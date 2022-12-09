@@ -4,6 +4,7 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 
+import com.example.bekind_v2.Utilities.MyCallback;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -24,7 +25,7 @@ import java.util.Date;
 import java.util.UUID;
 
 public class ProposalRepository {
-    public class Proposal {
+    public static class Proposal {
         private String title;
         private String body;
         private String id;
@@ -62,14 +63,14 @@ public class ProposalRepository {
         public void setFilters(ArrayList<String> filters){this.filters=filters;}
     }
 
-    public void createProposal(String title, String body, Date expiringDate, String publisherID, String accepterID, ArrayList<String> filters){
+    public static void createProposal(String title, String body, Date expiringDate, String publisherID, String accepterID, ArrayList<String> filters){
         String id =  UUID.randomUUID().toString();
         Proposal proposal = new Proposal(title, body, expiringDate, publisherID, accepterID, id, filters);
 
         FirebaseFirestore.getInstance().collection("Proposals").document(id).set(proposal); //TODO: make it asynchronous?
     }
 
-    public void updateProposal(String id, String title, String body, Date expiringDate, String accepterId, ArrayList<String> filters){
+    public static void updateProposal(String id, String title, String body, Date expiringDate, String accepterId, ArrayList<String> filters){
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         DocumentReference doc = db.collection("Proposals").document(id);
 
@@ -85,7 +86,7 @@ public class ProposalRepository {
             doc.update("filters", filters);
     }
 
-    public ArrayList<Proposal> getProposals(LocalDate day, String userId, ArrayList<String> filters, boolean proposed){
+    public static void getProposals(LocalDate day, String userId, ArrayList<String> filters, boolean proposed, MyCallback myCallback){
         ArrayList<Proposal> res = new ArrayList<>();
 
         LocalDateTime start = (day == null) ? LocalDateTime.MIN : day.atTime(0,0,0), end = (day == null) ? LocalDateTime.MAX : day.atTime(23,59,59);
@@ -95,7 +96,7 @@ public class ProposalRepository {
         activity_query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                if (task.isSuccessful())
+                if (task.isSuccessful()){
                     for (DocumentSnapshot snap :  task.getResult()) { //for each element in the query
                         Proposal prop = snap.toObject(Proposal.class); //cast the result to a real proposal
                         LocalDateTime expD = prop.getExpiringDate().toInstant().atZone(ZoneId.of("ECT")).toLocalDateTime(); //gets the expiring date of the proposal
@@ -106,37 +107,19 @@ public class ProposalRepository {
                             res.add(prop); //adds the proposal to the Proposal to be shown
                         }
                     }
+                    myCallback.onCallback(res);
+                }
             }
         });
-
-        return res; //TODO: make it asynchronous?
     }
 
-    public String getTitle(){
-        return "";
-    }
-
-    public String getBody(){
-        return "";
-    }
-
-    public Date getExpiringDate(){
-        return null;
-    }
-
-    public String getPublisherID(){
-        return "";
-    }
-
-    public String getAccepterID(){
-        return "";
-    }
-
-    public String getId(){
-        return "";
-    }
-
-    public ArrayList<String> getFilters(){
-        return null;
+    public static void getProposal(String Id, MyCallback myCallback){
+        FirebaseFirestore.getInstance().collection("Proposals").document(Id).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if(task.getResult().exists())
+                    myCallback.onCallback(task.getResult().toObject(Proposal.class));
+            }
+        });
     }
 }

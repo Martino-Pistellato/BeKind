@@ -1,69 +1,39 @@
 package com.example.bekind_v2.DataLayer;
 
+import com.example.bekind_v2.Utilities.MyCallback;
+
 public class UserManager {
-    private UserLoginRepository userLoginRepository;
-    private UserDatabaseRepository userDatabaseRepository;
-
-    public UserManager(UserLoginRepository userLoginRepository, UserDatabaseRepository userDatabaseRepository){
-        this.userLoginRepository = userLoginRepository;
-        this.userDatabaseRepository = userDatabaseRepository;
+    public static void createUser(String password, String name, String surname, String birth, String email, String city, String street, String street_number, String neighbourhoodID){
+        UserLoginRepository.register(email, password);
+        UserDatabaseRepository.createUser(getUserId(), name, surname, birth, email, city, street, street_number, neighbourhoodID);
     }
 
-    public void createUser(String password, String name, String surname, String birth, String email, String city, String street, String street_number, String neighbourhoodID){
-        userLoginRepository.register(email, password);
-        userDatabaseRepository.createUser(getUserId(), name, surname, birth, email, city, street, street_number, neighbourhoodID);
+    public static void login(String email, String password){
+        UserLoginRepository.login(email, password);
     }
 
-    public void login(String email, String password){
-        userLoginRepository.login(email, password);
+    public static void logout(){
+        UserLoginRepository.logout();
     }
 
-    public void logout(){
-        userLoginRepository.logout();
+    public static boolean isLogged(){
+        return UserLoginRepository.isLogged();
     }
 
-    public boolean isLogged(){
-        return userLoginRepository.isLogged();
+    public static String getUserId(){
+        return UserLoginRepository.getUid();
     }
 
-    public String getUserId(){
-        return userLoginRepository.getUid();
+    public static String getEmail(){
+        return UserLoginRepository.getEmail();
     }
 
-    public String getEmail(){
-        return userLoginRepository.getEmail();
+    public static void updateUser(String name, String surname, String email, String city, String street, String street_number, String neighborhoodId, String oldPassword, String newPassword){
+        UserLoginRepository.updateCredentials(email,oldPassword,newPassword);
+        UserDatabaseRepository.updateUser(getUserId(), name, surname, email, city, street, street_number, neighborhoodId);
     }
 
-    public void updateUser(String name, String surname, String email, String city, String street, String street_number, String neighborhoodID, String oldPassword, String newPassword){
-        userLoginRepository.updateCredentials(email,oldPassword,newPassword);
-        userDatabaseRepository.updateUser(getUserId(), name, surname, email, city, street, street_number, neighborhoodID);
-    }
-
-    public String getName(){
-        return userDatabaseRepository.getName(getUserId());
-    }
-
-    public String getSurname(){
-        return userDatabaseRepository.getSurname(getUserId());
-    }
-
-    public String getBirth(){
-        return userDatabaseRepository.getBirth(getUserId());
-    }
-
-    public String getCity(){
-        return userDatabaseRepository.getCity(getUserId());
-    }
-
-    public String getStreet(){
-        return userDatabaseRepository.getStreet(getUserId());
-    }
-
-    public String getStreetNumber(){
-        return userDatabaseRepository.getStreetNumber(getUserId());
-    }
-
-    public String getNeighbourhoodID(){
-        return userDatabaseRepository.getNeighbourhoodID(getUserId());
+    public static void getUser(String userId, MyCallback myCallback){
+        UserDatabaseRepository.getUser(userId, myCallback);
     }
 }

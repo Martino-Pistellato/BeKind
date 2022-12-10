@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">BeKind_v2</string>
+    <string name="title_activity_bottom_bar">BottomBar</string>
+    <string name="title_home">Home</string>
+    <string name="title_available">Attività</string>
+    <string name="title_dashboard">Bacheca</string>
+    <string name="title_profile">Profilo</string>
 </resources>

@@ -19,7 +19,7 @@ import com.example.bekind_v2.databinding.ActivityBottomBarBinding;
 public class BottomBar extends AppCompatActivity {
 
     private ActivityBottomBarBinding binding;
-    private Button addActivityButton;
+    private Button addProposalButton;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,8 +37,8 @@ public class BottomBar extends AppCompatActivity {
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(binding.navView, navController);
 
-        addActivityButton = findViewById(R.id.add_activity_btn);
-        addActivityButton.setOnClickListener(new View.OnClickListener() {
+        addProposalButton = findViewById(R.id.add_proposal_btn);
+        addProposalButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 

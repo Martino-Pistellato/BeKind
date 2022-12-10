@@ -22,8 +22,6 @@ import androidx.lifecycle.ViewModelProvider;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.textfield.TextInputEditText;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.Date;
 
 public class BottomBar extends AppCompatActivity {

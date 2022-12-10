@@ -1,12 +1,23 @@
 package com.example.bekind_v2.DataLayer;
 
+import androidx.annotation.NonNull;
+
+import com.example.bekind_v2.Utilities.MyCallback;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 public class UserLoginRepository {
-    public static void login(String email, String password){
-        if(!email.isEmpty() && !password.isEmpty())
-            FirebaseAuth.getInstance().signInWithEmailAndPassword(email, password); //there isn't a onCompleteListener
+    public static void login(String email, String password, MyCallback myCallback){
+        FirebaseAuth.getInstance().signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+            @Override
+            public void onComplete(@NonNull Task<AuthResult> task) {
+                if (task.isComplete())
+                    myCallback.onCallback(task);
+            }
+        });
     }
 
     public static void logout(){

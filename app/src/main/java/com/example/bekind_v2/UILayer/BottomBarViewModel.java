@@ -27,7 +27,7 @@ public class BottomBarViewModel extends ViewModel {
         ProposalRepository.createProposal(title, body, expiringDate, userId, null, filters);
     }
 
-    public Date toDate(int year, int month, int day, int hour, int minute){
+    public static Date toDate(int year, int month, int day, int hour, int minute){
         Calendar expiringDate = Calendar.getInstance();
         expiringDate.set(year, month, day, hour, minute);
         return expiringDate.getTime();

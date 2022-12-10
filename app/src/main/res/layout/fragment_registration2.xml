@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/fragment_registration2"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    tools:context=".UILayer.Authentication.RegistrationFragment2">
+
+    <RelativeLayout
+        android:id="@+id/neigh_register_container"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:background="@color/white">
+        <!-- TODO: Update blank fragment layout -->
+        <TextView
+            android:id="@+id/neighborhood_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:text="Inserisci dati quartiere"
+            android:textSize="20sp"
+            android:layout_marginBottom="20dp"/>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/city_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:boxBackgroundColor="@color/white"
+            android:layout_below="@id/neighborhood_text">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/user_city"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Città"
+                android:inputType="textNoSuggestions"
+                android:layout_marginBottom="20dp"/>
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/neigh_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:boxBackgroundColor="@color/white"
+            android:layout_below="@id/city_container">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/user_neigh"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Quartiere"
+                android:inputType="textNoSuggestions"
+                android:layout_marginBottom="20dp"/>
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/street_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:boxBackgroundColor="@color/white"
+            android:layout_below="@id/neigh_container"
+            android:layout_marginBottom="20dp">
+
+            <LinearLayout
+                android:id="@+id/street_linear"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:weightSum="2.5">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/user_street"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1.5"
+                    android:hint="Via"
+                    android:inputType="textNoSuggestions"/>
+                <Space
+                    android:layout_width="0dp"
+                    android:layout_weight="0.3"
+                    android:layout_height="wrap_content"/>
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/street_number"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.7"
+                    android:hint="Civico"
+                    android:inputType="textNoSuggestions"/>
+
+            </LinearLayout>
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <LinearLayout
+            android:id="@+id/buttons_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_below="@id/street_container"
+            android:weightSum="2.2"
+            android:layout_marginBottom="20dp">
+
+            <Button
+                android:id="@+id/back_button"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Indietro"
+                android:layout_marginStart="10dp"/>
+
+            <Space
+                android:layout_width="0dp"
+                android:layout_weight="0.1"
+                android:layout_height="wrap_content"/>
+
+            <Button
+                android:id="@+id/continue_button"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Conferma"/>
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/text_create_neigh"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/buttons_container"
+            android:layout_marginBottom="20dp"
+            android:text="Non c'è il tuo quartiere? Crealo!"
+            android:textSize="15sp"
+            android:layout_centerHorizontal="true"/>
+
+    </RelativeLayout>
+
+</FrameLayout>

@@ -5,4 +5,6 @@
     <string name="title_available">Attività</string>
     <string name="title_dashboard">Bacheca</string>
     <string name="title_profile">Profilo</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

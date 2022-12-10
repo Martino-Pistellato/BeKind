@@ -8,8 +8,8 @@ public class UserManager {
         UserDatabaseRepository.createUser(getUserId(), name, surname, birth, email, city, street, street_number, neighbourhoodID);
     }
 
-    public static void login(String email, String password){
-        UserLoginRepository.login(email, password);
+    public static void login(String email, String password, MyCallback myCallback){
+        UserLoginRepository.login(email, password, myCallback);
     }
 
     public static void logout(){

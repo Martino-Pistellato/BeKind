@@ -1,5 +1,6 @@
 package com.example.bekind_v2.UILayer.Authentication;
 
+import android.util.Log;
 import android.widget.DatePicker;
 
 import androidx.fragment.app.FragmentTransaction;
@@ -21,6 +22,9 @@ public class AuthenticationViewModel extends ViewModel {
     // TODO: Implement the ViewModel
 
     public boolean checkCredentials(TextInputEditText email, String userEmail, TextInputEditText password, String userPassword){
+        Log.e("PSD_EMAIL", userEmail);
+        Log.e("PSD_PSSWD", userPassword);
+
         if(userEmail.isEmpty()) { //we check if all fields have been properly filled
             email.setError("Per accedere devi inserire una email");
             email.requestFocus(); //turns the field red

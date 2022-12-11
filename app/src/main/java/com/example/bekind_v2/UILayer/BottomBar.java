@@ -20,6 +20,7 @@ import androidx.navigation.ui.NavigationUI;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.material.chip.Chip;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textfield.TextInputEditText;
 
 import java.util.Date;
@@ -28,7 +29,7 @@ public class BottomBar extends AppCompatActivity {
 
     private ActivityBottomBarBinding binding;
     private BottomBarViewModel bottomBarViewModel;
-    private Button addProposalButton;
+    private FloatingActionButton addProposalButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

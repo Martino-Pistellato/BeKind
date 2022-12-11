@@ -46,7 +46,7 @@ public class LoginActivity extends AppCompatActivity {
                     startActivity(new Intent(LoginActivity.this, BottomBar.class)); //bring me to the main page, passing .this could be a problem but who knows
                 });
             }
-        } );
+        });
 
         textRegister.setOnClickListener( (view) -> {startActivity(new Intent(LoginActivity.this, RegistrationActivity.class));} ); //registration link
     }

@@ -3,9 +3,9 @@ package com.example.bekind_v2.DataLayer;
 import com.example.bekind_v2.Utilities.MyCallback;
 
 public class UserManager {
-    public static void createUser(String password, String name, String surname, String birth, String email, String city, String street, String street_number, String neighbourhoodID){
+    public static void createUser(String name, String surname, String email, String password, String birth, String city, String neighbourhoodID, String street, String street_number, MyCallback myCallback){
         UserLoginRepository.register(email, password);
-        UserDatabaseRepository.createUser(getUserId(), name, surname, birth, email, city, street, street_number, neighbourhoodID);
+        UserDatabaseRepository.createUser(getUserId(), name, surname, birth, email, city, street, street_number, neighbourhoodID, myCallback);
     }
 
     public static void login(String email, String password, MyCallback myCallback){

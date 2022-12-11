@@ -49,12 +49,17 @@ public class UserDatabaseRepository {
         public void setNeighbourhoodId(String neighborhoodID){this.neighbourhoodId = neighborhoodID;}
     }
 
-    public static void createUser(String userID, String name, String surname, String birth, String email, String  city, String street, String street_number, String neighbourhoodID){
+    public static void createUser(String userID, String name, String surname, String birth, String email, String  city, String street, String street_number, String neighbourhoodId, MyCallback myCallback){
 
         //TODO: add check for neighbourhood in that repository
 
-        User us = new User(name, surname, birth, email, city, street, street_number,neighbourhoodID);
-        FirebaseFirestore.getInstance().collection("Users").document(userID).set(us);
+        User us = new User(name, surname, birth, email, city, street, street_number,neighbourhoodId);
+        FirebaseFirestore.getInstance().collection("Users").document(userID).set(us).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                myCallback.onCallback(task.getResult());
+            }
+        });
     }
 
     public static void updateUser(String userID, String name, String surname, String email, String  city, String street, String street_number, String neighbourhoodID){

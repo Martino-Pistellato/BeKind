@@ -8,8 +8,10 @@ import androidx.fragment.app.FragmentActivity;
 
 import androidx.lifecycle.ViewModel;
 
+import com.example.bekind_v2.DataLayer.NeighbourhoodRepository;
 import com.example.bekind_v2.R;
 import com.example.bekind_v2.UILayer.BottomBarViewModel;
+import com.example.bekind_v2.UILayer.NeighbourhoodViewModel;
 import com.example.bekind_v2.Utilities.MyCallback;
 import com.google.android.material.textfield.TextInputEditText;
 import com.example.bekind_v2.DataLayer.UserManager;
@@ -19,14 +21,10 @@ import java.util.Calendar;
 import java.util.Date;
 
 public class AuthenticationViewModel extends ViewModel {
-    private String name, surname, email, password, city, street, streetNumber, neighbourhoodId;
+    private String name, surname, email, password, city, street, streetNumber, neighbourhoodName, neighbourhoodId;
     private Date birthDate;
-    // TODO: Implement the ViewModel
 
     public boolean checkCredentials(TextInputEditText email, String userEmail, TextInputEditText password, String userPassword){
-        Log.e("PSD_EMAIL", userEmail);
-        Log.e("PSD_PSSWD", userPassword);
-
         if(userEmail.isEmpty()) { //we check if all fields have been properly filled
             email.setError("Per accedere devi inserire una email");
             email.requestFocus(); //turns the field red
@@ -48,56 +46,65 @@ public class AuthenticationViewModel extends ViewModel {
         UserManager.login(email, password, myCallback);
     }
 
-    public boolean checkUserFiedls(TextInputEditText name, String userName, TextInputEditText surname, String userSurname, TextInputEditText email, String userEmail, TextInputEditText password, String userPassword){
+    public boolean checkUserFields(TextInputEditText name, String userName, TextInputEditText surname, String userSurname, TextInputEditText email, String userEmail, TextInputEditText password, String userPassword){
+        boolean res = true;
+
         if(userName.isEmpty()){
             name.setError("Questo campo non può essere vuoto");
             name.requestFocus();
-            return false;
-        }else if(userSurname.isEmpty()){
+            res = false;
+        }
+        if(userSurname.isEmpty()){
             surname.setError("Questo campo non può essere vuoto");
             surname.requestFocus();
-            return false;
-        }else if(userEmail.isEmpty()){
+            res = false;
+        }
+        if(userEmail.isEmpty()){
             email.setError("Questo campo non può essere vuoto");
             email.requestFocus();
-            return false;
-        }else if(userPassword.isEmpty()){
+            res = false;
+        }
+        if(userPassword.isEmpty()){
             password.setError("Questo campo non può essere vuoto");
             password.requestFocus();
-            return false;
+            res = false;
         }
-        return true;
+        return res;
     }
 
-    public boolean checkLocationFiedls(TextInputEditText city, String userCity, TextInputEditText neighbourhood, String userNeighbourhood, TextInputEditText street, String userStreet, TextInputEditText streetNumber, String userStreetNumber){
-        if(userCity.isEmpty()){
-            city.setError("Questo campo non può essere vuoto");
-            city.requestFocus();
-            return false;
-        }else if(userNeighbourhood.isEmpty()){
-            neighbourhood.setError("Questo campo non può essere vuoto");
-            neighbourhood.requestFocus();
-            return false;
-        }else if(userStreet.isEmpty()){
-            street.setError("Questo campo non può essere vuoto");
-            street.requestFocus();
-            return false;
-        }else if(userStreetNumber.isEmpty()){
-            streetNumber.setError("Questo campo non può essere vuoto");
-            streetNumber.requestFocus();
-            return false;
-        }
-        //there should also be a check to see if the neighbourhood exists
-        /*else if (!existsNeighbourhood(userNeighbourhood, userCity)){
-            neighbourhood.setError("Questo quartiere non esiste");
-            neighbourhood.requestFocus();
-            return false;
-        }*/
-        //they should not be elses and if we return false as soon as we catch the first empty field, if there are other empty fields they won't be higlighted, same problem in checkUserFields
-        return true;
+    public void checkLocationFields(TextInputEditText city, String userCity, TextInputEditText neighbourhood, String userNeighbourhood, TextInputEditText street, String userStreet, TextInputEditText streetNumber, String userStreetNumber, MyCallback myCallback){
+        NeighbourhoodViewModel.doesNeighbourhoodExist(userNeighbourhood, userCity, (x)->{
+            boolean res = true;
+
+            if(userCity.isEmpty()){
+                city.setError("Questo campo non può essere vuoto");
+                city.requestFocus();
+                res = false;
+            }
+            if(userNeighbourhood.isEmpty()){
+                neighbourhood.setError("Questo campo non può essere vuoto");
+                neighbourhood.requestFocus();
+                res = false;
+            }
+            if(userStreet.isEmpty()){
+                street.setError("Questo campo non può essere vuoto");
+                street.requestFocus();
+                res = false;
+            }
+            if(userStreetNumber.isEmpty()){
+                streetNumber.setError("Questo campo non può essere vuoto");
+                streetNumber.requestFocus();
+                res = false;
+            }
+
+            if (((boolean)x) && res)
+                myCallback.onCallback(true);
+            else
+                myCallback.onCallback(false);
+        });
     }
 
-    public static void setBirthDate(DatePicker birthDate){
+    public void setBirthDate(DatePicker birthDate){
         Calendar calendar = Calendar.getInstance();
         calendar.set(1920,1,1);
         Date minDate = calendar.getTime(), maxDate;
@@ -128,20 +135,48 @@ public class AuthenticationViewModel extends ViewModel {
         this.birthDate = birthDate;
     }
 
-    public void saveLocationData(String city, String street, String streetNumber, String neighbourhoodId){
+    public void saveLocationData(String city, String street, String streetNumber, String neighbourhoodName){
         this.city = city;
         this.street = street;
         this.streetNumber = streetNumber;
-        this.neighbourhoodId = neighbourhoodId;
+        this.neighbourhoodName = neighbourhoodName;
     }
 
     public static Date toDate(DatePicker date){
         return BottomBarViewModel.toDate(date.getYear(), date.getMonth(), date.getDayOfMonth(), 0, 0);
     }
 
-    public ArrayList<String> getUserFields(){
-        //do we return an ArrayList? we do a method to get the single fiedls?
+    public void getUserData(TextInputEditText name, TextInputEditText surname, TextInputEditText email, TextInputEditText password){
+        name.setText(this.name);
+        surname.setText(this.surname);
+        email.setText(this.email);
+        password.setText(this.password);
+    }
 
-        return null;
+    public void getLocationData(TextInputEditText city, TextInputEditText neighbourhood, TextInputEditText street, TextInputEditText streetNumber){
+        city.setText(this.city);
+        neighbourhood.setText(this.neighbourhoodName);
+        street.setText(this.street);
+        streetNumber.setText(this.streetNumber);
+    }
+
+    public void createUser(MyCallback myCallback){
+        NeighbourhoodViewModel.getNeighbourhood(this.neighbourhoodName, this.city, (x) ->{
+            if(x != null){
+                UserManager.createUser(name, surname, email, password, birthDate.toString(), city, neighbourhoodId, street, streetNumber, new MyCallback() {
+                    @Override
+                    public void onCallback(Object result) {
+                        login(email,password,myCallback);
+                    }
+                });
+            }else{
+                myCallback.onCallback(null);
+            }
+        });
+
+    }
+
+    public String getCity(){
+        return this.city;
     }
 }

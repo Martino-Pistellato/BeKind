@@ -54,4 +54,18 @@ public class NeighbourhoodRepository {
             }
         });
     }
+
+    public static boolean existsNeighbourhood(String Id, String city, MyCallback myCallback){
+        Query existsNeighbourhood = FirebaseFirestore.getInstance().collection("Neighbourhood").whereEqualTo("", Id).whereEqualTo("city", city);
+        //we should check wether the city field in the object equals to the one passed as input --> if so return true, else return false
+        //we need a document snapshot to do a oncomplete listener
+        /*existsNeighbourhood.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if(task.getResult().exists())
+                    myCallback.onCallback(task.getResult().toObject(Neighbourhood.class));
+            }
+        });*/
+        return false;
+    }
 }

@@ -47,6 +47,7 @@ public class LoginActivity extends AppCompatActivity {
                 });
             }
         } );
+
         textRegister.setOnClickListener( (view) -> {startActivity(new Intent(LoginActivity.this, RegistrationActivity.class));} ); //registration link
     }
 }

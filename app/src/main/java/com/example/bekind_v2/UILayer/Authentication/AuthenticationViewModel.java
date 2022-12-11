@@ -14,6 +14,7 @@ import com.example.bekind_v2.Utilities.MyCallback;
 import com.google.android.material.textfield.TextInputEditText;
 import com.example.bekind_v2.DataLayer.UserManager;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -47,7 +48,7 @@ public class AuthenticationViewModel extends ViewModel {
         UserManager.login(email, password, myCallback);
     }
 
-    public boolean checkFiedls(TextInputEditText name, String userName, TextInputEditText surname, String userSurname, TextInputEditText email, String userEmail, TextInputEditText password, String userPassword){
+    public boolean checkUserFiedls(TextInputEditText name, String userName, TextInputEditText surname, String userSurname, TextInputEditText email, String userEmail, TextInputEditText password, String userPassword){
         if(userName.isEmpty()){
             name.setError("Questo campo non può essere vuoto");
             name.requestFocus();
@@ -68,6 +69,34 @@ public class AuthenticationViewModel extends ViewModel {
         return true;
     }
 
+    public boolean checkLocationFiedls(TextInputEditText city, String userCity, TextInputEditText neighbourhood, String userNeighbourhood, TextInputEditText street, String userStreet, TextInputEditText streetNumber, String userStreetNumber){
+        if(userCity.isEmpty()){
+            city.setError("Questo campo non può essere vuoto");
+            city.requestFocus();
+            return false;
+        }else if(userNeighbourhood.isEmpty()){
+            neighbourhood.setError("Questo campo non può essere vuoto");
+            neighbourhood.requestFocus();
+            return false;
+        }else if(userStreet.isEmpty()){
+            street.setError("Questo campo non può essere vuoto");
+            street.requestFocus();
+            return false;
+        }else if(userStreetNumber.isEmpty()){
+            streetNumber.setError("Questo campo non può essere vuoto");
+            streetNumber.requestFocus();
+            return false;
+        }
+        //there should also be a check to see if the neighbourhood exists
+        /*else if (!existsNeighbourhood(userNeighbourhood, userCity)){
+            neighbourhood.setError("Questo quartiere non esiste");
+            neighbourhood.requestFocus();
+            return false;
+        }*/
+        //they should not be elses and if we return false as soon as we catch the first empty field, if there are other empty fields they won't be higlighted, same problem in checkUserFields
+        return true;
+    }
+
     public static void setBirthDate(DatePicker birthDate){
         Calendar calendar = Calendar.getInstance();
         calendar.set(1920,1,1);
@@ -79,10 +108,16 @@ public class AuthenticationViewModel extends ViewModel {
     }
 
     public void changeFragment(FragmentActivity activity, int fragmentId, AuthenticationViewModel authenticationViewModel){
-        RegistrationFragment2 registrationFragment2 = new RegistrationFragment2(authenticationViewModel);
         //we start a fragment transaction and we replace current view with the new fragment
         FragmentTransaction fragmentTransaction = activity.getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.replace(R.id.fragment_container, registrationFragment2).commit();
+
+        if(fragmentId == R.id.fragment_registration1) {
+            RegistrationFragment2 registrationFragment2 = new RegistrationFragment2(authenticationViewModel);
+            fragmentTransaction.replace(R.id.fragment_container, registrationFragment2).commit();
+        }else{
+            RegistrationFragment1 registrationFragment1 = new RegistrationFragment1(authenticationViewModel);
+            fragmentTransaction.replace(R.id.fragment_container, registrationFragment1).commit();
+        }
     }
 
     public void saveUserData(String name, String surname, String email, String password, Date birthDate){ //TODO: we also need a getter if we reach fragment1 from fragment2
@@ -102,5 +137,11 @@ public class AuthenticationViewModel extends ViewModel {
 
     public static Date toDate(DatePicker date){
         return BottomBarViewModel.toDate(date.getYear(), date.getMonth(), date.getDayOfMonth(), 0, 0);
+    }
+
+    public ArrayList<String> getUserFields(){
+        //do we return an ArrayList? we do a method to get the single fiedls?
+
+        return null;
     }
 }

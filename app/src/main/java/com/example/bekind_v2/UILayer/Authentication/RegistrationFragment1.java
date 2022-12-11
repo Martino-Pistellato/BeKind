@@ -56,7 +56,7 @@ public class RegistrationFragment1 extends Fragment {
                 String userName = name.getText().toString().trim(), userSurname = surname.getText().toString().trim(),
                        userEmail = email.getText().toString().trim(), userPassword = password.getText().toString().trim();
 
-                if(!authenticationViewModel.checkFiedls(name, userName, surname, userSurname, email, userEmail, password, userPassword))
+                if(!authenticationViewModel.checkUserFiedls(name, userName, surname, userSurname, email, userEmail, password, userPassword))
                     Toast.makeText(getContext(), "Errore: i campi non sono stati riempiti correttamente", Toast.LENGTH_SHORT).show();
                 else{
                     Date birthDate = AuthenticationViewModel.toDate(birth);

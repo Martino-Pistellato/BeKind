@@ -16,25 +16,21 @@ public class RegistrationFragment2 extends Fragment {
 
     private AuthenticationViewModel authenticationViewModel;
 
+    public RegistrationFragment2(AuthenticationViewModel authenticationViewModel){
+        this.authenticationViewModel = authenticationViewModel;
+    }
+
     public static RegistrationFragment2 newInstance() {
-        return new RegistrationFragment2();
+        return new RegistrationFragment2(newInstance().authenticationViewModel);
     }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_registration2, container, false);
+        View view =  inflater.inflate(R.layout.fragment_registration2, container, false);
 
 
 
-
+        return view;
     }
-
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        authenticationViewModel = new ViewModelProvider(this).get(AuthenticationViewModel.class);
-        // TODO: Use the ViewModel
-    }
-
 }

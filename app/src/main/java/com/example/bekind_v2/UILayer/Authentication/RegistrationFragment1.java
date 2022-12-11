@@ -2,6 +2,7 @@ package com.example.bekind_v2.UILayer.Authentication;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,8 +24,12 @@ public class RegistrationFragment1 extends Fragment {
 
     private AuthenticationViewModel authenticationViewModel;
 
+    public RegistrationFragment1(AuthenticationViewModel authenticationViewModel){
+        this.authenticationViewModel = authenticationViewModel;
+    }
+
     public static RegistrationFragment1 newInstance() {
-        return new RegistrationFragment1();
+        return new RegistrationFragment1(newInstance().authenticationViewModel);
     }
 
     @Override
@@ -36,9 +41,7 @@ public class RegistrationFragment1 extends Fragment {
                           email = view.findViewById(R.id.register_email), password = view.findViewById(R.id.register_password);
         DatePicker birth = view.findViewById(R.id.registration_date_picker);
         Button cancelBtn = view.findViewById(R.id.cancel_button), continueBtn = view.findViewById(R.id.continue_button);
-        String userName = name.getText().toString().trim(), userSurname = surname.getText().toString().trim(),
-               userEmail = email.getText().toString().trim(), userPassword = password.getText().toString().trim();
-        authenticationViewModel.setBirthDate(birth);
+        AuthenticationViewModel.setBirthDate(birth);
 
         cancelBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -50,24 +53,19 @@ public class RegistrationFragment1 extends Fragment {
         continueBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                String userName = name.getText().toString().trim(), userSurname = surname.getText().toString().trim(),
+                       userEmail = email.getText().toString().trim(), userPassword = password.getText().toString().trim();
+
                 if(!authenticationViewModel.checkFiedls(name, userName, surname, userSurname, email, userEmail, password, userPassword))
                     Toast.makeText(getContext(), "Errore: i campi non sono stati riempiti correttamente", Toast.LENGTH_SHORT).show();
                 else{
-                    Date birthDate = authenticationViewModel.toDate(birth);
+                    Date birthDate = AuthenticationViewModel.toDate(birth);
                     authenticationViewModel.saveUserData(userName, userSurname, userEmail, userPassword, birthDate);
-                    authenticationViewModel.changeFragment(getActivity(), R.id.fragment_registration1);
+                    authenticationViewModel.changeFragment(getActivity(), R.id.fragment_registration1, authenticationViewModel);
                 }
             }
         });
 
         return view;
     }
-
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        authenticationViewModel = new ViewModelProvider(this).get(AuthenticationViewModel.class);
-        // TODO: Use the ViewModel
-    }
-
 }

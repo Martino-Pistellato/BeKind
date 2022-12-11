@@ -8,6 +8,7 @@ import androidx.fragment.app.FragmentActivity;
 
 import androidx.lifecycle.ViewModel;
 
+import com.example.bekind_v2.R;
 import com.example.bekind_v2.UILayer.BottomBarViewModel;
 import com.example.bekind_v2.Utilities.MyCallback;
 import com.google.android.material.textfield.TextInputEditText;
@@ -67,24 +68,24 @@ public class AuthenticationViewModel extends ViewModel {
         return true;
     }
 
-    public void setBirthDate(DatePicker birthDate){
+    public static void setBirthDate(DatePicker birthDate){
         Calendar calendar = Calendar.getInstance();
         calendar.set(1920,1,1);
         Date minDate = calendar.getTime(), maxDate;
-        calendar.set(2008, 12, 31);
+        calendar.set(2008, 11, 31);
         maxDate = calendar.getTime();
         birthDate.setMaxDate(maxDate.getTime());
         birthDate.setMinDate(minDate.getTime());
     }
 
-    public void changeFragment(FragmentActivity activity, int fragmentId){
-        RegistrationFragment2 registrationFragment2 = new RegistrationFragment2();
+    public void changeFragment(FragmentActivity activity, int fragmentId, AuthenticationViewModel authenticationViewModel){
+        RegistrationFragment2 registrationFragment2 = new RegistrationFragment2(authenticationViewModel);
         //we start a fragment transaction and we replace current view with the new fragment
         FragmentTransaction fragmentTransaction = activity.getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.replace(fragmentId, registrationFragment2).commit();
+        fragmentTransaction.replace(R.id.fragment_container, registrationFragment2).commit();
     }
 
-    public void saveUserData(String name, String surname, String email, String password, Date birthDate){
+    public void saveUserData(String name, String surname, String email, String password, Date birthDate){ //TODO: we also need a getter if we reach fragment1 from fragment2
         this.name = name;
         this.surname = surname;
         this.email = email;
@@ -99,7 +100,7 @@ public class AuthenticationViewModel extends ViewModel {
         this.neighbourhoodId = neighbourhoodId;
     }
 
-    public Date toDate(DatePicker date){
+    public static Date toDate(DatePicker date){
         return BottomBarViewModel.toDate(date.getYear(), date.getMonth(), date.getDayOfMonth(), 0, 0);
     }
 }

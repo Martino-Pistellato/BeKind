@@ -1,7 +1,10 @@
 package com.example.bekind_v2.UILayer.Authentication;
 
+import static android.webkit.ConsoleMessage.MessageLevel.LOG;
+
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -67,7 +70,8 @@ public class RegistrationFragment2 extends Fragment {
                             authenticationViewModel.createUser(new MyCallback() {
                                 @Override
                                 public void onCallback(Object result) {
-                                    startActivity(new Intent(getContext(), BottomBar.class));
+                                    if (result != null)
+                                        startActivity(new Intent(getContext(), BottomBar.class));
                                 }
                             });
                         }

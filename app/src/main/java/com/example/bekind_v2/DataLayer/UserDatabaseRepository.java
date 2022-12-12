@@ -1,5 +1,7 @@
 package com.example.bekind_v2.DataLayer;
 
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 
 import com.example.bekind_v2.Utilities.MyCallback;
@@ -51,12 +53,15 @@ public class UserDatabaseRepository {
 
     public static void createUser(String userID, String name, String surname, String birth, String email, String  city, String street, String street_number, String neighbourhoodId, MyCallback myCallback){
 
-        //TODO: add check for neighbourhood in that repository
+        Log.e("CREATE", "before query");
 
         User us = new User(name, surname, birth, email, city, street, street_number,neighbourhoodId);
+        Log.e("CREATE", "user: "+us.toString());
+
         FirebaseFirestore.getInstance().collection("Users").document(userID).set(us).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
+                Log.e("CREATE", "created");
                 myCallback.onCallback(task.getResult());
             }
         });

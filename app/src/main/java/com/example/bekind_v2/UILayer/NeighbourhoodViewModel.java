@@ -1,5 +1,7 @@
 package com.example.bekind_v2.UILayer;
 
+import android.util.Log;
+
 import androidx.lifecycle.ViewModel;
 
 import com.example.bekind_v2.DataLayer.NeighbourhoodRepository;
@@ -18,7 +20,7 @@ public class NeighbourhoodViewModel extends ViewModel {
     }
 
     public static void getNeighbourhood(String name, String city, MyCallback myCallback){
-
+        NeighbourhoodRepository.getNeighbourhood(name,city,myCallback);
     }
 
     public boolean checkNeighbourhoodName(TextInputEditText name, String neighbourhoodName){

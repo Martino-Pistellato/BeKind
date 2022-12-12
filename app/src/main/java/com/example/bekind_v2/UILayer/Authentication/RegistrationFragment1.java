@@ -31,13 +31,13 @@ public class RegistrationFragment1 extends Fragment {
                              @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_registration1, container, false);
 
-        TextInputEditText name = view.findViewById(R.id.register_name),surname = view.findViewById(R.id.register_surname),
+        TextInputEditText name = view.findViewById(R.id.register_name), surname = view.findViewById(R.id.register_surname),
                           email = view.findViewById(R.id.register_email), password = view.findViewById(R.id.register_password);
         DatePicker birth = view.findViewById(R.id.registration_date_picker);
         Button cancelBtn = view.findViewById(R.id.cancel_button), continueBtn = view.findViewById(R.id.continue_button);
 
         authenticationViewModel.setBirthDate(birth);
-        authenticationViewModel.getUserData(name, surname, email, password);
+        authenticationViewModel.getUserData(name, surname, email, password, birth);
 
         cancelBtn.setOnClickListener(new View.OnClickListener() {
             @Override

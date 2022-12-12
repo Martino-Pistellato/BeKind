@@ -97,10 +97,7 @@ public class AuthenticationViewModel extends ViewModel {
                 res = false;
             }
 
-            if (((boolean)x) && res)
-                myCallback.onCallback(true);
-            else
-                myCallback.onCallback(false);
+            myCallback.onCallback(((boolean)x) && res);
         });
     }
 
@@ -135,7 +132,7 @@ public class AuthenticationViewModel extends ViewModel {
         this.birthDate = birthDate;
     }
 
-    public void saveLocationData(String city, String street, String streetNumber, String neighbourhoodName){
+    public void saveLocationData(String city, String neighbourhoodName, String street, String streetNumber){
         this.city = city;
         this.street = street;
         this.streetNumber = streetNumber;
@@ -146,11 +143,18 @@ public class AuthenticationViewModel extends ViewModel {
         return BottomBarViewModel.toDate(date.getYear(), date.getMonth(), date.getDayOfMonth(), 0, 0);
     }
 
-    public void getUserData(TextInputEditText name, TextInputEditText surname, TextInputEditText email, TextInputEditText password){
+    public void getUserData(TextInputEditText name, TextInputEditText surname, TextInputEditText email, TextInputEditText password,  DatePicker date){
         name.setText(this.name);
         surname.setText(this.surname);
         email.setText(this.email);
         password.setText(this.password);
+
+        if (birthDate != null) {
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(birthDate);
+
+            date.updateDate(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
+        }
     }
 
     public void getLocationData(TextInputEditText city, TextInputEditText neighbourhood, TextInputEditText street, TextInputEditText streetNumber){
@@ -162,14 +166,16 @@ public class AuthenticationViewModel extends ViewModel {
 
     public void createUser(MyCallback myCallback){
         NeighbourhoodViewModel.getNeighbourhood(this.neighbourhoodName, this.city, (x) ->{
+            Log.e("USR_CRTD", "Neighbourhood id: "+x);
             if(x != null){
-                UserManager.createUser(name, surname, email, password, birthDate.toString(), city, neighbourhoodId, street, streetNumber, new MyCallback() {
+                UserManager.createUser(name, surname, email, password, birthDate.toString(), city, (String) x, street, streetNumber, new MyCallback() {
                     @Override
                     public void onCallback(Object result) {
                         login(email,password,myCallback);
                     }
                 });
-            }else{
+            }
+            else{
                 myCallback.onCallback(null);
             }
         });

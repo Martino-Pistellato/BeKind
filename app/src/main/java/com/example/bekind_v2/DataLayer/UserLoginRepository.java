@@ -1,5 +1,7 @@
 package com.example.bekind_v2.DataLayer;
 
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 
 import com.example.bekind_v2.Utilities.MyCallback;
@@ -15,7 +17,7 @@ public class UserLoginRepository {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isComplete())
-                    myCallback.onCallback(task);
+                    myCallback.onCallback(task.isSuccessful());
             }
         });
     }
@@ -24,9 +26,15 @@ public class UserLoginRepository {
         FirebaseAuth.getInstance().signOut();
     }
 
-    public static void register(String email, String password){
+    public static void register(String email, String password, MyCallback myCallback){
         if(!email.isEmpty() && !password.isEmpty())
-            FirebaseAuth.getInstance().createUserWithEmailAndPassword(email, password);
+            FirebaseAuth.getInstance().createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                @Override
+                public void onComplete(@NonNull Task<AuthResult> task) {
+                    Log.e("CRTD_USR", "before user creation");
+                    myCallback.onCallback(task.isSuccessful());
+                }
+            });
     }
 
     public static void updateCredentials(String email, String oldPassword, String newPassword){

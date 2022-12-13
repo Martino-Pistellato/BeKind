@@ -1,5 +1,6 @@
 package com.example.bekind_v2.UILayer;
 
+import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.content.Intent;
@@ -17,6 +18,7 @@ import android.widget.Toast;
 
 import com.example.bekind_v2.R;
 import com.example.bekind_v2.UILayer.Authentication.AuthenticationViewModel;
+import com.example.bekind_v2.UILayer.Authentication.RegistrationFragment2;
 import com.google.android.material.textfield.TextInputEditText;
 
 public class NeighbourhoodFragment extends Fragment {
@@ -26,7 +28,6 @@ public class NeighbourhoodFragment extends Fragment {
 
     public NeighbourhoodFragment(AuthenticationViewModel authenticationViewModel){
         this.authenticationViewModel = authenticationViewModel;
-        this.neighbourhoodViewModel = new ViewModelProvider(this).get(NeighbourhoodViewModel.class);
     }
 
     @Override
@@ -40,21 +41,27 @@ public class NeighbourhoodFragment extends Fragment {
         backBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
+                RegistrationFragment2 registrationFragment2 = new RegistrationFragment2(authenticationViewModel);
+                fragmentTransaction.replace(R.id.fragment_container, registrationFragment2).commit();
             }
         });
 
         continueBtn.setOnClickListener(new View.OnClickListener() {
-            String neighbourhoodName = name.getText().toString().trim();
             @Override
             public void onClick(View v) {
+                String neighbourhoodName = name.getText().toString().trim();
                 if(!neighbourhoodViewModel.checkNeighbourhoodName(name, neighbourhoodName)){
                     Toast.makeText(getContext(), "Errore: i campi non sono stati riempiti correttamente", Toast.LENGTH_SHORT).show();
                 }
                 else{
                     neighbourhoodViewModel.createNeighbourhood(neighbourhoodName, authenticationViewModel.getCity(), (x)->{
-                        if((boolean)x)
-                            authenticationViewModel.createUser((y)->{startActivity(new Intent(getContext(), BottomBar.class));});
+                        if((boolean)x) {
+                            authenticationViewModel.setNeighbourhood(neighbourhoodName);
+                            authenticationViewModel.createUser((y) -> {
+                                startActivity(new Intent(getContext(), BottomBar.class));
+                            });
+                        }
                         else
                             Toast.makeText(getContext(), "Errore: questo quartiere esiste già", Toast.LENGTH_SHORT).show();
                     });
@@ -65,4 +72,9 @@ public class NeighbourhoodFragment extends Fragment {
         return view;
     }
 
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        neighbourhoodViewModel = new ViewModelProvider(this).get(NeighbourhoodViewModel.class);
+    }
 }

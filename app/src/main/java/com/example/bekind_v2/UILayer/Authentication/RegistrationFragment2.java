@@ -1,10 +1,7 @@
 package com.example.bekind_v2.UILayer.Authentication;
 
-import static android.webkit.ConsoleMessage.MessageLevel.LOG;
-
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,7 +13,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
-import androidx.lifecycle.ViewModelProvider;
 
 import com.example.bekind_v2.R;
 //import com.example.bekind_v2.UILayer.NeighbourhoodActivity;
@@ -81,6 +77,10 @@ public class RegistrationFragment2 extends Fragment {
         });
 
         textCreateNeighbourhood.setOnClickListener((v) -> {
+            String userCity = city.getText().toString().trim(), userNeighbourhood = "",
+                   userStreet = street.getText().toString().trim(), userStreetNumber = streetNumber.getText().toString().trim();
+            authenticationViewModel.saveLocationData(userCity, userNeighbourhood, userStreet, userStreetNumber);
+
             FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
             NeighbourhoodFragment neighbourhoodFragment = new NeighbourhoodFragment(authenticationViewModel);
             fragmentTransaction.replace(R.id.fragment_container, neighbourhoodFragment).commit();

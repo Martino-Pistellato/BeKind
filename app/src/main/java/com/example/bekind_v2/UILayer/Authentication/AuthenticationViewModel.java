@@ -1,6 +1,5 @@
 package com.example.bekind_v2.UILayer.Authentication;
 
-import android.util.Log;
 import android.widget.DatePicker;
 
 import androidx.fragment.app.FragmentTransaction;
@@ -102,7 +101,7 @@ public class AuthenticationViewModel extends ViewModel {
     }
 
     public void setBirthDate(DatePicker birthDate){
-        Calendar calendar = Calendar.getInstance();
+        Calendar calendar = Calendar.getInstance();//TODO: remove the plain text
         calendar.set(1920,1,1);
         Date minDate = calendar.getTime(), maxDate;
         calendar.set(2008, 11, 31);
@@ -166,7 +165,6 @@ public class AuthenticationViewModel extends ViewModel {
 
     public void createUser(MyCallback myCallback){
         NeighbourhoodViewModel.getNeighbourhood(this.neighbourhoodName, this.city, (x) ->{
-            Log.e("USR_CRTD", "Neighbourhood id: "+x);
             if(x != null){
                 UserManager.createUser(name, surname, email, password, birthDate.toString(), city, (String) x, street, streetNumber, new MyCallback() {
                     @Override
@@ -179,10 +177,13 @@ public class AuthenticationViewModel extends ViewModel {
                 myCallback.onCallback(null);
             }
         });
-
     }
 
     public String getCity(){
         return this.city;
+    }
+    
+    public void setNeighbourhood(String neighbourhoodName){
+        this.neighbourhoodName = neighbourhoodName;
     }
 }

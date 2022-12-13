@@ -1,26 +1,21 @@
 package com.example.bekind_v2.DataLayer;
 
-import android.util.Log;
-
 import androidx.annotation.NonNull;
 
 import com.example.bekind_v2.Utilities.MyCallback;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 
-import java.util.ArrayList;
 import java.util.UUID;
 
 public class NeighbourhoodRepository {
     public static class Neighbourhood{
         private  String city, name, id;
 
-        public Neighbourhood(){
-        }
+        public Neighbourhood(){}
 
         public Neighbourhood(String city, String name, String id){
             this.name = name;
@@ -37,12 +32,15 @@ public class NeighbourhoodRepository {
         doesNeighbourhoodExist(name, city, new MyCallback() {
             @Override
             public void onCallback(Object result) {
+
                 if(!(boolean)result){ //if there is no neighbourhood with the same name in the same city
                     String Id =  UUID.randomUUID().toString();
                     Neighbourhood neighbourhood = new Neighbourhood(city, name, Id);
-                    FirebaseFirestore.getInstance().collection("Neighbourhoods").add(neighbourhood).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
+
+                    FirebaseFirestore.getInstance().collection("Neighbourhoods").document(Id).set(neighbourhood).addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
-                        public void onComplete(@NonNull Task<DocumentReference> task) {
+                        public void onComplete(@NonNull Task<Void> task) {
+
                             myCallback.onCallback(task.isSuccessful());
                         }
                     });

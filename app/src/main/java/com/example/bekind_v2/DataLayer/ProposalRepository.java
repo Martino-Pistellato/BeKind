@@ -1,10 +1,12 @@
 package com.example.bekind_v2.DataLayer;
 
 import android.util.Log;
+import android.widget.Switch;
 
 import androidx.annotation.NonNull;
 
 import com.example.bekind_v2.Utilities.MyCallback;
+import com.example.bekind_v2.Utilities.Types;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -86,12 +88,18 @@ public class ProposalRepository {
             doc.update("filters", filters);
     }
 
-    public static void getProposals(LocalDate day, String userId, ArrayList<String> filters, boolean proposed, MyCallback myCallback){
+    public static void getProposals(LocalDate day, String userId, ArrayList<String> filters, Types type, MyCallback myCallback){
         ArrayList<Proposal> res = new ArrayList<>();
 
         LocalDateTime start = (day == null) ? LocalDateTime.MIN : day.atTime(0,0,0), end = (day == null) ? LocalDateTime.MAX : day.atTime(23,59,59);
         CollectionReference db = FirebaseFirestore.getInstance().collection("Proposals");
-        Query activity_query = (proposed) ? db.whereEqualTo("publisherId", userId) : db.whereEqualTo("accepterId", userId);
+        Query activity_query = null;
+
+        switch(type){
+            case PROPOSED: activity_query = db.whereEqualTo("publisherId", userId); break;
+            case ACCEPTED: activity_query = db.whereEqualTo("accepterId", userId); break;
+            case AVAILABLE: activity_query = db.whereNotEqualTo("publisherId", userId).whereEqualTo("accepterID", null); break;
+        }
 
         activity_query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
@@ -119,6 +127,15 @@ public class ProposalRepository {
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 if(task.getResult().exists())
                     myCallback.onCallback(task.getResult().toObject(Proposal.class));
+            }
+        });
+    }
+
+    public static void acceptProposal(String documentId, String userId, MyCallback myCallback){
+        FirebaseFirestore.getInstance().collection("Proposals").document(documentId).update("accepterID", userId).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                myCallback.onCallback(task.isSuccessful());
             }
         });
     }

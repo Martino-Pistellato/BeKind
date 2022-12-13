@@ -2,6 +2,7 @@ package com.example.bekind_v2.UILayer;
 
 import android.app.Dialog;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -53,10 +54,11 @@ public class BottomBar extends AppCompatActivity {
         NavigationUI.setupWithNavController(binding.navView, navController);
 
         addProposalButton = findViewById(R.id.add_proposal_btn);
+
         addProposalButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Dialog dialog = new Dialog(getApplicationContext()); //TODO: blend declaration and initialization
+                Dialog dialog = new Dialog(BottomBar.this);
                 TextInputEditText title, body;
                 DatePicker expiringDate;
                 TimePicker expiringHour;
@@ -120,8 +122,10 @@ public class BottomBar extends AppCompatActivity {
 
                         if(!bottomBarViewModel.checkConstraints(title, proposalTitle, body, proposalBody, proposalExpiringDate))
                             Toast.makeText(getApplicationContext(), "Errore: i campi non sono stati riempiti correttamente", Toast.LENGTH_SHORT).show();
-                        else //all the parameters in input are correct
+                        else{   //all the parameters in input are correct
                             bottomBarViewModel.createProposal(proposalTitle, proposalBody, proposalExpiringDate);
+                            dialog.dismiss();
+                        }
                     }
                 });
 

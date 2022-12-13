@@ -25,6 +25,103 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintBottom_toBottomOf="@id/nav_view"/>
+        
+    <RelativeLayout
+            android:id="@+id/schedule_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@id/nav_host_fragment_activity_bottom_bar"
+            android:background="#e6ffe6">
+    
+            <TextView
+                android:id="@+id/scheduledate_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Programma del giorno x"
+                android:textStyle="bold"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="1dp"
+                android:visibility="visible"
+                android:clickable="true"/>
+    
+            <TextView
+                android:id="@+id/total_activities"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Attività totali"
+                android:textStyle="bold"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="1dp"
+                android:visibility="invisible"
+                android:clickable="true"/>
+    
+            <Switch
+                android:id="@+id/simpleSwitch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_alignParentEnd="true"/>        <!--android:textOff="Totali"
+                android:textOn="Giornaliere"-->
+    
+        </RelativeLayout>
+    
+        <RelativeLayout
+            android:id="@+id/chips_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/schedule_layout"
+            android:background="#e6ffe6">
+    
+            <HorizontalScrollView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:scrollbars="none">
+    
+                <com.google.android.material.chip.ChipGroup
+                    android:id="@+id/chip_group"
+                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    app:singleLine="true">
+    
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/shopping_chip"
+                        android:layout_height="wrap_content"
+                        android:layout_width="wrap_content"
+                        android:text="Spesa"
+                        android:checkable="true"
+                        android:checked="false"/>
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/houseworks_chip"
+                        android:layout_height="wrap_content"
+                        android:layout_width="wrap_content"
+                        android:text="Lavori Domestici"
+                        android:checkable="true"
+                        android:checked="false"/>
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/cleaning_chip"
+                        android:layout_height="wrap_content"
+                        android:layout_width="wrap_content"
+                        android:text="Pulizie"
+                        android:checkable="true"
+                        android:checked="false"/>
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/transport_chip"
+                        android:layout_height="wrap_content"
+                        android:layout_width="wrap_content"
+                        android:text="Trasporto"
+                        android:checkable="true"
+                        android:checked="false"/>
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/random_chip"
+                        android:layout_height="wrap_content"
+                        android:layout_width="wrap_content"
+                        android:text="Varie"
+                        android:checkable="true"
+                        android:checked="false"/>
+    
+                </com.google.android.material.chip.ChipGroup>
+            </HorizontalScrollView>
+        </RelativeLayout>
 
     <fragment
         android:id="@+id/nav_host_fragment_activity_bottom_bar"

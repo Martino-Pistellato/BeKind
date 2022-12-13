@@ -1,5 +1,6 @@
 package com.example.bekind_v2.UILayer;
 
+import android.util.Log;
 import android.widget.DatePicker;
 import android.widget.TimePicker;
 
@@ -56,7 +57,7 @@ public class BottomBarViewModel extends ViewModel {
 
     public boolean checkDateConstraint(Date expiringDate){
         LocalDateTime current = LocalDateTime.now();
-        Date currentDate = toDate(current.getYear(), current.getMonthValue(), current.getDayOfMonth(), current.getHour(), current.getMinute());
+        Date currentDate = toDate(current.getYear(), current.getMonthValue() - 1, current.getDayOfMonth(), current.getHour(), current.getMinute());
         return expiringDate.after(currentDate);
     }
 

@@ -6,7 +6,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:gravity="center_horizontal">
 
-        <!--<androidx.recyclerview.widget.RecyclerView
+        <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycler_view_proposal"
             android:layout_width="wrap_content"
             android:layout_height="630dp"
@@ -14,7 +14,7 @@
             android:layout_centerHorizontal="true"
             tools:listitem="@layout/list_element">
 
-        </androidx.recyclerview.widget.RecyclerView>-->
+        </androidx.recyclerview.widget.RecyclerView>
 
 
 </LinearLayout>

@@ -27,40 +27,19 @@ import java.util.Date;
 
 public class ProposalRecyclerViewAdapter extends RecyclerView.Adapter<ProposalRecyclerViewAdapter.MyViewHolder> {
     private ProposalsViewModel proposalsViewModel;
-    private Context context;
-    private Fragment owner;
+    ArrayList<ProposalRepository.Proposal> proposals;
+    Context context;
+
+    public ProposalRecyclerViewAdapter(ArrayList<ProposalRepository.Proposal> proposals, Context context) {
+        this.proposals = proposals;
+        this.context = context;
+    }
 
     @NonNull
     @Override
     public ProposalRecyclerViewAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(context);
         View view = inflater.inflate(R.layout.list_element, parent, false);
-        proposalsViewModel = new ViewModelProvider((ViewModelStoreOwner) owner).get(ProposalsViewModel.class);
-
-        final Observer<ArrayList<ProposalRepository.Proposal>> proposedObserver = new Observer<ArrayList<ProposalRepository.Proposal>>() {
-            @Override
-            public void onChanged(@Nullable final ArrayList<ProposalRepository.Proposal> proposed) {
-
-            }
-        };
-
-        final Observer<ArrayList<ProposalRepository.Proposal>> acceptedObserver = new Observer<ArrayList<ProposalRepository.Proposal>>() {
-            @Override
-            public void onChanged(@Nullable final ArrayList<ProposalRepository.Proposal> accepted) {
-
-            }
-        };
-
-        final Observer<ArrayList<ProposalRepository.Proposal>> availableObserver = new Observer<ArrayList<ProposalRepository.Proposal>>() {
-            @Override
-            public void onChanged(@Nullable final ArrayList<ProposalRepository.Proposal> available) {
-
-            }
-        };
-
-        proposalsViewModel.getProposed().observe((LifecycleOwner) owner,proposedObserver);
-        proposalsViewModel.getAccepted().observe((LifecycleOwner) owner,acceptedObserver);
-        proposalsViewModel.getAvailable().observe((LifecycleOwner) owner,availableObserver);
 
         return new ProposalRecyclerViewAdapter.MyViewHolder(view);
     }
@@ -80,7 +59,7 @@ public class ProposalRecyclerViewAdapter extends RecyclerView.Adapter<ProposalRe
 
     @Override
     public int getItemCount() {
-        return 0;
+        return proposals.size();
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {

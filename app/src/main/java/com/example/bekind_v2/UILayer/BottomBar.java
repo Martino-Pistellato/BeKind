@@ -9,13 +9,21 @@ import android.widget.DatePicker;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.example.bekind_v2.DataLayer.ProposalRepository;
+import com.example.bekind_v2.DataLayer.UserManager;
 import com.example.bekind_v2.R;
+import com.example.bekind_v2.Utilities.MyCallback;
+import com.example.bekind_v2.Utilities.ProposalsViewModel;
+import com.example.bekind_v2.Utilities.Types;
 import com.example.bekind_v2.databinding.ActivityBottomBarBinding;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.compose.ui.graphics.GraphicsLayerScope;
+import androidx.navigation.NavBackStackEntry;
 import androidx.navigation.NavController;
+import androidx.navigation.NavGraph;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
@@ -26,6 +34,8 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.tabs.TabLayout;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Date;
 
 public class BottomBar extends AppCompatActivity {
@@ -33,6 +43,9 @@ public class BottomBar extends AppCompatActivity {
     private ActivityBottomBarBinding binding;
     private BottomBarViewModel bottomBarViewModel;
     private FloatingActionButton addProposalButton;
+    private ProposalsViewModel proposalsViewModel;
+    private LocalDate setDay;
+    private ArrayList<String> filters;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,17 +54,23 @@ public class BottomBar extends AppCompatActivity {
         binding = ActivityBottomBarBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        bottomBarViewModel = new ViewModelProvider(this).get(BottomBarViewModel.class);
-
         BottomNavigationView navView = findViewById(R.id.nav_view);
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
-                    R.id.navigation_home, R.id.navigation_available,  R.id.navigation_dashboard, R.id.navigation_profile)
+                    R.id.navigation_home, R.id.navigation_available, R.id.navigation_dashboard, R.id.navigation_profile)
                     .build();
-        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_activity_bottom_bar);
+        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
+
+        NavBackStackEntry backStackEntry = navController.getBackStackEntry(R.id.mobile_navigation);
+
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(binding.navView, navController);
+
+        bottomBarViewModel = new ViewModelProvider(this).get(BottomBarViewModel.class);
+        proposalsViewModel = new ViewModelProvider(backStackEntry).get(ProposalsViewModel.class);
+
+
 
         addProposalButton = findViewById(R.id.add_proposal_btn);
 
@@ -116,7 +135,7 @@ public class BottomBar extends AppCompatActivity {
                 publishBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Date proposalExpiringDate = bottomBarViewModel.toDate(expiringDate.getYear(), expiringDate.getMonth(), expiringDate.getDayOfMonth(), expiringHour.getHour(), expiringHour.getMinute());
+                        Date proposalExpiringDate = BottomBarViewModel.toDate(expiringDate.getYear(), expiringDate.getMonth(), expiringDate.getDayOfMonth(), expiringHour.getHour(), expiringHour.getMinute());
                         String proposalTitle = title.getText().toString().trim(); //gets the content of the title
                         String proposalBody = body.getText().toString().trim(); //gets the content of the body
 
@@ -124,6 +143,13 @@ public class BottomBar extends AppCompatActivity {
                             Toast.makeText(getApplicationContext(), "Errore: i campi non sono stati riempiti correttamente", Toast.LENGTH_SHORT).show();
                         else{   //all the parameters in input are correct
                             bottomBarViewModel.createProposal(proposalTitle, proposalBody, proposalExpiringDate);
+                            ProposalRepository.getProposals(setDay, UserManager.getUserId(), filters, Types.PROPOSED, new MyCallback<ArrayList<ProposalRepository.Proposal>>() {
+                                        @Override
+                                        public void onCallback(ArrayList<ProposalRepository.Proposal> result) {
+                                            proposalsViewModel.getProposed().setValue(result);
+                                        }
+                                    }
+                            );
                             dialog.dismiss();
                         }
                     }

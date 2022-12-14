@@ -1,11 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".UILayer.ui.home.ProposalFragment">
+    tools:context=".UILayer.ui.home.ProposalFragment"
+    android:id="@+id/fragment_proposal">
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler_view_proposal"
+        android:layout_width="wrap_content"
+        android:layout_height="630dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        tools:listitem="@layout/list_element">
+    </androidx.recyclerview.widget.RecyclerView>
 
 
 </FrameLayout>

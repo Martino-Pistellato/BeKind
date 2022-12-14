@@ -9,23 +9,57 @@
         android:id="@+id/navigation_home"
         android:name="com.example.bekind_v2.UILayer.ui.home.HomeFragment"
         android:label="@string/title_home"
-        tools:layout="@layout/fragment_home" />
-
+        tools:layout="@layout/fragment_home" >
+        <action
+            android:id="@+id/action_navigation_home_to_proposalFragment"
+            app:destination="@id/proposalFragment" />
+        <action
+            android:id="@+id/action_navigation_home_to_acceptedFragment"
+            app:destination="@id/acceptedFragment" />
+        <argument
+            android:name="proposalsViewModel"
+            app:argType="reference" />
+    </fragment>
     <fragment
         android:id="@+id/navigation_available"
         android:name="com.example.bekind_v2.UILayer.ui.available.AvailableFragment"
         android:label="@string/title_available"
-        tools:layout="@layout/fragment_available" />
-
+        tools:layout="@layout/fragment_available" >
+        <argument
+            android:name="proposalsViewModel"
+            app:argType="reference" />
+    </fragment>
     <fragment
         android:id="@+id/navigation_dashboard"
         android:name="com.example.bekind_v2.UILayer.ui.dashboard.DashboardFragment"
         android:label="@string/title_dashboard"
-        tools:layout="@layout/fragment_dashboard" />
-
+        tools:layout="@layout/fragment_dashboard" >
+        <argument
+            android:name="proposalsViewModel"
+            app:argType="reference" />
+    </fragment>
     <fragment
         android:id="@+id/navigation_profile"
         android:name="com.example.bekind_v2.UILayer.ui.profile.ProfileFragment"
         android:label="@string/title_profile"
         tools:layout="@layout/fragment_profile" />
+
+    <fragment
+        android:id="@+id/proposalFragment"
+        android:name="com.example.bekind_v2.UILayer.ui.home.ProposalFragment"
+        android:label="fragment_proposal"
+        tools:layout="@layout/fragment_proposal" >
+        <argument
+            android:name="proposalsViewModel"
+            app:argType="reference" />
+    </fragment>
+    <fragment
+        android:id="@+id/acceptedFragment"
+        android:name="com.example.bekind_v2.UILayer.ui.home.AcceptedFragment"
+        android:label="fragment_accepted"
+        tools:layout="@layout/fragment_accepted" >
+        <argument
+            android:name="proposalsViewModel"
+            app:argType="reference" />
+    </fragment>
 </navigation>

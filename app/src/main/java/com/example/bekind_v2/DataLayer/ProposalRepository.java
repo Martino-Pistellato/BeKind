@@ -88,7 +88,7 @@ public class ProposalRepository {
             doc.update("filters", filters);
     }
 
-    public static void getProposals(LocalDate day, String userId, ArrayList<String> filters, Types type, MyCallback myCallback){
+    public static void getProposals(LocalDate day, String userId, ArrayList<String> filters, Types type, MyCallback<ArrayList<Proposal>> myCallback){
         ArrayList<Proposal> res = new ArrayList<>();
 
         LocalDateTime start = (day == null) ? LocalDateTime.MIN : day.atTime(0,0,0), end = (day == null) ? LocalDateTime.MAX : day.atTime(23,59,59);
@@ -121,7 +121,7 @@ public class ProposalRepository {
         });
     }
 
-    public static void getProposal(String Id, MyCallback myCallback){
+    public static void getProposal(String Id, MyCallback<Proposal> myCallback){
         FirebaseFirestore.getInstance().collection("Proposals").document(Id).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
@@ -131,7 +131,7 @@ public class ProposalRepository {
         });
     }
 
-    public static void acceptProposal(String documentId, String userId, MyCallback myCallback){
+    public static void acceptProposal(String documentId, String userId, MyCallback<Boolean> myCallback){
         FirebaseFirestore.getInstance().collection("Proposals").document(documentId).update("accepterID", userId).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {

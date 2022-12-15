@@ -3,8 +3,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".UILayer.ui.home.AcceptedFragment">    
-    <!--android:paddingTop="?attr/actionBarSize"-->
+    tools:context=".UILayer.ui.home.AcceptedFragment"
+    android:id="@+id/fragment_accepted">
 
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler_view_proposal"
+        android:layout_width="wrap_content"
+        android:layout_height="630dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        tools:listitem="@layout/list_element">
+    </androidx.recyclerview.widget.RecyclerView>
 
 </FrameLayout>

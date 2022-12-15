@@ -6,14 +6,13 @@ import androidx.lifecycle.ViewModel;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 
 import com.example.bekind_v2.Utilities.ProposalsViewModel;
+import com.example.bekind_v2.Utilities.Utilities;
 
 public class HomeViewModel extends ViewModel {
     public static class HomeActivityViewPagerAdapter extends FragmentStateAdapter {
-        private ProposalsViewModel proposalsViewModel;
         //constructor, necessary
-        public HomeActivityViewPagerAdapter(@NonNull Fragment fragment, ProposalsViewModel proposalsViewModel) {
+        public HomeActivityViewPagerAdapter(@NonNull Fragment fragment) {
             super(fragment);
-            this.proposalsViewModel = proposalsViewModel;
         }
 
         //return new Fragment based on position
@@ -21,10 +20,10 @@ public class HomeViewModel extends ViewModel {
         @Override
         public Fragment createFragment(int position) {
             if(position == 1) {
-                return new AcceptedFragment(proposalsViewModel);
+                return new AcceptedFragment();
             }
             else {
-                return new ProposedFragment(proposalsViewModel);
+                return new ProposedFragment();
             }
         }
 

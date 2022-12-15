@@ -21,53 +21,36 @@ import com.example.bekind_v2.R;
 import com.example.bekind_v2.UILayer.BottomBar;
 import com.example.bekind_v2.Utilities.ProposalRecyclerViewAdapter;
 import com.example.bekind_v2.Utilities.ProposalsViewModel;
+import com.example.bekind_v2.Utilities.Utilities;
 
 import java.util.ArrayList;
 
 public class ProposedFragment extends Fragment {
-
-    private ProposalsViewModel proposalsViewModel;
+    private final ProposalsViewModel proposalsViewModel;
 
     public ProposedFragment() {
-        this.proposalsViewModel = BottomBar.SharedViewModel.proposalsViewModel;
-    }
-
-    public ProposedFragment(ProposalsViewModel proposalsViewModel){
-        this.proposalsViewModel = proposalsViewModel;
+        this.proposalsViewModel = Utilities.SharedViewModel.proposalsViewModel;
     }
 
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
-                             @Nullable Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_proposed, container, false);
 
-        return view;
-    }
-
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-
-        RecyclerView recyclerView = this.getView().findViewById(R.id.recycler_view_proposal);
-        Log.e("HERE", "quack");
+        RecyclerView recyclerView = view.findViewById(R.id.recycler_view_proposal);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+
         final Observer<ArrayList<ProposalRepository.Proposal>> proposedObserver = new Observer<ArrayList<ProposalRepository.Proposal>>() {
             @Override
             public void onChanged(@Nullable final ArrayList<ProposalRepository.Proposal> proposed) {
-                Log.e("ON CHANGED", "proposed is changed");
-                for (ProposalRepository.Proposal prop : proposed)
-                    Log.e("PRPSD", prop.toString());
                 ProposalRecyclerViewAdapter adapter = new ProposalRecyclerViewAdapter(proposed, getContext());
                 recyclerView.setAdapter(adapter);
                 adapter.notifyDataSetChanged();
             }
         };
 
-        Log.e("PROPOSED", "call");
-        Log.e("PROPOSED", "is null: " + (proposalsViewModel == null));
-        this.proposalsViewModel = BottomBar.SharedViewModel.proposalsViewModel;
-        Log.e("PROPOSED", "is null: " + (proposalsViewModel == null));
         proposalsViewModel.getProposed().observe(getViewLifecycleOwner(),proposedObserver);
+
+        return view;
     }
 }

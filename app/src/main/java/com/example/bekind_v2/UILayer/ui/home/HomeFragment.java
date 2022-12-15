@@ -17,17 +17,13 @@ import androidx.viewpager2.widget.ViewPager2;
 import com.example.bekind_v2.R;
 import com.example.bekind_v2.UILayer.BottomBar;
 import com.example.bekind_v2.Utilities.ProposalsViewModel;
+import com.example.bekind_v2.Utilities.Utilities;
 import com.example.bekind_v2.databinding.FragmentHomeBinding;
 import com.google.android.material.tabs.TabLayout;
 
 public class HomeFragment extends Fragment {
 
     private FragmentHomeBinding binding;
-    private ProposalsViewModel proposalsViewModel;
-
-    public HomeFragment() {
-        this.proposalsViewModel = BottomBar.SharedViewModel.proposalsViewModel;
-    }
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         HomeViewModel homeViewModel = new ViewModelProvider(this).get(HomeViewModel.class);
@@ -36,7 +32,7 @@ public class HomeFragment extends Fragment {
         View root = binding.getRoot();
 
         ViewPager2 viewPager2 = root.findViewById(R.id.pager);
-        viewPager2.setAdapter(new HomeViewModel.HomeActivityViewPagerAdapter(this, proposalsViewModel));
+        viewPager2.setAdapter(new HomeViewModel.HomeActivityViewPagerAdapter(this));
 
         TabLayout tabLayout = root.findViewById(R.id.tab_layout);
 

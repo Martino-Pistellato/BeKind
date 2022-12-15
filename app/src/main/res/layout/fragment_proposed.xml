@@ -3,15 +3,19 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".UILayer.ui.home.ProposedFragment"
-    android:id="@+id/fragment_proposed">
+    android:id="@+id/fragment_proposed"
+    android:layout_centerHorizontal="true">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view_proposal"
         android:layout_width="wrap_content"
         android:layout_height="630dp"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
         tools:listitem="@layout/list_element">
     </androidx.recyclerview.widget.RecyclerView>
 

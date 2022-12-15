@@ -90,15 +90,14 @@ public class ProposalRepository {
 
     public static void getProposals(LocalDate day, String userId, ArrayList<String> filters, Types type, MyCallback<ArrayList<Proposal>> myCallback){
         ArrayList<Proposal> res = new ArrayList<>();
-
         LocalDateTime start = (day == null) ? LocalDateTime.MIN : day.atTime(0,0,0), end = (day == null) ? LocalDateTime.MAX : day.atTime(23,59,59);
         CollectionReference db = FirebaseFirestore.getInstance().collection("Proposals");
         Query activity_query = null;
 
         switch(type){
-            case PROPOSED: activity_query = db.whereEqualTo("publisherId", userId); break;
-            case ACCEPTED: activity_query = db.whereEqualTo("accepterId", userId); break;
-            case AVAILABLE: activity_query = db.whereNotEqualTo("publisherId", userId).whereEqualTo("accepterID", null); break;
+            case PROPOSED: activity_query = db.whereEqualTo("publisherID", userId); break;
+            case ACCEPTED: activity_query = db.whereEqualTo("accepterID", userId); break;
+            case AVAILABLE: activity_query = db.whereNotEqualTo("publisherID", userId).whereEqualTo("accepterID", null); break;
         }
 
         activity_query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -108,10 +107,8 @@ public class ProposalRepository {
                     for (DocumentSnapshot snap :  task.getResult()) { //for each element in the query
                         Proposal prop = snap.toObject(Proposal.class); //cast the result to a real proposal
                         LocalDateTime expD = prop.getExpiringDate().toInstant().atZone(ZoneId.of("ECT")).toLocalDateTime(); //gets the expiring date of the proposal
-
                         if (expD.isAfter(start) && expD.isBefore(end)) {//if the proposal expiring date is between the limits
                             if (filters != null && prop.getFilters().containsAll(filters))
-                                Log.e("PROP_FILTER", filters.toString()); //TODO: remove it
                             res.add(prop); //adds the proposal to the Proposal to be shown
                         }
                     }

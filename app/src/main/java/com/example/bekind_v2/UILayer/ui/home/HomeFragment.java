@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.example.bekind_v2.R;
+import com.example.bekind_v2.UILayer.BottomBar;
 import com.example.bekind_v2.Utilities.ProposalsViewModel;
 import com.example.bekind_v2.databinding.FragmentHomeBinding;
 import com.google.android.material.tabs.TabLayout;
@@ -25,11 +26,7 @@ public class HomeFragment extends Fragment {
     private ProposalsViewModel proposalsViewModel;
 
     public HomeFragment() {
-        this.proposalsViewModel = new ViewModelProvider(this).get(ProposalsViewModel.class);
-    }
-
-    public HomeFragment(ProposalsViewModel proposalsViewModel) {
-        this.proposalsViewModel = proposalsViewModel;
+        this.proposalsViewModel = BottomBar.SharedViewModel.proposalsViewModel;
     }
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {

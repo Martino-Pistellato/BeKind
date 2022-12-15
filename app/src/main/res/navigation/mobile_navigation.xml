@@ -12,7 +12,7 @@
         tools:layout="@layout/fragment_home" >
         <action
             android:id="@+id/action_navigation_home_to_proposalFragment"
-            app:destination="@id/proposalFragment" />
+            app:destination="@id/proposedFragment" />
         <action
             android:id="@+id/action_navigation_home_to_acceptedFragment"
             app:destination="@id/acceptedFragment" />
@@ -45,10 +45,10 @@
         tools:layout="@layout/fragment_profile" />
 
     <fragment
-        android:id="@+id/proposalFragment"
-        android:name="com.example.bekind_v2.UILayer.ui.home.ProposalFragment"
-        android:label="fragment_proposal"
-        tools:layout="@layout/fragment_proposal" >
+        android:id="@+id/proposedFragment"
+        android:name="com.example.bekind_v2.UILayer.ui.home.ProposedFragment"
+        android:label="fragment_proposed"
+        tools:layout="@layout/fragment_proposed" >
         <argument
             android:name="proposalsViewModel"
             app:argType="reference" />

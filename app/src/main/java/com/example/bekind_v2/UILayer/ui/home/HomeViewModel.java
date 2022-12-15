@@ -1,14 +1,8 @@
 package com.example.bekind_v2.UILayer.ui.home;
 
-import android.os.Bundle;
-
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentActivity;
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
-import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 
 import com.example.bekind_v2.Utilities.ProposalsViewModel;
@@ -30,7 +24,7 @@ public class HomeViewModel extends ViewModel {
                 return new AcceptedFragment(proposalsViewModel);
             }
             else {
-                return new ProposalFragment(proposalsViewModel);
+                return new ProposedFragment(proposalsViewModel);
             }
         }
 

@@ -43,9 +43,12 @@ public class BottomBar extends AppCompatActivity {
     private ActivityBottomBarBinding binding;
     private BottomBarViewModel bottomBarViewModel;
     private FloatingActionButton addProposalButton;
-    private ProposalsViewModel proposalsViewModel;
-    private LocalDate setDay;
-    private ArrayList<String> filters;
+    private LocalDate setDay = LocalDate.now();
+    private ArrayList<String> filters = new ArrayList<>();
+
+    public static class SharedViewModel{
+        public static ProposalsViewModel proposalsViewModel;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,9 +71,16 @@ public class BottomBar extends AppCompatActivity {
         NavigationUI.setupWithNavController(binding.navView, navController);
 
         bottomBarViewModel = new ViewModelProvider(this).get(BottomBarViewModel.class);
-        proposalsViewModel = new ViewModelProvider(backStackEntry).get(ProposalsViewModel.class);
 
+        SharedViewModel.proposalsViewModel = new ViewModelProvider(this).get(ProposalsViewModel.class);
 
+        ProposalRepository.getProposals(setDay, UserManager.getUserId(), filters, Types.PROPOSED, new MyCallback<ArrayList<ProposalRepository.Proposal>>() {
+                    @Override
+                    public void onCallback(ArrayList<ProposalRepository.Proposal> result) {
+                        BottomBar.SharedViewModel.proposalsViewModel.getProposed().setValue(result);
+                    }
+                }
+        );
 
         addProposalButton = findViewById(R.id.add_proposal_btn);
 
@@ -139,14 +149,18 @@ public class BottomBar extends AppCompatActivity {
                         String proposalTitle = title.getText().toString().trim(); //gets the content of the title
                         String proposalBody = body.getText().toString().trim(); //gets the content of the body
 
+
+                        if (!filters.contains("Varie")) filters.add("Varie");
+
                         if(!bottomBarViewModel.checkConstraints(title, proposalTitle, body, proposalBody, proposalExpiringDate))
                             Toast.makeText(getApplicationContext(), "Errore: i campi non sono stati riempiti correttamente", Toast.LENGTH_SHORT).show();
                         else{   //all the parameters in input are correct
                             bottomBarViewModel.createProposal(proposalTitle, proposalBody, proposalExpiringDate);
+
                             ProposalRepository.getProposals(setDay, UserManager.getUserId(), filters, Types.PROPOSED, new MyCallback<ArrayList<ProposalRepository.Proposal>>() {
                                         @Override
                                         public void onCallback(ArrayList<ProposalRepository.Proposal> result) {
-                                            proposalsViewModel.getProposed().setValue(result);
+                                            SharedViewModel.proposalsViewModel.getProposed().setValue(result);
                                         }
                                     }
                             );

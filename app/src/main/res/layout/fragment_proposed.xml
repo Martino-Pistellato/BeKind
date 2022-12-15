@@ -3,8 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".UILayer.ui.home.ProposalFragment"
-    android:id="@+id/fragment_proposal">
+    tools:context=".UILayer.ui.home.ProposedFragment"
+    android:id="@+id/fragment_proposed">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view_proposal"

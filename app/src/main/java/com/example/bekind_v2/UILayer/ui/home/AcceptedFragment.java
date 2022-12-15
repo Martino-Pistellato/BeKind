@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.bekind_v2.R;
+import com.example.bekind_v2.UILayer.BottomBar;
 import com.example.bekind_v2.Utilities.ProposalsViewModel;
 import com.example.bekind_v2.databinding.FragmentHomeBinding;
 
@@ -19,7 +20,7 @@ public class AcceptedFragment extends Fragment {
     private ProposalsViewModel proposalsViewModel;
 
     public AcceptedFragment() {
-        this.proposalsViewModel = new ViewModelProvider(this).get(ProposalsViewModel.class);
+        this.proposalsViewModel = BottomBar.SharedViewModel.proposalsViewModel;
     }
 
     public AcceptedFragment(ProposalsViewModel proposalsViewModel) {

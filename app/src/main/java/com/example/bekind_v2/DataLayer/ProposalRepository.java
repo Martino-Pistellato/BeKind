@@ -72,21 +72,6 @@ public class ProposalRepository {
         FirebaseFirestore.getInstance().collection("Proposals").document(id).set(proposal); //TODO: make it asynchronous?
     }
 
-    public static void updateProposal(String id, String title, String body, Date expiringDate, String accepterId, ArrayList<String> filters){
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        DocumentReference doc = db.collection("Proposals").document(id);
-
-        if(!title.isEmpty())
-            doc.update("title", title);
-        if(!body.isEmpty())
-            doc.update("body", body);
-        if(expiringDate != null)
-            doc.update("expiringDate", expiringDate);
-        if(!accepterId.isEmpty())
-            doc.update("accepterId", accepterId);
-        if(filters != null)
-            doc.update("filters", filters);
-    }
 
     public static void getProposals(LocalDate day, String userId, ArrayList<String> filters, Types type, MyCallback<ArrayList<Proposal>> myCallback){
         ArrayList<Proposal> res = new ArrayList<>();

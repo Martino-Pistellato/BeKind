@@ -6,6 +6,7 @@ import android.widget.TimePicker;
 
 import androidx.lifecycle.ViewModel;
 
+import com.example.bekind_v2.DataLayer.PostRepository;
 import com.google.android.material.textfield.TextInputEditText;
 
 import java.time.LocalDateTime;
@@ -14,6 +15,7 @@ import java.util.Date;
 import java.util.ArrayList;
 
 import com.example.bekind_v2.DataLayer.ProposalRepository;
+import com.example.bekind_v2.DataLayer.PostRepository;
 import com.example.bekind_v2.DataLayer.UserManager;
 
 public class BottomBarViewModel extends ViewModel {
@@ -26,6 +28,10 @@ public class BottomBarViewModel extends ViewModel {
     public void createProposal(String title, String body, Date expiringDate){
         String userId = UserManager.getUserId();
         ProposalRepository.createProposal(title, body, expiringDate, userId, null, filters);
+    }
+
+    public void createPost(String title, String body){
+        PostRepository.createPost(title, body);
     }
 
     public static Date toDate(int year, int month, int day, int hour, int minute){
@@ -73,5 +79,19 @@ public class BottomBarViewModel extends ViewModel {
             return false;
         }
         else return checkDateConstraint(proposalExpiringDate);
+    }
+
+    public boolean checkPostConstraints(TextInputEditText title, String postTitle, TextInputEditText body, String postBody){
+        if(postTitle.isEmpty()){ //checks if the title is empty, in that case it blocks the creation until it is filled
+            title.setError("Questo campo non può essere vuoto");
+            title.requestFocus();
+            return false;
+        }
+        else if(postBody.isEmpty()){ //checks if the body is empty, in that case it blocks the creation until it is filled
+            body.setError("Questo campo non può essere vuoto");
+            body.requestFocus();
+            return false;
+        }
+        return true;
     }
 }

@@ -22,6 +22,7 @@ import com.example.bekind_v2.Utilities.ScheduleBar;
 import com.example.bekind_v2.Utilities.ScheduleBar.ScheduleDate;
 import com.example.bekind_v2.Utilities.Utilities;
 import com.example.bekind_v2.databinding.FragmentHomeBinding;
+import com.google.android.material.chip.Chip;
 import com.google.android.material.tabs.TabLayout;
 
 public class HomeFragment extends Fragment {
@@ -30,15 +31,41 @@ public class HomeFragment extends Fragment {
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         HomeViewModel homeViewModel = new ViewModelProvider(this).get(HomeViewModel.class);
-
         binding = FragmentHomeBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
+        Chip shoppingChip, houseworksChip, cleaningChip, transportChip, randomChip;
+            
+        shoppingChip = root.findViewById(R.id.shopping_chip);
+        houseworksChip = root.findViewById(R.id.houseworks_chip);
+        cleaningChip = root.findViewById(R.id.cleaning_chip);
+        transportChip = root.findViewById(R.id.transport_chip);
+        randomChip = root.findViewById(R.id.random_chip);
+        
+        shoppingChip.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) { homeViewModel.manageFilter(shoppingChip.getText().toString()); }
+        });
+        houseworksChip.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) { homeViewModel.manageFilter(houseworksChip.getText().toString()); }
+        });
+        cleaningChip.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) { homeViewModel.manageFilter(cleaningChip.getText().toString()); }
+        });
+        transportChip.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) { homeViewModel.manageFilter(transportChip.getText().toString()); }
+        });
+        randomChip.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) { homeViewModel.manageFilter(randomChip.getText().toString()); }
+        });
 
         ViewPager2 viewPager2 = root.findViewById(R.id.pager);
         viewPager2.setAdapter(new HomeViewModel.HomeActivityViewPagerAdapter(this));
 
         TabLayout tabLayout = root.findViewById(R.id.tab_layout);
-
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) { //when we select a tab

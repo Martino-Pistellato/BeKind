@@ -31,7 +31,6 @@ public class UserLoginRepository {
             FirebaseAuth.getInstance().createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                 @Override
                 public void onComplete(@NonNull Task<AuthResult> task) {
-                    Log.e("CRTD_USR", "before user creation");
                     myCallback.onCallback(task.isSuccessful());
                 }
             });

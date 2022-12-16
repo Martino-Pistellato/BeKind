@@ -48,12 +48,72 @@
 
     </RelativeLayout>
 
+    <RelativeLayout
+        android:id="@+id/chips_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/schedule_layout"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:background="#e6ffe6">
+
+        <HorizontalScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:scrollbars="none">
+
+            <com.google.android.material.chip.ChipGroup
+                android:id="@+id/chip_group"
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                app:singleLine="true">
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/shopping_chip"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:text="Spesa"
+                    android:checkable="true"
+                    android:checked="false"/>
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/houseworks_chip"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:text="Lavori Domestici"
+                    android:checkable="true"
+                    android:checked="false"/>
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/cleaning_chip"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:text="Pulizie"
+                    android:checkable="true"
+                    android:checked="false"/>
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/transport_chip"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:text="Trasporto"
+                    android:checkable="true"
+                    android:checked="false"/>
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/random_chip"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:text="Varie"
+                    android:checkable="true"
+                    android:checked="false"/>
+
+            </com.google.android.material.chip.ChipGroup>
+        </HorizontalScrollView>
+    </RelativeLayout>
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view_proposal"
         android:layout_width="wrap_content"
         android:layout_height="630dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/schedule_layout"
+        app:layout_constraintTop_toBottomOf="@+id/chips_layout"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         tools:listitem="@layout/list_element">

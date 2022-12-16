@@ -6,7 +6,6 @@ import com.example.bekind_v2.Utilities.MyCallback;
 
 public class UserManager {
     public static void createUser(String name, String surname, String email, String password, String birth, String city, String neighbourhoodID, String street, String street_number, MyCallback myCallback){
-        Log.e("CRTD_USR", "before auth registration");
         UserLoginRepository.register(email, password, (x)->{
             UserDatabaseRepository.createUser(getUserId(), name, surname, birth, email, city, street, street_number, neighbourhoodID, myCallback);
         });

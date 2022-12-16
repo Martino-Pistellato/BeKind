@@ -33,4 +33,8 @@ public class HomeViewModel extends ViewModel {
             return 2;
         }
     }
+
+    public void manageFilter(String filter){
+        Utilities.manageFilter(filter, Utilities.SharedViewModel.filters);
+    }
 }

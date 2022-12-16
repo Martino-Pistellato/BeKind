@@ -94,7 +94,7 @@ public class ProposalRepository {
                         LocalDateTime expD = prop.getExpiringDate().toInstant().atZone(ZoneId.of("ECT")).toLocalDateTime(); //gets the expiring date of the proposal
                         if (expD.isAfter(start) && expD.isBefore(end)) {//if the proposal expiring date is between the limits
                             if (filters != null && prop.getFilters().containsAll(filters))
-                            res.add(prop); //adds the proposal to the Proposal to be shown
+                                res.add(prop); //adds the proposal to the Proposal to be shown
                         }
                     }
                     myCallback.onCallback(res);

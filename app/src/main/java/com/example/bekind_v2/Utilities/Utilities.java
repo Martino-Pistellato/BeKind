@@ -9,4 +9,10 @@ public class Utilities {
         public static LocalDate day;
         public static ArrayList<String> filters;
     }
+    public static void manageFilter(String filter, ArrayList<String> filters){
+        if(filters.contains(filter))
+            filters.remove(filter);
+        else
+            filters.add(filter);
+    }
 }

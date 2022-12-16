@@ -21,6 +21,7 @@ import com.example.bekind_v2.Utilities.ProposalRecyclerViewAdapter;
 import com.example.bekind_v2.Utilities.ProposalsViewModel;
 import com.example.bekind_v2.Utilities.Utilities;
 import com.example.bekind_v2.databinding.FragmentAvailableBinding;
+import com.google.android.material.chip.Chip;
 
 import java.util.ArrayList;
 
@@ -33,13 +34,38 @@ public class AvailableFragment extends Fragment {
         this.proposalsViewModel = Utilities.SharedViewModel.proposalsViewModel;
     }
 
-    public View onCreateView(@NonNull LayoutInflater inflater,
-                             ViewGroup container, Bundle savedInstanceState) {
-        AvailableViewModel availableViewModel =
-                new ViewModelProvider(this).get(AvailableViewModel.class);
-
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        AvailableViewModel availableViewModel = new ViewModelProvider(this).get(AvailableViewModel.class);
         binding = FragmentAvailableBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
+        Chip shoppingChip, houseworksChip, cleaningChip, transportChip, randomChip;
+
+        shoppingChip = root.findViewById(R.id.shopping_chip);
+        houseworksChip = root.findViewById(R.id.houseworks_chip);
+        cleaningChip = root.findViewById(R.id.cleaning_chip);
+        transportChip = root.findViewById(R.id.transport_chip);
+        randomChip = root.findViewById(R.id.random_chip);
+
+        shoppingChip.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) { availableViewModel.manageFilter(shoppingChip.getText().toString()); }
+        });
+        houseworksChip.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) { availableViewModel.manageFilter(houseworksChip.getText().toString()); }
+        });
+        cleaningChip.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) { availableViewModel.manageFilter(cleaningChip.getText().toString()); }
+        });
+        transportChip.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) { availableViewModel.manageFilter(transportChip.getText().toString()); }
+        });
+        randomChip.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) { availableViewModel.manageFilter(randomChip.getText().toString()); }
+        });
 
         RecyclerView recyclerView = root.findViewById(R.id.recycler_view_proposal);
         recyclerView.setHasFixedSize(true);

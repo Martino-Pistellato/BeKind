@@ -28,30 +28,29 @@ public class NeighbourhoodRepository {
         public String getCity(){return this.city;}
     }
 
-    public static void createNeighbourhood(String name, String city, MyCallback myCallback){
-        doesNeighbourhoodExist(name, city, new MyCallback() {
+    public static void createNeighbourhood(String name, String city, MyCallback<Boolean> myCallback){
+        doesNeighbourhoodExist(name, city, new MyCallback<Boolean>() {
             @Override
-            public void onCallback(Object result) {
+            public void onCallback(Boolean result) {
 
-                if(!(boolean)result){ //if there is no neighbourhood with the same name in the same city
+                if(!result){ //if there is no neighbourhood with the same name in the same city
                     String Id =  UUID.randomUUID().toString();
                     Neighbourhood neighbourhood = new Neighbourhood(city, name, Id);
 
                     FirebaseFirestore.getInstance().collection("Neighbourhoods").document(Id).set(neighbourhood).addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
-
                             myCallback.onCallback(task.isSuccessful());
                         }
                     });
                 }
                 else //if there is a neighbourhood with the same name in the same city
-                    myCallback.onCallback((boolean)result);
+                    myCallback.onCallback(result);
             }
         });
     }
 
-    public static void getNeighbourhood(String name, String city, MyCallback myCallback){
+    public static void getNeighbourhood(String name, String city, MyCallback<String> myCallback){
         FirebaseFirestore.getInstance().collection("Neighbourhoods").whereEqualTo("city",city).whereEqualTo("name",name).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
@@ -69,7 +68,7 @@ public class NeighbourhoodRepository {
         });
     }
 
-    public static void doesNeighbourhoodExist(String name, String city, MyCallback myCallback){
+    public static void doesNeighbourhoodExist(String name, String city, MyCallback<Boolean> myCallback){
         FirebaseFirestore.getInstance().collection("Neighbourhoods").whereEqualTo("name", name).whereEqualTo("city", city).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {

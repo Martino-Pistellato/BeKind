@@ -5,6 +5,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -17,6 +18,8 @@ import androidx.viewpager2.widget.ViewPager2;
 import com.example.bekind_v2.R;
 import com.example.bekind_v2.UILayer.BottomBar;
 import com.example.bekind_v2.Utilities.ProposalsViewModel;
+import com.example.bekind_v2.Utilities.ScheduleBar;
+import com.example.bekind_v2.Utilities.ScheduleBar.ScheduleDate;
 import com.example.bekind_v2.Utilities.Utilities;
 import com.example.bekind_v2.databinding.FragmentHomeBinding;
 import com.google.android.material.tabs.TabLayout;
@@ -56,6 +59,18 @@ public class HomeFragment extends Fragment {
                 tabLayout.getTabAt(position).select(); //select the correct tab based on the position of the relative page
             }
         });
+
+        TextView scheduleDate = root.findViewById(R.id.scheduledate_text);
+        Switch simpleSwitch = root.findViewById(R.id.simpleSwitch);
+
+
+        //Sistemare tipi e date listener
+        /*scheduleDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ScheduleDate.showDatePickerDialog(this, this);
+            }
+        });*/
 
         return root;
     }

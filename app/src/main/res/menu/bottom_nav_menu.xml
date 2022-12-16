@@ -11,7 +11,11 @@
         android:icon="@drawable/ic_dashboard_black_24dp"
         android:title="@string/title_available" />
 
-    <!-- TODO: add a blak space-->
+    <item
+        android:id="@+id/navigation_blank"
+        android:clickable="false"
+        android:contextClickable="false"
+        android:title="Blank" />
 
     <item
         android:id="@+id/navigation_dashboard"

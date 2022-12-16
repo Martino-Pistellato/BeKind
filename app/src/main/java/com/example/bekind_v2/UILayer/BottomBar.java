@@ -67,7 +67,6 @@ public class BottomBar extends AppCompatActivity {
         NavigationUI.setupWithNavController(binding.navView, navController);
         bottomBarViewModel = new ViewModelProvider(this).get(BottomBarViewModel.class);
         postsViewModel = new ViewModelProvider(this).get(PostsViewModel.class);
-
         Utilities.SharedViewModel.proposalsViewModel = new ViewModelProvider(this).get(ProposalsViewModel.class);
         Utilities.SharedViewModel.day = LocalDate.now();
         Utilities.SharedViewModel.filters = new ArrayList<>();

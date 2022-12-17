@@ -99,21 +99,13 @@ public class BottomBar extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Dialog choose_dialog = new Dialog(BottomBar.this);
-                Button closeBtn, activityBtn, postBtn;
+                Button activityBtn, postBtn;
 
                 choose_dialog.setContentView(R.layout.choose_popup);
-                choose_dialog.setCanceledOnTouchOutside(false);
+               //choose_dialog.setCanceledOnTouchOutside(false);
 
-                closeBtn = choose_dialog.findViewById(R.id.close_btn);
                 activityBtn = choose_dialog.findViewById(R.id.activity_btn);
                 postBtn = choose_dialog.findViewById(R.id.post_btn);
-
-                closeBtn.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        choose_dialog.dismiss(); //close dialog
-                    }
-                });
 
                 activityBtn.setOnClickListener(new View.OnClickListener() {
                     @Override

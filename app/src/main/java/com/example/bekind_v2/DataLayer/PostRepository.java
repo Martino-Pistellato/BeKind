@@ -11,7 +11,10 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.firestore.ServerTimestamp;
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.UUID;
@@ -21,14 +24,17 @@ public class PostRepository {
         private String title;
         private String body;
         private String id;
+        @ServerTimestamp
+        private Date publishingDate;
 
         public Post() {
         }
 
-        public Post(String title, String body, String id) {
+        public Post(String title, String body, String id, Date publishingDate) {
             this.title = title;
             this.body = body;
             this.id = id;
+            this.publishingDate = publishingDate;
         }
 
         public String getTitle() {
@@ -43,6 +49,10 @@ public class PostRepository {
             return this.id;
         }
 
+        public Date getPublishingDate() {
+            return this.publishingDate;
+        }
+
         public void setTitle(String title) {
             this.title = title;
         }
@@ -53,7 +63,11 @@ public class PostRepository {
     }
     public static void createPost(String title, String body){
         String id =  UUID.randomUUID().toString();
-        PostRepository.Post post = new PostRepository.Post(title, body, id);
+        Date date = new Date();
+        LocalDateTime ldt = LocalDateTime.ofInstant(date.toInstant(), ZoneId.systemDefault());
+        date = Date.from(ldt.atZone(ZoneId.systemDefault()).toInstant());
+
+        PostRepository.Post post = new PostRepository.Post(title, body, id, date);
 
         FirebaseFirestore.getInstance().collection("Posts").document(id).set(post); //TODO: make it asynchronous?
     }

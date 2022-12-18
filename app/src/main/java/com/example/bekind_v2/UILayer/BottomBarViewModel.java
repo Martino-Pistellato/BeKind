@@ -91,4 +91,7 @@ public class BottomBarViewModel extends ViewModel {
         }
         return true;
     }
+    public static void clearProposals(){
+        ProposalRepository.clearProposals();
+    }
 }

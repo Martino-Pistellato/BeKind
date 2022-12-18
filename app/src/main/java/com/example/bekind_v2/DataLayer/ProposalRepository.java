@@ -16,6 +16,7 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.ServerTimestamp;
 
@@ -118,6 +119,24 @@ public class ProposalRepository {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 myCallback.onCallback(task.isSuccessful());
+            }
+        });
+    }
+    
+    public static void deleteProposal(String Id){
+        FirebaseFirestore.getInstance().collection("Proposals").document(Id).delete();
+    }
+    
+    public static void clearProposals(){
+        FirebaseFirestore.getInstance().collection("Proposals").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                for(DocumentSnapshot snap : task.getResult()){
+                    Proposal prop = snap.toObject(Proposal.class); //cast the result to a real proposal
+                    LocalDateTime expD = prop.getExpiringDate().toInstant().atZone(ZoneId.of("ECT")).toLocalDateTime();
+                    if (!expD.isAfter(LocalDateTime.now()))
+                        deleteProposal(prop.getId());
+                }
             }
         });
     }

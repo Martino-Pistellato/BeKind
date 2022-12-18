@@ -2,36 +2,52 @@ package com.example.bekind_v2.Utilities;
 
 import android.app.DatePickerDialog;
 import android.content.Context;
+import android.util.Log;
 import android.view.View;
+import android.widget.DatePicker;
+import android.widget.TextView;
 
 
-import java.util.Calendar;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.Date;
 
 public class ScheduleBar {
 
     public static class ScheduleDate {
-        public static Date scheduleDate;
+        private static Date scheduleDate = Date.from(LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant());
 
-        public void ScheduleBar(Date scheduleDate) {
-            this.scheduleDate = scheduleDate;
+        public void ScheduleBar() {
         }
 
-        public void setScheduleDate(Date scheduleDate) {
-            this.scheduleDate = scheduleDate;
-        }
+        public static void setScheduleDate(Date newDate) { scheduleDate = newDate; }
 
-        public Date getScheduleDate() {
+        public static Date getScheduleDate() {
             return scheduleDate;
         }
 
-        public static void showDatePickerDialog(Context context, DatePickerDialog.OnDateSetListener dateSetListener) {
-            Calendar calendar = Calendar.getInstance();
-            calendar.setTime(scheduleDate);
-            DatePickerDialog datePickerDialog = new DatePickerDialog(context, dateSetListener, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
+        public static DatePickerDialog showDatePickerDialog(Context context) {
+            DatePickerDialog datePickerDialog = new DatePickerDialog(context);
+            Date date = ScheduleDate.getScheduleDate();
+
+
+            Utilities.BetterCalendar calendar = new Utilities.BetterCalendar(scheduleDate);
+
+            datePickerDialog.updateDate( calendar.getYear(),
+                    calendar.getMonth(),
+                    calendar.getDay());
+
             datePickerDialog.show();
+            return datePickerDialog;
         }
 
+        public static void setTextDate(TextView textScheduleDate) {
+            Utilities.BetterCalendar calendar = new Utilities.BetterCalendar(scheduleDate);
+            textScheduleDate.setText("Programma del giorno " +
+                    calendar.getDay() + "/" +
+                    (calendar.getMonth() + 1) + "/" +
+                    calendar.getYear()); //changing the TextView
+        }
     }
 
 }

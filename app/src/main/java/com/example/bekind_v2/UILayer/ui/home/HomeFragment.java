@@ -1,14 +1,19 @@
 package com.example.bekind_v2.UILayer.ui.home;
 
+import android.app.DatePickerDialog;
+import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.Switch;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.widget.SwitchCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.ViewModelProvider;
@@ -24,6 +29,9 @@ import com.example.bekind_v2.Utilities.Utilities;
 import com.example.bekind_v2.databinding.FragmentHomeBinding;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.tabs.TabLayout;
+
+import java.util.Calendar;
+import java.util.Date;
 
 public class HomeFragment extends Fragment {
 
@@ -88,16 +96,37 @@ public class HomeFragment extends Fragment {
         });
 
         TextView scheduleDate = root.findViewById(R.id.scheduledate_text);
-        Switch simpleSwitch = root.findViewById(R.id.simpleSwitch);
+        ScheduleDate.setTextDate(scheduleDate);
 
+        SwitchCompat simpleSwitch = root.findViewById(R.id.simpleSwitch);
+        Context context = this.getContext();
 
-        //Sistemare tipi e date listener
-        /*scheduleDate.setOnClickListener(new View.OnClickListener() {
+        scheduleDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ScheduleDate.showDatePickerDialog(this, this);
+                DatePickerDialog datePickerDialog = ScheduleDate.showDatePickerDialog(context);
+
+                datePickerDialog.getDatePicker().setOnDateChangedListener(new DatePicker.OnDateChangedListener() {
+                    @Override
+                    public void onDateChanged(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                        Calendar calendar = Calendar.getInstance();
+                        calendar.set(year, monthOfYear, dayOfMonth);
+
+                        ScheduleDate.setScheduleDate(calendar.getTime());
+                    }
+
+                });
+
+                Button buttonOk = (Button) datePickerDialog.getButton(datePickerDialog.BUTTON_POSITIVE);
+                buttonOk.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        ScheduleDate.setTextDate(scheduleDate);
+                        datePickerDialog.dismiss();
+                    }
+                });
             }
-        });*/
+        });
 
         return root;
     }

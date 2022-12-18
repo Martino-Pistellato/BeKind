@@ -80,9 +80,9 @@ public class ProposalRepository {
         Query activity_query = null;
 
         switch(type){
-            case PROPOSED: activity_query = db.whereEqualTo("publisherID", userId); break;
-            case ACCEPTED: activity_query = db.whereEqualTo("accepterID", userId); break;
-            case AVAILABLE: activity_query = db.whereNotEqualTo("publisherID", userId).whereEqualTo("accepterID", null); break;
+            case PROPOSED: activity_query = db.whereEqualTo("publisherID", userId).orderBy("expiringDate"); break;
+            case ACCEPTED: activity_query = db.whereEqualTo("accepterID", userId).orderBy("expiringDate"); break;
+            case AVAILABLE: activity_query = db.whereNotEqualTo("publisherID", userId).whereEqualTo("accepterID", null).orderBy("publisherID", Query.Direction.ASCENDING).orderBy("expiringDate", Query.Direction.ASCENDING); break;
         }
 
         activity_query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {

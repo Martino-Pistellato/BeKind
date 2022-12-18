@@ -13,6 +13,7 @@ import com.example.bekind_v2.DataLayer.PostRepository;
 import com.example.bekind_v2.DataLayer.ProposalRepository;
 import com.example.bekind_v2.DataLayer.UserManager;
 import com.example.bekind_v2.R;
+import com.example.bekind_v2.UILayer.ui.home.HomeViewModel;
 import com.example.bekind_v2.Utilities.MyCallback;
 import com.example.bekind_v2.Utilities.PostsViewModel;
 import com.example.bekind_v2.Utilities.ProposalsViewModel;
@@ -69,30 +70,6 @@ public class BottomBar extends AppCompatActivity {
         postsViewModel = new ViewModelProvider(this).get(PostsViewModel.class);
         Utilities.SharedViewModel.proposalsViewModel = new ViewModelProvider(this).get(ProposalsViewModel.class);
         Utilities.SharedViewModel.day = LocalDate.now();
-        Utilities.SharedViewModel.filters = new ArrayList<>();
-
-        ProposalRepository.getProposals(Utilities.SharedViewModel.day, UserManager.getUserId(), Utilities.SharedViewModel.filters, Types.PROPOSED, new MyCallback<ArrayList<ProposalRepository.Proposal>>() {
-                    @Override
-                    public void onCallback(ArrayList<ProposalRepository.Proposal> result) {
-                        Utilities.SharedViewModel.proposalsViewModel.getProposed().setValue(result);
-                    }
-                }
-        );
-        ProposalRepository.getProposals(Utilities.SharedViewModel.day, UserManager.getUserId(), Utilities.SharedViewModel.filters, Types.ACCEPTED, new MyCallback<ArrayList<ProposalRepository.Proposal>>() {
-                    @Override
-                    public void onCallback(ArrayList<ProposalRepository.Proposal> result) {
-                        Utilities.SharedViewModel.proposalsViewModel.getAccepted().setValue(result);
-                    }
-                }
-        );
-        ProposalRepository.getProposals(Utilities.SharedViewModel.day, UserManager.getUserId(), Utilities.SharedViewModel.filters, Types.AVAILABLE, new MyCallback<ArrayList<ProposalRepository.Proposal>>() {
-                    @Override
-                    public void onCallback(ArrayList<ProposalRepository.Proposal> result) {
-                        Utilities.SharedViewModel.proposalsViewModel.getAvailable().setValue(result);
-                    }
-                }
-        );
-
         addProposalButton = findViewById(R.id.add_proposal_btn);
 
         addProposalButton.setOnClickListener(new View.OnClickListener() {
@@ -187,7 +164,7 @@ public class BottomBar extends AppCompatActivity {
                                 else {   //all the parameters in input are correct
                                     bottomBarViewModel.createProposal(proposalTitle, proposalBody, proposalExpiringDate);
 
-                                    ProposalRepository.getProposals(Utilities.SharedViewModel.day, UserManager.getUserId(), Utilities.SharedViewModel.filters, Types.PROPOSED, new MyCallback<ArrayList<ProposalRepository.Proposal>>() {
+                                    ProposalRepository.getProposals(Utilities.SharedViewModel.day, UserManager.getUserId(), HomeViewModel.filters, Types.PROPOSED, new MyCallback<ArrayList<ProposalRepository.Proposal>>() {
                                                 @Override
                                                 public void onCallback(ArrayList<ProposalRepository.Proposal> result) {
                                                     Utilities.SharedViewModel.proposalsViewModel.getProposed().setValue(result);

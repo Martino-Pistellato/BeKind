@@ -20,18 +20,26 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.widget.ViewPager2;
 
+import com.example.bekind_v2.DataLayer.ProposalRepository;
+import com.example.bekind_v2.DataLayer.UserManager;
 import com.example.bekind_v2.R;
 import com.example.bekind_v2.UILayer.BottomBar;
+import com.example.bekind_v2.Utilities.MyCallback;
 import com.example.bekind_v2.Utilities.ProposalsViewModel;
 import com.example.bekind_v2.Utilities.ScheduleBar;
 import com.example.bekind_v2.Utilities.ScheduleBar.ScheduleDate;
+import com.example.bekind_v2.Utilities.Types;
 import com.example.bekind_v2.Utilities.Utilities;
 import com.example.bekind_v2.databinding.FragmentHomeBinding;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.tabs.TabLayout;
 
+<<<<<<< HEAD
 import java.util.Calendar;
 import java.util.Date;
+=======
+import java.util.ArrayList;
+>>>>>>> 63aaef427cf7c00cc6271e320298ae90a9cb870c
 
 public class HomeFragment extends Fragment {
 
@@ -42,7 +50,7 @@ public class HomeFragment extends Fragment {
         binding = FragmentHomeBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
         Chip shoppingChip, houseworksChip, cleaningChip, transportChip, randomChip;
-            
+
         shoppingChip = root.findViewById(R.id.shopping_chip);
         houseworksChip = root.findViewById(R.id.houseworks_chip);
         cleaningChip = root.findViewById(R.id.cleaning_chip);
@@ -126,7 +134,26 @@ public class HomeFragment extends Fragment {
                     }
                 });
             }
+<<<<<<< HEAD
         });
+=======
+        });*/
+        ProposalRepository.getProposals(Utilities.SharedViewModel.day, UserManager.getUserId(), HomeViewModel.filters, Types.PROPOSED, new MyCallback<ArrayList<ProposalRepository.Proposal>>() {
+                    @Override
+                    public void onCallback(ArrayList<ProposalRepository.Proposal> result) {
+                        Utilities.SharedViewModel.proposalsViewModel.getProposed().setValue(result);
+                    }
+                }
+        );
+
+        ProposalRepository.getProposals(Utilities.SharedViewModel.day, UserManager.getUserId(), HomeViewModel.filters, Types.ACCEPTED, new MyCallback<ArrayList<ProposalRepository.Proposal>>() {
+                    @Override
+                    public void onCallback(ArrayList<ProposalRepository.Proposal> result) {
+                        Utilities.SharedViewModel.proposalsViewModel.getAccepted().setValue(result);
+                    }
+                }
+        );
+>>>>>>> 63aaef427cf7c00cc6271e320298ae90a9cb870c
 
         return root;
     }

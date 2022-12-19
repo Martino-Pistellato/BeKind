@@ -67,7 +67,7 @@ public class BottomBar extends AppCompatActivity {
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(binding.navView, navController);
         bottomBarViewModel = new ViewModelProvider(this).get(BottomBarViewModel.class);
-        postsViewModel = new ViewModelProvider(this).get(PostsViewModel.class);
+        Utilities.SharedViewModel.postsViewModel = new ViewModelProvider(this).get(PostsViewModel.class);
         Utilities.SharedViewModel.proposalsViewModel = new ViewModelProvider(this).get(ProposalsViewModel.class);
         Utilities.SharedViewModel.day = LocalDate.now();
         addProposalButton = findViewById(R.id.add_proposal_btn);
@@ -217,7 +217,7 @@ public class BottomBar extends AppCompatActivity {
                                     PostRepository.getPosts(new MyCallback<ArrayList<PostRepository.Post>>() {
                                                 @Override
                                                 public void onCallback(ArrayList<PostRepository.Post> result) {
-                                                    postsViewModel.getPosts().setValue(result);
+                                                    Utilities.SharedViewModel.postsViewModel.getPosts().setValue(result);
                                                 }
                                             }
                                     );

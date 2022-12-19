@@ -24,16 +24,18 @@ public class PostRepository {
         private String title;
         private String body;
         private String id;
+        private String publisherID;
         @ServerTimestamp
         private Date publishingDate;
 
         public Post() {
         }
 
-        public Post(String title, String body, String id, Date publishingDate) {
+        public Post(String title, String body, String id, String publisherID, Date publishingDate) {
             this.title = title;
             this.body = body;
             this.id = id;
+            this.publisherID = publisherID;
             this.publishingDate = publishingDate;
         }
 
@@ -49,6 +51,10 @@ public class PostRepository {
             return this.id;
         }
 
+        public String getPublisherID() {
+            return this.publisherID;
+        }
+
         public Date getPublishingDate() {
             return this.publishingDate;
         }
@@ -60,14 +66,19 @@ public class PostRepository {
         public void setBody(String body) {
             this.body = body;
         }
+
+        public void setPublishingDate(Date publishingDate) {
+            this.publishingDate = publishingDate;
+        }
     }
     public static void createPost(String title, String body){
         String id =  UUID.randomUUID().toString();
+        String publisherID = UserManager.getUserId();
         Date date = new Date();
         LocalDateTime ldt = LocalDateTime.ofInstant(date.toInstant(), ZoneId.systemDefault());
         date = Date.from(ldt.atZone(ZoneId.systemDefault()).toInstant());
 
-        PostRepository.Post post = new PostRepository.Post(title, body, id, date);
+        PostRepository.Post post = new PostRepository.Post(title, body, id, publisherID, date);
 
         FirebaseFirestore.getInstance().collection("Posts").document(id).set(post); //TODO: make it asynchronous?
     }

@@ -3,6 +3,7 @@ package com.example.bekind_v2.UILayer.ui.dashboard;
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,14 +12,29 @@ import android.widget.DatePicker;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SwitchCompat;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.bekind_v2.DataLayer.PostRepository;
+import com.example.bekind_v2.DataLayer.ProposalRepository;
+import com.example.bekind_v2.DataLayer.UserManager;
 import com.example.bekind_v2.R;
+import com.example.bekind_v2.UILayer.ui.home.HomeViewModel;
+import com.example.bekind_v2.Utilities.MyCallback;
+import com.example.bekind_v2.Utilities.PostRecyclerViewAdapter;
+import com.example.bekind_v2.Utilities.PostsViewModel;
+import com.example.bekind_v2.Utilities.ProposalRecyclerViewAdapter;
 import com.example.bekind_v2.Utilities.ScheduleBar;
+import com.example.bekind_v2.Utilities.Types;
+import com.example.bekind_v2.Utilities.Utilities;
 import com.example.bekind_v2.databinding.FragmentDashboardBinding;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 
 public class DashboardFragment extends Fragment {
@@ -27,14 +43,34 @@ public class DashboardFragment extends Fragment {
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        DashboardViewModel dashboardViewModel =
-                new ViewModelProvider(this).get(DashboardViewModel.class);
-
+        DashboardViewModel dashboardViewModel = new ViewModelProvider(this).get(DashboardViewModel.class);
         binding = FragmentDashboardBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        final TextView textView = binding.textDashboard;
-        dashboardViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
+        RecyclerView recyclerView = root.findViewById(R.id.recycler_view_post);
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+
+        final Observer<ArrayList<PostRepository.Post>> postObserver = new Observer<ArrayList<PostRepository.Post>>() {
+            @Override
+            public void onChanged(@Nullable final ArrayList<PostRepository.Post> posts) {
+                PostRecyclerViewAdapter adapter = new PostRecyclerViewAdapter(posts, getContext());
+                recyclerView.setAdapter(adapter);
+                adapter.notifyDataSetChanged();
+                Log.e("INSIDE OBSERVER", "something changed");
+            }
+        };
+
+        Utilities.SharedViewModel.postsViewModel.getPosts().observe(getViewLifecycleOwner(), postObserver);
+
+        PostRepository.getPosts(new MyCallback<ArrayList<PostRepository.Post>>() {
+                                    @Override
+                                    public void onCallback(ArrayList<PostRepository.Post> result) {
+                                        Utilities.SharedViewModel.postsViewModel.getPosts().setValue(result);
+                                    }
+                                }
+        );
+
 
         TextView scheduleDate = root.findViewById(R.id.scheduledate_text);
         ScheduleBar.ScheduleDate.setTextDate(scheduleDate);

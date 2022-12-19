@@ -46,6 +46,7 @@ public class ProposedFragment extends Fragment {
                 ProposalRecyclerViewAdapter adapter = new ProposalRecyclerViewAdapter(proposed, getContext());
                 recyclerView.setAdapter(adapter);
                 adapter.notifyDataSetChanged();
+                Log.e("PROPOSEd OBS", "something changed in proposed");
             }
         };
 

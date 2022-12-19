@@ -8,6 +8,7 @@ import java.util.Date;
 public class Utilities {
     public static class SharedViewModel{
         public static ProposalsViewModel proposalsViewModel;
+        public static PostsViewModel postsViewModel;
         public static LocalDate day = LocalDate.now();
     }
     public static class BetterCalendar {

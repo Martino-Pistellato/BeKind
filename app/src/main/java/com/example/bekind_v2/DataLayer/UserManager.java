@@ -1,7 +1,5 @@
 package com.example.bekind_v2.DataLayer;
 
-import android.util.Log;
-
 import com.example.bekind_v2.Utilities.MyCallback;
 
 public class UserManager {
@@ -11,7 +9,7 @@ public class UserManager {
         });
     }
 
-    public static void login(String email, String password, MyCallback myCallback){
+    public static void login(String email, String password, MyCallback<Boolean> myCallback){
         UserLoginRepository.login(email, password, myCallback);
     }
 
@@ -36,7 +34,7 @@ public class UserManager {
         UserDatabaseRepository.updateUser(getUserId(), name, surname, email, city, street, street_number, neighborhoodId);
     }
 
-    public static void getUser(String userId, MyCallback myCallback){
+    public static void getUser(String userId, MyCallback<UserDatabaseRepository.User> myCallback){
         UserDatabaseRepository.getUser(userId, myCallback);
     }
 }

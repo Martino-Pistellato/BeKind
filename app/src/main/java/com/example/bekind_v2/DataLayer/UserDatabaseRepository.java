@@ -82,7 +82,7 @@ public class UserDatabaseRepository {
             doc.update("neighbourhoodID", neighbourhoodID);
     }
 
-    public static void getUser(String userId, MyCallback myCallback){
+    public static void getUser(String userId, MyCallback<User> myCallback){
         FirebaseFirestore.getInstance().collection("Users").document(userId).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {

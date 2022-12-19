@@ -1,100 +1,63 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout
+<androidx.constraintlayout.widget.ConstraintLayout 
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/fragment_registration2"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    tools:context=".UILayer.Authentication.RegistrationFragment2">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
     <RelativeLayout
-        android:id="@+id/neigh_register_container"
+        android:id="@+id/modify_profile_container"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
         android:background="@color/white">
-        
+
         <TextView
-            android:id="@+id/neighbourhood_text"
-            android:layout_width="wrap_content"
+            android:id="@+id/text_modify_profile"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:text="Inserisci dati residenza"
+            android:gravity="center"
+            android:text="Modifica il tuo profilo"
             android:textSize="20sp"
             android:layout_marginBottom="20dp"/>
 
+        <!-- attribute layout_below specifies under which XML element this element is placed -->
+
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/city_container"
+            android:id="@+id/name_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:boxBackgroundColor="@color/white"
-            android:layout_below="@id/neighbourhood_text">
+            android:layout_below="@+id/text_modify_profile">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/user_city"
+                android:id="@+id/modify_profile_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Città"
+                android:hint="Nome"
                 android:inputType="textNoSuggestions"
                 android:layout_marginBottom="20dp"/>
 
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/neigh_container"
+            android:id="@+id/surname_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:boxBackgroundColor="@color/white"
-            android:layout_below="@id/city_container">
+            android:layout_below="@+id/name_container">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/user_neigh"
+                android:id="@+id/modify_profile_surname"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Quartiere"
+                android:hint="Cognome"
                 android:inputType="textNoSuggestions"
                 android:layout_marginBottom="20dp"/>
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/street_container"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:boxBackgroundColor="@color/white"
-            android:layout_below="@id/neigh_container"
-            android:layout_marginBottom="20dp">
-
-            <LinearLayout
-                android:id="@+id/street_linear"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:weightSum="2.5">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/user_street"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1.5"
-                    android:hint="Via"
-                    android:inputType="textNoSuggestions"/>
-                
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/street_number"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="0.7"
-                    android:hint="Civico"
-                    android:inputType="textNoSuggestions"/>
-
-            </LinearLayout>
-
         </com.google.android.material.textfield.TextInputLayout>
 
         <LinearLayout
@@ -102,16 +65,16 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_below="@id/street_container"
+            android:layout_below="@id/surname_container"
             android:weightSum="2.2"
             android:layout_marginBottom="20dp">
 
             <Button
-                android:id="@+id/back_button"
+                android:id="@+id/cancel_button"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Indietro"
+                android:text="Annulla"
                 android:layout_marginStart="10dp"/>
 
             <Space
@@ -120,7 +83,7 @@
                 android:layout_height="wrap_content"/>
 
             <Button
-                android:id="@+id/continue_button"
+                android:id="@+id/confirm_button"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -129,15 +92,14 @@
         </LinearLayout>
 
         <TextView
-            android:id="@+id/text_create_neigh"
+            android:id="@+id/text_change_credentials"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/buttons_container"
+            android:layout_below="@+id/buttons_container"
             android:layout_marginBottom="20dp"
-            android:text="Non c'è il tuo quartiere? Crealo!"
+            android:text="Modifica credenziali"
             android:textSize="15sp"
             android:layout_centerHorizontal="true"/>
 
     </RelativeLayout>
-
-</FrameLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -15,12 +15,14 @@ public class UserDatabaseRepository {
     public static class User{
         private String name;
         private String surname;
-        private final String birth; //is a String, not a Date.
+        private String birth; //is a String, not a Date.
         private String email;
         private String city;
         private String street;
         private String street_number;
         private String neighbourhoodId;
+
+        public User(){}
 
         public User(String name, String surname, String birth, String email, String city, String street, String street_number, String neighbourhoodId){
             this.name = name;
@@ -44,7 +46,7 @@ public class UserDatabaseRepository {
 
         public void setName(String name){this.name=name;}
         public void setSurname(String surname){this.surname=surname;}
-        public void setEmail(String eemail){this.email=email;}
+        public void setEmail(String email){this.email=email;}
         public void setCity(String city){this.city=city;}
         public void setStreet(String street){this.street=street;}
         public void setStreet_number(String street_number){this.street_number=street_number;}

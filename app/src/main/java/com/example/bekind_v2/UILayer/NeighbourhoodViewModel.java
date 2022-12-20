@@ -9,15 +9,15 @@ import com.google.android.material.textfield.TextInputEditText;
 
 public class NeighbourhoodViewModel extends ViewModel {
 
-    public void createNeighbourhood(String name, String city, MyCallback myCallback){
+    public static void createNeighbourhood(String name, String city, MyCallback<Boolean> myCallback){
         NeighbourhoodRepository.createNeighbourhood(name.toLowerCase(), city.toLowerCase(), myCallback);
     }
 
-    public static void doesNeighbourhoodExist(String name, String city, MyCallback myCallback){
+    public static void doesNeighbourhoodExist(String name, String city, MyCallback<Boolean> myCallback){
         NeighbourhoodRepository.doesNeighbourhoodExist(name, city, myCallback);
     }
 
-    public static void getNeighbourhood(String name, String city, MyCallback myCallback){
+    public static void getNeighbourhood(String name, String city, MyCallback<String> myCallback){
         NeighbourhoodRepository.getNeighbourhood(name.toLowerCase(),city.toLowerCase(),myCallback);
     }
 

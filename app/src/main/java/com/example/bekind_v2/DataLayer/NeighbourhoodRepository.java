@@ -45,7 +45,7 @@ public class NeighbourhoodRepository {
                     });
                 }
                 else //if there is a neighbourhood with the same name in the same city
-                    myCallback.onCallback(result);
+                    myCallback.onCallback(false);
             }
         });
     }

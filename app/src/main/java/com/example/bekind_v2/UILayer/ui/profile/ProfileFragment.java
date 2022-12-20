@@ -3,6 +3,7 @@ package com.example.bekind_v2.UILayer.ui.profile;
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,7 +33,7 @@ public class ProfileFragment extends Fragment {
         Button logoutBtn = binding.logout, updateUserData = binding.modifyProfileBtn, updateUserLocation = binding.modifyNeighBtn;
         TextView profileName = binding.profileName;
 
-        profileName.setText(profileViewModel.getUserName());
+        profileViewModel.getUserName(profileName::setText);
 
         updateUserData.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -57,7 +58,7 @@ public class ProfileFragment extends Fragment {
                     public void onClick(View view) {
                         profileViewModel.setName(userName.getText().toString().trim());
                         profileViewModel.setSurname(userSurname.getText().toString().trim());
-                        profileName.setText(profileViewModel.getUserName());
+                        profileViewModel.getUserName(profileName::setText);
                         profileViewModel.updateUser();
                         dialog.dismiss();
                     }
@@ -68,9 +69,7 @@ public class ProfileFragment extends Fragment {
                     public void onClick(View v) { //if you're inside a dialog, first you close the outer one and then you open a new one
                         //TODO:ask: should we implement a way to update user name/surname without closing the dialog and opening the credential one?
                         dialog.dismiss();
-
                         Dialog dialog = new Dialog(getContext());
-
                         dialog.setContentView(R.layout.popup_update2); //set content of dialog (look in layout folder for modify_profile_dialog file)
                         dialog.setCanceledOnTouchOutside(false); //prevents dialog to close when clicking outside of it
 
@@ -99,8 +98,12 @@ public class ProfileFragment extends Fragment {
                                 dialog.dismiss();
                             }
                         });
+
+                        dialog.show();
                     }
                 });
+
+                dialog.show();
             }
         });
 
@@ -118,13 +121,80 @@ public class ProfileFragment extends Fragment {
 
                 title.setText("Modifica dati residenza");
                 
-                profileViewModel.setCity(city.getText().toString().trim());
-                profileViewModel.setNeighbourhoodId(neighbourhood.getText().toString().trim());
-                profileViewModel.setStreet(street.getText().toString().trim());
-                profileViewModel.setStreet_number(streetNumber.getText().toString().trim());
-                
-                profileViewModel.updateUser();
-                dialog.dismiss();
+                continueBtn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        profileViewModel.setCity(city.getText().toString().trim());
+                        profileViewModel.setStreet(street.getText().toString().trim());
+                        profileViewModel.setStreet_number(streetNumber.getText().toString().trim());
+                        profileViewModel.setNeighbourhood(neighbourhood, new MyCallback<Boolean>() {
+                            @Override
+                            public void onCallback(Boolean result) {
+                                profileViewModel.updateUser();
+                            }
+                        });
+
+                        profileViewModel.getUserName(profileName::setText);
+                        dialog.dismiss();
+                    }
+                });
+
+                cancelBtn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog.dismiss();
+                    }
+                });
+
+                textCreateNeighbourhood.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        profileViewModel.setCity(city.getText().toString().trim());
+                        profileViewModel.setStreet(street.getText().toString().trim());
+                        profileViewModel.setStreet_number(streetNumber.getText().toString().trim());
+
+                        dialog.dismiss();
+                        Dialog dialog = new Dialog(getContext());
+                        dialog.setContentView(R.layout.fragment_neighbourhood);
+                        dialog.setCanceledOnTouchOutside(false);
+
+                        TextInputEditText neighbourhood = dialog.findViewById(R.id.neigh_name);
+                        Button backBtn = dialog.findViewById(R.id.back_button), confirmBtn = dialog.findViewById(R.id.continue_button);
+
+                        backBtn.setText("CHIUDI");
+                        confirmBtn.setText("CONFERMA");
+
+                        backBtn.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                dialog.dismiss();
+                            }
+                        });
+
+                        confirmBtn.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                profileViewModel.createNeighbourhood(neighbourhood.getText().toString().trim(), (x) -> {
+                                   if (x)
+                                       profileViewModel.setNeighbourhood(neighbourhood, (y) -> {
+                                           profileViewModel.updateUser();
+
+                                           profileViewModel.getUserName(profileName::setText);
+                                           dialog.dismiss();
+                                       });
+                                   else {
+                                       neighbourhood.setError("Il quartiere esiste già");
+                                       neighbourhood.requestFocus();
+                                   }
+                                });
+                            }
+                        });
+
+                        dialog.show();
+                    }
+                });
+
+                dialog.show();
             }
         });
 

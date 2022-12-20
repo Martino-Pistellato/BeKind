@@ -30,11 +30,11 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:layout_centerHorizontal="true"
-            android:textSize="20dp"
+            android:textSize="20sp"
             android:text="Nome Utente"/>
 
         <Button
-            android:id="@+id/modifyProfile_btn"
+            android:id="@+id/modifyProfileBtn"
             android:layout_width="wrap_content"
             android:layout_height="40dp"
             android:layout_below="@+id/profile_name"
@@ -44,10 +44,10 @@
             android:backgroundTint="@color/teal_700"/>
 
         <Button
-            android:id="@+id/modifyNeigh_btn"
+            android:id="@+id/modifyNeighBtn"
             android:layout_width="wrap_content"
             android:layout_height="40dp"
-            android:layout_below="@+id/modifyProfile_btn"
+            android:layout_below="@+id/modifyProfileBtn"
             android:layout_marginTop="5dp"
             android:layout_marginStart="140dp"
             android:text="Modifica Quartiere"

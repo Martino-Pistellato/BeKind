@@ -24,7 +24,7 @@ import com.google.android.material.textfield.TextInputEditText;
 public class NeighbourhoodFragment extends Fragment {
 
     private NeighbourhoodViewModel neighbourhoodViewModel;
-    private AuthenticationViewModel authenticationViewModel;
+    private final AuthenticationViewModel authenticationViewModel;
 
     public NeighbourhoodFragment(AuthenticationViewModel authenticationViewModel){
         this.authenticationViewModel = authenticationViewModel;
@@ -55,8 +55,8 @@ public class NeighbourhoodFragment extends Fragment {
                     Toast.makeText(getContext(), "Errore: i campi non sono stati riempiti correttamente", Toast.LENGTH_SHORT).show();
                 }
                 else{
-                    neighbourhoodViewModel.createNeighbourhood(neighbourhoodName, authenticationViewModel.getCity(), (x)->{
-                        if((boolean)x) {
+                    NeighbourhoodViewModel.createNeighbourhood(neighbourhoodName, authenticationViewModel.getCity(), (x)->{
+                        if(x) {
                             authenticationViewModel.setNeighbourhood(neighbourhoodName);
                             authenticationViewModel.createUser((y) -> {
                                 startActivity(new Intent(getContext(), BottomBar.class));

@@ -60,11 +60,8 @@
         <androidx.appcompat.widget.SwitchCompat
             android:id="@+id/simpleSwitch"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_alignParentEnd="true"/>
-        <!--android:textOff="Totali"
-        android:textOn="Giornaliere"-->
+            android:layout_height="27dp"
+            android:layout_alignParentEnd="true" />
 
     </RelativeLayout>
 

@@ -27,6 +27,7 @@ import com.example.bekind_v2.R;
 import com.example.bekind_v2.UILayer.ui.home.HomeViewModel;
 import com.example.bekind_v2.Utilities.MyCallback;
 import com.example.bekind_v2.Utilities.PostRecyclerViewAdapter;
+import com.example.bekind_v2.Utilities.PostTypes;
 import com.example.bekind_v2.Utilities.PostsViewModel;
 import com.example.bekind_v2.Utilities.ProposalRecyclerViewAdapter;
 import com.example.bekind_v2.Utilities.ScheduleBar;
@@ -37,6 +38,8 @@ import com.example.bekind_v2.databinding.FragmentDashboardBinding;
 import java.util.ArrayList;
 import java.util.Calendar;
 
+//TODO add filters and datepicker
+
 public class DashboardFragment extends Fragment {
 
     private FragmentDashboardBinding binding;
@@ -44,6 +47,7 @@ public class DashboardFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         DashboardViewModel dashboardViewModel = new ViewModelProvider(this).get(DashboardViewModel.class);
+        PostsViewModel postsViewModel = new ViewModelProvider(this).get(PostsViewModel.class);
         binding = FragmentDashboardBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
@@ -57,16 +61,15 @@ public class DashboardFragment extends Fragment {
                 PostRecyclerViewAdapter adapter = new PostRecyclerViewAdapter(posts, getContext());
                 recyclerView.setAdapter(adapter);
                 adapter.notifyDataSetChanged();
-                Log.e("INSIDE OBSERVER", "something changed");
             }
         };
 
-        Utilities.SharedViewModel.postsViewModel.getPosts().observe(getViewLifecycleOwner(), postObserver);
+        postsViewModel.getPosts().observe(getViewLifecycleOwner(), postObserver);
 
-        PostRepository.getPosts(new MyCallback<ArrayList<PostRepository.Post>>() {
+        PostRepository.getPosts(PostTypes.OTHERSPOSTS, UserManager.getUserId(), new MyCallback<ArrayList<PostRepository.Post>>() {
                                     @Override
                                     public void onCallback(ArrayList<PostRepository.Post> result) {
-                                        Utilities.SharedViewModel.postsViewModel.getPosts().setValue(result);
+                                        postsViewModel.getPosts().setValue(result);
                                     }
                                 }
         );

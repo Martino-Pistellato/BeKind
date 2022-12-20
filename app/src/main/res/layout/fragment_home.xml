@@ -7,6 +7,7 @@
     android:layout_height="match_parent"
     tools:context=".UILayer.ui.home.HomeFragment">
 
+   <!--
     <com.google.android.material.tabs.TabLayout
             android:id="@+id/tab_layout"
             android:layout_width="match_parent"
@@ -24,12 +25,12 @@
             android:layout_height="wrap_content"
             android:text="Accettate"/>
     </com.google.android.material.tabs.TabLayout>
+    -->
 
     <RelativeLayout
         android:id="@+id/schedule_layout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@+id/tab_layout"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         android:background="#e6ffe6">
@@ -127,7 +128,28 @@
         </HorizontalScrollView>
     </RelativeLayout>
 
+    <RelativeLayout
+        android:id="@+id/recycler_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/chips_layout"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent">
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler_view_proposal"
+            android:layout_width="wrap_content"
+            android:layout_height="630dp"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            tools:listitem="@layout/list_element">
+        </androidx.recyclerview.widget.RecyclerView>
+    </RelativeLayout>
 
+    <!--
     <androidx.viewpager2.widget.ViewPager2
             android:id="@+id/pager"
             android:layout_width="match_parent"
@@ -136,5 +158,5 @@
             app:layout_constraintTop_toBottomOf="@id/chips_layout"
             app:layout_constraintBottom_toBottomOf="parent">
     </androidx.viewpager2.widget.ViewPager2>
-
+    -->
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -3,6 +3,7 @@ package com.example.bekind_v2.DataLayer;
 import androidx.annotation.NonNull;
 
 import com.example.bekind_v2.Utilities.MyCallback;
+import com.example.bekind_v2.Utilities.PostTypes;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
@@ -93,9 +94,16 @@ public class PostRepository {
             doc.update("body", body);
     }
 
-    public static void getPosts(MyCallback<ArrayList<Post>> myCallback){
+    public static void getPosts(PostTypes type, String userdID, MyCallback<ArrayList<Post>> myCallback){
         ArrayList<PostRepository.Post> res = new ArrayList<>();
-        FirebaseFirestore.getInstance().collection("Posts").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+        CollectionReference db = FirebaseFirestore.getInstance().collection("Posts");
+        Query postsQuery = null;
+        switch (type){
+            case MYPOSTS: postsQuery = db.whereEqualTo("publisherID", userdID); break;
+            case OTHERSPOSTS: postsQuery = db.whereNotEqualTo("publisherID", userdID);break;
+        }
+
+        postsQuery.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if(task.isSuccessful()) {

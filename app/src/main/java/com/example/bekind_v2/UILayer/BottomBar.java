@@ -15,6 +15,7 @@ import com.example.bekind_v2.DataLayer.UserManager;
 import com.example.bekind_v2.R;
 import com.example.bekind_v2.UILayer.ui.home.HomeViewModel;
 import com.example.bekind_v2.Utilities.MyCallback;
+import com.example.bekind_v2.Utilities.PostTypes;
 import com.example.bekind_v2.Utilities.PostsViewModel;
 import com.example.bekind_v2.Utilities.ProposalsViewModel;
 import com.example.bekind_v2.Utilities.Types;
@@ -67,7 +68,7 @@ public class BottomBar extends AppCompatActivity {
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(binding.navView, navController);
         bottomBarViewModel = new ViewModelProvider(this).get(BottomBarViewModel.class);
-        Utilities.SharedViewModel.postsViewModel = new ViewModelProvider(this).get(PostsViewModel.class);
+        postsViewModel = new ViewModelProvider(this).get(PostsViewModel.class);
         Utilities.SharedViewModel.proposalsViewModel = new ViewModelProvider(this).get(ProposalsViewModel.class);
         Utilities.SharedViewModel.day = LocalDate.now();
         addProposalButton = findViewById(R.id.add_proposal_btn);
@@ -214,10 +215,11 @@ public class BottomBar extends AppCompatActivity {
                                 else{
                                     bottomBarViewModel.createPost(postTitle, postBody);
 
-                                    PostRepository.getPosts(new MyCallback<ArrayList<PostRepository.Post>>() {
+                                    //TODO i think that this getposts is no longer necessary ---> cancel this, or have two arrays in postsViewModel for my posts and other posts?
+                                    PostRepository.getPosts(PostTypes.MYPOSTS, UserManager.getUserId(), new MyCallback<ArrayList<PostRepository.Post>>() {
                                                 @Override
                                                 public void onCallback(ArrayList<PostRepository.Post> result) {
-                                                    Utilities.SharedViewModel.postsViewModel.getPosts().setValue(result);
+                                                    postsViewModel.getPosts().setValue(result);
                                                 }
                                             }
                                     );

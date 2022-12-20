@@ -12,15 +12,21 @@ import android.widget.DatePicker;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SwitchCompat;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.example.bekind_v2.DataLayer.ProposalRepository;
 import com.example.bekind_v2.DataLayer.UserManager;
 import com.example.bekind_v2.R;
 import com.example.bekind_v2.Utilities.MyCallback;
+import com.example.bekind_v2.Utilities.ProposalRecyclerViewAdapter;
+import com.example.bekind_v2.Utilities.ProposalsViewModel;
 import com.example.bekind_v2.Utilities.ScheduleBar.ScheduleDate;
 import com.example.bekind_v2.Utilities.Types;
 import com.example.bekind_v2.Utilities.Utilities;
@@ -68,7 +74,7 @@ public class HomeFragment extends Fragment {
             public void onClick(View v) { homeViewModel.manageFilter(randomChip.getText().toString()); }
         });
 
-        ViewPager2 viewPager2 = root.findViewById(R.id.pager);
+        /*ViewPager2 viewPager2 = root.findViewById(R.id.pager);
         viewPager2.setAdapter(new HomeViewModel.HomeActivityViewPagerAdapter(this));
 
         TabLayout tabLayout = root.findViewById(R.id.tab_layout);
@@ -99,7 +105,11 @@ public class HomeFragment extends Fragment {
                         Utilities.SharedViewModel.proposalsViewModel.getProposed().setValue(result);
                     }
                 }
-        );
+        );*/
+
+        RecyclerView recyclerView = root.findViewById(R.id.recycler_view_proposal);
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
         ProposalRepository.getProposals(Utilities.SharedViewModel.day, UserManager.getUserId(), HomeViewModel.filters, Types.ACCEPTED, new MyCallback<ArrayList<ProposalRepository.Proposal>>() {
                     @Override
@@ -108,6 +118,19 @@ public class HomeFragment extends Fragment {
                     }
                 }
         );
+
+        final Observer<ArrayList<ProposalRepository.Proposal>> acceptedObserver = new Observer<ArrayList<ProposalRepository.Proposal>>() {
+            @Override
+            public void onChanged(@Nullable final ArrayList<ProposalRepository.Proposal> accepted) {
+                ProposalRecyclerViewAdapter adapter = new ProposalRecyclerViewAdapter(accepted, getContext());
+                recyclerView.setAdapter(adapter);
+                adapter.notifyDataSetChanged();
+            }
+        };
+
+        //TODO for some reason line 57 of bottom bar makes the app crash at this line, used this check to avoid crashing, check if better solutions are possible
+        if(Utilities.SharedViewModel.proposalsViewModel != null)
+            Utilities.SharedViewModel.proposalsViewModel.getAccepted().observe(getViewLifecycleOwner(),acceptedObserver);
 
         TextView scheduleDate = root.findViewById(R.id.scheduledate_text);
         ScheduleDate.setTextDate(scheduleDate);

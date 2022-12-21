@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout
+    android:id="@+id/outer_constraintlayout"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
@@ -17,7 +18,6 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         android:clipToPadding="false"
-        android:clickable="true"
         app:cardBackgroundColor="@android:color/transparent"
         app:cardElevation="0dp">
 
@@ -108,7 +108,7 @@
     </androidx.cardview.widget.CardView>
 
     <LinearLayout
-        android:id="@+id/buttons_container_recycler_free"
+        android:id="@+id/buttons_container_recycler_available"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/cardView"
@@ -151,7 +151,7 @@
     </LinearLayout>
 
     <LinearLayout
-            android:id="@+id/buttons_container_recycler_myproposal"
+            android:id="@+id/buttons_container_recycler_proposed"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/cardView"
@@ -207,7 +207,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="12dp"
-                    android:src="@drawable/ic_map"
+                    android:src="@drawable/ic_reject"
                     android:background="@drawable/button_roundcorner"/>
 
 

@@ -104,8 +104,8 @@ public class ProposalRepository {
         });
     }
 
-    public static void getProposal(String Id, MyCallback<Proposal> myCallback){
-        FirebaseFirestore.getInstance().collection("Proposals").document(Id).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+    public static void getProposal(String documentId, MyCallback<Proposal> myCallback){
+        FirebaseFirestore.getInstance().collection("Proposals").document(documentId).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 if(task.getResult().exists())
@@ -122,9 +122,29 @@ public class ProposalRepository {
             }
         });
     }
+
+    public static void rejectProposal(String documentId, MyCallback<Boolean> myCallback){
+        Log.e("QUERY", "sono nella query");
+        FirebaseFirestore.getInstance().collection("Proposals"). document(documentId).update("accepterID", null).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                Log.e("SUCCESS", "task successful: " + task.isSuccessful());
+                myCallback.onCallback(task.isSuccessful());
+            }
+        });
+    }
+
+    public static void editProposal(String documentId, String title, String body, Date expiringDate, ArrayList<String> filters, MyCallback<Boolean> myCallback){
+        FirebaseFirestore.getInstance().collection("Proposals").document(documentId).update("title", title, "body", body, "expiringDate", expiringDate, "filters", filters).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                myCallback.onCallback(task.isSuccessful());
+            }
+        });
+    }
     
-    public static void deleteProposal(String Id){
-        FirebaseFirestore.getInstance().collection("Proposals").document(Id).delete();
+    public static void deleteProposal(String documentId){
+        FirebaseFirestore.getInstance().collection("Proposals").document(documentId).delete();
     }
     
     public static void clearProposals(){

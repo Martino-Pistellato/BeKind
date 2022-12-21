@@ -21,6 +21,7 @@ import com.example.bekind_v2.R;
 import com.example.bekind_v2.UILayer.BottomBar;
 import com.example.bekind_v2.Utilities.ProposalRecyclerViewAdapter;
 import com.example.bekind_v2.Utilities.ProposalsViewModel;
+import com.example.bekind_v2.Utilities.Types;
 import com.example.bekind_v2.Utilities.Utilities;
 
 import java.util.ArrayList;
@@ -43,7 +44,7 @@ public class ProposedFragment extends Fragment {
         final Observer<ArrayList<ProposalRepository.Proposal>> proposedObserver = new Observer<ArrayList<ProposalRepository.Proposal>>() {
             @Override
             public void onChanged(@Nullable final ArrayList<ProposalRepository.Proposal> proposed) {
-                ProposalRecyclerViewAdapter adapter = new ProposalRecyclerViewAdapter(proposed, getContext());
+                ProposalRecyclerViewAdapter adapter = new ProposalRecyclerViewAdapter(proposed, getContext(), Types.PROPOSED, null);
                 recyclerView.setAdapter(adapter);
                 adapter.notifyDataSetChanged();
                 Log.e("PROPOSEd OBS", "something changed in proposed");

@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -80,11 +81,21 @@ public class AvailableFragment extends Fragment {
         RecyclerView recyclerView = root.findViewById(R.id.recycler_view_proposal);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        Context context = this.getContext();
 
         final Observer<ArrayList<ProposalRepository.Proposal>> availableObserver = new Observer<ArrayList<ProposalRepository.Proposal>>() {
             @Override
             public void onChanged(@Nullable final ArrayList<ProposalRepository.Proposal> available) {
-                ProposalRecyclerViewAdapter adapter = new ProposalRecyclerViewAdapter(available, getContext());
+                ProposalRecyclerViewAdapter adapter = new ProposalRecyclerViewAdapter(available, getContext(), Types.AVAILABLE, new MyCallback<Boolean>() {
+                    @Override
+                    public void onCallback(Boolean result) {
+                        if(result)
+                            Toast.makeText(context, "Attività accettata correttamente", Toast.LENGTH_SHORT).show();
+                            //TODO: add refresh function to utilities
+                        else
+                            Toast.makeText(context, "Errore nell'accettazione dell'attività", Toast.LENGTH_SHORT).show();
+                    }
+                });
                 recyclerView.setAdapter(adapter);
                 adapter.notifyDataSetChanged();
             }
@@ -105,7 +116,6 @@ public class AvailableFragment extends Fragment {
         ScheduleBar.ScheduleDate.setTextDate(scheduleDate);
 
         SwitchCompat simpleSwitch = root.findViewById(R.id.simpleSwitch);
-        Context context = this.getContext();
 
         scheduleDate.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -133,6 +143,8 @@ public class AvailableFragment extends Fragment {
                 });
             }
         });
+
+
 
         return root;
     }

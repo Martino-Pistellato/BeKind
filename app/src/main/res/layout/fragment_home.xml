@@ -7,26 +7,6 @@
     android:layout_height="match_parent"
     tools:context=".UILayer.ui.home.HomeFragment">
 
-   <!--
-    <com.google.android.material.tabs.TabLayout
-            android:id="@+id/tab_layout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/purple_200"
-            app:layout_constraintTop_toTopOf="parent">
-
-        <com.google.android.material.tabs.TabItem
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Proposte"/>
-
-        <com.google.android.material.tabs.TabItem
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Accettate"/>
-    </com.google.android.material.tabs.TabLayout>
-    -->
-
     <RelativeLayout
         android:id="@+id/schedule_layout"
         android:layout_width="wrap_content"
@@ -147,14 +127,5 @@
         </androidx.recyclerview.widget.RecyclerView>
     </RelativeLayout>
 
-    <!--
-    <androidx.viewpager2.widget.ViewPager2
-            android:id="@+id/pager"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_below="@+id/tab_layout"
-            app:layout_constraintTop_toBottomOf="@id/chips_layout"
-            app:layout_constraintBottom_toBottomOf="parent">
-    </androidx.viewpager2.widget.ViewPager2>
-    -->
+
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -74,39 +74,6 @@ public class HomeFragment extends Fragment {
             public void onClick(View v) { homeViewModel.manageFilter(randomChip.getText().toString()); }
         });
 
-        /*ViewPager2 viewPager2 = root.findViewById(R.id.pager);
-        viewPager2.setAdapter(new HomeViewModel.HomeActivityViewPagerAdapter(this));
-
-        TabLayout tabLayout = root.findViewById(R.id.tab_layout);
-        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-            @Override
-            public void onTabSelected(TabLayout.Tab tab) { //when we select a tab
-                viewPager2.setCurrentItem(tab.getPosition()); //the ViewPager2, using the adapter, will show the requested content
-            }
-
-            @Override
-            public void onTabUnselected(TabLayout.Tab tab) {}
-
-            @Override
-            public void onTabReselected(TabLayout.Tab tab) {}
-        });
-
-        viewPager2.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
-            @Override
-            public void onPageSelected(int position) {
-                super.onPageSelected(position);
-                tabLayout.getTabAt(position).select(); //select the correct tab based on the position of the relative page
-            }
-        });
-
-        ProposalRepository.getProposals(Utilities.SharedViewModel.day, UserManager.getUserId(), HomeViewModel.filters, Types.PROPOSED, new MyCallback<ArrayList<ProposalRepository.Proposal>>() {
-                    @Override
-                    public void onCallback(ArrayList<ProposalRepository.Proposal> result) {
-                        Utilities.SharedViewModel.proposalsViewModel.getProposed().setValue(result);
-                    }
-                }
-        );*/
-
         RecyclerView recyclerView = root.findViewById(R.id.recycler_view_proposal);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));

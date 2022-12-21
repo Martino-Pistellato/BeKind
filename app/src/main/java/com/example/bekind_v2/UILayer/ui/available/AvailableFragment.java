@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -144,7 +145,22 @@ public class AvailableFragment extends Fragment {
             }
         });
 
+        TextView scheduledateText = root.findViewById(R.id.scheduledate_text),
+                 totalActivities = root.findViewById(R.id.total_activities);
 
+        simpleSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(buttonView.isPressed() && !isChecked){
+                    scheduledateText.setVisibility(View.VISIBLE);
+                    totalActivities.setVisibility(View.INVISIBLE);
+                }
+                else if (buttonView.isPressed() && isChecked){
+                    scheduledateText.setVisibility(View.INVISIBLE);
+                    totalActivities.setVisibility(View.VISIBLE);
+                }
+            }
+        });
 
         return root;
     }

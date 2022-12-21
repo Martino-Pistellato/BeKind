@@ -20,11 +20,11 @@ public class UserDatabaseRepository {
         private String city;
         private String street;
         private String street_number;
-        private String neighbourhoodId;
+        private String neighbourhoodID;
 
         public User(){}
 
-        public User(String name, String surname, String birth, String email, String city, String street, String street_number, String neighbourhoodId){
+        public User(String name, String surname, String birth, String email, String city, String street, String street_number, String neighbourhoodID){
             this.name = name;
             this.surname = surname;
             this.birth = birth;
@@ -32,7 +32,7 @@ public class UserDatabaseRepository {
             this.city = city;
             this.street = street;
             this.street_number = street_number;
-            this.neighbourhoodId = neighbourhoodId;
+            this.neighbourhoodID = neighbourhoodID;
         }
 
         public String getName(){return this.name;}
@@ -42,7 +42,7 @@ public class UserDatabaseRepository {
         public String getCity(){return this.city;}
         public String getStreet(){return this.street;}
         public String getStreet_number(){return this.street_number;}
-        public String getNeighbourhoodId() {return neighbourhoodId;}
+        public String getNeighbourhoodID() {return neighbourhoodID;}
 
         public void setName(String name){this.name=name;}
         public void setSurname(String surname){this.surname=surname;}
@@ -50,11 +50,11 @@ public class UserDatabaseRepository {
         public void setCity(String city){this.city=city;}
         public void setStreet(String street){this.street=street;}
         public void setStreet_number(String street_number){this.street_number=street_number;}
-        public void setNeighbourhoodId(String neighborhoodID){this.neighbourhoodId = neighborhoodID;}
+        public void setNeighbourhoodID(String neighbourhoodID){this.neighbourhoodID = neighbourhoodID;}
     }
 
-    public static void createUser(String userID, String name, String surname, String birth, String email, String  city, String street, String street_number, String neighbourhoodId, MyCallback myCallback){
-        User us = new User(name, surname, birth, email, city, street, street_number,neighbourhoodId);
+    public static void createUser(String userID, String name, String surname, String birth, String email, String  city, String street, String street_number, String neighbourhoodID, MyCallback myCallback){
+        User us = new User(name, surname, birth, email, city, street, street_number,neighbourhoodID);
 
         FirebaseFirestore.getInstance().collection("Users").document(userID).set(us).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override

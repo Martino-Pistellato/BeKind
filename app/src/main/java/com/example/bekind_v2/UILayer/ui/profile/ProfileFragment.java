@@ -46,6 +46,9 @@ public class ProfileFragment extends Fragment {
                 Button confirmBtn =  dialog.findViewById(R.id.confirm_button), cancelBtn =  dialog.findViewById(R.id.cancel_button);
                 TextView textCredentials = dialog.findViewById(R.id.text_change_credentials);
 
+                userName.setText(profileViewModel.getUser().getName());
+                userSurname.setText(profileViewModel.getUser().getSurname());
+
                 cancelBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -75,11 +78,11 @@ public class ProfileFragment extends Fragment {
 
                         Button cancelBtn = dialog.findViewById(R.id.cancel_button); //button for closing dialog
                         Button confirmBtn = dialog.findViewById(R.id.confirm_button); //button to confirm profile modification
-                        TextView textCredential = dialog.findViewById(R.id.text_change_credentials);
 
                         TextInputEditText email = dialog.findViewById(R.id.user_email);
                         TextInputEditText  password = dialog.findViewById(R.id.user_password);
 
+                        email.setText(profileViewModel.getUser().getEmail());
 
                         cancelBtn.setOnClickListener(new View.OnClickListener() {
                             @Override
@@ -120,7 +123,11 @@ public class ProfileFragment extends Fragment {
                 Button cancelBtn = dialog.findViewById(R.id.back_button), continueBtn = dialog.findViewById(R.id.continue_button);
 
                 title.setText("Modifica dati residenza");
-                
+                city.setText(profileViewModel.getUser().getCity());
+                street.setText(profileViewModel.getUser().getStreet());
+                streetNumber.setText(profileViewModel.getUser().getStreet_number());
+                profileViewModel.getNeighbourhood(profileViewModel.getUser().getNeighbourhoodID(), neighbourhood::setText);
+
                 continueBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -184,7 +191,6 @@ public class ProfileFragment extends Fragment {
                                        });
                                    else {
                                        neighbourhood.setError("Il quartiere esiste già");
-                                       neighbourhood.requestFocus();
                                    }
                                 });
                             }

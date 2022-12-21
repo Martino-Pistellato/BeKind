@@ -21,6 +21,10 @@ public class NeighbourhoodViewModel extends ViewModel {
         NeighbourhoodRepository.getNeighbourhood(name.toLowerCase(),city.toLowerCase(),myCallback);
     }
 
+    public static void getNeighbourhood(String id, MyCallback<String> myCallback){
+        NeighbourhoodRepository.getNeighbourhood(id,myCallback);
+    }
+
     public boolean checkNeighbourhoodName(TextInputEditText name, String neighbourhoodName){
         if(neighbourhoodName.isEmpty()){
             name.setError("Questo campo non può essere vuoto");

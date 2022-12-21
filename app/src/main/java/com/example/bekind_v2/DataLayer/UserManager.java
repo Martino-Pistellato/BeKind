@@ -29,9 +29,9 @@ public class UserManager {
         return UserLoginRepository.getEmail();
     }
 
-    public static void updateUser(String name, String surname, String email, String city, String street, String street_number, String neighborhoodId, String oldPassword, String newPassword){
+    public static void updateUser(String name, String surname, String email, String city, String street, String street_number, String setNeighbourhoodID, String oldPassword, String newPassword){
         UserLoginRepository.updateCredentials(email,oldPassword,newPassword);
-        UserDatabaseRepository.updateUser(getUserId(), name, surname, email, city, street, street_number, neighborhoodId);
+        UserDatabaseRepository.updateUser(getUserId(), name, surname, email, city, street, street_number, setNeighbourhoodID);
     }
 
     public static void getUser(String userId, MyCallback<UserDatabaseRepository.User> myCallback){

@@ -39,7 +39,8 @@
                 android:layout_height="wrap_content"
                 android:hint="Nome"
                 android:inputType="textNoSuggestions"
-                android:layout_marginBottom="20dp"/>
+                android:layout_marginBottom="20dp"
+                app:hintEnabled="false"/>
 
         </com.google.android.material.textfield.TextInputLayout>
 

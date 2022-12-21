@@ -1,5 +1,7 @@
 package com.example.bekind_v2.DataLayer;
 
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 
 import com.example.bekind_v2.Utilities.MyCallback;
@@ -38,8 +40,12 @@ public class UserLoginRepository {
 
     public static void updateCredentials(String email, String oldPassword, String newPassword){
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        if (email != null)
+        if (email != null) {
+            Log.e("UPDATE", "before email: "+email);
             user.updateEmail(email);
+            Log.e("UPDATE", "after email: "+email);
+            Log.e("UPDATE", "get email: "+user.getEmail());
+        }
         if (newPassword != null)
             user.updatePassword(newPassword); //TODO: add check for oldPassword.equals(storedPassword)
     }

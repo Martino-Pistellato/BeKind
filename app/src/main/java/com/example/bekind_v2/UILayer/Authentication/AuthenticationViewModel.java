@@ -22,7 +22,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 public class AuthenticationViewModel extends ViewModel {
-    private String name, surname, email, password, city, street, streetNumber, neighbourhoodName, neighbourhoodId;
+    private String name, surname, email, password, city, street, streetNumber, neighbourhoodName, neighbourhoodID;
     private Date birthDate;
 
     public boolean checkCredentials(TextInputEditText email, String userEmail, TextInputEditText password, String userPassword){
@@ -43,7 +43,7 @@ public class AuthenticationViewModel extends ViewModel {
         return UserManager.isLogged();
     }
 
-    public void login(String email, String password, MyCallback myCallback){
+    public void login(String email, String password, MyCallback<Boolean> myCallback){
         UserManager.login(email, password, myCallback);
     }
 
@@ -127,32 +127,35 @@ public class AuthenticationViewModel extends ViewModel {
     }
 
 
-    public void checkLocationFields(TextInputEditText city, String userCity, TextInputEditText neighbourhood, String userNeighbourhood, TextInputEditText street, String userStreet, TextInputEditText streetNumber, String userStreetNumber, MyCallback myCallback){
-        NeighbourhoodViewModel.doesNeighbourhoodExist(userNeighbourhood, userCity, (x)->{
-            boolean res = true;
+    public void checkLocationFields(TextInputEditText city, String userCity, TextInputEditText neighbourhood, String userNeighbourhood, TextInputEditText street, String userStreet, TextInputEditText streetNumber, String userStreetNumber, MyCallback<Boolean> myCallback){
+        NeighbourhoodViewModel.doesNeighbourhoodExist(userNeighbourhood, userCity, new MyCallback<Boolean>() {
+            @Override
+            public void onCallback(Boolean result) {
+                boolean res = true;
 
-            if(userCity.isEmpty()){
-                city.setError("Questo campo non può essere vuoto");
-                city.requestFocus();
-                res = false;
-            }
-            if(userNeighbourhood.isEmpty()){
-                neighbourhood.setError("Questo campo non può essere vuoto");
-                neighbourhood.requestFocus();
-                res = false;
-            }
-            if(userStreet.isEmpty()){
-                street.setError("Questo campo non può essere vuoto");
-                street.requestFocus();
-                res = false;
-            }
-            if(userStreetNumber.isEmpty()){
-                streetNumber.setError("Questo campo non può essere vuoto");
-                streetNumber.requestFocus();
-                res = false;
-            }
+                if(userCity.isEmpty()){
+                    city.setError("Questo campo non può essere vuoto");
+                    city.requestFocus();
+                    res = false;
+                }
+                if(userNeighbourhood.isEmpty()){
+                    neighbourhood.setError("Questo campo non può essere vuoto");
+                    neighbourhood.requestFocus();
+                    res = false;
+                }
+                if(userStreet.isEmpty()){
+                    street.setError("Questo campo non può essere vuoto");
+                    street.requestFocus();
+                    res = false;
+                }
+                if(userStreetNumber.isEmpty()){
+                    streetNumber.setError("Questo campo non può essere vuoto");
+                    streetNumber.requestFocus();
+                    res = false;
+                }
 
-            myCallback.onCallback(((boolean)x) && res);
+                myCallback.onCallback(result && res);
+            }
         });
     }
 
@@ -219,10 +222,10 @@ public class AuthenticationViewModel extends ViewModel {
         streetNumber.setText(this.streetNumber);
     }
 
-    public void createUser(MyCallback myCallback){
+    public void createUser(MyCallback<Boolean> myCallback){
         NeighbourhoodViewModel.getNeighbourhood(this.neighbourhoodName, this.city, (x) ->{
             if(x != null){
-                UserManager.createUser(name, surname, email, password, birthDate.toString(), city, (String) x, street, streetNumber, new MyCallback() {
+                UserManager.createUser(name, surname, email, password, birthDate.toString(), city, x, street, streetNumber, new MyCallback<Object>() {
                     @Override
                     public void onCallback(Object result) {
                         login(email,password,myCallback);

@@ -12,6 +12,8 @@ import com.example.bekind_v2.UILayer.NeighbourhoodViewModel;
 import com.example.bekind_v2.Utilities.MyCallback;
 import com.google.android.material.textfield.TextInputEditText;
 
+import java.util.Locale;
+
 public class ProfileViewModel extends ViewModel {
     private UserDatabaseRepository.User user;
     private String password;
@@ -29,6 +31,12 @@ public class ProfileViewModel extends ViewModel {
         else{
             myCallback.onCallback(user.getName() + " " + user.getSurname());
         }
+    }
+
+    public UserDatabaseRepository.User getUser(){return user;}
+
+    public void getNeighbourhood(String id, MyCallback<String> myCallback){
+        NeighbourhoodViewModel.getNeighbourhood(id, myCallback);
     }
 
     public void logout(){
@@ -64,16 +72,16 @@ public class ProfileViewModel extends ViewModel {
     }
     
     public void setNeighbourhood(TextInputEditText neighbourhood, MyCallback<Boolean> myCallback){
-        String name = neighbourhood.getText().toString().trim();
+        String name = neighbourhood.getText().toString().trim().toLowerCase();
 
-        NeighbourhoodViewModel.doesNeighbourhoodExist(name, user.getCity(), new MyCallback<Boolean>() {
+        NeighbourhoodViewModel.doesNeighbourhoodExist(name, user.getCity().toLowerCase(), new MyCallback<Boolean>() {
             @Override
             public void onCallback(Boolean result) {
                 if(result) {
-                    NeighbourhoodViewModel.getNeighbourhood(name, user.getCity(), new MyCallback<String>() {
+                    NeighbourhoodViewModel.getNeighbourhood(name, user.getCity().toLowerCase(), new MyCallback<String>() {
                         @Override
                         public void onCallback(String result) {
-                            user.setNeighbourhoodId(result);
+                            user.setNeighbourhoodID(result);
                             myCallback.onCallback(true);
                         }
                     });
@@ -92,12 +100,12 @@ public class ProfileViewModel extends ViewModel {
 
     public void updateUser(){ //TODO: should we check the old password?
         UserManager.updateUser(user.getName(), user.getSurname(), user.getEmail(), user.getCity(), user.getStreet(),
-                               user.getStreet_number(), user.getNeighbourhoodId(), null, password);
+                               user.getStreet_number(), user.getNeighbourhoodID(), null, password);
     }
 
     public void createNeighbourhood (String name, MyCallback<Boolean> myCallback){
         if(!name.isEmpty())
-            NeighbourhoodViewModel.createNeighbourhood(name, user.getCity(), myCallback);
+            NeighbourhoodViewModel.createNeighbourhood(name.toLowerCase(), user.getCity().toLowerCase(), myCallback);
         else
             myCallback.onCallback(true);
     }

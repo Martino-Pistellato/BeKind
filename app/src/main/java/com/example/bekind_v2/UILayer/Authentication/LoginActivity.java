@@ -42,7 +42,10 @@ public class LoginActivity extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), "Errore: le credenziali di accesso non sono corrette", Toast.LENGTH_SHORT).show();
             else{
                 authenticationViewModel.login(userEmail, userPassword, (x) -> {
-                    startActivity(new Intent(LoginActivity.this, BottomBar.class)); //bring me to the main page, passing .this could be a problem but who knows
+                    if (x)
+                        startActivity(new Intent(LoginActivity.this, BottomBar.class)); //bring me to the main page, passing .this could be a problem but who knows
+                    else
+                        Toast.makeText(getApplicationContext(), "Errore: le credenziali di accesso non sono corrette", Toast.LENGTH_SHORT).show();
                 });
             }
         });

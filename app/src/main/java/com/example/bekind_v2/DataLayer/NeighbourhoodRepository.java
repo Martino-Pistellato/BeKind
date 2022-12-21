@@ -32,7 +32,6 @@ public class NeighbourhoodRepository {
         doesNeighbourhoodExist(name, city, new MyCallback<Boolean>() {
             @Override
             public void onCallback(Boolean result) {
-
                 if(!result){ //if there is no neighbourhood with the same name in the same city
                     String Id =  UUID.randomUUID().toString();
                     Neighbourhood neighbourhood = new Neighbourhood(city, name, Id);
@@ -60,6 +59,23 @@ public class NeighbourhoodRepository {
                         for (DocumentSnapshot snap : task.getResult())
                              neighbourhood = snap.toObject(Neighbourhood.class);
                         myCallback.onCallback(neighbourhood.getId());
+                    }
+                }
+                else
+                    myCallback.onCallback(null);
+            }
+        });
+    }
+
+    public static void getNeighbourhood(String id, MyCallback<String> myCallback){
+        FirebaseFirestore.getInstance().collection("Neighbourhoods").document(id).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if(task.isSuccessful()){
+                    if(task.getResult().exists()) {
+                        Neighbourhood neighbourhood = new Neighbourhood();
+                        neighbourhood = task.getResult().toObject(Neighbourhood.class);
+                        myCallback.onCallback(neighbourhood.getName());
                     }
                 }
                 else

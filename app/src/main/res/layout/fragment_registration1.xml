@@ -65,6 +65,15 @@
                 android:layout_marginBottom="20dp"/>
         </com.google.android.material.textfield.TextInputLayout>
 
+        <TextView
+            android:id="@+id/birth_header"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/surname_container"
+            android:text="Data di Nascita"
+            android:textSize="16sp"
+            android:layout_marginStart="16dp"
+            android:layout_marginBottom="20dp"/>
         <DatePicker
             android:id="@+id/registration_date_picker"
             android:layout_width="wrap_content"
@@ -72,7 +81,7 @@
             android:calendarViewShown="false"
             android:datePickerMode="spinner"
             android:spinnersShown="true"
-            android:layout_below="@id/surname_container"
+            android:layout_below="@id/birth_header"
             android:layout_centerHorizontal="true"/>
 
         <com.google.android.material.textfield.TextInputLayout

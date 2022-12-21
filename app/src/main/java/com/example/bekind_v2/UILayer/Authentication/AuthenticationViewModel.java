@@ -144,6 +144,11 @@ public class AuthenticationViewModel extends ViewModel {
                     neighbourhood.requestFocus();
                     res = false;
                 }
+                if(!result){
+                    neighbourhood.setError("Questo quartiere non esiste. Crealo!");
+                    neighbourhood.requestFocus();
+                    res = false;
+                }
                 if(userStreet.isEmpty()){
                     street.setError("Questo campo non può essere vuoto");
                     street.requestFocus();

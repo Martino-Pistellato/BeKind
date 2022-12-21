@@ -47,13 +47,80 @@
     </RelativeLayout>
 
     <RelativeLayout
+        android:id="@+id/chips_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/schedule_layout"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:background="#e6ffe6">
+
+        <HorizontalScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:scrollbars="none">
+
+            <com.google.android.material.chip.ChipGroup
+                android:id="@+id/chip_group"
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                app:singleLine="true">
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/event_chip"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:text="Eventi"
+                    android:checkable="true"
+                    android:checked="false"/>
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/utilities_chip"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:text="Utenze"
+                    android:checkable="true"
+                    android:checked="false"/>
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/criminal_chip"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:text="Criminalità"
+                    android:checkable="true"
+                    android:checked="false"/>
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/transport_chip"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:text="Trasporto pubblico"
+                    android:checkable="true"
+                    android:checked="false"/>
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/animal_chip"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:text="Animali"
+                    android:checkable="true"
+                    android:checked="false"/>
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/random_chip"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:text="Varie"
+                    android:checkable="true"
+                    android:checked="false"/>
+
+            </com.google.android.material.chip.ChipGroup>
+        </HorizontalScrollView>
+    </RelativeLayout>
+
+    <RelativeLayout
         android:id="@+id/post_layout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toBottomOf="@+id/chips_layout">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycler_view_post"

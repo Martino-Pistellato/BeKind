@@ -19,15 +19,17 @@ import com.example.bekind_v2.DataLayer.ProposalRepository;
 import com.example.bekind_v2.DataLayer.UserManager;
 
 public class BottomBarViewModel extends ViewModel {
-    private ArrayList<String> filters;
+    private ArrayList<String> filtersProposal;
+    private ArrayList<String> filtersPost;
 
     public BottomBarViewModel() {
-        filters = new ArrayList<>();
+        filtersProposal = new ArrayList<>();
+        filtersPost = new ArrayList<>();
     }
 
     public void createProposal(String title, String body, Date expiringDate){
         String userId = UserManager.getUserId();
-        ProposalRepository.createProposal(title, body, expiringDate, userId, null, filters);
+        ProposalRepository.createProposal(title, body, expiringDate, userId, null, filtersProposal);
     }
 
     public static Date toDate(int year, int month, int day, int hour, int minute){
@@ -37,11 +39,15 @@ public class BottomBarViewModel extends ViewModel {
     }
 
     public void createPost(String title, String body){
-        PostRepository.createPost(title, body);
+        PostRepository.createPost(title, body, filtersPost);
     }
 
-    public void manageFilter(String filter){
-        Utilities.manageFilter(filter,filters);
+    public void manageFilterProposal(String filter){
+        Utilities.manageFilter(filter,filtersProposal);
+    }
+
+    public void manageFilterPost(String filter){
+        Utilities.manageFilter(filter,filtersPost);
     }
 
     public void setExpiringHour(TimePicker expiringHour){

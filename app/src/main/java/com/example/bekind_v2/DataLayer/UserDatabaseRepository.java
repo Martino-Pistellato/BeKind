@@ -10,6 +10,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 
 public class UserDatabaseRepository {
     public static class User{
@@ -90,6 +91,16 @@ public class UserDatabaseRepository {
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 if(task.getResult().exists())
                     myCallback.onCallback(task.getResult().toObject(User.class));
+            }
+        });
+    }
+
+    public static void doesEmailExist(String email, MyCallback<Boolean> myCallback){
+        FirebaseFirestore.getInstance().collection("Users").whereEqualTo("email", email).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if(task.isSuccessful())
+                    myCallback.onCallback(!task.getResult().isEmpty());
             }
         });
     }

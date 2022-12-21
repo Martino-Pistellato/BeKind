@@ -59,11 +59,69 @@
                 android:textSize="20sp" />
         </com.google.android.material.textfield.TextInputLayout>
 
+        <RelativeLayout
+            android:id="@+id/chips_layout_popup"
+            android:layout_width="280dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/body_container"
+            android:layout_centerHorizontal="true">
+
+            <com.google.android.material.chip.ChipGroup
+                android:id="@+id/chip_group_popup"
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent">
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/event_chip_popup"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:text="Eventi"
+                    android:checkable="true"
+                    android:checked="false"/>
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/utilities_chip_popup"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:text="Utenze"
+                    android:checkable="true"
+                    android:checked="false"/>
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/animal_chip_popup"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:text="Animali"
+                    android:checkable="true"
+                    android:checked="false"/>
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/transport_chip_popup"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:text="Trasporto pubblico"
+                    android:checkable="true"
+                    android:checked="false"/>
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/criminal_chip_popup"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:text="Criminalità"
+                    android:checkable="true"
+                    android:checked="false"/>
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/random_chip_popup"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:text="Varie"
+                    android:checkable="true"
+                    android:checked="false"/>
+
+            </com.google.android.material.chip.ChipGroup>
+        </RelativeLayout>
+
         <LinearLayout
             android:id="@+id/buttons_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/body_container"
+            android:layout_below="@id/chips_layout_popup"
             android:layout_marginTop="11dp"
             android:gravity="center"
             android:weightSum="2.2">

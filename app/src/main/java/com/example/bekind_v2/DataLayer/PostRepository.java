@@ -28,16 +28,18 @@ public class PostRepository {
         private String publisherID;
         @ServerTimestamp
         private Date publishingDate;
+        private ArrayList<String> filters;
 
         public Post() {
         }
 
-        public Post(String title, String body, String id, String publisherID, Date publishingDate) {
+        public Post(String title, String body, String id, String publisherID, Date publishingDate, ArrayList<String> filters) {
             this.title = title;
             this.body = body;
             this.id = id;
             this.publisherID = publisherID;
             this.publishingDate = publishingDate;
+            this.filters = filters;
         }
 
         public String getTitle() {
@@ -60,6 +62,8 @@ public class PostRepository {
             return this.publishingDate;
         }
 
+        public ArrayList<String> getFilters() { return filters; }
+
         public void setTitle(String title) {
             this.title = title;
         }
@@ -71,15 +75,19 @@ public class PostRepository {
         public void setPublishingDate(Date publishingDate) {
             this.publishingDate = publishingDate;
         }
+
+        public void setFilters(ArrayList<String> filters) {
+            this.filters = filters;
+        }
     }
-    public static void createPost(String title, String body){
+    public static void createPost(String title, String body, ArrayList<String> filters){
         String id =  UUID.randomUUID().toString();
         String publisherID = UserManager.getUserId();
         Date date = new Date();
         LocalDateTime ldt = LocalDateTime.ofInstant(date.toInstant(), ZoneId.systemDefault());
         date = Date.from(ldt.atZone(ZoneId.systemDefault()).toInstant());
 
-        PostRepository.Post post = new PostRepository.Post(title, body, id, publisherID, date);
+        PostRepository.Post post = new PostRepository.Post(title, body, id, publisherID, date, filters);
 
         FirebaseFirestore.getInstance().collection("Posts").document(id).set(post); //TODO: make it asynchronous?
     }
@@ -94,7 +102,7 @@ public class PostRepository {
             doc.update("body", body);
     }
 
-    public static void getPosts(PostTypes type, String userdID, MyCallback<ArrayList<Post>> myCallback){
+    public static void getPosts(PostTypes type, String userdID, ArrayList<String> filters, MyCallback<ArrayList<Post>> myCallback){
         ArrayList<PostRepository.Post> res = new ArrayList<>();
         CollectionReference db = FirebaseFirestore.getInstance().collection("Posts");
         Query postsQuery = null;
@@ -109,7 +117,8 @@ public class PostRepository {
                 if(task.isSuccessful()) {
                     for (DocumentSnapshot snap : task.getResult()) { //for each element in the query
                         PostRepository.Post post = snap.toObject(PostRepository.Post.class);
-                        res.add(post);
+                        if (filters != null && post.getFilters().containsAll(filters))
+                            res.add(post); //adds the proposal to the Proposal to be shown
                     }
                     myCallback.onCallback(res);
                 }

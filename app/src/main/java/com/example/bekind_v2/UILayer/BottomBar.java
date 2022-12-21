@@ -13,6 +13,7 @@ import com.example.bekind_v2.DataLayer.PostRepository;
 import com.example.bekind_v2.DataLayer.ProposalRepository;
 import com.example.bekind_v2.DataLayer.UserManager;
 import com.example.bekind_v2.R;
+import com.example.bekind_v2.UILayer.ui.dashboard.DashboardViewModel;
 import com.example.bekind_v2.UILayer.ui.home.HomeViewModel;
 import com.example.bekind_v2.Utilities.MyCallback;
 import com.example.bekind_v2.Utilities.PostTypes;
@@ -43,11 +44,12 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 
+import io.grpc.okhttp.internal.Util;
+
 public class BottomBar extends AppCompatActivity {
 
     private ActivityBottomBarBinding binding;
     private BottomBarViewModel bottomBarViewModel;
-    private PostsViewModel postsViewModel;
     private FloatingActionButton addProposalButton;
 
     @Override
@@ -68,7 +70,7 @@ public class BottomBar extends AppCompatActivity {
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(binding.navView, navController);
         bottomBarViewModel = new ViewModelProvider(this).get(BottomBarViewModel.class);
-        postsViewModel = new ViewModelProvider(this).get(PostsViewModel.class);
+        Utilities.SharedViewModel.postsViewModel = new ViewModelProvider(this).get(PostsViewModel.class);
         Utilities.SharedViewModel.proposalsViewModel = new ViewModelProvider(this).get(ProposalsViewModel.class);
         Utilities.SharedViewModel.day = LocalDate.now();
         addProposalButton = findViewById(R.id.add_proposal_btn);
@@ -107,31 +109,31 @@ public class BottomBar extends AppCompatActivity {
                         shoppingChip.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                bottomBarViewModel.manageFilter(shoppingChip.getText().toString());
+                                bottomBarViewModel.manageFilterProposal(shoppingChip.getText().toString());
                             }
                         });
                         houseworksChip.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                bottomBarViewModel.manageFilter(houseworksChip.getText().toString());
+                                bottomBarViewModel.manageFilterProposal(houseworksChip.getText().toString());
                             }
                         });
                         cleaningChip.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                bottomBarViewModel.manageFilter(cleaningChip.getText().toString());
+                                bottomBarViewModel.manageFilterProposal(cleaningChip.getText().toString());
                             }
                         });
                         transportChip.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                bottomBarViewModel.manageFilter(transportChip.getText().toString());
+                                bottomBarViewModel.manageFilterProposal(transportChip.getText().toString());
                             }
                         });
                         randomChip.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                bottomBarViewModel.manageFilter(randomChip.getText().toString());
+                                bottomBarViewModel.manageFilterProposal(randomChip.getText().toString());
                             }
                         });
 
@@ -192,6 +194,40 @@ public class BottomBar extends AppCompatActivity {
                         dialog.setContentView(R.layout.add_post_popup); //set content of dialog (look in layout folder for new_activity_dialog file)
                         dialog.setCanceledOnTouchOutside(false); //prevents dialog to close when clicking outside of it
 
+                        Chip eventChip, animalChip, utilitiesChip, transportChip, randomChip, criminalChip;
+
+                        eventChip = dialog.findViewById(R.id.event_chip_popup);
+                        animalChip = dialog.findViewById(R.id.animal_chip_popup);
+                        utilitiesChip = dialog.findViewById(R.id.utilities_chip_popup);
+                        transportChip = dialog.findViewById(R.id.transport_chip_popup);
+                        randomChip = dialog.findViewById(R.id.random_chip_popup);
+                        criminalChip = dialog.findViewById(R.id.criminal_chip_popup);
+
+                        eventChip.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) { bottomBarViewModel.manageFilterPost(eventChip.getText().toString()); }
+                        });
+                        animalChip.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) { bottomBarViewModel.manageFilterPost(animalChip.getText().toString()); }
+                        });
+                        utilitiesChip.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) { bottomBarViewModel.manageFilterPost(utilitiesChip.getText().toString()); }
+                        });
+                        transportChip.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) { bottomBarViewModel.manageFilterPost(transportChip.getText().toString()); }
+                        });
+                        randomChip.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) { bottomBarViewModel.manageFilterPost(randomChip.getText().toString()); }
+                        });
+                        criminalChip.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) { bottomBarViewModel.manageFilterPost(criminalChip.getText().toString()); }
+                        });
+
                         closeBtn = dialog.findViewById(R.id.close_btn); //button for closing dialog
                         publishBtn = dialog.findViewById(R.id.publish_btn); //button to confirm and publish activity
                         title = dialog.findViewById(R.id.post_title);
@@ -210,16 +246,17 @@ public class BottomBar extends AppCompatActivity {
                                 String postTitle = title.getText().toString().trim();
                                 String postBody = body.getText().toString().trim();
 
+
                                 if(!bottomBarViewModel.checkPostConstraints(title, postTitle, body, postBody))
                                     Toast.makeText(getApplicationContext(), "Errore: i campi non sono stati riempiti correttamente", Toast.LENGTH_SHORT).show();
                                 else{
                                     bottomBarViewModel.createPost(postTitle, postBody);
 
                                     //TODO i think that this getposts is no longer necessary ---> cancel this, or have two arrays in postsViewModel for my posts and other posts?
-                                    PostRepository.getPosts(PostTypes.MYPOSTS, UserManager.getUserId(), new MyCallback<ArrayList<PostRepository.Post>>() {
+                                    PostRepository.getPosts(PostTypes.MYPOSTS, UserManager.getUserId(), DashboardViewModel.filters, new MyCallback<ArrayList<PostRepository.Post>>() {
                                                 @Override
                                                 public void onCallback(ArrayList<PostRepository.Post> result) {
-                                                    postsViewModel.getPosts().setValue(result);
+                                                    Utilities.SharedViewModel.postsViewModel.getMyPosts().setValue(result);
                                                 }
                                             }
                                     );

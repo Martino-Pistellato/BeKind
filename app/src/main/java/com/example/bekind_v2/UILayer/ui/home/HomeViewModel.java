@@ -17,31 +17,6 @@ import java.util.ArrayList;
 public class HomeViewModel extends ViewModel {
     public static ArrayList<String> filters = new ArrayList<>();
 
-    public static class HomeActivityViewPagerAdapter extends FragmentStateAdapter {
-        //constructor, necessary
-        public HomeActivityViewPagerAdapter(@NonNull Fragment fragment) {
-            super(fragment);
-        }
-
-        //return new Fragment based on position
-        @NonNull
-        @Override
-        public Fragment createFragment(int position) {
-            if(position == 1) {
-                return new AcceptedFragment();
-            }
-            else {
-                return new ProposedFragment();
-            }
-        }
-
-        //return number of Fragments
-        @Override
-        public int getItemCount() {
-            return 2;
-        }
-    }
-
     public void manageFilter(String filter){
         Utilities.manageFilter(filter, filters);
 

@@ -34,6 +34,7 @@ import com.example.bekind_v2.Utilities.ScheduleBar;
 import com.example.bekind_v2.Utilities.Types;
 import com.example.bekind_v2.Utilities.Utilities;
 import com.example.bekind_v2.databinding.FragmentDashboardBinding;
+import com.google.android.material.chip.Chip;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -47,9 +48,42 @@ public class DashboardFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         DashboardViewModel dashboardViewModel = new ViewModelProvider(this).get(DashboardViewModel.class);
-        PostsViewModel postsViewModel = new ViewModelProvider(this).get(PostsViewModel.class);
         binding = FragmentDashboardBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
+
+        Chip eventChip, animalChip, utilitiesChip, transportChip, randomChip, criminalChip;
+
+        eventChip = root.findViewById(R.id.event_chip);
+        animalChip = root.findViewById(R.id.animal_chip);
+        utilitiesChip = root.findViewById(R.id.utilities_chip);
+        transportChip = root.findViewById(R.id.transport_chip);
+        randomChip = root.findViewById(R.id.random_chip);
+        criminalChip = root.findViewById(R.id.criminal_chip);
+
+        eventChip.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) { dashboardViewModel.manageFilter(eventChip.getText().toString()); }
+        });
+        animalChip.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) { dashboardViewModel.manageFilter(animalChip.getText().toString()); }
+        });
+        utilitiesChip.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) { dashboardViewModel.manageFilter(utilitiesChip.getText().toString()); }
+        });
+        transportChip.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) { dashboardViewModel.manageFilter(transportChip.getText().toString()); }
+        });
+        randomChip.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) { dashboardViewModel.manageFilter(randomChip.getText().toString()); }
+        });
+        criminalChip.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) { dashboardViewModel.manageFilter(criminalChip.getText().toString()); }
+        });
 
         RecyclerView recyclerView = root.findViewById(R.id.recycler_view_post);
         recyclerView.setHasFixedSize(true);
@@ -64,14 +98,14 @@ public class DashboardFragment extends Fragment {
             }
         };
 
-        postsViewModel.getPosts().observe(getViewLifecycleOwner(), postObserver);
+        Utilities.SharedViewModel.postsViewModel.getOtherPosts().observe(getViewLifecycleOwner(), postObserver);
 
-        PostRepository.getPosts(PostTypes.OTHERSPOSTS, UserManager.getUserId(), new MyCallback<ArrayList<PostRepository.Post>>() {
-                                    @Override
-                                    public void onCallback(ArrayList<PostRepository.Post> result) {
-                                        postsViewModel.getPosts().setValue(result);
-                                    }
-                                }
+        PostRepository.getPosts(PostTypes.OTHERSPOSTS, UserManager.getUserId(), DashboardViewModel.filters, new MyCallback<ArrayList<PostRepository.Post>>() {
+            @Override
+                public void onCallback(ArrayList<PostRepository.Post> result) {
+                    Utilities.SharedViewModel.postsViewModel.getOtherPosts().setValue(result);
+                }
+            }
         );
 
 

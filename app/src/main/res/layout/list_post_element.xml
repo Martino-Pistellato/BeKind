@@ -18,7 +18,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:cardBackgroundColor="#cbf2cb"
+        app:cardBackgroundColor="#92fe9a"
         android:clipToPadding="false"
         android:clickable="true">
 
@@ -116,7 +116,7 @@
             android:layout_weight="1"
             android:text="Delete"/>
 
-        <Space
+        <android.widget.Space
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="0.1" />

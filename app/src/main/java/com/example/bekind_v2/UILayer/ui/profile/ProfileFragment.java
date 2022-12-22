@@ -13,14 +13,24 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.viewpager2.widget.ViewPager2;
 
+import com.example.bekind_v2.DataLayer.PostRepository;
+import com.example.bekind_v2.DataLayer.ProposalRepository;
+import com.example.bekind_v2.DataLayer.UserManager;
 import com.example.bekind_v2.MainActivity;
 import com.example.bekind_v2.R;
 import com.example.bekind_v2.UILayer.Authentication.LoginActivity;
 import com.example.bekind_v2.UILayer.BottomBar;
 import com.example.bekind_v2.Utilities.MyCallback;
+import com.example.bekind_v2.Utilities.PostTypes;
+import com.example.bekind_v2.Utilities.Types;
+import com.example.bekind_v2.Utilities.Utilities;
 import com.example.bekind_v2.databinding.FragmentProfileBinding;
+import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.textfield.TextInputEditText;
+
+import java.util.ArrayList;
 
 public class ProfileFragment extends Fragment {
 
@@ -209,6 +219,47 @@ public class ProfileFragment extends Fragment {
             public void onClick(View v) {
                 profileViewModel.logout();
                 startActivity(new Intent(getContext(), LoginActivity.class));
+            }
+        });
+
+        ViewPager2 viewPager2 = root.findViewById(R.id.pager);
+        viewPager2.setAdapter(new ProfileViewModel.ProfileActivityViewPagerAdapter(this));
+
+
+        TabLayout tabLayout = root.findViewById(R.id.tab_layout);
+        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) { //when we select a tab
+                viewPager2.setCurrentItem(tab.getPosition()); //the ViewPager2, using the adapter, will show the requested content
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {}
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {}
+        });
+
+        viewPager2.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
+            @Override
+            public void onPageSelected(int position) {
+                super.onPageSelected(position);
+                tabLayout.getTabAt(position).select(); //select the correct tab based on the position of the relative page
+            }
+        });
+
+        ProposalRepository.getProposals(Utilities.SharedViewModel.day, UserManager.getUserId(), ProfileViewModel.filters, Types.PROPOSED, new MyCallback<ArrayList<ProposalRepository.Proposal>>() {
+                    @Override
+                    public void onCallback(ArrayList<ProposalRepository.Proposal> result) {
+                        Utilities.SharedViewModel.proposalsViewModel.getProposed().setValue(result);
+                    }
+                }
+        );
+
+        PostRepository.getPosts(PostTypes.MYPOSTS, UserManager.getUserId(), ProfileViewModel.filters, new MyCallback<ArrayList<PostRepository.Post>>() {
+            @Override
+            public void onCallback(ArrayList<PostRepository.Post> result) {
+                Utilities.SharedViewModel.postsViewModel.getMyPosts().setValue(result);
             }
         });
 

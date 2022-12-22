@@ -24,13 +24,16 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/new_activity_header"
-            app:boxBackgroundColor="@color/white">
+            app:boxBackgroundColor="@color/white"
+            app:hintTextColor="@color/teal_700"
+            app:boxStrokeColor="@color/teal_700">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/activity_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="20dp"
+                android:textCursorDrawable="@color/teal_200"
                 android:hint="Titolo"
                 android:inputType="textNoSuggestions"
                 android:textSize="20sp" />
@@ -41,7 +44,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/title_container"
-            app:boxBackgroundColor="@color/white">
+            app:boxBackgroundColor="@color/white"
+            app:hintTextColor="@color/teal_700"
+            app:boxStrokeColor="@color/teal_700">
 
             <!-- https://stackoverflow.com/questions/4233626/allow-multi-line-in-edittext-view-in-android -->
             <com.google.android.material.textfield.TextInputEditText
@@ -50,6 +55,7 @@
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
                 android:layout_marginBottom="20dp"
+                android:textCursorDrawable="@color/teal_200"
                 android:hint="Descrizione"
                 android:inputType="textMultiLine|textNoSuggestions"
                 android:maxLines="5"
@@ -147,9 +153,10 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Annulla" />
+                android:text="Annulla"
+                android:backgroundTint="@color/teal_700"/>
 
-            <Space
+            <android.widget.Space
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.1" />
@@ -159,7 +166,8 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Conferma" />
+                android:text="Conferma"
+                android:backgroundTint="@color/teal_700"/>
         </LinearLayout>
     </RelativeLayout>
 </RelativeLayout>

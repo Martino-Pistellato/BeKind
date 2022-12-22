@@ -46,7 +46,7 @@
 
     <fragment
         android:id="@+id/proposedFragment"
-        android:name="com.example.bekind_v2.UILayer.ui.home.ProposedFragment"
+        android:name="com.example.bekind_v2.UILayer.ui.profile.ProposedFragment"
         android:label="fragment_proposed"
         tools:layout="@layout/fragment_proposed" >
         <argument

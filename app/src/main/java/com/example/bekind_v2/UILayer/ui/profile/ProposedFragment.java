@@ -1,4 +1,4 @@
-package com.example.bekind_v2.UILayer.ui.home;
+package com.example.bekind_v2.UILayer.ui.profile;
 
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -47,7 +47,6 @@ public class ProposedFragment extends Fragment {
                 ProposalRecyclerViewAdapter adapter = new ProposalRecyclerViewAdapter(proposed, getContext(), Types.PROPOSED, null);
                 recyclerView.setAdapter(adapter);
                 adapter.notifyDataSetChanged();
-                Log.e("PROPOSEd OBS", "something changed in proposed");
             }
         };
 

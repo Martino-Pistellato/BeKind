@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 
 public class AuthenticationViewModel extends ViewModel {
     private String name, surname, email, password, city, street, streetNumber, neighbourhoodName, neighbourhoodID;
@@ -129,7 +130,7 @@ public class AuthenticationViewModel extends ViewModel {
 
 
     public void checkLocationFields(TextInputEditText city, String userCity, TextInputEditText neighbourhood, String userNeighbourhood, TextInputEditText street, String userStreet, TextInputEditText streetNumber, String userStreetNumber, MyCallback<Boolean> myCallback){
-        NeighbourhoodViewModel.doesNeighbourhoodExist(userNeighbourhood, userCity, new MyCallback<Boolean>() {
+        NeighbourhoodViewModel.doesNeighbourhoodExist(userNeighbourhood.toLowerCase(), userCity.toLowerCase(), new MyCallback<Boolean>() {
             @Override
             public void onCallback(Boolean result) {
                 boolean res = true;
@@ -231,7 +232,7 @@ public class AuthenticationViewModel extends ViewModel {
     public void createUser(MyCallback<Boolean> myCallback){
         NeighbourhoodViewModel.getNeighbourhood(this.neighbourhoodName, this.city, (x) ->{
             if(x != null){
-                UserManager.createUser(name, surname, email, password, birthDate.toString(), city, x, street, streetNumber, new MyCallback<Object>() {
+                UserManager.createUser(name, surname, email, password, birthDate.toString(), city.toLowerCase(), x, street.toLowerCase(), streetNumber.toLowerCase(), new MyCallback<Object>() {
                     @Override
                     public void onCallback(Object result) {
                         login(email,password,myCallback);

@@ -2,9 +2,12 @@ package com.example.bekind_v2.UILayer.ui.profile;
 
 import android.util.Log;
 
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
+import androidx.viewpager2.adapter.FragmentStateAdapter;
 
 import com.example.bekind_v2.DataLayer.UserDatabaseRepository;
 import com.example.bekind_v2.DataLayer.UserManager;
@@ -12,9 +15,37 @@ import com.example.bekind_v2.UILayer.NeighbourhoodViewModel;
 import com.example.bekind_v2.Utilities.MyCallback;
 import com.google.android.material.textfield.TextInputEditText;
 
+import java.util.ArrayList;
 import java.util.Locale;
 
 public class ProfileViewModel extends ViewModel {
+
+    public static class ProfileActivityViewPagerAdapter extends FragmentStateAdapter {
+        //constructor, necessary
+        public ProfileActivityViewPagerAdapter(@NonNull Fragment fragment) {
+            super(fragment);
+        }
+
+        //return new Fragment based on position
+        @NonNull
+        @Override
+        public Fragment createFragment(int position) {
+            if(position == 1) {
+                return new MyPostsFragment();
+            }
+            else {
+                return new ProposedFragment();
+            }
+        }
+
+        //return number of Fragments
+        @Override
+        public int getItemCount() {
+            return 2;
+        }
+    }
+
+    public static ArrayList<String> filters = new ArrayList<>();
     private UserDatabaseRepository.User user;
     private String password;
 

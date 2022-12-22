@@ -12,7 +12,7 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         android:layout_width="match_parent"
-        android:layout_height="150dp"
+        android:layout_height="180dp"
         android:background="#92fe9a"
         android:orientation="horizontal">
 
@@ -52,18 +52,90 @@
             android:layout_marginStart="140dp"
             android:text="Modifica Quartiere"
             android:backgroundTint="@color/teal_700"/>
+        <Button
+            android:id="@+id/logout"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:text="Logout"
+            android:layout_below="@id/modifyNeighBtn"
+            android:layout_marginTop="5dp"
+            android:layout_marginStart="140dp"
+            android:backgroundTint="@color/teal_700"/>
+
+    </RelativeLayout>
+
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/tab_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/teal_700"
+        app:tabTextColor="@color/black"
+        app:tabSelectedTextColor="@color/white"
+        app:tabIndicatorColor="@color/white"
+        app:layout_constraintTop_toBottomOf="@id/grectangle"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent">
+
+        <com.google.android.material.tabs.TabItem
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Le mie proposte"/>
+
+        <com.google.android.material.tabs.TabItem
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="I miei post"/>
+    </com.google.android.material.tabs.TabLayout>
+
+    <RelativeLayout
+        android:id="@+id/schedule_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/tab_layout"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:background="#92fe9a">
+
+        <TextView
+            android:id="@+id/scheduledate_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Programma del giorno x"
+            android:textStyle="bold"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="1dp"
+            android:visibility="visible"
+            android:clickable="true"/>
+
+        <TextView
+            android:id="@+id/total_activities"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Attività totali"
+            android:textStyle="bold"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="1dp"
+            android:visibility="invisible"
+            android:clickable="true"/>
+
+        <androidx.appcompat.widget.SwitchCompat
+            android:id="@+id/simpleSwitch"
+            android:layout_width="wrap_content"
+            android:layout_height="27dp"
+            android:layout_alignParentEnd="true" />
 
     </RelativeLayout>
 
 
-    <Button
-        android:id="@+id/logout"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Logout"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
+
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/pager"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_below="@+id/schedule_layout"
+        app:layout_constraintTop_toBottomOf="@id/schedule_layout"
+        app:layout_constraintBottom_toBottomOf="parent">
+    </androidx.viewpager2.widget.ViewPager2>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -13,7 +13,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        android:background="#e6ffe6">
+        android:background="#92fe9a">
 
         <TextView
             android:id="@+id/scheduledate_text"
@@ -53,7 +53,7 @@
         app:layout_constraintTop_toBottomOf="@id/schedule_layout"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
-        android:background="#e6ffe6">
+        android:background="#92fe9a">
 
         <HorizontalScrollView
             android:layout_width="match_parent"
@@ -106,14 +106,25 @@
         </HorizontalScrollView>
     </RelativeLayout>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recycler_view_proposal"
+    <RelativeLayout
+        android:id="@+id/recycler_layout"
         android:layout_width="wrap_content"
-        android:layout_height="670dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/chips_layout"
-        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/chips_layout"
         app:layout_constraintRight_toRightOf="parent"
-        tools:listitem="@layout/list_element">
-    </androidx.recyclerview.widget.RecyclerView>
+        app:layout_constraintLeft_toLeftOf="parent">
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler_view_proposal"
+            android:layout_width="wrap_content"
+            android:layout_height="670dp"
+            android:layout_marginTop="20dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            tools:listitem="@layout/list_element">
+        </androidx.recyclerview.widget.RecyclerView>
+
+    </RelativeLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

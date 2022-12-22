@@ -31,12 +31,15 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:boxBackgroundColor="@color/white"
+            app:hintTextColor="@color/teal_700"
+            app:boxStrokeColor="@color/teal_700"
             android:layout_below="@+id/text_modify_profile">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/modify_profile_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:textCursorDrawable="@color/teal_200"
                 android:hint="Nome"
                 android:inputType="textNoSuggestions"
                 android:layout_marginBottom="20dp"
@@ -49,12 +52,15 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:boxBackgroundColor="@color/white"
+            app:hintTextColor="@color/teal_700"
+            app:boxStrokeColor="@color/teal_700"
             android:layout_below="@+id/name_container">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/modify_profile_surname"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:textCursorDrawable="@color/teal_200"
                 android:hint="Cognome"
                 android:inputType="textNoSuggestions"
                 android:layout_marginBottom="20dp"/>
@@ -75,9 +81,10 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="Annulla"
-                android:layout_marginStart="10dp"/>
+                android:layout_marginStart="10dp"
+                android:backgroundTint="@color/teal_700"/>
 
-            <Space
+            <android.widget.Space
                 android:layout_width="0dp"
                 android:layout_weight="0.1"
                 android:layout_height="wrap_content"/>
@@ -87,7 +94,8 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Conferma"/>
+                android:text="Conferma"
+                android:backgroundTint="@color/teal_700"/>
 
         </LinearLayout>
 

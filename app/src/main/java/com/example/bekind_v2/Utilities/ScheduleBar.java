@@ -8,6 +8,7 @@ import android.widget.DatePicker;
 import android.widget.TextView;
 
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
@@ -24,6 +25,10 @@ public class ScheduleBar {
 
         public static Date getScheduleDate() {
             return scheduleDate;
+        }
+        
+        public static LocalDate getScheduleLocalDate() {
+            return scheduleDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
         }
 
         public static DatePickerDialog showDatePickerDialog(Context context) {

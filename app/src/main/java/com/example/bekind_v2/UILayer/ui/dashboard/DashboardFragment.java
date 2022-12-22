@@ -25,6 +25,7 @@ import com.example.bekind_v2.DataLayer.ProposalRepository;
 import com.example.bekind_v2.DataLayer.UserManager;
 import com.example.bekind_v2.R;
 import com.example.bekind_v2.UILayer.ui.home.HomeViewModel;
+import com.example.bekind_v2.Utilities.GetProposals;
 import com.example.bekind_v2.Utilities.MyCallback;
 import com.example.bekind_v2.Utilities.PostRecyclerViewAdapter;
 import com.example.bekind_v2.Utilities.PostTypes;
@@ -44,6 +45,7 @@ import java.util.Calendar;
 public class DashboardFragment extends Fragment {
 
     private FragmentDashboardBinding binding;
+    private SwitchCompat simpleSwitch;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -112,7 +114,7 @@ public class DashboardFragment extends Fragment {
         TextView scheduleDate = root.findViewById(R.id.scheduledate_text);
         ScheduleBar.ScheduleDate.setTextDate(scheduleDate);
 
-        SwitchCompat simpleSwitch = root.findViewById(R.id.simpleSwitch);
+        simpleSwitch = root.findViewById(R.id.simpleSwitch);
         Context context = this.getContext();
 
         scheduleDate.setOnClickListener(new View.OnClickListener() {
@@ -149,5 +151,14 @@ public class DashboardFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if(!simpleSwitch.isChecked())
+            GetProposals.getProposalsDate(ScheduleBar.ScheduleDate.getScheduleLocalDate(), UserManager.getUserId(), HomeViewModel.filters, Types.AVAILABLE);
+        else
+            GetProposals.getProposalsDate(null, UserManager.getUserId(), HomeViewModel.filters, Types.AVAILABLE);
     }
 }

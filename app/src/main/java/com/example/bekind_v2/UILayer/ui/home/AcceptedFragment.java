@@ -63,13 +63,4 @@ public class AcceptedFragment extends Fragment /*implements ProposalRecyclerView
 
         return view;
     }
-
-    /*@Override
-    public void onItemClick(int position, View view) {
-        Log.e("ACCEPTED", "drop down");
-        ImageButton reject = view.findViewById(R.id.reject_button);
-        LinearLayout linearLayout = view.findViewById(R.id.buttons_container_recycler_accepted);
-
-        linearLayout.setVisibility(View.VISIBLE);
-    }*/
 }

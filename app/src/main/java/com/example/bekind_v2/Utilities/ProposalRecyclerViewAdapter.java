@@ -111,7 +111,6 @@ public class ProposalRecyclerViewAdapter extends RecyclerView.Adapter<ProposalRe
                     reject.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            //TODO: call function rejectProposal()
                             ProposalRepository.rejectProposal(documentId, myCallback);
                         }
                     });

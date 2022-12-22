@@ -24,8 +24,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.bekind_v2.DataLayer.ProposalRepository;
 import com.example.bekind_v2.DataLayer.UserManager;
 import com.example.bekind_v2.R;
+import com.example.bekind_v2.Utilities.GetProposals;
 import com.example.bekind_v2.Utilities.MyCallback;
 import com.example.bekind_v2.Utilities.ProposalRecyclerViewAdapter;
+import com.example.bekind_v2.Utilities.ScheduleBar;
 import com.example.bekind_v2.Utilities.ScheduleBar.ScheduleDate;
 import com.example.bekind_v2.Utilities.Types;
 import com.example.bekind_v2.Utilities.Utilities;
@@ -38,12 +40,16 @@ import java.util.ArrayList;
 public class HomeFragment extends Fragment {
 
     private FragmentHomeBinding binding;
+    private SwitchCompat simpleSwitch;
+    private TextView scheduledateText, totalActivities;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
         HomeViewModel homeViewModel = new ViewModelProvider(this).get(HomeViewModel.class);
         binding = FragmentHomeBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
         Chip shoppingChip, houseworksChip, cleaningChip, transportChip, randomChip;
+
+        simpleSwitch = root.findViewById(R.id.simpleSwitch);
 
         shoppingChip = root.findViewById(R.id.shopping_chip);
         houseworksChip = root.findViewById(R.id.houseworks_chip);
@@ -76,13 +82,7 @@ public class HomeFragment extends Fragment {
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        ProposalRepository.getProposals(Utilities.SharedViewModel.day, UserManager.getUserId(), HomeViewModel.filters, Types.ACCEPTED, new MyCallback<ArrayList<ProposalRepository.Proposal>>() {
-                    @Override
-                    public void onCallback(ArrayList<ProposalRepository.Proposal> result) {
-                        Utilities.SharedViewModel.proposalsViewModel.getAccepted().setValue(result);
-                    }
-                }
-        );
+        GetProposals.getProposalsDate(Utilities.SharedViewModel.day, UserManager.getUserId(), HomeViewModel.filters, Types.ACCEPTED);
 
         Context context = this.getContext();
 
@@ -92,10 +92,13 @@ public class HomeFragment extends Fragment {
                 ProposalRecyclerViewAdapter adapter = new ProposalRecyclerViewAdapter(accepted, getContext(), Types.ACCEPTED, new MyCallback<Boolean>() {
                     @Override
                     public void onCallback(Boolean result) {
-                        if(result)
-                            Toast.makeText(context,"Ritiro dall'attività avvenuto correttamente", Toast.LENGTH_SHORT).show();
-                            //TODO: add function refresh to utilities
-                        else
+                        if(result) {
+                            Toast.makeText(context, "Ritiro dall'attività avvenuto correttamente", Toast.LENGTH_SHORT).show();
+                            if(!simpleSwitch.isChecked())
+                                GetProposals.getProposalsDate(ScheduleBar.ScheduleDate.getScheduleLocalDate(), UserManager.getUserId(), HomeViewModel.filters, Types.ACCEPTED);
+                            else
+                                GetProposals.getProposalsDate(null, UserManager.getUserId(), HomeViewModel.filters, Types.ACCEPTED);
+                        }else
                             Toast.makeText(context, "Errore nel ritira dall'attività", Toast.LENGTH_SHORT).show();
                     }
                 });
@@ -112,8 +115,6 @@ public class HomeFragment extends Fragment {
         TextView scheduleDate = root.findViewById(R.id.scheduledate_text);
         ScheduleDate.setTextDate(scheduleDate);
 
-        SwitchCompat simpleSwitch = root.findViewById(R.id.simpleSwitch);
-
         scheduleDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -127,7 +128,6 @@ public class HomeFragment extends Fragment {
 
                         ScheduleDate.setScheduleDate(calendar.getTime());
                     }
-
                 });
 
                 Button buttonOk = (Button) datePickerDialog.getButton(datePickerDialog.BUTTON_POSITIVE);
@@ -136,13 +136,15 @@ public class HomeFragment extends Fragment {
                     public void onClick(View v) {
                         ScheduleDate.setTextDate(scheduleDate);
                         datePickerDialog.dismiss();
+
+                        GetProposals.getProposalsDate(ScheduleDate.getScheduleLocalDate(), UserManager.getUserId(), HomeViewModel.filters, Types.ACCEPTED);
                     }
                 });
             }
         });
 
-        TextView scheduledateText = root.findViewById(R.id.scheduledate_text),
-                totalActivities = root.findViewById(R.id.total_activities);
+        scheduledateText = root.findViewById(R.id.scheduledate_text);
+        totalActivities = root.findViewById(R.id.total_activities);
 
         simpleSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -150,10 +152,15 @@ public class HomeFragment extends Fragment {
                 if(buttonView.isPressed() && !isChecked){
                     scheduledateText.setVisibility(View.VISIBLE);
                     totalActivities.setVisibility(View.INVISIBLE);
+
+                    GetProposals.getProposalsDate(ScheduleDate.getScheduleLocalDate(), UserManager.getUserId(), HomeViewModel.filters, Types.ACCEPTED);
+
                 }
                 else if (buttonView.isPressed() && isChecked){
                     scheduledateText.setVisibility(View.INVISIBLE);
                     totalActivities.setVisibility(View.VISIBLE);
+
+                    GetProposals.getProposalsDate(null, UserManager.getUserId(), HomeViewModel.filters, Types.ACCEPTED);
                 }
             }
         });
@@ -167,8 +174,17 @@ public class HomeFragment extends Fragment {
         binding = null;
     }
 
-
-    protected void onCreate(){
-
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (!simpleSwitch.isChecked()){
+            GetProposals.getProposalsDate(ScheduleBar.ScheduleDate.getScheduleLocalDate(), UserManager.getUserId(), HomeViewModel.filters, Types.AVAILABLE);
+            scheduledateText.setVisibility(View.VISIBLE);
+            totalActivities.setVisibility(View.INVISIBLE);
+        }else{
+            GetProposals.getProposalsDate(null, UserManager.getUserId(), HomeViewModel.filters, Types.AVAILABLE);
+            scheduledateText.setVisibility(View.INVISIBLE);
+            totalActivities.setVisibility(View.VISIBLE);
+        }
     }
 }

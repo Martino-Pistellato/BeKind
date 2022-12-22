@@ -77,6 +77,7 @@ public class ProposalRepository {
     public static void getProposals(LocalDate day, String userId, ArrayList<String> filters, Types type, MyCallback<ArrayList<Proposal>> myCallback){
         ArrayList<Proposal> res = new ArrayList<>();
         LocalDateTime start = (day == null) ? LocalDateTime.MIN : day.atTime(0,0,0), end = (day == null) ? LocalDateTime.MAX : day.atTime(23,59,59);
+        Log.e("DAYS SET", "start : " + start.toString() + " end : " + end.toString());
         CollectionReference db = FirebaseFirestore.getInstance().collection("Proposals");
         Query activity_query = null;
 

@@ -25,6 +25,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.bekind_v2.DataLayer.ProposalRepository;
 import com.example.bekind_v2.DataLayer.UserManager;
 import com.example.bekind_v2.R;
+import com.example.bekind_v2.UILayer.ui.home.HomeViewModel;
+import com.example.bekind_v2.Utilities.GetProposals;
 import com.example.bekind_v2.Utilities.MyCallback;
 import com.example.bekind_v2.Utilities.ProposalRecyclerViewAdapter;
 import com.example.bekind_v2.Utilities.ProposalsViewModel;
@@ -41,6 +43,8 @@ public class AvailableFragment extends Fragment {
 
     private FragmentAvailableBinding binding;
     private final ProposalsViewModel proposalsViewModel;
+    private SwitchCompat simpleSwitch;
+    private TextView totalActivities, scheduledateText;
 
     public AvailableFragment(){
         this.proposalsViewModel = Utilities.SharedViewModel.proposalsViewModel;
@@ -90,10 +94,13 @@ public class AvailableFragment extends Fragment {
                 ProposalRecyclerViewAdapter adapter = new ProposalRecyclerViewAdapter(available, getContext(), Types.AVAILABLE, new MyCallback<Boolean>() {
                     @Override
                     public void onCallback(Boolean result) {
-                        if(result)
+                        if(result) {
                             Toast.makeText(context, "Attività accettata correttamente", Toast.LENGTH_SHORT).show();
-                            //TODO: add refresh function to utilities
-                        else
+                            if (!simpleSwitch.isChecked())
+                                GetProposals.getProposalsDate(ScheduleBar.ScheduleDate.getScheduleLocalDate(), UserManager.getUserId(), HomeViewModel.filters, Types.AVAILABLE);
+                            else
+                                GetProposals.getProposalsDate(null, UserManager.getUserId(), HomeViewModel.filters, Types.AVAILABLE);
+                        }else
                             Toast.makeText(context, "Errore nell'accettazione dell'attività", Toast.LENGTH_SHORT).show();
                     }
                 });
@@ -104,19 +111,12 @@ public class AvailableFragment extends Fragment {
 
         proposalsViewModel.getAvailable().observe(getViewLifecycleOwner(),availableObserver);
 
-        ProposalRepository.getProposals(Utilities.SharedViewModel.day, UserManager.getUserId(), AvailableViewModel.filters, Types.AVAILABLE, new MyCallback<ArrayList<ProposalRepository.Proposal>>() {
-                    @Override
-                    public void onCallback(ArrayList<ProposalRepository.Proposal> result) {
-                        Utilities.SharedViewModel.proposalsViewModel.getAvailable().setValue(result);
-                    }
-                }
-        );
-
+        GetProposals.getProposalsDate(Utilities.SharedViewModel.day, UserManager.getUserId(), HomeViewModel.filters, Types.AVAILABLE);
 
         TextView scheduleDate = root.findViewById(R.id.scheduledate_text);
         ScheduleBar.ScheduleDate.setTextDate(scheduleDate);
 
-        SwitchCompat simpleSwitch = root.findViewById(R.id.simpleSwitch);
+        simpleSwitch = root.findViewById(R.id.simpleSwitch);
 
         scheduleDate.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -140,24 +140,36 @@ public class AvailableFragment extends Fragment {
                     public void onClick(View v) {
                         ScheduleBar.ScheduleDate.setTextDate(scheduleDate);
                         datePickerDialog.dismiss();
+
+                        Log.e("DATE", ScheduleBar.ScheduleDate.getScheduleLocalDate().toString());
+                        GetProposals.getProposalsDate(ScheduleBar.ScheduleDate.getScheduleLocalDate(), UserManager.getUserId(), HomeViewModel.filters, Types.AVAILABLE);
                     }
                 });
             }
         });
 
-        TextView scheduledateText = root.findViewById(R.id.scheduledate_text),
-                 totalActivities = root.findViewById(R.id.total_activities);
+
+        scheduledateText = root.findViewById(R.id.scheduledate_text);
+        totalActivities = root.findViewById(R.id.total_activities);
 
         simpleSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if(buttonView.isPressed() && !isChecked){
+                    Log.e("SWITCH CLICKED", "change text");
                     scheduledateText.setVisibility(View.VISIBLE);
                     totalActivities.setVisibility(View.INVISIBLE);
+
+                    Log.e("DATE", ScheduleBar.ScheduleDate.getScheduleLocalDate().toString());
+                    GetProposals.getProposalsDate(ScheduleBar.ScheduleDate.getScheduleLocalDate(), UserManager.getUserId(), HomeViewModel.filters, Types.AVAILABLE);
                 }
                 else if (buttonView.isPressed() && isChecked){
+                    Log.e("SWITCH CLICKED", "change text back");
+
                     scheduledateText.setVisibility(View.INVISIBLE);
                     totalActivities.setVisibility(View.VISIBLE);
+
+                    GetProposals.getProposalsDate(null, UserManager.getUserId(), HomeViewModel.filters, Types.AVAILABLE);
                 }
             }
         });
@@ -169,5 +181,19 @@ public class AvailableFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (!simpleSwitch.isChecked()){
+            GetProposals.getProposalsDate(ScheduleBar.ScheduleDate.getScheduleLocalDate(), UserManager.getUserId(), HomeViewModel.filters, Types.AVAILABLE);
+        scheduledateText.setVisibility(View.VISIBLE);
+        totalActivities.setVisibility(View.INVISIBLE);
+        }else{
+            GetProposals.getProposalsDate(null, UserManager.getUserId(), HomeViewModel.filters, Types.AVAILABLE);
+            scheduledateText.setVisibility(View.INVISIBLE);
+            totalActivities.setVisibility(View.VISIBLE);
+        }
     }
 }

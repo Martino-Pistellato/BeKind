@@ -3,6 +3,7 @@ package com.example.bekind_v2.UILayer.ui.home;
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -82,8 +83,6 @@ public class HomeFragment extends Fragment {
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        GetProposals.getProposalsDate(Utilities.SharedViewModel.day, UserManager.getUserId(), HomeViewModel.filters, Types.ACCEPTED);
-
         Context context = this.getContext();
 
         final Observer<ArrayList<ProposalRepository.Proposal>> acceptedObserver = new Observer<ArrayList<ProposalRepository.Proposal>>() {
@@ -99,7 +98,7 @@ public class HomeFragment extends Fragment {
                             else
                                 GetProposals.getProposalsDate(null, UserManager.getUserId(), HomeViewModel.filters, Types.ACCEPTED);
                         }else
-                            Toast.makeText(context, "Errore nel ritira dall'attività", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(context, "Errore nel ritiro dall'attività", Toast.LENGTH_SHORT).show();
                     }
                 });
 
@@ -108,9 +107,13 @@ public class HomeFragment extends Fragment {
             }
         };
 
+        Log.e("BACK IN HOME", "in home where "+(Utilities.SharedViewModel.proposalsViewModel==null)+" is null");
         //TODO for some reason line 57 of bottom bar makes the app crash at this line, used this check to avoid crashing, check if better solutions are possible
         if(Utilities.SharedViewModel.proposalsViewModel != null)
             Utilities.SharedViewModel.proposalsViewModel.getAccepted().observe(getViewLifecycleOwner(),acceptedObserver);
+
+        GetProposals.getProposalsDate(Utilities.SharedViewModel.day, UserManager.getUserId(), HomeViewModel.filters, Types.ACCEPTED);
+
 
         TextView scheduleDate = root.findViewById(R.id.scheduledate_text);
         ScheduleDate.setTextDate(scheduleDate);

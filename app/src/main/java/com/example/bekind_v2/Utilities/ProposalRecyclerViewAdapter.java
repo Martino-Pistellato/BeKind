@@ -15,6 +15,7 @@ import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.bekind_v2.DataLayer.UserDatabaseRepository;
 import com.example.bekind_v2.DataLayer.UserManager;
 import com.example.bekind_v2.R;
 import com.example.bekind_v2.DataLayer.ProposalRepository;
@@ -52,13 +53,26 @@ public class ProposalRecyclerViewAdapter extends RecyclerView.Adapter<ProposalRe
         String documentId = proposals.get(position).getId();
         String userId = UserManager.getUserId();
 
-        holder.proposalTitle.setText(proposals.get(position).getTitle());
-        holder.proposalBody.setText(proposals.get(position).getBody());
-        Date date = proposals.get(position).getExpiringDate();
-        LocalDateTime expiring_date_time = LocalDateTime.ofInstant(date.toInstant(), ZoneId.systemDefault());
-        holder.expiringHour.setText((String.format("%02d", expiring_date_time.getHour()+1)) + ":" + (String.format("%02d", expiring_date_time.getMinute())));
-        holder.expiringDate.setText((String.format("%02d", expiring_date_time.getDayOfMonth())) + "/" + (String.format("%02d", expiring_date_time.getMonthValue())) + "/" + expiring_date_time.getYear());
-        ConstraintLayout constraintLayout = holder.itemView.findViewById(R.id.proposal);
+        ProposalRepository.Proposal proposal = proposals.get(position);
+        String pubId = proposal.getPublisherID();
+        UserManager.getUser(pubId, new MyCallback<UserDatabaseRepository.User>() {
+            @Override
+            public void onCallback(UserDatabaseRepository.User result) {
+                holder.proposalPublisher.setText(result.getName()+" "+result.getSurname());
+                holder.proposalTitle.setText(proposal.getTitle());
+                holder.proposalBody.setText(proposal.getBody());
+                if(proposal.getMaxParticipants() > 1)
+                    holder.proposalParticipants.setText("N. partecipanti attuali: "+proposal.getAcceptersID().size()+"/"+proposal.getMaxParticipants());
+                else
+                    holder.proposalParticipants.setText("");
+                Date date = proposal.getExpiringDate();
+                LocalDateTime expiring_date_time = LocalDateTime.ofInstant(date.toInstant(), ZoneId.systemDefault());
+                holder.expiringHour.setText((String.format("%02d", expiring_date_time.getHour()+1)) + ":" + (String.format("%02d", expiring_date_time.getMinute())));
+                holder.expiringDate.setText((String.format("%02d", expiring_date_time.getDayOfMonth())) + "/" + (String.format("%02d", expiring_date_time.getMonthValue())) + "/" + expiring_date_time.getYear());
+            }
+        });
+
+       ConstraintLayout constraintLayout = holder.itemView.findViewById(R.id.proposal);
 
         switch(type){
             case PROPOSED: holder.itemView.setOnClickListener(new View.OnClickListener() {
@@ -111,7 +125,7 @@ public class ProposalRecyclerViewAdapter extends RecyclerView.Adapter<ProposalRe
                     reject.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            ProposalRepository.rejectProposal(documentId, myCallback);
+                            ProposalRepository.rejectProposal(documentId, userId, myCallback);
                         }
                     });
                 }
@@ -163,15 +177,17 @@ public class ProposalRecyclerViewAdapter extends RecyclerView.Adapter<ProposalRe
 
     public static class MyViewHolder extends RecyclerView.ViewHolder {
         ImageView userProfilePic;
-        TextView proposalTitle, proposalBody, expiringHour, expiringDate;
+        TextView proposalPublisher, proposalTitle, proposalBody, proposalParticipants, expiringHour, expiringDate;
         ConstraintLayout constraintLayout;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
 
             userProfilePic = itemView.findViewById(R.id.user_profile_pic);
+            proposalPublisher = itemView.findViewById(R.id.proposal_publisher);
             proposalTitle = itemView.findViewById(R.id.proposal_title);
             proposalBody = itemView.findViewById(R.id.proposal_body);
+            proposalParticipants = itemView.findViewById(R.id.proposal_participants);
             expiringHour = itemView.findViewById(R.id.expiring_hour);
             expiringDate = itemView.findViewById(R.id.expiring_date);
             constraintLayout = itemView.findViewById(R.id.proposal);

@@ -12,6 +12,8 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.bekind_v2.DataLayer.PostRepository;
+import com.example.bekind_v2.DataLayer.UserDatabaseRepository;
+import com.example.bekind_v2.DataLayer.UserManager;
 import com.example.bekind_v2.R;
 
 import java.util.ArrayList;
@@ -36,8 +38,18 @@ public class PostRecyclerViewAdapter extends RecyclerView.Adapter<PostRecyclerVi
 
     @Override
     public void onBindViewHolder(@NonNull PostRecyclerViewAdapter.MyViewHolder holder, int position) {
-        holder.proposal_title.setText(posts.get(position).getTitle());
-        holder.proposal_body.setText(posts.get(position).getBody());
+
+        PostRepository.Post post = posts.get(position);
+        String pubId = post.getPublisherID();
+        UserManager.getUser(pubId, new MyCallback<UserDatabaseRepository.User>() {
+            @Override
+            public void onCallback(UserDatabaseRepository.User result) {
+                holder.proposal_publisher.setText(result.getName()+" "+result.getSurname());
+                holder.proposal_title.setText(post.getTitle());
+                holder.proposal_body.setText(post.getBody());
+            }
+        });
+
         ConstraintLayout constraintLayout = holder.itemView.findViewById(R.id.post);
     }
 
@@ -48,12 +60,13 @@ public class PostRecyclerViewAdapter extends RecyclerView.Adapter<PostRecyclerVi
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         ImageView user_profile_pic;
-        TextView proposal_title, proposal_body;
+        TextView proposal_title, proposal_publisher, proposal_body;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
 
             user_profile_pic = itemView.findViewById(R.id.user_profile_pic);
+            proposal_publisher = itemView.findViewById(R.id.post_publisher);
             proposal_title = itemView.findViewById(R.id.post_title);
             proposal_body = itemView.findViewById(R.id.post_body);
         }

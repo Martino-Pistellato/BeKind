@@ -88,11 +88,45 @@
                 android:timePickerMode="spinner" />
         </LinearLayout>
 
+        <CheckBox
+            android:id="@+id/group_checkbox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:text="E' un'attività di gruppo?"
+            android:textSize="18sp"
+            android:layoutDirection="rtl"
+            android:layout_below="@id/datehour_container">
+        </CheckBox>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/maxparticipants_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/group_checkbox"
+            app:boxBackgroundColor="@color/white"
+            app:hintTextColor="@color/teal_700"
+            app:boxStrokeColor="@color/teal_700">
+
+            <!-- https://stackoverflow.com/questions/4233626/allow-multi-line-in-edittext-view-in-android -->
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/activity_maxparticipants"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="20dp"
+                android:textCursorDrawable="@color/teal_200"
+                android:hint="Numero di partecipanti"
+                android:inputType="number"
+                android:textSize="20sp"
+                android:visibility="gone"/>
+        </com.google.android.material.textfield.TextInputLayout>
+
         <RelativeLayout
             android:id="@+id/chips_layout_popup"
             android:layout_width="280dp"
             android:layout_height="wrap_content"
-            android:layout_below="@id/datehour_container"
+            android:layout_below="@id/maxparticipants_container"
             android:layout_centerHorizontal="true">
             
             <com.google.android.material.chip.ChipGroup

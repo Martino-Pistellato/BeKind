@@ -27,9 +27,9 @@ public class BottomBarViewModel extends ViewModel {
         filtersPost = new ArrayList<>();
     }
 
-    public void createProposal(String title, String body, Date expiringDate){
+    public void createProposal(String title, String body, int max, Date expiringDate){
         String userId = UserManager.getUserId();
-        ProposalRepository.createProposal(title, body, expiringDate, userId, null, filtersProposal);
+        ProposalRepository.createProposal(title, body, expiringDate, userId, max, filtersProposal);
     }
 
     public static Date toDate(int year, int month, int day, int hour, int minute){
@@ -84,6 +84,20 @@ public class BottomBarViewModel extends ViewModel {
         else return checkDateConstraint(proposalExpiringDate);
     }
 
+    public boolean checkGroupProposalConstraints(TextInputEditText title, String proposalTitle, TextInputEditText body, String proposalBody, Date proposalExpiringDate, TextInputEditText maxparticipants, String proposalPartcipants) {
+        if(proposalPartcipants.isEmpty()){
+            maxparticipants.setError("Questo campo non può essere vuoto");
+            maxparticipants.requestFocus();
+            return false;
+        }
+        if(Integer.valueOf(proposalPartcipants) <=1){
+            maxparticipants.setError("Un'attività di gruppo prevede un minimo di 2 partecipanti");
+            maxparticipants.requestFocus();
+            return false;
+        }
+        return checkConstraints(title, proposalTitle, body, proposalBody, proposalExpiringDate);
+    }
+
     public boolean checkPostConstraints(TextInputEditText title, String postTitle, TextInputEditText body, String postBody){
         if(postTitle.isEmpty()){ //checks if the title is empty, in that case it blocks the creation until it is filled
             title.setError("Questo campo non può essere vuoto");
@@ -100,4 +114,7 @@ public class BottomBarViewModel extends ViewModel {
     public static void clearProposals(){
         ProposalRepository.clearProposals();
     }
+
+
+
 }

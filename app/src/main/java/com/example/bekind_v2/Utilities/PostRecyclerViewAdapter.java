@@ -4,14 +4,10 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -20,19 +16,13 @@ import com.example.bekind_v2.R;
 
 import java.util.ArrayList;
 
-import dagger.hilt.processor.internal.definecomponent.codegen._dagger_hilt_android_components_ViewComponent;
-
 public class PostRecyclerViewAdapter extends RecyclerView.Adapter<PostRecyclerViewAdapter.MyViewHolder> {
     ArrayList<PostRepository.Post> posts;
     Context context;
-    PostTypes type;
-    //private final MyCallback<Boolean> myCallback;
 
-    public PostRecyclerViewAdapter(ArrayList<PostRepository.Post> posts, Context context, PostTypes type/*, MyCallback<Boolean> myCallback*/) {
+    public PostRecyclerViewAdapter(ArrayList<PostRepository.Post> posts, Context context) {
         this.posts = posts;
         this.context = context;
-        this.type = type;
-        //this.myCallback = myCallback;
     }
 
     @NonNull
@@ -49,55 +39,6 @@ public class PostRecyclerViewAdapter extends RecyclerView.Adapter<PostRecyclerVi
         holder.proposal_title.setText(posts.get(position).getTitle());
         holder.proposal_body.setText(posts.get(position).getBody());
         ConstraintLayout constraintLayout = holder.itemView.findViewById(R.id.post);
-
-        switch(type){
-            case MYPOSTS: constraintLayout.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    ImageButton edit = holder.itemView.findViewById(R.id.edit_button),
-                            delete = holder.itemView.findViewById(R.id.delete_button);
-                    LinearLayout linearLayout = holder.itemView.findViewById(R.id.buttons_container_recycler_mypost);
-
-                    if(linearLayout.getVisibility() == View.GONE)
-                        linearLayout.setVisibility(View.VISIBLE);
-                    else
-                        linearLayout.setVisibility(View.GONE);
-
-                    edit.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            Toast.makeText(context, "MODIFICA POST", Toast.LENGTH_LONG).show();
-                        }
-                    });
-
-                    delete.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            Toast.makeText(context, "ELIMINA POST", Toast.LENGTH_LONG).show();
-                        }
-                    });
-                }
-            }); break;
-            case OTHERSPOSTS: constraintLayout.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    ImageButton flag = holder.itemView.findViewById(R.id.flag_button);
-                    LinearLayout linearLayout = holder.itemView.findViewById(R.id.buttons_container_recycler_otherpost);
-
-                    if(linearLayout.getVisibility() == View.GONE)
-                        linearLayout.setVisibility(View.VISIBLE);
-                    else
-                        linearLayout.setVisibility(View.GONE);
-
-                    flag.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            Toast.makeText(context, "SEGNALA POST", Toast.LENGTH_LONG).show();
-                        }
-                    });
-                }
-            }); break;
-        }
     }
 
     @Override
@@ -108,7 +49,6 @@ public class PostRecyclerViewAdapter extends RecyclerView.Adapter<PostRecyclerVi
     public class MyViewHolder extends RecyclerView.ViewHolder {
         ImageView user_profile_pic;
         TextView proposal_title, proposal_body;
-        ConstraintLayout constraintLayout;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -116,7 +56,6 @@ public class PostRecyclerViewAdapter extends RecyclerView.Adapter<PostRecyclerVi
             user_profile_pic = itemView.findViewById(R.id.user_profile_pic);
             proposal_title = itemView.findViewById(R.id.post_title);
             proposal_body = itemView.findViewById(R.id.post_body);
-            constraintLayout = itemView.findViewById(R.id.post);
         }
     }
 }

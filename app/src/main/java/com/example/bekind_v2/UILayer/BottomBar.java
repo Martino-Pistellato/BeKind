@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.TimePicker;
 import android.widget.Toast;
@@ -91,14 +93,30 @@ public class BottomBar extends AppCompatActivity {
                     @Override
                     public void onClick(View view) {
                         Dialog dialog = new Dialog(BottomBar.this);
-                        TextInputEditText title, body;
+                        TextInputEditText title, body, maxparticipants;
                         DatePicker expiringDate;
                         TimePicker expiringHour;
+                        CheckBox groupProposal;
                         Chip shoppingChip, houseworksChip, cleaningChip, transportChip, randomChip;
                         Button closeBtn, publishBtn;
 
                         dialog.setContentView(R.layout.add_proposal_popup); //set content of dialog (look in layout folder for new_activity_dialog file)
                         dialog.setCanceledOnTouchOutside(false); //prevents dialog to close when clicking outside of it
+
+                        groupProposal = dialog.findViewById(R.id.group_checkbox);
+                        maxparticipants = dialog.findViewById(R.id.activity_maxparticipants);
+
+                        groupProposal.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                            @Override
+                            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                                if(b)
+                                    maxparticipants.setVisibility(View.VISIBLE);
+                                else {
+                                    maxparticipants.setText("");
+                                    maxparticipants.setVisibility(View.GONE);
+                                }
+                            }
+                        });
 
                         shoppingChip = dialog.findViewById(R.id.shopping_chip_popup);
                         houseworksChip = dialog.findViewById(R.id.houseworks_chip_popup);
@@ -162,21 +180,41 @@ public class BottomBar extends AppCompatActivity {
                                 String proposalTitle = title.getText().toString().trim(); //gets the content of the title
                                 String proposalBody = body.getText().toString().trim(); //gets the content of the body
 
-                                if (!bottomBarViewModel.checkConstraints(title, proposalTitle, body, proposalBody, proposalExpiringDate))
-                                    Toast.makeText(getApplicationContext(), "Errore: i campi non sono stati riempiti correttamente", Toast.LENGTH_SHORT).show();
-                                else {   //all the parameters in input are correct
-                                    bottomBarViewModel.createProposal(proposalTitle, proposalBody, proposalExpiringDate);
 
-                                    ProposalRepository.getProposals(Utilities.SharedViewModel.day, UserManager.getUserId(), HomeViewModel.filters, Types.PROPOSED, new MyCallback<ArrayList<ProposalRepository.Proposal>>() {
-                                                @Override
-                                                public void onCallback(ArrayList<ProposalRepository.Proposal> result) {
-                                                    Utilities.SharedViewModel.proposalsViewModel.getProposed().setValue(result);
+                                if(!groupProposal.isChecked()) {
+                                    if (!bottomBarViewModel.checkConstraints(title, proposalTitle, body, proposalBody, proposalExpiringDate))
+                                        Toast.makeText(getApplicationContext(), "Errore: i campi non sono stati riempiti correttamente", Toast.LENGTH_SHORT).show();
+                                    else {   //all the parameters in input are correct
+                                        bottomBarViewModel.createProposal(proposalTitle, proposalBody,1, proposalExpiringDate);
+
+                                        ProposalRepository.getProposals(Utilities.SharedViewModel.day, UserManager.getUserId(), HomeViewModel.filters, Types.PROPOSED, new MyCallback<ArrayList<ProposalRepository.Proposal>>() {
+                                                    @Override
+                                                    public void onCallback(ArrayList<ProposalRepository.Proposal> result) {
+                                                        Utilities.SharedViewModel.proposalsViewModel.getProposed().setValue(result);
+                                                    }
                                                 }
-                                            }
-                                    );
-                                    dialog.dismiss();
-                                    choose_dialog.dismiss();
+                                        );
+                                        dialog.dismiss();
+                                        choose_dialog.dismiss();
+                                    }
+                                }else{
+                                    String proposalPartcipants = maxparticipants.getText().toString().trim();
+                                    if(!bottomBarViewModel.checkGroupProposalConstraints(title, proposalTitle, body, proposalBody, proposalExpiringDate, maxparticipants, proposalPartcipants))
+                                        Toast.makeText(getApplicationContext(), "Errore: i campi non sono stati riempiti correttamente", Toast.LENGTH_SHORT).show();
+                                    else{
+                                        bottomBarViewModel.createProposal(proposalTitle, proposalBody, Integer.valueOf(proposalPartcipants), proposalExpiringDate);
+                                        ProposalRepository.getProposals(Utilities.SharedViewModel.day, UserManager.getUserId(), HomeViewModel.filters, Types.PROPOSED, new MyCallback<ArrayList<ProposalRepository.Proposal>>() {
+                                                    @Override
+                                                    public void onCallback(ArrayList<ProposalRepository.Proposal> result) {
+                                                        Utilities.SharedViewModel.proposalsViewModel.getProposed().setValue(result);
+                                                    }
+                                                }
+                                        );
+                                        dialog.dismiss();
+                                        choose_dialog.dismiss();
+                                    }
                                 }
+
                             }
                         });
 

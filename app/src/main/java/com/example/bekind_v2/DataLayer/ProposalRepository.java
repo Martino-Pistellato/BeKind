@@ -147,6 +147,15 @@ public class ProposalRepository {
     public static void deleteProposal(String documentId){
         FirebaseFirestore.getInstance().collection("Proposals").document(documentId).delete();
     }
+
+    public static void deleteProposal(String documentId, MyCallback<Boolean> myCallback){
+        FirebaseFirestore.getInstance().collection("Proposals").document(documentId).delete().addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                myCallback.onCallback(task.isSuccessful());
+            }
+        });
+    }
     
     public static void clearProposals(){
         FirebaseFirestore.getInstance().collection("Proposals").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {

@@ -16,6 +16,7 @@ import com.example.bekind_v2.DataLayer.PostRepository;
 import com.example.bekind_v2.DataLayer.ProposalRepository;
 import com.example.bekind_v2.R;
 import com.example.bekind_v2.Utilities.PostRecyclerViewAdapter;
+import com.example.bekind_v2.Utilities.PostTypes;
 import com.example.bekind_v2.Utilities.PostsViewModel;
 import com.example.bekind_v2.Utilities.ProposalRecyclerViewAdapter;
 import com.example.bekind_v2.Utilities.ProposalsViewModel;
@@ -42,10 +43,9 @@ public class MyPostsFragment extends Fragment {
         final Observer<ArrayList<PostRepository.Post>> postObserver = new Observer<ArrayList<PostRepository.Post>>() {
             @Override
             public void onChanged(@Nullable final ArrayList<PostRepository.Post> posts) {
-                PostRecyclerViewAdapter adapter = new PostRecyclerViewAdapter(posts, getContext());
+                PostRecyclerViewAdapter adapter = new PostRecyclerViewAdapter(posts, getContext(), PostTypes.MYPOSTS);
                 recyclerView.setAdapter(adapter);
                 adapter.notifyDataSetChanged();
-
             }
         };
 

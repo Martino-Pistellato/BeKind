@@ -94,7 +94,7 @@ public class DashboardFragment extends Fragment {
         final Observer<ArrayList<PostRepository.Post>> postObserver = new Observer<ArrayList<PostRepository.Post>>() {
             @Override
             public void onChanged(@Nullable final ArrayList<PostRepository.Post> posts) {
-                PostRecyclerViewAdapter adapter = new PostRecyclerViewAdapter(posts, getContext());
+                PostRecyclerViewAdapter adapter = new PostRecyclerViewAdapter(posts, getContext(), PostTypes.OTHERSPOSTS);
                 recyclerView.setAdapter(adapter);
                 adapter.notifyDataSetChanged();
             }

@@ -18,7 +18,7 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         android:clipToPadding="false"
-        app:cardBackgroundColor="#92fe9a"
+        app:cardBackgroundColor="@android:color/transparent"
         app:cardElevation="0dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -209,8 +209,5 @@
                     android:layout_marginRight="12dp"
                     android:src="@drawable/ic_reject"
                     android:background="@drawable/button_roundcorner"/>
-
-
         </LinearLayout>
-
 </androidx.constraintlayout.widget.ConstraintLayout>

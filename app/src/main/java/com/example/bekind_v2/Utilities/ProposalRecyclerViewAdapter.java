@@ -61,7 +61,7 @@ public class ProposalRecyclerViewAdapter extends RecyclerView.Adapter<ProposalRe
         ConstraintLayout constraintLayout = holder.itemView.findViewById(R.id.proposal);
 
         switch(type){
-            case PROPOSED: holder.itemView.setOnClickListener(new View.OnClickListener() {
+            case PROPOSED: constraintLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     ImageButton delete = holder.itemView.findViewById(R.id.delete_button),
@@ -77,26 +77,29 @@ public class ProposalRecyclerViewAdapter extends RecyclerView.Adapter<ProposalRe
                     delete.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            //TODO: call function deleteProposal()
+                            ProposalRepository.deleteProposal(documentId, myCallback);
+                            Toast.makeText(context, "ELIMINA ATTIVITA'", Toast.LENGTH_SHORT).show();
                         }
                     });
 
                     edit.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            //TODO: call function editProposal()
+                            //ProposalRepository.editProposal();
+                            //Toast.makeText(context, "MODIFICA ATTIVITA'", Toast.LENGTH_SHORT).show();
                         }
                     });
 
                     confirm.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            //TODO: call function deleteProposal()
+                            ProposalRepository.deleteProposal(documentId);
+                            Toast.makeText(context, "CONFERMA FINE ATTIVITA'", Toast.LENGTH_SHORT).show();
                         }
                     });
                 }
             }); break;
-            case ACCEPTED: holder.constraintLayout.setOnClickListener(new View.OnClickListener() {
+            case ACCEPTED: constraintLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Log.e("ACCEPTED", "drop down");
@@ -116,7 +119,7 @@ public class ProposalRecyclerViewAdapter extends RecyclerView.Adapter<ProposalRe
                     });
                 }
             }); break;
-            case AVAILABLE: holder.constraintLayout.setOnClickListener(new View.OnClickListener() {
+            case AVAILABLE: constraintLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     ImageButton accept = holder.itemView.findViewById(R.id.accept_button),

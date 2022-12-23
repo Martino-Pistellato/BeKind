@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout
-    android:id="@+id/outer_constraintlayout"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_gravity="center_horizontal"
-    android:layout_marginBottom="10dp"
+    android:layout_marginTop="10dp"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@drawable/list_element_roundcorner">
 
@@ -33,12 +32,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
-                android:layout_marginTop="4dp"
-                android:layout_marginBottom="4dp"
+                android:layout_marginTop="10dp"
                 app:cardCornerRadius="100dp"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
                 tools:cardElevation="5dp">
 
                 <ImageView
@@ -107,9 +104,8 @@
             android:id="@+id/flag_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="12dp"
             android:src="@drawable/ic_flag"
-            android:layout_marginRight="12dp"
-            android:layout_marginBottom="3dp"
             android:background="@drawable/button_roundcorner"/>
 
     </LinearLayout>
@@ -127,7 +123,7 @@
 
         <android.widget.Space
             android:layout_width="130dp"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"/>
 
         <ImageButton
             android:id="@+id/delete_button"
@@ -135,20 +131,17 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
             android:src="@drawable/ic_delete"
-            android:layout_marginBottom="3dp"
-
             android:background="@drawable/button_roundcorner"/>
 
         <android.widget.Space
             android:layout_width="100dp"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"/>
 
         <ImageButton
             android:id="@+id/edit_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/ic_edit"
-            android:layout_marginBottom="3dp"
             android:background="@drawable/button_roundcorner"/>
 
     </LinearLayout>

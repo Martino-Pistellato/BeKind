@@ -3,7 +3,6 @@ package com.example.bekind_v2.UILayer.ui.profile;
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,17 +10,15 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.widget.SwitchCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.viewpager2.widget.ViewPager2;
 
-import com.example.bekind_v2.DataLayer.PostRepository;
-import com.example.bekind_v2.DataLayer.ProposalRepository;
 import com.example.bekind_v2.DataLayer.UserManager;
-import com.example.bekind_v2.MainActivity;
 import com.example.bekind_v2.R;
 import com.example.bekind_v2.UILayer.Authentication.LoginActivity;
-import com.example.bekind_v2.UILayer.BottomBar;
+import com.example.bekind_v2.UILayer.ui.home.HomeViewModel;
 import com.example.bekind_v2.Utilities.MyCallback;
 import com.example.bekind_v2.Utilities.PostTypes;
 import com.example.bekind_v2.Utilities.Types;
@@ -30,11 +27,11 @@ import com.example.bekind_v2.databinding.FragmentProfileBinding;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.textfield.TextInputEditText;
 
-import java.util.ArrayList;
-
 public class ProfileFragment extends Fragment {
 
     private FragmentProfileBinding binding;
+    private SwitchCompat simpleSwitch;
+    private TextView totalActivities, scheduledateText;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         ProfileViewModel profileViewModel = new ViewModelProvider(this).get(ProfileViewModel.class);
@@ -42,6 +39,9 @@ public class ProfileFragment extends Fragment {
         View root = binding.getRoot();
         Button logoutBtn = binding.logout, updateUserData = binding.modifyProfileBtn, updateUserLocation = binding.modifyNeighBtn;
         TextView profileName = binding.profileName;
+        simpleSwitch = root.findViewById(R.id.simpleSwitch);
+        totalActivities = root.findViewById(R.id.total_activities);
+        scheduledateText = root.findViewById(R.id.scheduledate_text);
 
         profileViewModel.getUserName(profileName::setText);
 
@@ -248,20 +248,8 @@ public class ProfileFragment extends Fragment {
             }
         });
 
-        ProposalRepository.getProposals(Utilities.SharedViewModel.day, UserManager.getUserId(), ProfileViewModel.filters, Types.PROPOSED, new MyCallback<ArrayList<ProposalRepository.Proposal>>() {
-                    @Override
-                    public void onCallback(ArrayList<ProposalRepository.Proposal> result) {
-                        Utilities.SharedViewModel.proposalsViewModel.getProposed().setValue(result);
-                    }
-                }
-        );
-
-        PostRepository.getPosts(PostTypes.MYPOSTS, UserManager.getUserId(), ProfileViewModel.filters, new MyCallback<ArrayList<PostRepository.Post>>() {
-            @Override
-            public void onCallback(ArrayList<PostRepository.Post> result) {
-                Utilities.SharedViewModel.postsViewModel.getMyPosts().setValue(result);
-            }
-        });
+        Utilities.getProposals(Utilities.day, UserManager.getUserId(), ProfileViewModel.filters, Types.PROPOSED);
+        Utilities.getPosts(UserManager.getUserId(), ProfileViewModel.filters, PostTypes.MYPOSTS);
 
         return root;
     }
@@ -270,5 +258,28 @@ public class ProfileFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        if(Utilities.day == null){
+            if(!simpleSwitch.isChecked()){
+                simpleSwitch.setChecked(true);
+                scheduledateText.setVisibility(View.INVISIBLE);
+                totalActivities.setVisibility(View.VISIBLE);
+            }
+        }
+        else{
+            if(simpleSwitch.isChecked()){
+                simpleSwitch.setChecked(false);
+                scheduledateText.setVisibility(View.VISIBLE);
+                totalActivities.setVisibility(View.INVISIBLE);
+            }
+        }
+
+        Utilities.getProposals(Utilities.day, UserManager.getUserId(), HomeViewModel.filters, Types.PROPOSED);
+        Utilities.getPosts(UserManager.getUserId(), ProfileViewModel.filters, PostTypes.MYPOSTS);
     }
 }

@@ -1,8 +1,11 @@
 package com.example.bekind_v2.UILayer;
 
 import android.app.Dialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -14,7 +17,9 @@ import android.widget.Toast;
 import com.example.bekind_v2.DataLayer.PostRepository;
 import com.example.bekind_v2.DataLayer.ProposalRepository;
 import com.example.bekind_v2.DataLayer.UserManager;
+import com.example.bekind_v2.MainActivity;
 import com.example.bekind_v2.R;
+import com.example.bekind_v2.UILayer.Authentication.LoginActivity;
 import com.example.bekind_v2.UILayer.ui.dashboard.DashboardViewModel;
 import com.example.bekind_v2.UILayer.ui.home.HomeViewModel;
 import com.example.bekind_v2.Utilities.MyCallback;
@@ -27,6 +32,7 @@ import com.example.bekind_v2.databinding.ActivityBottomBarBinding;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import androidx.activity.OnBackPressedCallback;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.compose.ui.graphics.GraphicsLayerScope;
 import androidx.navigation.NavBackStackEntry;
@@ -74,7 +80,7 @@ public class BottomBar extends AppCompatActivity {
         bottomBarViewModel = new ViewModelProvider(this).get(BottomBarViewModel.class);
         Utilities.SharedViewModel.postsViewModel = new ViewModelProvider(this).get(PostsViewModel.class);
         Utilities.SharedViewModel.proposalsViewModel = new ViewModelProvider(this).get(ProposalsViewModel.class);
-        Utilities.SharedViewModel.day = LocalDate.now();
+        Utilities.day = LocalDate.now();
         addProposalButton = findViewById(R.id.add_proposal_btn);
 
         addProposalButton.setOnClickListener(new View.OnClickListener() {
@@ -187,13 +193,7 @@ public class BottomBar extends AppCompatActivity {
                                     else {   //all the parameters in input are correct
                                         bottomBarViewModel.createProposal(proposalTitle, proposalBody,1, proposalExpiringDate);
 
-                                        ProposalRepository.getProposals(Utilities.SharedViewModel.day, UserManager.getUserId(), HomeViewModel.filters, Types.PROPOSED, new MyCallback<ArrayList<ProposalRepository.Proposal>>() {
-                                                    @Override
-                                                    public void onCallback(ArrayList<ProposalRepository.Proposal> result) {
-                                                        Utilities.SharedViewModel.proposalsViewModel.getProposed().setValue(result);
-                                                    }
-                                                }
-                                        );
+                                        Utilities.getProposals(Utilities.day, UserManager.getUserId(), HomeViewModel.filters, Types.PROPOSED);
                                         dialog.dismiss();
                                         choose_dialog.dismiss();
                                     }
@@ -203,13 +203,7 @@ public class BottomBar extends AppCompatActivity {
                                         Toast.makeText(getApplicationContext(), "Errore: i campi non sono stati riempiti correttamente", Toast.LENGTH_SHORT).show();
                                     else{
                                         bottomBarViewModel.createProposal(proposalTitle, proposalBody, Integer.valueOf(proposalPartcipants), proposalExpiringDate);
-                                        ProposalRepository.getProposals(Utilities.SharedViewModel.day, UserManager.getUserId(), HomeViewModel.filters, Types.PROPOSED, new MyCallback<ArrayList<ProposalRepository.Proposal>>() {
-                                                    @Override
-                                                    public void onCallback(ArrayList<ProposalRepository.Proposal> result) {
-                                                        Utilities.SharedViewModel.proposalsViewModel.getProposed().setValue(result);
-                                                    }
-                                                }
-                                        );
+                                        Utilities.getProposals(Utilities.day, UserManager.getUserId(), HomeViewModel.filters, Types.PROPOSED);
                                         dialog.dismiss();
                                         choose_dialog.dismiss();
                                     }
@@ -291,13 +285,7 @@ public class BottomBar extends AppCompatActivity {
                                     bottomBarViewModel.createPost(postTitle, postBody);
 
                                     //TODO i think that this getposts is no longer necessary ---> cancel this, or have two arrays in postsViewModel for my posts and other posts?
-                                    PostRepository.getPosts(PostTypes.MYPOSTS, UserManager.getUserId(), DashboardViewModel.filters, new MyCallback<ArrayList<PostRepository.Post>>() {
-                                                @Override
-                                                public void onCallback(ArrayList<PostRepository.Post> result) {
-                                                    Utilities.SharedViewModel.postsViewModel.getMyPosts().setValue(result);
-                                                }
-                                            }
-                                    );
+                                    Utilities.getPosts(UserManager.getUserId(), DashboardViewModel.filters, PostTypes.MYPOSTS);
                                 }
                                 dialog.dismiss();
                                 choose_dialog.dismiss();
@@ -310,6 +298,18 @@ public class BottomBar extends AppCompatActivity {
             choose_dialog.show();
             }
         });
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.action_bar_menu, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        startActivity(new Intent(this, SettingsActivity.class));
+        return super.onOptionsItemSelected(item);
     }
 }
 

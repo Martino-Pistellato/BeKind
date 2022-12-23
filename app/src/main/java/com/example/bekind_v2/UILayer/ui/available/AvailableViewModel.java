@@ -18,7 +18,7 @@ public class AvailableViewModel extends ViewModel {
     public void manageFilter(String filter){
         Utilities.manageFilter(filter, filters);
 
-        ProposalRepository.getProposals(Utilities.SharedViewModel.day, UserManager.getUserId(), filters, Types.AVAILABLE, new MyCallback<ArrayList<ProposalRepository.Proposal>>() {
+        ProposalRepository.getProposals(Utilities.day, UserManager.getUserId(), filters, Types.AVAILABLE, new MyCallback<ArrayList<ProposalRepository.Proposal>>() {
                     @Override
                     public void onCallback(ArrayList<ProposalRepository.Proposal> result) {
                         Utilities.SharedViewModel.proposalsViewModel.getAvailable().setValue(result);

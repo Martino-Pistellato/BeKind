@@ -181,7 +181,6 @@ public class ProposalRecyclerViewAdapter extends RecyclerView.Adapter<ProposalRe
     public static class MyViewHolder extends RecyclerView.ViewHolder {
         ImageView userProfilePic;
         TextView proposalPublisher, proposalTitle, proposalBody, proposalParticipants, expiringHour, expiringDate;
-        ConstraintLayout constraintLayout;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -193,7 +192,6 @@ public class ProposalRecyclerViewAdapter extends RecyclerView.Adapter<ProposalRe
             proposalParticipants = itemView.findViewById(R.id.proposal_participants);
             expiringHour = itemView.findViewById(R.id.expiring_hour);
             expiringDate = itemView.findViewById(R.id.expiring_date);
-            constraintLayout = itemView.findViewById(R.id.proposal);
         }
     }
 }

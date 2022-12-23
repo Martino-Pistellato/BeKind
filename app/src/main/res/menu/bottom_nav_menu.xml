@@ -15,7 +15,7 @@
         android:id="@+id/navigation_blank"
         android:clickable="false"
         android:contextClickable="false"
-        android:title="Blank" />
+        android:title="" />
 
     <item
         android:id="@+id/navigation_dashboard"

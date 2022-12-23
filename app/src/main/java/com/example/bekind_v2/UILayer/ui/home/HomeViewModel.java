@@ -20,7 +20,7 @@ public class HomeViewModel extends ViewModel {
     public void manageFilter(String filter){
         Utilities.manageFilter(filter, filters);
 
-        ProposalRepository.getProposals(Utilities.SharedViewModel.day, UserManager.getUserId(), filters, Types.PROPOSED, new MyCallback<ArrayList<ProposalRepository.Proposal>>() {
+        ProposalRepository.getProposals(Utilities.day, UserManager.getUserId(), filters, Types.PROPOSED, new MyCallback<ArrayList<ProposalRepository.Proposal>>() {
                     @Override
                     public void onCallback(ArrayList<ProposalRepository.Proposal> result) {
                         Utilities.SharedViewModel.proposalsViewModel.getProposed().setValue(result);
@@ -28,7 +28,7 @@ public class HomeViewModel extends ViewModel {
                 }
         );
 
-        ProposalRepository.getProposals(Utilities.SharedViewModel.day, UserManager.getUserId(), filters, Types.ACCEPTED, new MyCallback<ArrayList<ProposalRepository.Proposal>>() {
+        ProposalRepository.getProposals(Utilities.day, UserManager.getUserId(), filters, Types.ACCEPTED, new MyCallback<ArrayList<ProposalRepository.Proposal>>() {
                     @Override
                     public void onCallback(ArrayList<ProposalRepository.Proposal> result) {
                         Utilities.SharedViewModel.proposalsViewModel.getAccepted().setValue(result);

@@ -1,16 +1,23 @@
 package com.example.bekind_v2.Utilities;
 
+import android.util.Log;
+
+import com.example.bekind_v2.DataLayer.PostRepository;
+import com.example.bekind_v2.DataLayer.ProposalRepository;
+
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
 public class Utilities {
+    public static LocalDate day = LocalDate.now();
+
     public static class SharedViewModel{
         public static ProposalsViewModel proposalsViewModel;
         public static PostsViewModel postsViewModel;
-        public static LocalDate day = LocalDate.now();
     }
+
     public static class BetterCalendar {
         public Calendar c;
 
@@ -43,4 +50,29 @@ public class Utilities {
         else
             filters.add(filter);
     }
+
+    public static void getProposals(LocalDate day, String userId, ArrayList<String> filters, Types type){
+        ProposalRepository.getProposals(day, userId, filters, type, new MyCallback<ArrayList<ProposalRepository.Proposal>>() {
+            @Override
+            public void onCallback(ArrayList<ProposalRepository.Proposal> result) {
+                switch(type){
+                    case ACCEPTED: SharedViewModel.proposalsViewModel.getAccepted().setValue(result); break;
+                    case AVAILABLE: SharedViewModel.proposalsViewModel.getAvailable().setValue(result); break;
+                    case PROPOSED: SharedViewModel.proposalsViewModel.getProposed().setValue(result); break;
+                }
+            }
+        });
+    }
+    
+    public static void getPosts(String userId, ArrayList<String> filters, PostTypes type){
+        PostRepository.getPosts(userId, filters, type, new MyCallback<ArrayList<PostRepository.Post>>() {
+            @Override
+            public void onCallback(ArrayList<PostRepository.Post> result) {
+                switch(type){
+                    case MYPOSTS: SharedViewModel.postsViewModel.getMyPosts().setValue(result); break;
+                    case OTHERSPOSTS: SharedViewModel.postsViewModel.getOtherPosts().setValue(result); break;
+                }
+            }
+        });
+    }    
 }

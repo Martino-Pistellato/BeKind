@@ -18,8 +18,7 @@ public class ScheduleBar {
     public static class ScheduleDate {
         private static Date scheduleDate = Date.from(LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant());
 
-        public void ScheduleBar() {
-        }
+        public void ScheduleBar() {}
 
         public static void setScheduleDate(Date newDate) { scheduleDate = newDate; }
 

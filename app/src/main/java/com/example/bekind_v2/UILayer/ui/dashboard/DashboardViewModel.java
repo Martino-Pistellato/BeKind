@@ -19,14 +19,7 @@ public class DashboardViewModel extends ViewModel {
 
     public void manageFilter(String filter){
         Utilities.manageFilter(filter,filters);
-
-        PostRepository.getPosts(PostTypes.OTHERSPOSTS, UserManager.getUserId(), filters, new MyCallback<ArrayList<PostRepository.Post>>() {
-                    @Override
-                    public void onCallback(ArrayList<PostRepository.Post> result) {
-                        Utilities.SharedViewModel.postsViewModel.getOtherPosts().setValue(result);
-                    }
-                }
-        );
+        Utilities.getPosts(UserManager.getUserId(), filters, PostTypes.OTHERSPOSTS);
     }
 
 }

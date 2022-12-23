@@ -3,7 +3,6 @@ package com.example.bekind_v2.UILayer.ui.dashboard;
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,22 +20,16 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.bekind_v2.DataLayer.PostRepository;
-import com.example.bekind_v2.DataLayer.ProposalRepository;
 import com.example.bekind_v2.DataLayer.UserManager;
 import com.example.bekind_v2.R;
-import com.example.bekind_v2.UILayer.ui.home.HomeViewModel;
-import com.example.bekind_v2.Utilities.GetProposals;
-import com.example.bekind_v2.Utilities.MyCallback;
 import com.example.bekind_v2.Utilities.PostRecyclerViewAdapter;
 import com.example.bekind_v2.Utilities.PostTypes;
-import com.example.bekind_v2.Utilities.PostsViewModel;
-import com.example.bekind_v2.Utilities.ProposalRecyclerViewAdapter;
 import com.example.bekind_v2.Utilities.ScheduleBar;
-import com.example.bekind_v2.Utilities.Types;
 import com.example.bekind_v2.Utilities.Utilities;
 import com.example.bekind_v2.databinding.FragmentDashboardBinding;
 import com.google.android.material.chip.Chip;
 
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Calendar;
 
@@ -46,9 +39,9 @@ public class DashboardFragment extends Fragment {
 
     private FragmentDashboardBinding binding;
     private SwitchCompat simpleSwitch;
+    private TextView totalActivities, scheduledateText;
 
-    public View onCreateView(@NonNull LayoutInflater inflater,
-                             ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         DashboardViewModel dashboardViewModel = new ViewModelProvider(this).get(DashboardViewModel.class);
         binding = FragmentDashboardBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
@@ -94,27 +87,21 @@ public class DashboardFragment extends Fragment {
         final Observer<ArrayList<PostRepository.Post>> postObserver = new Observer<ArrayList<PostRepository.Post>>() {
             @Override
             public void onChanged(@Nullable final ArrayList<PostRepository.Post> posts) {
-                PostRecyclerViewAdapter adapter = new PostRecyclerViewAdapter(posts, getContext());
+                PostRecyclerViewAdapter adapter = new PostRecyclerViewAdapter(posts, getContext(), PostTypes.OTHERSPOSTS);
                 recyclerView.setAdapter(adapter);
                 adapter.notifyDataSetChanged();
             }
         };
 
         Utilities.SharedViewModel.postsViewModel.getOtherPosts().observe(getViewLifecycleOwner(), postObserver);
-
-        PostRepository.getPosts(PostTypes.OTHERSPOSTS, UserManager.getUserId(), DashboardViewModel.filters, new MyCallback<ArrayList<PostRepository.Post>>() {
-            @Override
-                public void onCallback(ArrayList<PostRepository.Post> result) {
-                    Utilities.SharedViewModel.postsViewModel.getOtherPosts().setValue(result);
-                }
-            }
-        );
-
+        Utilities.getPosts(UserManager.getUserId(), DashboardViewModel.filters, PostTypes.OTHERSPOSTS);
 
         TextView scheduleDate = root.findViewById(R.id.scheduledate_text);
         ScheduleBar.ScheduleDate.setTextDate(scheduleDate);
 
         simpleSwitch = root.findViewById(R.id.simpleSwitch);
+        totalActivities = root.findViewById(R.id.total_activities);
+        scheduledateText = root.findViewById(R.id.scheduledate_text);
         Context context = this.getContext();
 
         scheduleDate.setOnClickListener(new View.OnClickListener() {
@@ -129,6 +116,7 @@ public class DashboardFragment extends Fragment {
                         calendar.set(year, monthOfYear, dayOfMonth);
 
                         ScheduleBar.ScheduleDate.setScheduleDate(calendar.getTime());
+                        Utilities.day = calendar.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
                     }
 
                 });
@@ -156,9 +144,22 @@ public class DashboardFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        if(!simpleSwitch.isChecked())
-            GetProposals.getProposalsDate(ScheduleBar.ScheduleDate.getScheduleLocalDate(), UserManager.getUserId(), HomeViewModel.filters, Types.AVAILABLE);
-        else
-            GetProposals.getProposalsDate(null, UserManager.getUserId(), HomeViewModel.filters, Types.AVAILABLE);
+
+        if(Utilities.day == null){
+            if(!simpleSwitch.isChecked()){
+                simpleSwitch.setChecked(true);
+                scheduledateText.setVisibility(View.INVISIBLE);
+                totalActivities.setVisibility(View.VISIBLE);
+            }
+        }
+        else{
+            if(simpleSwitch.isChecked()){
+                simpleSwitch.setChecked(false);
+                scheduledateText.setVisibility(View.VISIBLE);
+                totalActivities.setVisibility(View.INVISIBLE);
+            }
+        }
+
+        Utilities.getPosts(UserManager.getUserId(), DashboardViewModel.filters, PostTypes.OTHERSPOSTS);
     }
 }

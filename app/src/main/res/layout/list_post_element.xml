@@ -1,26 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_gravity="center_horizontal"
-    android:layout_marginTop="-2dp"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:layout_marginTop="10dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@drawable/list_element_roundcorner">
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cardView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
-        android:layout_marginBottom="12dp"
-        app:cardCornerRadius="10dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:cardBackgroundColor="#92fe9a"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
         android:clipToPadding="false"
-        android:clickable="true">
+        app:cardBackgroundColor="@android:color/transparent"
+        app:cardElevation="0dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/post"
@@ -100,14 +98,15 @@
         android:orientation="horizontal"
         android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/cardView">
 
-        <Button
+        <ImageButton
             android:id="@+id/flag_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Flag" />
+            android:layout_marginEnd="12dp"
+            android:src="@drawable/ic_flag"
+            android:background="@drawable/button_roundcorner"/>
 
     </LinearLayout>
 
@@ -118,30 +117,32 @@
         android:layout_below="@+id/cardView"
         android:orientation="horizontal"
         android:visibility="gone"
-        android:weightSum="2.2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/cardView">
 
-        <Button
-            android:id="@+id/cancel_button"
-            android:layout_width="0dp"
+        <android.widget.Space
+            android:layout_width="130dp"
+            android:layout_height="wrap_content"/>
+
+        <ImageButton
+            android:id="@+id/delete_button"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
-            android:layout_weight="1"
-            android:text="Delete"/>
+            android:src="@drawable/ic_delete"
+            android:background="@drawable/button_roundcorner"/>
 
         <android.widget.Space
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.1" />
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"/>
 
-        <Button
-            android:id="@+id/change_button"
-            android:layout_width="0dp"
+        <ImageButton
+            android:id="@+id/edit_button"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Edit"/>
+            android:src="@drawable/ic_edit"
+            android:background="@drawable/button_roundcorner"/>
 
     </LinearLayout>
 

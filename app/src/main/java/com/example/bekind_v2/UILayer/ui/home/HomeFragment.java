@@ -25,7 +25,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.bekind_v2.DataLayer.ProposalRepository;
 import com.example.bekind_v2.DataLayer.UserManager;
 import com.example.bekind_v2.R;
-import com.example.bekind_v2.Utilities.GetProposals;
 import com.example.bekind_v2.Utilities.MyCallback;
 import com.example.bekind_v2.Utilities.ProposalRecyclerViewAdapter;
 import com.example.bekind_v2.Utilities.ScheduleBar;
@@ -93,10 +92,7 @@ public class HomeFragment extends Fragment {
                     public void onCallback(Boolean result) {
                         if(result) {
                             Toast.makeText(context, "Ritiro dall'attività avvenuto correttamente", Toast.LENGTH_SHORT).show();
-                            if(!simpleSwitch.isChecked())
-                                GetProposals.getProposalsDate(ScheduleBar.ScheduleDate.getScheduleLocalDate(), UserManager.getUserId(), HomeViewModel.filters, Types.ACCEPTED);
-                            else
-                                GetProposals.getProposalsDate(null, UserManager.getUserId(), HomeViewModel.filters, Types.ACCEPTED);
+                            Utilities.getProposals(Utilities.day, UserManager.getUserId(), HomeViewModel.filters, Types.ACCEPTED);
                         }else
                             Toast.makeText(context, "Errore nel ritiro dall'attività", Toast.LENGTH_SHORT).show();
                     }
@@ -112,7 +108,7 @@ public class HomeFragment extends Fragment {
         if(Utilities.SharedViewModel.proposalsViewModel != null)
             Utilities.SharedViewModel.proposalsViewModel.getAccepted().observe(getViewLifecycleOwner(),acceptedObserver);
 
-        GetProposals.getProposalsDate(Utilities.SharedViewModel.day, UserManager.getUserId(), HomeViewModel.filters, Types.ACCEPTED);
+        Utilities.getProposals(Utilities.day, UserManager.getUserId(), HomeViewModel.filters, Types.ACCEPTED);
 
 
         TextView scheduleDate = root.findViewById(R.id.scheduledate_text);
@@ -140,7 +136,7 @@ public class HomeFragment extends Fragment {
                         ScheduleDate.setTextDate(scheduleDate);
                         datePickerDialog.dismiss();
 
-                        GetProposals.getProposalsDate(ScheduleDate.getScheduleLocalDate(), UserManager.getUserId(), HomeViewModel.filters, Types.ACCEPTED);
+                        Utilities.getProposals(ScheduleDate.getScheduleLocalDate(), UserManager.getUserId(), HomeViewModel.filters, Types.ACCEPTED);
                     }
                 });
             }
@@ -155,16 +151,15 @@ public class HomeFragment extends Fragment {
                 if(buttonView.isPressed() && !isChecked){
                     scheduledateText.setVisibility(View.VISIBLE);
                     totalActivities.setVisibility(View.INVISIBLE);
-
-                    GetProposals.getProposalsDate(ScheduleDate.getScheduleLocalDate(), UserManager.getUserId(), HomeViewModel.filters, Types.ACCEPTED);
-
+                    Utilities.day = ScheduleDate.getScheduleLocalDate();                    
                 }
                 else if (buttonView.isPressed() && isChecked){
                     scheduledateText.setVisibility(View.INVISIBLE);
                     totalActivities.setVisibility(View.VISIBLE);
-
-                    GetProposals.getProposalsDate(null, UserManager.getUserId(), HomeViewModel.filters, Types.ACCEPTED);
+                    Utilities.day = null;
                 }
+
+                Utilities.getProposals(Utilities.day, UserManager.getUserId(), HomeViewModel.filters, Types.ACCEPTED);
             }
         });
 
@@ -180,7 +175,7 @@ public class HomeFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        if (!simpleSwitch.isChecked()){
+        /*if (!simpleSwitch.isChecked()){
             GetProposals.getProposalsDate(ScheduleBar.ScheduleDate.getScheduleLocalDate(), UserManager.getUserId(), HomeViewModel.filters, Types.AVAILABLE);
             scheduledateText.setVisibility(View.VISIBLE);
             totalActivities.setVisibility(View.INVISIBLE);
@@ -188,6 +183,23 @@ public class HomeFragment extends Fragment {
             GetProposals.getProposalsDate(null, UserManager.getUserId(), HomeViewModel.filters, Types.AVAILABLE);
             scheduledateText.setVisibility(View.INVISIBLE);
             totalActivities.setVisibility(View.VISIBLE);
+        }*/
+
+        if(Utilities.day == null){
+            if(!simpleSwitch.isChecked()){
+                simpleSwitch.setChecked(true);
+                scheduledateText.setVisibility(View.INVISIBLE);
+                totalActivities.setVisibility(View.VISIBLE);
+            }
         }
+        else{
+            if(simpleSwitch.isChecked()){
+                simpleSwitch.setChecked(false);
+                scheduledateText.setVisibility(View.VISIBLE);
+                totalActivities.setVisibility(View.INVISIBLE);
+            }
+        }
+
+        Utilities.getProposals(Utilities.day, UserManager.getUserId(), HomeViewModel.filters, Types.ACCEPTED);
     }
 }

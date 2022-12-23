@@ -102,7 +102,7 @@ public class PostRepository {
             doc.update("body", body);
     }
 
-    public static void getPosts(PostTypes type, String userdID, ArrayList<String> filters, MyCallback<ArrayList<Post>> myCallback){
+    public static void getPosts(String userdID, ArrayList<String> filters, PostTypes type, MyCallback<ArrayList<Post>> myCallback){
         ArrayList<PostRepository.Post> res = new ArrayList<>();
         CollectionReference db = FirebaseFirestore.getInstance().collection("Posts");
         Query postsQuery = null;

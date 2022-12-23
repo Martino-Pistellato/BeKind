@@ -75,7 +75,7 @@ public class ProposalRecyclerViewAdapter extends RecyclerView.Adapter<ProposalRe
        ConstraintLayout constraintLayout = holder.itemView.findViewById(R.id.proposal);
 
         switch(type){
-            case PROPOSED: holder.itemView.setOnClickListener(new View.OnClickListener() {
+            case PROPOSED: constraintLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     ImageButton delete = holder.itemView.findViewById(R.id.delete_button),
@@ -110,7 +110,7 @@ public class ProposalRecyclerViewAdapter extends RecyclerView.Adapter<ProposalRe
                     });
                 }
             }); break;
-            case ACCEPTED: holder.constraintLayout.setOnClickListener(new View.OnClickListener() {
+            case ACCEPTED: constraintLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Log.e("ACCEPTED", "drop down");
@@ -130,7 +130,7 @@ public class ProposalRecyclerViewAdapter extends RecyclerView.Adapter<ProposalRe
                     });
                 }
             }); break;
-            case AVAILABLE: holder.constraintLayout.setOnClickListener(new View.OnClickListener() {
+            case AVAILABLE: constraintLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     ImageButton accept = holder.itemView.findViewById(R.id.accept_button),
@@ -178,7 +178,6 @@ public class ProposalRecyclerViewAdapter extends RecyclerView.Adapter<ProposalRe
     public static class MyViewHolder extends RecyclerView.ViewHolder {
         ImageView userProfilePic;
         TextView proposalPublisher, proposalTitle, proposalBody, proposalParticipants, expiringHour, expiringDate;
-        ConstraintLayout constraintLayout;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -190,7 +189,6 @@ public class ProposalRecyclerViewAdapter extends RecyclerView.Adapter<ProposalRe
             proposalParticipants = itemView.findViewById(R.id.proposal_participants);
             expiringHour = itemView.findViewById(R.id.expiring_hour);
             expiringDate = itemView.findViewById(R.id.expiring_date);
-            constraintLayout = itemView.findViewById(R.id.proposal);
         }
     }
 }

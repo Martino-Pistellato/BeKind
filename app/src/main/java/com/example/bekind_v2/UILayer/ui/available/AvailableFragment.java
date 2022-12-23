@@ -3,7 +3,6 @@ package com.example.bekind_v2.UILayer.ui.available;
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,7 +25,6 @@ import com.example.bekind_v2.DataLayer.ProposalRepository;
 import com.example.bekind_v2.DataLayer.UserManager;
 import com.example.bekind_v2.R;
 import com.example.bekind_v2.UILayer.ui.home.HomeViewModel;
-import com.example.bekind_v2.Utilities.GetProposals;
 import com.example.bekind_v2.Utilities.MyCallback;
 import com.example.bekind_v2.Utilities.ProposalRecyclerViewAdapter;
 import com.example.bekind_v2.Utilities.ProposalsViewModel;
@@ -36,6 +34,7 @@ import com.example.bekind_v2.Utilities.Utilities;
 import com.example.bekind_v2.databinding.FragmentAvailableBinding;
 import com.google.android.material.chip.Chip;
 
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Calendar;
 
@@ -96,10 +95,7 @@ public class AvailableFragment extends Fragment {
                     public void onCallback(Boolean result) {
                         if(result) {
                             Toast.makeText(context, "Attività accettata correttamente", Toast.LENGTH_SHORT).show();
-                            if (!simpleSwitch.isChecked())
-                                GetProposals.getProposalsDate(ScheduleBar.ScheduleDate.getScheduleLocalDate(), UserManager.getUserId(), HomeViewModel.filters, Types.AVAILABLE);
-                            else
-                                GetProposals.getProposalsDate(null, UserManager.getUserId(), HomeViewModel.filters, Types.AVAILABLE);
+                            Utilities.getProposals(Utilities.day, UserManager.getUserId(), HomeViewModel.filters, Types.AVAILABLE);
                         }else
                             Toast.makeText(context, "Errore nell'accettazione dell'attività", Toast.LENGTH_SHORT).show();
                     }
@@ -111,14 +107,15 @@ public class AvailableFragment extends Fragment {
 
         proposalsViewModel.getAvailable().observe(getViewLifecycleOwner(),availableObserver);
 
-        GetProposals.getProposalsDate(Utilities.SharedViewModel.day, UserManager.getUserId(), HomeViewModel.filters, Types.AVAILABLE);
+        Utilities.getProposals(Utilities.day, UserManager.getUserId(), HomeViewModel.filters, Types.AVAILABLE);
 
-        TextView scheduleDate = root.findViewById(R.id.scheduledate_text);
-        ScheduleBar.ScheduleDate.setTextDate(scheduleDate);
+        scheduledateText = root.findViewById(R.id.scheduledate_text);
+        totalActivities = root.findViewById(R.id.total_activities);
+        ScheduleBar.ScheduleDate.setTextDate(scheduledateText);
 
         simpleSwitch = root.findViewById(R.id.simpleSwitch);
 
-        scheduleDate.setOnClickListener(new View.OnClickListener() {
+        scheduledateText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 DatePickerDialog datePickerDialog = ScheduleBar.ScheduleDate.showDatePickerDialog(context);
@@ -130,6 +127,7 @@ public class AvailableFragment extends Fragment {
                         calendar.set(year, monthOfYear, dayOfMonth);
 
                         ScheduleBar.ScheduleDate.setScheduleDate(calendar.getTime());
+                        Utilities.day = calendar.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
                     }
 
                 });
@@ -138,39 +136,32 @@ public class AvailableFragment extends Fragment {
                 buttonOk.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        ScheduleBar.ScheduleDate.setTextDate(scheduleDate);
+                        ScheduleBar.ScheduleDate.setTextDate(scheduledateText);
                         datePickerDialog.dismiss();
 
-                        Log.e("DATE", ScheduleBar.ScheduleDate.getScheduleLocalDate().toString());
-                        GetProposals.getProposalsDate(ScheduleBar.ScheduleDate.getScheduleLocalDate(), UserManager.getUserId(), HomeViewModel.filters, Types.AVAILABLE);
+                        Utilities.getProposals(Utilities.day, UserManager.getUserId(), HomeViewModel.filters, Types.AVAILABLE);
                     }
                 });
             }
         });
 
 
-        scheduledateText = root.findViewById(R.id.scheduledate_text);
-        totalActivities = root.findViewById(R.id.total_activities);
 
         simpleSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if(buttonView.isPressed() && !isChecked){
-                    Log.e("SWITCH CLICKED", "change text");
                     scheduledateText.setVisibility(View.VISIBLE);
                     totalActivities.setVisibility(View.INVISIBLE);
+                    Utilities.day = ScheduleBar.ScheduleDate.getScheduleLocalDate();
 
-                    Log.e("DATE", ScheduleBar.ScheduleDate.getScheduleLocalDate().toString());
-                    GetProposals.getProposalsDate(ScheduleBar.ScheduleDate.getScheduleLocalDate(), UserManager.getUserId(), HomeViewModel.filters, Types.AVAILABLE);
                 }
                 else if (buttonView.isPressed() && isChecked){
-                    Log.e("SWITCH CLICKED", "change text back");
-
                     scheduledateText.setVisibility(View.INVISIBLE);
                     totalActivities.setVisibility(View.VISIBLE);
-
-                    GetProposals.getProposalsDate(null, UserManager.getUserId(), HomeViewModel.filters, Types.AVAILABLE);
+                    Utilities.day = null;
                 }
+                Utilities.getProposals(Utilities.day, UserManager.getUserId(), HomeViewModel.filters, Types.AVAILABLE);
             }
         });
 
@@ -186,7 +177,7 @@ public class AvailableFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        if (!simpleSwitch.isChecked()){
+        /*if (!simpleSwitch.isChecked()){
             GetProposals.getProposalsDate(ScheduleBar.ScheduleDate.getScheduleLocalDate(), UserManager.getUserId(), HomeViewModel.filters, Types.AVAILABLE);
         scheduledateText.setVisibility(View.VISIBLE);
         totalActivities.setVisibility(View.INVISIBLE);
@@ -194,6 +185,23 @@ public class AvailableFragment extends Fragment {
             GetProposals.getProposalsDate(null, UserManager.getUserId(), HomeViewModel.filters, Types.AVAILABLE);
             scheduledateText.setVisibility(View.INVISIBLE);
             totalActivities.setVisibility(View.VISIBLE);
+        }*/
+
+        if(Utilities.day == null){
+            if(!simpleSwitch.isChecked()){
+                simpleSwitch.setChecked(true);
+                scheduledateText.setVisibility(View.INVISIBLE);
+                totalActivities.setVisibility(View.VISIBLE);
+            }
         }
+        else{
+            if(simpleSwitch.isChecked()){
+                simpleSwitch.setChecked(false);
+                scheduledateText.setVisibility(View.VISIBLE);
+                totalActivities.setVisibility(View.INVISIBLE);
+            }
+        }
+
+        Utilities.getProposals(Utilities.day, UserManager.getUserId(), HomeViewModel.filters, Types.AVAILABLE);
     }
 }

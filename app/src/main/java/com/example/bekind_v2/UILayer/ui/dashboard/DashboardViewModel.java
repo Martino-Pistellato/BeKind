@@ -19,7 +19,7 @@ public class DashboardViewModel extends ViewModel {
 
     public void manageFilter(String filter){
         Utilities.manageFilter(filter,filters);
-        Utilities.getPosts(UserManager.getUserId(), filters, PostTypes.OTHERSPOSTS);
+        Utilities.getPosts(Utilities.day, UserManager.getUserId(), filters, PostTypes.OTHERSPOSTS);
     }
 
 }

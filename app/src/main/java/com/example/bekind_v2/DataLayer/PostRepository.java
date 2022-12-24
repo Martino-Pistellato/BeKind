@@ -14,6 +14,7 @@ import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.ServerTimestamp;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
@@ -80,6 +81,7 @@ public class PostRepository {
             this.filters = filters;
         }
     }
+
     public static void createPost(String title, String body, ArrayList<String> filters){
         String id =  UUID.randomUUID().toString();
         String publisherID = UserManager.getUserId();
@@ -92,18 +94,38 @@ public class PostRepository {
         FirebaseFirestore.getInstance().collection("Posts").document(id).set(post); //TODO: make it asynchronous?
     }
 
-    public static void updatePost(String id, String title, String body){
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        DocumentReference doc = db.collection("Posts").document(id);
 
-        if(!title.isEmpty())
-            doc.update("title", title);
-        if(!body.isEmpty())
-            doc.update("body", body);
+    public static void editPost(String documentId, String title, String body, ArrayList<String> filters, MyCallback<Boolean> myCallback){
+        FirebaseFirestore.getInstance().collection("Posts").document(documentId).update("title", title, "body", body, "filters", filters).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                myCallback.onCallback(task.isSuccessful());
+            }
+        });
     }
 
-    public static void getPosts(String userdID, ArrayList<String> filters, PostTypes type, MyCallback<ArrayList<Post>> myCallback){
+    public static void deletePost(String documentId){
+        FirebaseFirestore.getInstance().collection("Posts").document(documentId).delete();
+    }
+
+    public static void clearPosts(){
+        FirebaseFirestore.getInstance().collection("Posts").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                for(DocumentSnapshot snap : task.getResult()){
+                    Post post = snap.toObject(Post.class); //cast the result to a real proposal
+                    LocalDateTime pubD = post.getPublishingDate().toInstant().atZone(ZoneId.of("ECT")).toLocalDateTime();
+                    LocalDateTime expD = LocalDateTime.now().minusMonths(3);
+                    if (pubD.isBefore(expD))
+                        deletePost(post.getId());
+                }
+            }
+        });
+    }
+
+    public static void getPosts(LocalDate day, String userdID, ArrayList<String> filters, PostTypes type, MyCallback<ArrayList<Post>> myCallback){
         ArrayList<PostRepository.Post> res = new ArrayList<>();
+        LocalDateTime start = (day == null) ? LocalDateTime.MIN : day.atTime(0,0,0), end = (day == null) ? LocalDateTime.MAX : day.atTime(23,59,59);
         CollectionReference db = FirebaseFirestore.getInstance().collection("Posts");
         Query postsQuery = null;
         switch (type){
@@ -117,12 +139,25 @@ public class PostRepository {
                 if(task.isSuccessful()) {
                     for (DocumentSnapshot snap : task.getResult()) { //for each element in the query
                         PostRepository.Post post = snap.toObject(PostRepository.Post.class);
-                        if (filters != null && post.getFilters().containsAll(filters))
-                            res.add(post); //adds the proposal to the Proposal to be shown
+                        LocalDateTime pubD = post.getPublishingDate().toInstant().atZone(ZoneId.of("ECT")).toLocalDateTime();
+                        if (pubD.isAfter(start) && pubD.isBefore(end)){
+                            if (filters != null && post.getFilters().containsAll(filters))
+                                res.add(post); //adds the proposal to the Proposal to be shown
+                        }
                     }
                     myCallback.onCallback(res);
                 }
 
+            }
+        });
+    }
+
+    public static void getPost(String documentId, MyCallback<Post> myCallback){
+        FirebaseFirestore.getInstance().collection("Posts").document(documentId).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if(task.getResult().exists())
+                    myCallback.onCallback(task.getResult().toObject(Post.class));
             }
         });
     }

@@ -31,8 +31,7 @@ public class PostRepository {
         private Date publishingDate;
         private ArrayList<String> filters;
 
-        public Post() {
-        }
+        public Post() {}
 
         public Post(String title, String body, String id, String publisherID, Date publishingDate, ArrayList<String> filters) {
             this.title = title;
@@ -46,40 +45,25 @@ public class PostRepository {
         public String getTitle() {
             return this.title;
         }
-
         public String getBody() {
             return this.body;
         }
-
         public String getId() {
             return this.id;
         }
-
         public String getPublisherID() {
             return this.publisherID;
         }
-
         public Date getPublishingDate() {
             return this.publishingDate;
         }
-
         public ArrayList<String> getFilters() { return filters; }
 
         public void setTitle(String title) {
             this.title = title;
         }
-
-        public void setBody(String body) {
-            this.body = body;
-        }
-
-        public void setPublishingDate(Date publishingDate) {
-            this.publishingDate = publishingDate;
-        }
-
-        public void setFilters(ArrayList<String> filters) {
-            this.filters = filters;
-        }
+        public void setBody(String body) {this.body = body;}
+        public void setFilters(ArrayList<String> filters) {this.filters = filters;}
     }
 
     public static void createPost(String title, String body, ArrayList<String> filters){
@@ -123,14 +107,14 @@ public class PostRepository {
         });
     }
 
-    public static void getPosts(LocalDate day, String userdID, ArrayList<String> filters, PostTypes type, MyCallback<ArrayList<Post>> myCallback){
+    public static void getPosts(LocalDate day, String userID, ArrayList<String> filters, PostTypes type, MyCallback<ArrayList<Post>> myCallback){
         ArrayList<PostRepository.Post> res = new ArrayList<>();
         LocalDateTime start = (day == null) ? LocalDateTime.MIN : day.atTime(0,0,0), end = (day == null) ? LocalDateTime.MAX : day.atTime(23,59,59);
         CollectionReference db = FirebaseFirestore.getInstance().collection("Posts");
         Query postsQuery = null;
         switch (type){
-            case MYPOSTS: postsQuery = db.whereEqualTo("publisherID", userdID); break;
-            case OTHERSPOSTS: postsQuery = db.whereNotEqualTo("publisherID", userdID);break;
+            case MYPOSTS: postsQuery = db.whereEqualTo("publisherID", userID); break;
+            case OTHERSPOSTS: postsQuery = db.whereNotEqualTo("publisherID", userID);break;
         }
 
         postsQuery.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {

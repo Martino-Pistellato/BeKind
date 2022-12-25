@@ -13,7 +13,7 @@ import java.util.UUID;
 
 public class NeighbourhoodRepository {
     public static class Neighbourhood{
-        private  String city, name, id;
+        private String city, name, id;
 
         public Neighbourhood(){}
 

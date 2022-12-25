@@ -167,10 +167,12 @@ public class AuthenticationViewModel extends ViewModel {
     }
 
     public void setBirthDate(DatePicker birthDate){
-        Calendar calendar = Calendar.getInstance();//TODO: remove the plain text
-        calendar.set(1920,1,1);
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.YEAR, -100);
+        //calendar.set(1920,1,1);
         Date minDate = calendar.getTime(), maxDate;
-        calendar.set(2008, 11, 31);
+        calendar.add(Calendar.YEAR, 82);
+        //calendar.set(2008, 11, 31);
         maxDate = calendar.getTime();
         birthDate.setMaxDate(maxDate.getTime());
         birthDate.setMinDate(minDate.getTime());
@@ -232,7 +234,7 @@ public class AuthenticationViewModel extends ViewModel {
     public void createUser(MyCallback<Boolean> myCallback){
         NeighbourhoodViewModel.getNeighbourhood(this.neighbourhoodName, this.city, (x) ->{
             if(x != null){
-                UserManager.createUser(name, surname, email, password, birthDate.toString(), city.toLowerCase(), x, street.toLowerCase(), streetNumber.toLowerCase(), new MyCallback<Object>() {
+                UserManager.createUser(name, surname, email, password, birthDate, city.toLowerCase(), x, street.toLowerCase(), streetNumber.toLowerCase(), new MyCallback<Object>() {
                     @Override
                     public void onCallback(Object result) {
                         login(email,password,myCallback);

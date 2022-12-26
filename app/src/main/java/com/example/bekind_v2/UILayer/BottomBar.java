@@ -1,7 +1,12 @@
 package com.example.bekind_v2.UILayer;
 
+import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_NO;
+import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_YES;
+
 import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -14,15 +19,20 @@ import android.widget.DatePicker;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
-import com.example.bekind_v2.DataLayer.PostRepository;
-import com.example.bekind_v2.DataLayer.ProposalRepository;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
+import androidx.navigation.ui.AppBarConfiguration;
+import androidx.navigation.ui.NavigationUI;
+import androidx.preference.PreferenceManager;
+
 import com.example.bekind_v2.DataLayer.UserManager;
-import com.example.bekind_v2.MainActivity;
 import com.example.bekind_v2.R;
-import com.example.bekind_v2.UILayer.Authentication.LoginActivity;
 import com.example.bekind_v2.UILayer.ui.dashboard.DashboardViewModel;
 import com.example.bekind_v2.UILayer.ui.home.HomeViewModel;
-import com.example.bekind_v2.Utilities.MyCallback;
 import com.example.bekind_v2.Utilities.PostTypes;
 import com.example.bekind_v2.Utilities.PostsViewModel;
 import com.example.bekind_v2.Utilities.ProposalsViewModel;
@@ -30,29 +40,12 @@ import com.example.bekind_v2.Utilities.Types;
 import com.example.bekind_v2.Utilities.Utilities;
 import com.example.bekind_v2.databinding.ActivityBottomBarBinding;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-
-import androidx.activity.OnBackPressedCallback;
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.compose.ui.graphics.GraphicsLayerScope;
-import androidx.navigation.NavBackStackEntry;
-import androidx.navigation.NavController;
-import androidx.navigation.NavGraph;
-import androidx.navigation.Navigation;
-import androidx.navigation.ui.AppBarConfiguration;
-import androidx.navigation.ui.NavigationUI;
-import androidx.lifecycle.ViewModelProvider;
-
 import com.google.android.material.chip.Chip;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textfield.TextInputEditText;
-import com.google.android.material.tabs.TabLayout;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.Date;
-
-import io.grpc.okhttp.internal.Util;
 
 public class BottomBar extends AppCompatActivity {
 
@@ -68,6 +61,14 @@ public class BottomBar extends AppCompatActivity {
         Utilities.SharedViewModel.postsViewModel = new ViewModelProvider(this).get(PostsViewModel.class);
         Utilities.SharedViewModel.proposalsViewModel = new ViewModelProvider(this).get(ProposalsViewModel.class);
         Utilities.day = LocalDate.now();
+
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        boolean is_dark = sharedPreferences.getBoolean("dark_theme", false);
+        if(is_dark)
+            AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_YES);
+        else
+            AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_NO);
+
 
         binding = ActivityBottomBarBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());

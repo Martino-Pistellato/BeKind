@@ -1,35 +1,39 @@
-<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
+<PreferenceScreen
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <PreferenceCategory app:title="@string/messages_header">
+    <ListPreference
+        app:defaultValue="light_theme"
+        app:entries="@array/theme_entries"
+        app:entryValues="@array/theme_values"
+        app:key="theme"
+        app:title="Seleziona tema"
+        android:icon="@drawable/ic_outline_palette_24"/>
 
-        <EditTextPreference
-            app:key="signature"
-            app:title="@string/signature_title"
-            app:useSimpleSummaryProvider="true" />
+    <ListPreference
+        app:defaultValue="medium_font_size"
+        app:entries="@array/font_size_entries"
+        app:entryValues="@array/font_size_values"
+        app:key="font_size"
+        app:title="Grandezza testo"
+        android:icon="@drawable/ic_baseline_text_increase_24"/>
 
-        <ListPreference
-            app:defaultValue="reply"
-            app:entries="@array/reply_entries"
-            app:entryValues="@array/reply_values"
-            app:key="reply"
-            app:title="@string/reply_title"
-            app:useSimpleSummaryProvider="true" />
+    <Preference
+        app:key="logout"
+        app:title="Logout"
+        android:icon="@drawable/ic_baseline_logout_24"
+        />
 
-    </PreferenceCategory>
+    <Preference
+        app:key="tutorial"
+        app:title="Rivedi tutorial"
+        android:icon="@drawable/ic_baseline_help_outline_24"
+        />
 
-    <PreferenceCategory app:title="@string/sync_header">
-
-        <SwitchPreferenceCompat
-            app:key="sync"
-            app:title="@string/sync_title" />
-
-        <SwitchPreferenceCompat
-            app:dependency="sync"
-            app:key="attachment"
-            app:summaryOff="@string/attachment_summary_off"
-            app:summaryOn="@string/attachment_summary_on"
-            app:title="@string/attachment_title" />
-
-    </PreferenceCategory>
+    <Preference
+        app:key="privacy"
+        app:title="Informazioni sulla privacy"
+        android:icon="@drawable/ic_outline_privacy_tip_24"
+        />
 
 </PreferenceScreen>

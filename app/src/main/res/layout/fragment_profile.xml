@@ -12,7 +12,7 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         android:layout_width="match_parent"
-        android:layout_height="180dp"
+        android:layout_height="150dp"
         android:background="#92fe9a"
         android:orientation="horizontal">
 
@@ -51,15 +51,6 @@
             android:layout_marginTop="5dp"
             android:layout_marginStart="140dp"
             android:text="Modifica Quartiere"
-            android:backgroundTint="@color/teal_700"/>
-        <Button
-            android:id="@+id/logout"
-            android:layout_width="wrap_content"
-            android:layout_height="40dp"
-            android:text="Logout"
-            android:layout_below="@id/modifyNeighBtn"
-            android:layout_marginTop="5dp"
-            android:layout_marginStart="140dp"
             android:backgroundTint="@color/teal_700"/>
 
     </RelativeLayout>

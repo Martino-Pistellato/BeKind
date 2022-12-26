@@ -70,10 +70,6 @@ public class ProfileViewModel extends ViewModel {
         NeighbourhoodViewModel.getNeighbourhood(id, myCallback);
     }
 
-    public void logout(){
-        UserManager.logout();
-    }
-
     public void setName(String name){
         if(!name.isEmpty()) user.setName(name);
     }

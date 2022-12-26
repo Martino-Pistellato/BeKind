@@ -22,4 +22,29 @@
     <string name="attachment_summary_on">Automatically download attachments for incoming emails</string>
     <string name="attachment_summary_off">Only download attachments when manually requested</string>
     <!-- TODO: Remove or change this placeholder text -->
+    
+    <string name="preferences_key">preferences_key</string>
+    <string name="made_by_roundtable">Made by RoundTable</string>
+    <string name="access_btn">Accedi</string>
+    <string name="password">Password</string>
+    <string name="register_text">Non sei iscritto? Registrati!</string>
+    <string name="email_hint">Email</string>
+    <string name="login_title">Inserisci le tue credenziali</string>
+    <string name="add_btn">Add button</string>
+    <string name="wrong_page">You are not supposed to see this</string>
+    <string name="cancel_btn">Annulla</string>
+    <string name="confirm_btn">Conferma</string>
+    <string name="new_proposal_text">Crea una nuova attività</string>
+    <string name="title_hint">Titolo</string>
+    <string name="description_hint">Descrizione</string>
+    <string name="group_activity_text">E\' un\'attività di gruppo?</string>
+    <string name="partecipants_number">Numero di partecipanti</string>
+    <string name="shopping_chip">Spesa</string>
+    <string name="housework_chip">Lavori Domestici</string>
+    <string name="cleaning_chip">Pulizie</string>
+    <string name="transport_chip">Trasporto</string>
+    <string name="random_chip">Varie</string>
+    <string name="creation_choice_text">Che cosa vuoi creare?</string>
+    <string name="proposal_btn">Attività</string>
+    <string name="post_btn">Post</string>
 </resources>

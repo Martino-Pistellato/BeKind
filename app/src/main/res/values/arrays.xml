@@ -1,12 +1,27 @@
 <resources>
-    <!-- Reply Preference -->
-    <string-array name="reply_entries">
-        <item>Reply</item>
-        <item>Reply to all</item>
+    <!-- hTeme Prefcnres -->
+    <string-array name="theme_entries">
+        <item>Scuro</item>
+        <item>Chiaro</item>
     </string-array>
 
-    <string-array name="reply_values">
-        <item>reply</item>
-        <item>reply_all</item>
+    <string-array name="theme_values">
+        <item>dark_theme</item>
+        <item>light_theme</item>
     </string-array>
+
+    <!-- Font Size Preferences -->
+
+    <string-array name="font_size_entries">
+        <item>Piccolo</item>
+        <item>Medio</item>
+        <item>Grande</item>
+    </string-array>
+
+    <string-array name="font_size_values">
+        <item>small_font_size</item>
+        <item>medium_font_size</item>
+        <item>large_font_size</item>
+    </string-array>
+
 </resources>

@@ -1,15 +1,24 @@
 package com.example.bekind_v2.UILayer;
 
+import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_NO;
+import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_YES;
+
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
+import androidx.preference.ListPreference;
+import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
+import androidx.preference.PreferenceManager;
 
 import com.example.bekind_v2.R;
+import com.example.bekind_v2.UILayer.Authentication.LoginActivity;
 
 public class SettingsActivity extends AppCompatActivity {
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -18,14 +27,39 @@ public class SettingsActivity extends AppCompatActivity {
             getSupportFragmentManager().beginTransaction().replace(R.id.settings, new SettingsFragment()).commit();
 
         ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null)
+        if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setTitle("Impostazioni");
+        }
     }
 
     public static class SettingsFragment extends PreferenceFragmentCompat {
         @Override
         public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
             setPreferencesFromResource(R.xml.root_preferences, rootKey);
+
+            SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
+            Preference logoutBtn = findPreference("logout");
+            ListPreference theme = findPreference("theme");
+
+            logoutBtn.setOnPreferenceClickListener(preference -> {
+                SettingsViewModel.logout();
+                startActivity(new Intent(getContext(), LoginActivity.class));
+                return true;
+            });
+
+            theme.setOnPreferenceChangeListener(((preference, newValue) -> {
+                if(newValue.equals("dark_theme")) {
+                    AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_YES);
+                    sharedPreferences.edit().putBoolean("dark_theme", true).commit();
+                }
+                else {
+                    AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_NO);
+                    sharedPreferences.edit().putBoolean("dark_theme", false).apply();
+                }
+
+                return true;
+            }));
         }
     }
 }

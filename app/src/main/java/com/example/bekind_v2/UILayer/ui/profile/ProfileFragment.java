@@ -37,7 +37,7 @@ public class ProfileFragment extends Fragment {
         ProfileViewModel profileViewModel = new ViewModelProvider(this).get(ProfileViewModel.class);
         binding = FragmentProfileBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
-        Button logoutBtn = binding.logout, updateUserData = binding.modifyProfileBtn, updateUserLocation = binding.modifyNeighBtn;
+        Button updateUserData = binding.modifyProfileBtn, updateUserLocation = binding.modifyNeighBtn;
         TextView profileName = binding.profileName;
         simpleSwitch = root.findViewById(R.id.simpleSwitch);
         totalActivities = root.findViewById(R.id.total_activities);
@@ -211,14 +211,6 @@ public class ProfileFragment extends Fragment {
                 });
 
                 dialog.show();
-            }
-        });
-
-        logoutBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                profileViewModel.logout();
-                startActivity(new Intent(getContext(), LoginActivity.class));
             }
         });
 

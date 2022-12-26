@@ -115,6 +115,10 @@ public class BottomBarViewModel extends ViewModel {
         ProposalRepository.clearProposals();
     }
 
+    public static void clearPosts(){
+        PostRepository.clearPosts();
+    }
+
 
 
 }

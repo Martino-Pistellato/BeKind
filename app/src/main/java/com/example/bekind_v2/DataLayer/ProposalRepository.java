@@ -33,8 +33,8 @@ public class ProposalRepository {
         private String title;
         private String body;
         private String id;
-        private String publisherId; //we could save the ID of the publisher
-        private ArrayList<String> acceptersId; //and the ID of the accepter
+        private String publisherID; //we could save the ID of the publisher
+        private ArrayList<String> acceptersID; //and the ID of the accepter
         private int maxParticipants;
         @ServerTimestamp
         private Date expiringDate; //must be a date, when stored to database is mapped to a firestore timestamp and viceversa when reading
@@ -46,8 +46,8 @@ public class ProposalRepository {
             this.title = title;
             this.body = body;
             this.expiringDate = expiringDate;
-            this.publisherId = publisherId;
-            this.acceptersId = new ArrayList<>();
+            this.publisherID = publisherId;
+            this.acceptersID = new ArrayList<>();
             this.id = id;
             this.maxParticipants = maxParticipants;
             this.filters = filters;
@@ -56,8 +56,11 @@ public class ProposalRepository {
         public String getTitle(){return this.title;}
         public String getBody(){return this.body;}
         public Date getExpiringDate(){return this.expiringDate;}
-        public String getPublisherID(){return this.publisherId;}
-        public ArrayList<String> getAcceptersID(){return this.acceptersId;}
+
+        public String getPublisherID() {
+            return this.publisherID;
+        }
+        public ArrayList<String> getAcceptersID(){return this.acceptersID;}
         public String getId(){return this.id;}
         public int getMaxParticipants() {return this.maxParticipants;}
         public ArrayList<String> getFilters(){return this.filters;}
@@ -65,16 +68,15 @@ public class ProposalRepository {
         public void setTitle(String title){this.title=title;}
         public void setBody(String body){this.body=body;}
         public void setExpiringDate(Date expiringDate){this.expiringDate=expiringDate;}
-        public void setPublisherID(String publisherID){this.publisherId=publisherID;}
-        public void setAcceptersID(ArrayList<String> acceptersID){this.acceptersId=acceptersID;}
+        public void setAcceptersID(ArrayList<String> acceptersID){this.acceptersID=acceptersID;}
         public void setMaxParticipants(int maxParticipants) {this.maxParticipants = maxParticipants;}
         public void setFilters(ArrayList<String> filters){this.filters=filters;}
 
         public void addParticipant(String participantId){
-            this.acceptersId.add(participantId);
+            this.acceptersID.add(participantId);
         }
         public void removeParticipant(String participantId){
-            this.acceptersId.remove(participantId);
+            this.acceptersID.remove(participantId);
         }
     }
 
@@ -90,7 +92,6 @@ public class ProposalRepository {
     public static void getProposals(LocalDate day, String userId, ArrayList<String> filters, Types type, MyCallback<ArrayList<Proposal>> myCallback){
         ArrayList<Proposal> res = new ArrayList<>();
         LocalDateTime start = (day == null) ? LocalDateTime.MIN : day.atTime(0,0,0), end = (day == null) ? LocalDateTime.MAX : day.atTime(23,59,59);
-        Log.e("DAYS SET", "start : " + start.toString() + " end : " + end.toString());
         FirebaseFirestore.getInstance().collection("Proposals").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
@@ -105,9 +106,7 @@ public class ProposalRepository {
                                         if (prop.getPublisherID().equals(userId)) res.add(prop);
                                         break; //adds the proposal to the Proposal to be shown
                                     case ACCEPTED:
-                                        Log.e("INSIDE ACC CASE REPO", "is it ok for "+userId+" ? "+prop.toString());
                                         if (prop.getAcceptersID().contains((String) userId)) {
-                                            Log.e("INSIDE IF", "seems to be ok");
                                             res.add(prop);
                                         }
                                         break;
@@ -154,7 +153,6 @@ public class ProposalRepository {
     }
 
     public static void rejectProposal(String documentId, String userId, MyCallback<Boolean> myCallback){
-        Log.e("QUERY", "sono nella query");
         ProposalRepository.getProposal(documentId, new MyCallback<Proposal>() {
             @Override
             public void onCallback(Proposal result) {
@@ -164,7 +162,6 @@ public class ProposalRepository {
         FirebaseFirestore.getInstance().collection("Proposals"). document(documentId).update("acceptersID", FieldValue.arrayRemove(userId)).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
-                Log.e("SUCCESS", "task successful: " + task.isSuccessful());
                 myCallback.onCallback(task.isSuccessful());
             }
         });

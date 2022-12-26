@@ -22,9 +22,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.bekind_v2.DataLayer.PostRepository;
 import com.example.bekind_v2.DataLayer.UserManager;
 import com.example.bekind_v2.R;
+import com.example.bekind_v2.UILayer.ui.home.HomeViewModel;
 import com.example.bekind_v2.Utilities.PostRecyclerViewAdapter;
 import com.example.bekind_v2.Utilities.PostTypes;
 import com.example.bekind_v2.Utilities.ScheduleBar;
+import com.example.bekind_v2.Utilities.Types;
 import com.example.bekind_v2.Utilities.Utilities;
 import com.example.bekind_v2.databinding.FragmentDashboardBinding;
 import com.google.android.material.chip.Chip;
@@ -94,7 +96,7 @@ public class DashboardFragment extends Fragment {
         };
 
         Utilities.SharedViewModel.postsViewModel.getOtherPosts().observe(getViewLifecycleOwner(), postObserver);
-        Utilities.getPosts(UserManager.getUserId(), DashboardViewModel.filters, PostTypes.OTHERSPOSTS);
+        Utilities.getPosts(Utilities.day, UserManager.getUserId(), DashboardViewModel.filters, PostTypes.OTHERSPOSTS);
 
         TextView scheduleDate = root.findViewById(R.id.scheduledate_text);
         ScheduleBar.ScheduleDate.setTextDate(scheduleDate);
@@ -127,6 +129,8 @@ public class DashboardFragment extends Fragment {
                     public void onClick(View v) {
                         ScheduleBar.ScheduleDate.setTextDate(scheduleDate);
                         datePickerDialog.dismiss();
+
+                        Utilities.getPosts(Utilities.day, UserManager.getUserId(), DashboardViewModel.filters, PostTypes.OTHERSPOSTS);
                     }
                 });
             }
@@ -160,6 +164,6 @@ public class DashboardFragment extends Fragment {
             }
         }
 
-        Utilities.getPosts(UserManager.getUserId(), DashboardViewModel.filters, PostTypes.OTHERSPOSTS);
+        Utilities.getPosts(Utilities.day, UserManager.getUserId(), DashboardViewModel.filters, PostTypes.OTHERSPOSTS);
     }
 }

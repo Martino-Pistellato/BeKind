@@ -64,6 +64,11 @@ public class BottomBar extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         BottomBarViewModel.clearProposals();
+        BottomBarViewModel.clearPosts();
+        Utilities.SharedViewModel.postsViewModel = new ViewModelProvider(this).get(PostsViewModel.class);
+        Utilities.SharedViewModel.proposalsViewModel = new ViewModelProvider(this).get(ProposalsViewModel.class);
+        Utilities.day = LocalDate.now();
+
         binding = ActivityBottomBarBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
@@ -78,9 +83,7 @@ public class BottomBar extends AppCompatActivity {
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(binding.navView, navController);
         bottomBarViewModel = new ViewModelProvider(this).get(BottomBarViewModel.class);
-        Utilities.SharedViewModel.postsViewModel = new ViewModelProvider(this).get(PostsViewModel.class);
-        Utilities.SharedViewModel.proposalsViewModel = new ViewModelProvider(this).get(ProposalsViewModel.class);
-        Utilities.day = LocalDate.now();
+
         addProposalButton = findViewById(R.id.add_proposal_btn);
 
         addProposalButton.setOnClickListener(new View.OnClickListener() {
@@ -285,7 +288,7 @@ public class BottomBar extends AppCompatActivity {
                                     bottomBarViewModel.createPost(postTitle, postBody);
 
                                     //TODO i think that this getposts is no longer necessary ---> cancel this, or have two arrays in postsViewModel for my posts and other posts?
-                                    Utilities.getPosts(UserManager.getUserId(), DashboardViewModel.filters, PostTypes.MYPOSTS);
+                                    Utilities.getPosts(Utilities.day, UserManager.getUserId(), DashboardViewModel.filters, PostTypes.MYPOSTS);
                                 }
                                 dialog.dismiss();
                                 choose_dialog.dismiss();

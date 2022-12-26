@@ -11,12 +11,16 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.firestore.ServerTimestamp;
+
+import java.util.Date;
 
 public class UserDatabaseRepository {
     public static class User{
         private String name;
         private String surname;
-        private String birth; //is a String, not a Date.
+        @ServerTimestamp
+        private Date birth; //is a String, not a Date.
         private String email;
         private String city;
         private String street;
@@ -25,7 +29,7 @@ public class UserDatabaseRepository {
 
         public User(){}
 
-        public User(String name, String surname, String birth, String email, String city, String street, String street_number, String neighbourhoodID){
+        public User(String name, String surname, Date birth, String email, String city, String street, String street_number, String neighbourhoodID){
             this.name = name;
             this.surname = surname;
             this.birth = birth;
@@ -38,7 +42,7 @@ public class UserDatabaseRepository {
 
         public String getName(){return this.name;}
         public String getSurname(){return this.surname;}
-        public String getBirth(){return this.birth;}
+        public Date getBirth(){return this.birth;}
         public String getEmail(){return this.email;}
         public String getCity(){return this.city;}
         public String getStreet(){return this.street;}
@@ -54,7 +58,7 @@ public class UserDatabaseRepository {
         public void setNeighbourhoodID(String neighbourhoodID){this.neighbourhoodID = neighbourhoodID;}
     }
 
-    public static void createUser(String userID, String name, String surname, String birth, String email, String  city, String street, String street_number, String neighbourhoodID, MyCallback myCallback){
+    public static void createUser(String userID, String name, String surname, Date birth, String email, String  city, String street, String street_number, String neighbourhoodID, MyCallback myCallback){
         User us = new User(name, surname, birth, email, city, street, street_number,neighbourhoodID);
 
         FirebaseFirestore.getInstance().collection("Users").document(userID).set(us).addOnCompleteListener(new OnCompleteListener<Void>() {

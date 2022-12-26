@@ -249,7 +249,7 @@ public class ProfileFragment extends Fragment {
         });
 
         Utilities.getProposals(Utilities.day, UserManager.getUserId(), ProfileViewModel.filters, Types.PROPOSED);
-        Utilities.getPosts(UserManager.getUserId(), ProfileViewModel.filters, PostTypes.MYPOSTS);
+        Utilities.getPosts(Utilities.day, UserManager.getUserId(), ProfileViewModel.filters, PostTypes.MYPOSTS);
 
         return root;
     }
@@ -280,6 +280,6 @@ public class ProfileFragment extends Fragment {
         }
 
         Utilities.getProposals(Utilities.day, UserManager.getUserId(), HomeViewModel.filters, Types.PROPOSED);
-        Utilities.getPosts(UserManager.getUserId(), ProfileViewModel.filters, PostTypes.MYPOSTS);
+        Utilities.getPosts(Utilities.day, UserManager.getUserId(), ProfileViewModel.filters, PostTypes.MYPOSTS);
     }
 }

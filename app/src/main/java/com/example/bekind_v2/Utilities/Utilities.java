@@ -64,8 +64,8 @@ public class Utilities {
         });
     }
     
-    public static void getPosts(String userId, ArrayList<String> filters, PostTypes type){
-        PostRepository.getPosts(userId, filters, type, new MyCallback<ArrayList<PostRepository.Post>>() {
+    public static void getPosts(LocalDate day, String userId, ArrayList<String> filters, PostTypes type){
+        PostRepository.getPosts(day, userId, filters, type, new MyCallback<ArrayList<PostRepository.Post>>() {
             @Override
             public void onCallback(ArrayList<PostRepository.Post> result) {
                 switch(type){

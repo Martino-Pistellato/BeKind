@@ -32,7 +32,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="20dp"
                 app:cardCornerRadius="100dp"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -58,7 +58,7 @@
                 app:layout_constraintBaseline_toTopOf="parent"
                 app:layout_constraintLeft_toRightOf="@id/thumb"
                 app:layout_constraintStart_toEndOf="@id/thumb"
-                tools:layout_editor_absoluteY="-7dp" />
+                tools:layout_editor_absoluteY="-10dp" />
 
             <TextView
                 android:id="@+id/post_title"
@@ -85,6 +85,13 @@
                 app:layout_constraintLeft_toRightOf="@id/thumb"
                 app:layout_constraintStart_toEndOf="@id/thumb"
                 tools:layout_editor_absoluteY="49dp" />
+
+            <Space
+                android:layout_width="wrap_content"
+                android:layout_height="15dp"
+                app:layout_constraintTop_toBottomOf="@+id/post_body"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

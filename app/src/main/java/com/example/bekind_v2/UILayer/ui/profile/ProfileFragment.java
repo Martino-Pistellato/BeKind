@@ -1,12 +1,16 @@
 package com.example.bekind_v2.UILayer.ui.profile;
 
+import android.app.DatePickerDialog;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CompoundButton;
+import android.widget.DatePicker;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -21,11 +25,14 @@ import com.example.bekind_v2.UILayer.Authentication.LoginActivity;
 import com.example.bekind_v2.UILayer.ui.home.HomeViewModel;
 import com.example.bekind_v2.Utilities.MyCallback;
 import com.example.bekind_v2.Utilities.PostTypes;
+import com.example.bekind_v2.Utilities.ScheduleBar;
 import com.example.bekind_v2.Utilities.Types;
 import com.example.bekind_v2.Utilities.Utilities;
 import com.example.bekind_v2.databinding.FragmentProfileBinding;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.textfield.TextInputEditText;
+
+import java.util.Calendar;
 
 public class ProfileFragment extends Fragment {
 
@@ -42,6 +49,7 @@ public class ProfileFragment extends Fragment {
         simpleSwitch = root.findViewById(R.id.simpleSwitch);
         totalActivities = root.findViewById(R.id.total_activities);
         scheduledateText = root.findViewById(R.id.scheduledate_text);
+        Context context = this.getContext();
 
         profileViewModel.getUserName(profileName::setText);
 
@@ -242,6 +250,58 @@ public class ProfileFragment extends Fragment {
 
         Utilities.getProposals(Utilities.day, UserManager.getUserId(), ProfileViewModel.filters, Types.PROPOSED);
         Utilities.getPosts(Utilities.day, UserManager.getUserId(), ProfileViewModel.filters, PostTypes.MYPOSTS);
+
+        TextView scheduleDate = root.findViewById(R.id.scheduledate_text);
+        ScheduleBar.ScheduleDate.setTextDate(scheduleDate);
+
+        scheduleDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DatePickerDialog datePickerDialog = ScheduleBar.ScheduleDate.showDatePickerDialog(context);
+
+                datePickerDialog.getDatePicker().setOnDateChangedListener(new DatePicker.OnDateChangedListener() {
+                    @Override
+                    public void onDateChanged(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                        Calendar calendar = Calendar.getInstance();
+                        calendar.set(year, monthOfYear, dayOfMonth);
+
+                        ScheduleBar.ScheduleDate.setScheduleDate(calendar.getTime());
+                    }
+                });
+
+                Button buttonOk = (Button) datePickerDialog.getButton(datePickerDialog.BUTTON_POSITIVE);
+                buttonOk.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        ScheduleBar.ScheduleDate.setTextDate(scheduleDate);
+                        datePickerDialog.dismiss();
+
+                        Utilities.getProposals(ScheduleBar.ScheduleDate.getScheduleLocalDate(), UserManager.getUserId(), HomeViewModel.filters, Types.ACCEPTED);
+                    }
+                });
+            }
+        });
+
+        scheduledateText = root.findViewById(R.id.scheduledate_text);
+        totalActivities = root.findViewById(R.id.total_activities);
+
+        simpleSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(buttonView.isPressed() && !isChecked){
+                    scheduledateText.setVisibility(View.VISIBLE);
+                    totalActivities.setVisibility(View.INVISIBLE);
+                    Utilities.day = ScheduleBar.ScheduleDate.getScheduleLocalDate();
+                }
+                else if (buttonView.isPressed() && isChecked){
+                    scheduledateText.setVisibility(View.INVISIBLE);
+                    totalActivities.setVisibility(View.VISIBLE);
+                    Utilities.day = null;
+                }
+
+                Utilities.getProposals(Utilities.day, UserManager.getUserId(), HomeViewModel.filters, Types.ACCEPTED);
+            }
+        });
 
         return root;
     }

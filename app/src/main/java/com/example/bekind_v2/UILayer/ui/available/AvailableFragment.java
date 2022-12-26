@@ -90,16 +90,7 @@ public class AvailableFragment extends Fragment {
         final Observer<ArrayList<ProposalRepository.Proposal>> availableObserver = new Observer<ArrayList<ProposalRepository.Proposal>>() {
             @Override
             public void onChanged(@Nullable final ArrayList<ProposalRepository.Proposal> available) {
-                ProposalRecyclerViewAdapter adapter = new ProposalRecyclerViewAdapter(available, getContext(), Types.AVAILABLE, new MyCallback<Boolean>() {
-                    @Override
-                    public void onCallback(Boolean result) {
-                        if(result) {
-                            Toast.makeText(context, "Attività accettata correttamente", Toast.LENGTH_SHORT).show();
-                            Utilities.getProposals(Utilities.day, UserManager.getUserId(), HomeViewModel.filters, Types.AVAILABLE);
-                        }else
-                            Toast.makeText(context, "Errore nell'accettazione dell'attività", Toast.LENGTH_SHORT).show();
-                    }
-                });
+                ProposalRecyclerViewAdapter adapter = new ProposalRecyclerViewAdapter(available, getContext(), Types.AVAILABLE);
                 recyclerView.setAdapter(adapter);
                 adapter.notifyDataSetChanged();
             }

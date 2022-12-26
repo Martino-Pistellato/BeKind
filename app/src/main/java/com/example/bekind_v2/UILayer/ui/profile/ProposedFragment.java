@@ -40,7 +40,7 @@ public class ProposedFragment extends Fragment {
         final Observer<ArrayList<ProposalRepository.Proposal>> proposedObserver = new Observer<ArrayList<ProposalRepository.Proposal>>() {
             @Override
             public void onChanged(@Nullable final ArrayList<ProposalRepository.Proposal> proposed) {
-                ProposalRecyclerViewAdapter adapter = new ProposalRecyclerViewAdapter(proposed, getContext(), Types.PROPOSED, null);
+                ProposalRecyclerViewAdapter adapter = new ProposalRecyclerViewAdapter(proposed, getContext(), Types.PROPOSED);
                 recyclerView.setAdapter(adapter);
                 adapter.notifyDataSetChanged();
             }

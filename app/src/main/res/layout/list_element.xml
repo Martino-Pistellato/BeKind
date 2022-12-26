@@ -236,8 +236,5 @@
                     android:layout_marginRight="12dp"
                     android:src="@drawable/ic_reject"
                     android:background="@drawable/button_roundcorner"/>
-
-
         </LinearLayout>
-
 </androidx.constraintlayout.widget.ConstraintLayout>

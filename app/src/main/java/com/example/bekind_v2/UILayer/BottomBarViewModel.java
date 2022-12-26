@@ -29,6 +29,7 @@ public class BottomBarViewModel extends ViewModel {
 
     public void createProposal(String title, String body, int max, Date expiringDate){
         String userId = UserManager.getUserId();
+        Log.e("FILTERS", filtersProposal.toString());
         ProposalRepository.createProposal(title, body, expiringDate, userId, max, filtersProposal);
     }
 

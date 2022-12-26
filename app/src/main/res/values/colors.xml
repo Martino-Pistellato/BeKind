@@ -9,11 +9,11 @@
     <color name="white">#FFFFFFFF</color>
 
     <color name="primaryColor">#dcedc8</color>
-    <color name="primaryLightColor">#fffffb</color>
-    <color name="primaryDarkColor">#879C70</color>
+    <color name="primaryLightColor">#F9FFE7</color>
+    <color name="primaryDarkColor">#70835B</color>
     <color name="secondaryColor">#AFAF5F</color>
     <color name="secondaryLightColor">#ffffc4</color>
-    <color name="secondaryDarkColor">#9c9d65</color>
+    <color name="secondaryDarkColor">#878655</color>
     <color name="primaryTextColor">#000000</color>
     <color name="secondaryTextColor">#000000</color>
 </resources>

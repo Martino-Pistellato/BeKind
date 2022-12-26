@@ -13,7 +13,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        android:background="#92fe9a">
+        android:background="@color/primaryColor">
 
         <TextView
             android:id="@+id/scheduledate_text"
@@ -53,7 +53,7 @@
         app:layout_constraintTop_toBottomOf="@id/schedule_layout"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
-        android:background="#92fe9a">
+        android:background="@color/primaryDarkColor">
 
         <HorizontalScrollView
             android:layout_width="match_parent"
@@ -63,42 +63,42 @@
             <com.google.android.material.chip.ChipGroup
                 android:id="@+id/chip_group"
                 android:layout_height="wrap_content"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 app:singleLine="true">
 
                 <com.google.android.material.chip.Chip
                     android:id="@+id/shopping_chip"
                     android:layout_height="wrap_content"
                     android:layout_width="wrap_content"
-                    android:text="Spesa"
+                    android:text="@string/shopping_chip"
                     android:checkable="true"
                     android:checked="false"/>
                 <com.google.android.material.chip.Chip
                     android:id="@+id/houseworks_chip"
                     android:layout_height="wrap_content"
                     android:layout_width="wrap_content"
-                    android:text="Lavori Domestici"
+                    android:text="@string/housework_chip"
                     android:checkable="true"
                     android:checked="false"/>
                 <com.google.android.material.chip.Chip
                     android:id="@+id/cleaning_chip"
                     android:layout_height="wrap_content"
                     android:layout_width="wrap_content"
-                    android:text="Pulizie"
+                    android:text="@string/cleaning_chip"
                     android:checkable="true"
                     android:checked="false"/>
                 <com.google.android.material.chip.Chip
                     android:id="@+id/transport_chip"
                     android:layout_height="wrap_content"
                     android:layout_width="wrap_content"
-                    android:text="Trasporto"
+                    android:text="@string/transport_chip"
                     android:checkable="true"
                     android:checked="false"/>
                 <com.google.android.material.chip.Chip
                     android:id="@+id/random_chip"
                     android:layout_height="wrap_content"
                     android:layout_width="wrap_content"
-                    android:text="Varie"
+                    android:text="@string/random_chip"
                     android:checkable="true"
                     android:checked="false"/>
 

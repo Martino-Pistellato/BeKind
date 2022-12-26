@@ -16,7 +16,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="20dp"
             android:gravity="center"
-            android:text="Crea un nuovo post"
+            android:text="@string/new_post_title"
             android:textSize="20sp" />
 
         <com.google.android.material.textfield.TextInputLayout
@@ -34,7 +34,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="20dp"
                 android:textCursorDrawable="@color/teal_200"
-                android:hint="Titolo"
+                android:hint="@string/title_hint"
                 android:inputType="textNoSuggestions"
                 android:textSize="20sp" />
         </com.google.android.material.textfield.TextInputLayout>
@@ -56,7 +56,7 @@
                 android:layout_centerHorizontal="true"
                 android:layout_marginBottom="20dp"
                 android:textCursorDrawable="@color/teal_200"
-                android:hint="Descrizione"
+                android:hint="@string/description_hint"
                 android:inputType="textMultiLine|textNoSuggestions"
                 android:maxLines="5"
                 android:overScrollMode="always"
@@ -81,42 +81,42 @@
                     android:id="@+id/event_chip_popup"
                     android:layout_height="wrap_content"
                     android:layout_width="wrap_content"
-                    android:text="Eventi"
+                    android:text="@string/event_chip"
                     android:checkable="true"
                     android:checked="false"/>
                 <com.google.android.material.chip.Chip
                     android:id="@+id/utilities_chip_popup"
                     android:layout_height="wrap_content"
                     android:layout_width="wrap_content"
-                    android:text="Utenze"
+                    android:text="@string/utilities_chip"
                     android:checkable="true"
                     android:checked="false"/>
                 <com.google.android.material.chip.Chip
                     android:id="@+id/animal_chip_popup"
                     android:layout_height="wrap_content"
                     android:layout_width="wrap_content"
-                    android:text="Animali"
+                    android:text="@string/animal_chip"
                     android:checkable="true"
                     android:checked="false"/>
                 <com.google.android.material.chip.Chip
                     android:id="@+id/transport_chip_popup"
                     android:layout_height="wrap_content"
                     android:layout_width="wrap_content"
-                    android:text="Trasporto pubblico"
+                    android:text="@string/public_transport_chip"
                     android:checkable="true"
                     android:checked="false"/>
                 <com.google.android.material.chip.Chip
                     android:id="@+id/criminal_chip_popup"
                     android:layout_height="wrap_content"
                     android:layout_width="wrap_content"
-                    android:text="Criminalità"
+                    android:text="@string/criminal_chip"
                     android:checkable="true"
                     android:checked="false"/>
                 <com.google.android.material.chip.Chip
                     android:id="@+id/random_chip_popup"
                     android:layout_height="wrap_content"
                     android:layout_width="wrap_content"
-                    android:text="Varie"
+                    android:text="@string/random_chip"
                     android:checkable="true"
                     android:checked="false"/>
 
@@ -137,8 +137,8 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Annulla"
-                android:backgroundTint="@color/teal_700"/>
+                android:text="@string/cancel_btn"
+                android:backgroundTint="@color/primaryDarkColor"/>
 
             <android.widget.Space
                 android:layout_width="0dp"
@@ -150,8 +150,8 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Conferma"
-                android:backgroundTint="@color/teal_700"/>
+                android:text="@string/confirm_btn"
+                android:backgroundTint="@color/primaryDarkColor"/>
         </LinearLayout>
 
     </RelativeLayout>

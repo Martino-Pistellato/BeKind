@@ -19,7 +19,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
-                android:text="Crea quartiere"
+                android:text="@string/neighbourhood_creation_title"
                 android:textSize="20sp"
                 android:layout_marginBottom="20dp"/>
 
@@ -38,7 +38,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textCursorDrawable="@color/teal_200"
-                    android:hint="Nome quartiere"
+                    android:hint="@string/neighbourhood_name_hint"
                     android:inputType="textNoSuggestions"
                     android:layout_marginBottom="20dp"/>
 
@@ -58,9 +58,9 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Indietro"
+                    android:text="@string/back_btn"
                     android:layout_marginStart="10dp"
-                    android:backgroundTint="@color/teal_700"/>
+                    android:backgroundTint="@color/primaryDarkColor"/>
 
                 <android.widget.Space
                     android:layout_width="0dp"
@@ -72,8 +72,8 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Conferma"
-                    android:backgroundTint="@color/teal_700"/>
+                    android:text="@string/confirm_btn"
+                    android:backgroundTint="@color/primaryDarkColor"/>
 
             </LinearLayout>
         </RelativeLayout>

@@ -7,26 +7,11 @@
     <string name="title_profile">Profilo</string>
     <string name="title_settings">Impostazioni</string>
     <string name="title_activity_settings">SettingsActivity</string>
-
-    <!-- Preference Titles -->
-    <string name="messages_header">Messages</string>
-    <string name="sync_header">Sync</string>
-
-    <!-- Messages Preferences -->
-    <string name="signature_title">Your signature</string>
-    <string name="reply_title">Default reply action</string>
-
-    <!-- Sync Preferences -->
-    <string name="sync_title">Sync email periodically</string>
-    <string name="attachment_title">Download incoming attachments</string>
-    <string name="attachment_summary_on">Automatically download attachments for incoming emails</string>
-    <string name="attachment_summary_off">Only download attachments when manually requested</string>
-    <!-- TODO: Remove or change this placeholder text -->
     
     <string name="preferences_key">preferences_key</string>
     <string name="made_by_roundtable">Made by RoundTable</string>
     <string name="access_btn">Accedi</string>
-    <string name="password">Password</string>
+    <string name="password_hint">Password</string>
     <string name="register_text">Non sei iscritto? Registrati!</string>
     <string name="email_hint">Email</string>
     <string name="login_title">Inserisci le tue credenziali</string>
@@ -47,4 +32,50 @@
     <string name="creation_choice_text">Che cosa vuoi creare?</string>
     <string name="proposal_btn">Attività</string>
     <string name="post_btn">Post</string>
+    <string name="new_post_title">Crea un nuovo post</string>
+    <string name="event_chip">Eventi</string>
+    <string name="utilities_chip">Utenze</string>
+    <string name="animal_chip">Animali</string>
+    <string name="public_transport_chip">Trasporto pubblico</string>
+    <string name="criminal_chip">Criminalità</string>
+    <string name="modify_proposal_text">Modifica attività</string>
+    <string name="x_day_program">Programma del giorno x</string>
+    <string name="total_proposals">Attività totali</string>
+    <string name="neighbourhood_creation_title">Crea quartiere</string>
+    <string name="neighbourhood_name_hint">Nome quartiere</string>
+    <string name="back_btn">Indietro</string>
+    <string name="profile_image_description">profile image</string>
+    <string name="username_text">Nome Utente</string>
+    <string name="modify_profile_btn">Modifica Profilo</string>
+    <string name="modify_residence">Modifica Residenza</string>
+    <string name="my_proposal_tab">Le mie proposte</string>
+    <string name="my_post_tab">I miei post</string>
+    <string name="register_title">Registrati qui</string>
+    <string name="name_hint">Nome</string>
+    <string name="surname_hint">Cognome</string>
+    <string name="birth_date_hint">Data di Nascita</string>
+    <string name="continue_btn">Continua</string>
+    <string name="residence_title">Inserisci dati residenza</string>
+    <string name="city_hint">Città</string>
+    <string name="neighbourhod_hint">Quartiere</string>
+    <string name="street_hint">Via</string>
+    <string name="street_number_hint">Civico</string>
+    <string name="neighbourhood_creation_text">Non c\'è il tuo quartiere? Crealo!</string>
+    <string name="proposal_title">proposal_title</string>
+    <string name="proposal_body">proposal_body</string>
+    <string name="proposal_participants">proposal_participants</string>
+    <string name="expiring_hour">expiring_hour</string>
+    <string name="expiring_date">expiring_date</string>
+    <string name="accept_prop_btn">accept_prop_btn</string>
+    <string name="flag_button">flag_button</string>
+    <string name="map_button">map_button</string>
+    <string name="delete_button">delete_button</string>
+    <string name="edit_button">edit_button</string>
+    <string name="confirm_button">confirm_button</string>
+    <string name="reject_button">reject_button</string>
+    <string name="post_publisher">post_publisher</string>
+    <string name="post_title">post_title</string>
+    <string name="post_body">post_body</string>
+    <string name="modify_neighbourhood_title">Modifica il tuo profilo</string>
+    <string name="modify_credentials_text">Modifica credenziali</string>
 </resources>

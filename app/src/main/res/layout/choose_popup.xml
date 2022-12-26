@@ -16,7 +16,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="20dp"
             android:gravity="center"
-            android:text="Che cosa vuoi creare?"
+            android:text="@string/creation_choice_text"
             android:textSize="20sp" />
 
         <LinearLayout
@@ -35,8 +35,8 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Attività"
-                android:backgroundTint="@color/teal_700"/>
+                android:text="@string/proposal_btn"
+                android:backgroundTint="@color/primaryDarkColor"/>
 
             <android.widget.Space
                 android:layout_width="0dp"
@@ -49,8 +49,8 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Post"
-                android:backgroundTint="@color/teal_700"/>
+                android:text="@string/post_btn"
+                android:backgroundTint="@color/primaryDarkColor"/>
 
 
         </LinearLayout>

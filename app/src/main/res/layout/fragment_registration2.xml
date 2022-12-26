@@ -24,7 +24,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
-            android:text="Inserisci dati residenza"
+            android:text="@string/residence_title"
             android:textSize="20sp"
             android:layout_marginBottom="20dp"/>
 
@@ -42,7 +42,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textCursorDrawable="@color/teal_200"
-                android:hint="Città"
+                android:hint="@string/city_hint"
                 android:inputType="textNoSuggestions"
                 android:layout_marginBottom="20dp"/>
 
@@ -62,7 +62,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textCursorDrawable="@color/teal_200"
-                android:hint="Quartiere"
+                android:hint="@string/neighbourhod_hint"
                 android:inputType="textNoSuggestions"
                 android:layout_marginBottom="20dp"/>
         </com.google.android.material.textfield.TextInputLayout>
@@ -90,7 +90,7 @@
                     android:layout_height="wrap_content"
                     android:textCursorDrawable="@color/teal_200"
                     android:layout_weight="1.5"
-                    android:hint="Via"
+                    android:hint="@string/street_hint"
                     android:inputType="textNoSuggestions"/>
                 
 
@@ -100,7 +100,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="0.7"
                     android:textCursorDrawable="@color/teal_200"
-                    android:hint="Civico"
+                    android:hint="@string/street_number_hint"
                     android:inputType="textNoSuggestions"/>
 
             </LinearLayout>
@@ -121,9 +121,9 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Indietro"
+                android:text="@string/back_btn"
                 android:layout_marginStart="10dp"
-                android:backgroundTint="@color/teal_700"/>
+                android:backgroundTint="@color/primaryDarkColor"/>
 
             <android.widget.Space
                 android:layout_width="0dp"
@@ -135,8 +135,8 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Conferma"
-                android:backgroundTint="@color/teal_700"/>
+                android:text="@string/confirm_btn"
+                android:backgroundTint="@color/primaryDarkColor"/>
 
         </LinearLayout>
 
@@ -146,7 +146,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/buttons_container"
             android:layout_marginBottom="20dp"
-            android:text="Non c'è il tuo quartiere? Crealo!"
+            android:text="@string/neighbourhood_creation_text"
             android:textSize="15sp"
             android:layout_centerHorizontal="true"/>
 

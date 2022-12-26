@@ -93,7 +93,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
-            android:text="E' un'attività di gruppo?"
+            android:text="@string/group_activity_text"
             android:textSize="18sp"
             android:layoutDirection="rtl"
             android:layout_below="@id/datehour_container">
@@ -116,7 +116,7 @@
                 android:layout_centerHorizontal="true"
                 android:layout_marginBottom="20dp"
                 android:textCursorDrawable="@color/teal_200"
-                android:hint="Numero di partecipanti"
+                android:hint="@string/partecipants_number"
                 android:inputType="number"
                 android:textSize="20sp"
                 android:visibility="gone"/>
@@ -138,35 +138,35 @@
                     android:id="@+id/shopping_chip_popup"
                     android:layout_height="wrap_content"
                     android:layout_width="wrap_content"
-                    android:text="Spesa"
+                    android:text="@string/shopping_chip"
                     android:checkable="true"
                     android:checked="false"/>
                 <com.google.android.material.chip.Chip
                     android:id="@+id/houseworks_chip_popup"
                     android:layout_height="wrap_content"
                     android:layout_width="wrap_content"
-                    android:text="Lavori Domestici"
+                    android:text="@string/housework_chip"
                     android:checkable="true"
                     android:checked="false"/>
                 <com.google.android.material.chip.Chip
                     android:id="@+id/cleaning_chip_popup"
                     android:layout_height="wrap_content"
                     android:layout_width="wrap_content"
-                    android:text="Pulizie"
+                    android:text="@string/cleaning_chip"
                     android:checkable="true"
                     android:checked="false"/>
                 <com.google.android.material.chip.Chip
                     android:id="@+id/transport_chip_popup"
                     android:layout_height="wrap_content"
                     android:layout_width="wrap_content"
-                    android:text="Trasporto"
+                    android:text="@string/transport_chip"
                     android:checkable="true"
                     android:checked="false"/>
                 <com.google.android.material.chip.Chip
                     android:id="@+id/random_chip_popup"
                     android:layout_height="wrap_content"
                     android:layout_width="wrap_content"
-                    android:text="Varie"
+                    android:text="@string/random_chip"
                     android:checkable="true"
                     android:checked="false"/>
 
@@ -187,8 +187,8 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Annulla"
-                android:backgroundTint="@color/teal_700"/>
+                android:text="@string/cancel_btn"
+                android:backgroundTint="@color/primaryDarkColor"/>
 
             <android.widget.Space
                 android:layout_width="0dp"
@@ -200,8 +200,8 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Conferma"
-                android:backgroundTint="@color/teal_700"/>
+                android:text="@string/confirm_btn"
+                android:backgroundTint="@color/primaryDarkColor"/>
         </LinearLayout>
     </RelativeLayout>
 </RelativeLayout>

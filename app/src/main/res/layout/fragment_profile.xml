@@ -13,7 +13,7 @@
         app:layout_constraintTop_toTopOf="parent"
         android:layout_width="match_parent"
         android:layout_height="150dp"
-        android:background="#92fe9a"
+        android:background="@color/primaryColor"
         android:orientation="horizontal">
 
         <ImageView
@@ -22,7 +22,9 @@
             android:layout_height="100dp"
             android:layout_marginTop="20dp"
             android:layout_marginStart="10dp"
-            app:srcCompat="@drawable/ic_account_circle" />
+            app:srcCompat="@drawable/ic_profile_selected_24"
+            app:tint="@color/primaryDarkColor"
+            android:contentDescription="@string/profile_image_description" />
 
         <TextView
             android:id="@+id/profile_name"
@@ -31,7 +33,7 @@
             android:layout_marginTop="20dp"
             android:layout_centerHorizontal="true"
             android:textSize="20sp"
-            android:text="Nome Utente"/>
+            android:text="@string/username_text"/>
 
         <Button
             android:id="@+id/modifyProfileBtn"
@@ -40,8 +42,8 @@
             android:layout_below="@+id/profile_name"
             android:layout_marginTop="5dp"
             android:layout_marginStart="140dp"
-            android:text="Modifica Profilo"
-            android:backgroundTint="@color/teal_700"/>
+            android:text="@string/modify_profile_btn"
+            android:backgroundTint="@color/primaryDarkColor"/>
 
         <Button
             android:id="@+id/modifyNeighBtn"
@@ -50,8 +52,8 @@
             android:layout_below="@+id/modifyProfileBtn"
             android:layout_marginTop="5dp"
             android:layout_marginStart="140dp"
-            android:text="Modifica Quartiere"
-            android:backgroundTint="@color/teal_700"/>
+            android:text="@string/modify_residence"
+            android:backgroundTint="@color/primaryDarkColor"/>
 
     </RelativeLayout>
 
@@ -59,10 +61,10 @@
         android:id="@+id/tab_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/teal_700"
+        android:background="@color/primaryDarkColor"
         app:tabTextColor="@color/black"
-        app:tabSelectedTextColor="@color/white"
-        app:tabIndicatorColor="@color/white"
+        app:tabSelectedTextColor="@color/primaryLightColor"
+        app:tabIndicatorColor="@color/primaryLightColor"
         app:layout_constraintTop_toBottomOf="@id/grectangle"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent">
@@ -70,12 +72,12 @@
         <com.google.android.material.tabs.TabItem
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Le mie proposte"/>
+            android:text="@string/my_proposal_tab"/>
 
         <com.google.android.material.tabs.TabItem
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="I miei post"/>
+            android:text="@string/my_post_tab"/>
     </com.google.android.material.tabs.TabLayout>
 
     <RelativeLayout
@@ -85,15 +87,15 @@
         app:layout_constraintTop_toBottomOf="@id/tab_layout"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        android:background="#92fe9a">
+        android:background="@color/primaryColor">
 
         <TextView
             android:id="@+id/scheduledate_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Programma del giorno x"
+            android:text="@string/x_day_program"
             android:textStyle="bold"
-            android:layout_marginLeft="10dp"
+            android:layout_marginStart="10dp"
             android:layout_marginTop="1dp"
             android:visibility="visible"
             android:clickable="true"/>
@@ -102,9 +104,9 @@
             android:id="@+id/total_activities"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Attività totali"
+            android:text="@string/total_proposals"
             android:textStyle="bold"
-            android:layout_marginLeft="10dp"
+            android:layout_marginStart="10dp"
             android:layout_marginTop="1dp"
             android:visibility="invisible"
             android:clickable="true"/>

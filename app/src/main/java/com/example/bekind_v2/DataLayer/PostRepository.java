@@ -92,6 +92,15 @@ public class PostRepository {
         FirebaseFirestore.getInstance().collection("Posts").document(documentId).delete();
     }
 
+    public static void deletePost(String documentId, MyCallback<Boolean> myCallback){
+        FirebaseFirestore.getInstance().collection("Posts").document(documentId).delete().addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                myCallback.onCallback(task.isSuccessful());
+            }
+        });
+    }
+
     public static void clearPosts(){
         FirebaseFirestore.getInstance().collection("Posts").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override

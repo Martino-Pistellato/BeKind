@@ -87,16 +87,7 @@ public class HomeFragment extends Fragment {
         final Observer<ArrayList<ProposalRepository.Proposal>> acceptedObserver = new Observer<ArrayList<ProposalRepository.Proposal>>() {
             @Override
             public void onChanged(@Nullable final ArrayList<ProposalRepository.Proposal> accepted) {
-                ProposalRecyclerViewAdapter adapter = new ProposalRecyclerViewAdapter(accepted, getContext(), Types.ACCEPTED, new MyCallback<Boolean>() {
-                    @Override
-                    public void onCallback(Boolean result) {
-                        if(result) {
-                            Toast.makeText(context, "Ritiro dall'attività avvenuto correttamente", Toast.LENGTH_SHORT).show();
-                            Utilities.getProposals(Utilities.day, UserManager.getUserId(), HomeViewModel.filters, Types.ACCEPTED);
-                        }else
-                            Toast.makeText(context, "Errore nel ritiro dall'attività", Toast.LENGTH_SHORT).show();
-                    }
-                });
+                ProposalRecyclerViewAdapter adapter = new ProposalRecyclerViewAdapter(accepted, getContext(), Types.ACCEPTED);
 
                 recyclerView.setAdapter(adapter);
                 adapter.notifyDataSetChanged();
@@ -109,7 +100,6 @@ public class HomeFragment extends Fragment {
             Utilities.SharedViewModel.proposalsViewModel.getAccepted().observe(getViewLifecycleOwner(),acceptedObserver);
 
         Utilities.getProposals(Utilities.day, UserManager.getUserId(), HomeViewModel.filters, Types.ACCEPTED);
-
 
         TextView scheduleDate = root.findViewById(R.id.scheduledate_text);
         ScheduleDate.setTextDate(scheduleDate);

@@ -83,18 +83,20 @@
         android:layout_below="@id/chips_layout"
         app:layout_constraintTop_toBottomOf="@id/chips_layout"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent">
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recycler_view_post"
-        android:layout_width="wrap_content"
-        android:layout_height="670dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        tools:listitem="@layout/list_post_element">
-    </androidx.recyclerview.widget.RecyclerView>
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="-20dp">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler_view_post"
+            android:layout_width="wrap_content"
+            android:layout_height="670dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            tools:listitem="@layout/list_post_element">
+        </androidx.recyclerview.widget.RecyclerView>
 
     </RelativeLayout>
 

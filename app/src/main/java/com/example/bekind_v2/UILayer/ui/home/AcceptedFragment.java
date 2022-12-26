@@ -44,16 +44,7 @@ public class AcceptedFragment extends Fragment /*implements ProposalRecyclerView
         final Observer<ArrayList<ProposalRepository.Proposal>> acceptedObserver = new Observer<ArrayList<ProposalRepository.Proposal>>() {
             @Override
             public void onChanged(@Nullable final ArrayList<ProposalRepository.Proposal> accepted) {
-                ProposalRecyclerViewAdapter adapter = new ProposalRecyclerViewAdapter(accepted, getContext(), Types.ACCEPTED, new MyCallback<Boolean>() {
-                    @Override
-                    public void onCallback(Boolean result) {
-                        if(result)
-                            Toast.makeText(context,"Ritiro dall'attività avvenuto correttamente", Toast.LENGTH_SHORT).show();
-                            //TODO: add function refresh to utilities
-                        else
-                            Toast.makeText(context, "Errore nel ritira dall'attività", Toast.LENGTH_SHORT).show();
-                    }
-                });
+                ProposalRecyclerViewAdapter adapter = new ProposalRecyclerViewAdapter(accepted, getContext(), Types.ACCEPTED);
                 recyclerView.setAdapter(adapter);
                 adapter.notifyDataSetChanged();
             }

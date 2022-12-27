@@ -27,19 +27,21 @@ public class PostRepository {
         private String body;
         private String id;
         private String publisherID;
+        private String neighbourhoodID;
         @ServerTimestamp
         private Date publishingDate;
         private ArrayList<String> filters;
 
         public Post() {}
 
-        public Post(String title, String body, String id, String publisherID, Date publishingDate, ArrayList<String> filters) {
+        public Post(String title, String body, String id, String publisherID,String neighbourhoodID, final Date publishingDate, ArrayList<String> filters) {
             this.title = title;
             this.body = body;
             this.id = id;
             this.publisherID = publisherID;
             this.publishingDate = publishingDate;
             this.filters = filters;
+            this.neighbourhoodID = neighbourhoodID;
         }
 
         public String getTitle() {
@@ -58,24 +60,28 @@ public class PostRepository {
             return this.publishingDate;
         }
         public ArrayList<String> getFilters() { return filters; }
+        public String getNeighbourhoodID() {return neighbourhoodID;}
 
         public void setTitle(String title) {
             this.title = title;
         }
         public void setBody(String body) {this.body = body;}
         public void setFilters(ArrayList<String> filters) {this.filters = filters;}
+        public void setNeighbourhoodID(String neighbourhoodID) {this.neighbourhoodID = neighbourhoodID;}
     }
 
     public static void createPost(String title, String body, ArrayList<String> filters){
         String id =  UUID.randomUUID().toString();
         String publisherID = UserManager.getUserId();
-        Date date = new Date();
-        LocalDateTime ldt = LocalDateTime.ofInstant(date.toInstant(), ZoneId.systemDefault());
-        date = Date.from(ldt.atZone(ZoneId.systemDefault()).toInstant());
+        LocalDateTime ldt = LocalDateTime.ofInstant(new Date().toInstant(), ZoneId.systemDefault());
+        Date date = Date.from(ldt.atZone(ZoneId.systemDefault()).toInstant());
 
-        PostRepository.Post post = new PostRepository.Post(title, body, id, publisherID, date, filters);
-
-        FirebaseFirestore.getInstance().collection("Posts").document(id).set(post); //TODO: make it asynchronous?
+        UserManager.getUser(publisherID, user -> {
+            if(user != null) {
+                PostRepository.Post post = new PostRepository.Post(title, body, id, publisherID, user.getNeighbourhoodID(), date, filters);
+                FirebaseFirestore.getInstance().collection("Posts").document(id).set(post); //TODO: make it asynchronous?
+            }
+        });
     }
 
 
@@ -130,17 +136,19 @@ public class PostRepository {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if(task.isSuccessful()) {
-                    for (DocumentSnapshot snap : task.getResult()) { //for each element in the query
-                        PostRepository.Post post = snap.toObject(PostRepository.Post.class);
-                        LocalDateTime pubD = post.getPublishingDate().toInstant().atZone(ZoneId.of("ECT")).toLocalDateTime();
-                        if (pubD.isAfter(start) && pubD.isBefore(end)){
-                            if (filters != null && post.getFilters().containsAll(filters))
-                                res.add(post); //adds the proposal to the Proposal to be shown
+                    UserManager.getUser(userID, user -> {
+                        for (DocumentSnapshot snap : task.getResult()) { //for each element in the query
+                            PostRepository.Post post = snap.toObject(PostRepository.Post.class);
+                            LocalDateTime pubD = post.getPublishingDate().toInstant().atZone(ZoneId.of("ECT")).toLocalDateTime();
+                            if (pubD.isAfter(start) && pubD.isBefore(end)){
+                                if (filters != null && post.getFilters().containsAll(filters))
+                                    if(user.getNeighbourhoodID().equals(post.getNeighbourhoodID()))
+                                        res.add(post); //adds the proposal to the Proposal to be shown
+                            }
                         }
-                    }
-                    myCallback.onCallback(res);
+                        myCallback.onCallback(res);
+                    });
                 }
-
             }
         });
     }

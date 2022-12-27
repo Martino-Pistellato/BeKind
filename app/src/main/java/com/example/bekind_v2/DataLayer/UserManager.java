@@ -1,5 +1,7 @@
 package com.example.bekind_v2.DataLayer;
 
+import android.util.Log;
+
 import com.example.bekind_v2.Utilities.MyCallback;
 
 import java.util.Date;
@@ -38,5 +40,17 @@ public class UserManager {
 
     public static void getUser(String userId, MyCallback<UserDatabaseRepository.User> myCallback){
         UserDatabaseRepository.getUser(userId, myCallback);
+    }
+
+    public static void check_neighbourhoods(String firstUserId, String secondUserId, MyCallback<Boolean> myCallback){
+        getUser(firstUserId, (firstUser->{
+            if(firstUser != null){
+                getUser(secondUserId, secondUser->{
+                    if(secondUser != null){
+                        myCallback.onCallback(firstUser.getNeighbourhoodID().equals(secondUser.getNeighbourhoodID()));
+                    }
+                });
+            }
+        }));
     }
 }

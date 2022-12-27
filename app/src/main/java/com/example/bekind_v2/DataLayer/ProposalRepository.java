@@ -1,12 +1,18 @@
 package com.example.bekind_v2.DataLayer;
 
+import static com.example.bekind_v2.Utilities.Utilities.day;
+import static java.lang.Thread.sleep;
+
+import android.os.AsyncTask;
 import android.util.Log;
+import android.util.Pair;
 import android.widget.Switch;
 
 import androidx.annotation.NonNull;
 
 import com.example.bekind_v2.Utilities.MyCallback;
 import com.example.bekind_v2.Utilities.Types;
+import com.example.bekind_v2.Utilities.Utilities;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -39,14 +45,16 @@ public class ProposalRepository {
         @ServerTimestamp
         private Date expiringDate; //must be a date, when stored to database is mapped to a firestore timestamp and viceversa when reading
         private ArrayList<String> filters;
+        private String neighbourhoodID;
 
         public Proposal(){}
 
-        public Proposal(String title, String body, Date expiringDate, String publisherId, String id, int maxParticipants, ArrayList<String> filters){
+        public Proposal(String title, String body, Date expiringDate, String publisherId, String neighbourhoodID, String id, int maxParticipants, ArrayList<String> filters){
             this.title = title;
             this.body = body;
             this.expiringDate = expiringDate;
             this.publisherID = publisherId;
+            this.neighbourhoodID = neighbourhoodID;
             this.acceptersID = new ArrayList<>();
             this.id = id;
             this.maxParticipants = maxParticipants;
@@ -64,12 +72,14 @@ public class ProposalRepository {
         public String getId(){return this.id;}
         public int getMaxParticipants() {return this.maxParticipants;}
         public ArrayList<String> getFilters(){return this.filters;}
+        public String getNeighbourhoodID(){return this.neighbourhoodID;}
 
         public void setTitle(String title){this.title=title;}
         public void setBody(String body){this.body=body;}
         public void setExpiringDate(Date expiringDate){this.expiringDate=expiringDate;}
         public void setAcceptersID(ArrayList<String> acceptersID){this.acceptersID=acceptersID;}
         public void setMaxParticipants(int maxParticipants) {this.maxParticipants = maxParticipants;}
+        public void setNeighbourhoodID(String neighbourhoodID) {this.neighbourhoodID = neighbourhoodID;}
         public void setFilters(ArrayList<String> filters){this.filters=filters;}
 
         public void addParticipant(String participantId){
@@ -80,52 +90,54 @@ public class ProposalRepository {
         }
     }
 
-
-    public static void createProposal(String title, String body, Date expiringDate, String publisherID, int max, ArrayList<String> filters){
+    public static void createProposal(String title, String body, Date expiringDate, String publisherID, String neighbourhoodId, int max, ArrayList<String> filters){
         String id =  UUID.randomUUID().toString();
-        Proposal proposal = new Proposal(title, body, expiringDate, publisherID, id, max, filters);
+        Proposal proposal = new Proposal(title, body, expiringDate, publisherID, neighbourhoodId, id, max, filters);
 
         FirebaseFirestore.getInstance().collection("Proposals").document(id).set(proposal); //TODO: make it asynchronous?
     }
 
 
+
     public static void getProposals(LocalDate day, String userId, ArrayList<String> filters, Types type, MyCallback<ArrayList<Proposal>> myCallback){
         ArrayList<Proposal> res = new ArrayList<>();
         LocalDateTime start = (day == null) ? LocalDateTime.MIN : day.atTime(0,0,0), end = (day == null) ? LocalDateTime.MAX : day.atTime(23,59,59);
+
         FirebaseFirestore.getInstance().collection("Proposals").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful()){
-                    for (DocumentSnapshot snap :  task.getResult()) { //for each element in the query
-                        Proposal prop = snap.toObject(Proposal.class); //cast the result to a real proposal
-                        LocalDateTime expD = prop.getExpiringDate().toInstant().atZone(ZoneId.of("ECT")).toLocalDateTime(); //gets the expiring date of the proposal
-                        if (expD.isAfter(start) && expD.isBefore(end)) {//if the proposal expiring date is between the limits
-                            if (filters != null && prop.getFilters().containsAll(filters)) {
-                                switch (type) {
-                                    case PROPOSED:
-                                        if (prop.getPublisherID().equals(userId)) res.add(prop);
-                                        break; //adds the proposal to the Proposal to be shown
-                                    case ACCEPTED:
-                                        if (prop.getAcceptersID().contains((String) userId)) {
-                                            res.add(prop);
-                                        }
-                                        break;
-                                    case AVAILABLE:
-                                        if (!prop.getPublisherID().equals(userId) && (!prop.getAcceptersID().contains((String) userId)) && (prop.getMaxParticipants() - prop.getAcceptersID().size() > 0))
-                                            res.add(prop);
-                                        break;
-                                }
-                            }
+                    UserManager.getUser(userId, user -> {
+                        for (DocumentSnapshot snap :  task.getResult()) { //for each element in the query
+                            Proposal prop = snap.toObject(Proposal.class); //cast the result to a real proposal
+                            LocalDateTime expD = prop.getExpiringDate().toInstant().atZone(ZoneId.of("ECT")).toLocalDateTime(); //gets the expiring date of the proposal
 
+                            if (expD.isAfter(start) && expD.isBefore(end)) {//if the proposal expiring date is between the limits
+                                if (filters != null && prop.getFilters().containsAll(filters)) {
+                                    switch (type) {
+                                        case PROPOSED: if (prop.getPublisherID().equals(userId)) res.add(prop); break; //adds the proposal to the Proposal to be shown
+                                        case ACCEPTED: if (prop.getAcceptersID().contains(userId)) res.add(prop); break;
+                                        case AVAILABLE: if (!prop.getPublisherID().equals(userId) && (!prop.getAcceptersID().contains((String) userId)) && (prop.getMaxParticipants() - prop.getAcceptersID().size() > 0)) {
+                                                            if (user.getNeighbourhoodID().equals(prop.getNeighbourhoodID()))
+                                                                res.add(prop);
+                                                        }
+                                                        break;
+                                    }
+                                }
+
+                            }
                         }
-                    }
-                    myCallback.onCallback(res);
+                        myCallback.onCallback(res);
+                    });
+
                 }
             }
         });
-
-
     }
+
+
+
+
 
     public static void getProposal(String documentId, MyCallback<Proposal> myCallback){
         FirebaseFirestore.getInstance().collection("Proposals").document(documentId).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {

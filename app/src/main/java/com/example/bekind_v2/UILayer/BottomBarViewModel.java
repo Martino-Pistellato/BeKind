@@ -7,6 +7,7 @@ import android.widget.TimePicker;
 import androidx.lifecycle.ViewModel;
 
 import com.example.bekind_v2.DataLayer.PostRepository;
+import com.example.bekind_v2.DataLayer.UserDatabaseRepository;
 import com.example.bekind_v2.Utilities.Utilities;
 import com.google.android.material.textfield.TextInputEditText;
 
@@ -29,8 +30,10 @@ public class BottomBarViewModel extends ViewModel {
 
     public void createProposal(String title, String body, int max, Date expiringDate){
         String userId = UserManager.getUserId();
-        Log.e("FILTERS", filtersProposal.toString());
-        ProposalRepository.createProposal(title, body, expiringDate, userId, max, filtersProposal);
+        UserManager.getUser(userId, user -> {
+            if(user != null)
+                ProposalRepository.createProposal(title, body, expiringDate, userId, user.getNeighbourhoodID(), max, filtersProposal);
+        });
     }
 
     public static Date toDate(int year, int month, int day, int hour, int minute){

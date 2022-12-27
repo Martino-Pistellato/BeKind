@@ -44,6 +44,24 @@ public class Utilities {
         }
     }
 
+    public static class MyMonitor{
+        private int counter;
+
+        public MyMonitor(int counter){
+            this.counter = counter;
+        }
+
+        public synchronized void myWait() throws InterruptedException {
+            while (counter < 0)
+                wait();
+        }
+
+        public synchronized void myNotify(){
+            if(counter++ >= 0)
+                notifyAll();
+        }
+    }
+
     public static void manageFilter(String filter, ArrayList<String> filters){
         if(filters.contains(filter))
             filters.remove(filter);
@@ -74,5 +92,5 @@ public class Utilities {
                 }
             }
         });
-    }    
+    }
 }

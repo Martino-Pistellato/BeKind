@@ -4,6 +4,7 @@ import static com.example.bekind_v2.Utilities.Utilities.day;
 import static java.lang.Thread.sleep;
 
 import android.os.AsyncTask;
+import android.os.ParcelUuid;
 import android.util.Log;
 import android.util.Pair;
 import android.widget.Switch;
@@ -46,6 +47,7 @@ public class ProposalRepository {
         private Date expiringDate; //must be a date, when stored to database is mapped to a firestore timestamp and viceversa when reading
         private ArrayList<String> filters;
         private String neighbourhoodID;
+        private ArrayList<String> flagsUsers;
 
         public Proposal(){}
 
@@ -59,12 +61,12 @@ public class ProposalRepository {
             this.id = id;
             this.maxParticipants = maxParticipants;
             this.filters = filters;
+            this.flagsUsers = new ArrayList<>();
         }
 
         public String getTitle(){return this.title;}
         public String getBody(){return this.body;}
         public Date getExpiringDate(){return this.expiringDate;}
-
         public String getPublisherID() {
             return this.publisherID;
         }
@@ -73,6 +75,7 @@ public class ProposalRepository {
         public int getMaxParticipants() {return this.maxParticipants;}
         public ArrayList<String> getFilters(){return this.filters;}
         public String getNeighbourhoodID(){return this.neighbourhoodID;}
+        public ArrayList<String> getFlagsUsers() {return flagsUsers;}
 
         public void setTitle(String title){this.title=title;}
         public void setBody(String body){this.body=body;}
@@ -88,6 +91,12 @@ public class ProposalRepository {
         public void removeParticipant(String participantId){
             this.acceptersID.remove(participantId);
         }
+
+        public void addFlagUser(String userId) {
+            if(!flagsUsers.contains(userId)) {
+                flagsUsers.add(userId);
+            }
+        }
     }
 
     public static void createProposal(String title, String body, Date expiringDate, String publisherID, String neighbourhoodId, int max, ArrayList<String> filters){
@@ -96,8 +105,6 @@ public class ProposalRepository {
 
         FirebaseFirestore.getInstance().collection("Proposals").document(id).set(proposal); //TODO: make it asynchronous?
     }
-
-
 
     public static void getProposals(LocalDate day, String userId, ArrayList<String> filters, Types type, MyCallback<ArrayList<Proposal>> myCallback){
         ArrayList<Proposal> res = new ArrayList<>();
@@ -134,10 +141,6 @@ public class ProposalRepository {
             }
         });
     }
-
-
-
-
 
     public static void getProposal(String documentId, MyCallback<Proposal> myCallback){
         FirebaseFirestore.getInstance().collection("Proposals").document(documentId).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -210,6 +213,26 @@ public class ProposalRepository {
                     LocalDateTime expD = prop.getExpiringDate().toInstant().atZone(ZoneId.of("ECT")).toLocalDateTime();
                     if (!expD.isAfter(LocalDateTime.now()))
                         deleteProposal(prop.getId());
+                }
+            }
+        });
+    }
+
+    public static void updateFlagProposal(String documentId, ArrayList<String> flagUsers, MyCallback<Boolean> myCallback) {
+        FirebaseFirestore.getInstance().collection("Proposals").document(documentId).update("flagsUsers", flagUsers).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                myCallback.onCallback(task.isSuccessful());
+            }
+        });
+    }
+    public static void addFlagUser(String documentId, String userId, MyCallback<Boolean> myCallback) {
+        getProposal(documentId, new MyCallback<Proposal>() {
+            @Override
+            public void onCallback(Proposal result) {
+                if(result != null) {
+                    result.addFlagUser(userId);
+                    updateFlagProposal(documentId, result.getFlagsUsers(), myCallback);
                 }
             }
         });

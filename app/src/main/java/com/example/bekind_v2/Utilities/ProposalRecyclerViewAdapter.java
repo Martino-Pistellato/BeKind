@@ -275,7 +275,16 @@ public class ProposalRecyclerViewAdapter extends RecyclerView.Adapter<ProposalRe
                         @Override
                         public void onClick(View v) {
                             //TODO: evolution flag
-                            Toast.makeText(context, "SEGNALA ATTIVITA'", Toast.LENGTH_LONG).show();
+                            ProposalRepository.addFlagUser(documentId, userId, new MyCallback<Boolean>() {
+                                @Override
+                                public void onCallback(Boolean result) {
+                                    if (result) {
+                                        Toast.makeText(context, "Attività segnalata con successo.", Toast.LENGTH_LONG).show();
+                                    } else {
+                                        Toast.makeText(context, "Impossibile segnalare l'attività.", Toast.LENGTH_LONG).show();
+                                    }
+                                }
+                            });
                         }
                     });
 

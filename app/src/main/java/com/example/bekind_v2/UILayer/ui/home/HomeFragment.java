@@ -96,7 +96,7 @@ public class HomeFragment extends Fragment {
 
         Log.e("BACK IN HOME", "in home where "+(Utilities.SharedViewModel.proposalsViewModel==null)+" is null");
         //TODO for some reason line 57 of bottom bar makes the app crash at this line, used this check to avoid crashing, check if better solutions are possible
-       // if(Utilities.SharedViewModel.proposalsViewModel != null)
+        // if(Utilities.SharedViewModel.proposalsViewModel != null)
             Utilities.SharedViewModel.proposalsViewModel.getAccepted().observe(getViewLifecycleOwner(),acceptedObserver);
 
         Utilities.getProposals(Utilities.day, UserManager.getUserId(), HomeViewModel.filters, Types.ACCEPTED);

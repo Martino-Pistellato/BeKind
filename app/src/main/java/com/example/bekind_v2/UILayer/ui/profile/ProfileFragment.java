@@ -226,7 +226,6 @@ public class ProfileFragment extends Fragment {
         ViewPager2 viewPager2 = root.findViewById(R.id.pager);
         viewPager2.setAdapter(new ProfileViewModel.ProfileActivityViewPagerAdapter(this));
 
-
         TabLayout tabLayout = root.findViewById(R.id.tab_layout);
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
@@ -334,7 +333,7 @@ public class ProfileFragment extends Fragment {
             totalActivities.setVisibility(View.INVISIBLE);
         }
 
-        Utilities.getProposals(Utilities.day, UserManager.getUserId(), ProfileViewModel.filters, Types.PROPOSED);
+        Utilities.getProposals(Utilities.day, UserManager.getUserId(), ProfileViewModel.proposedFilters, Types.PROPOSED);
         Utilities.getPosts(Utilities.day, UserManager.getUserId(), ProfileViewModel.filters, PostTypes.MYPOSTS);
     }
 }

@@ -15,7 +15,7 @@ android {
         targetSdk 33
         versionCode 1
         versionName "1.0"
-
+        resConfigs "it", "en"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -33,16 +33,23 @@ android {
         viewBinding true
         dataBinding true
     }
+    sourceSets {
+        main {
+            res {
+                srcDirs 'src\\main\\res', 'src\\main\\res\\values\\values-b+it'
+            }
+        }
+    }
 }
 
 dependencies {
     implementation 'com.google.firebase:firebase-storage:20.1.0'
-    implementation 'androidx.preference:preference:1.1.+'
+    implementation 'androidx.preference:preference:1.2.0'
     def lifecycle_version = "2.5.1"
     def work_version = "2.7.1"
 
     implementation platform('com.google.firebase:firebase-bom:31.1.0')
-    implementation 'androidx.appcompat:appcompat:1.5.1'
+    implementation 'androidx.appcompat:appcompat:1.7.0-alpha01'
     implementation 'com.google.android.material:material:1.7.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
     implementation 'com.google.firebase:firebase-firestore:24.4.1'

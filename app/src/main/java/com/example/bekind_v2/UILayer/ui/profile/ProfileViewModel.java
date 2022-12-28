@@ -13,7 +13,10 @@ import com.example.bekind_v2.DataLayer.UserDatabaseRepository;
 import com.example.bekind_v2.DataLayer.UserManager;
 import com.example.bekind_v2.UILayer.NeighbourhoodViewModel;
 import com.example.bekind_v2.Utilities.MyCallback;
+import com.example.bekind_v2.Utilities.Types;
+import com.example.bekind_v2.Utilities.Utilities;
 import com.google.android.material.textfield.TextInputEditText;
+import com.example.bekind_v2.DataLayer.ProposalRepository;
 
 import java.util.ArrayList;
 import java.util.Locale;
@@ -46,6 +49,9 @@ public class ProfileViewModel extends ViewModel {
     }
 
     public static ArrayList<String> filters = new ArrayList<>();
+    //we'll need it later to implement manageFilter
+    //public static ArrayList<String> PostsFilters = new ArrayList<>();
+    public static ArrayList<String> proposedFilters = new ArrayList<>();
     private UserDatabaseRepository.User user;
     private String password;
 
@@ -136,5 +142,23 @@ public class ProfileViewModel extends ViewModel {
         else
             myCallback.onCallback(true);
     }
+
+    public static void manageFilter(String filter, ArrayList<String> filters){
+        Utilities.manageFilter(filter, filters);
+
+        ProposalRepository.getProposals(Utilities.day, UserManager.getUserId(), filters, Types.PROPOSED, new MyCallback<ArrayList<ProposalRepository.Proposal>>() {
+            @Override
+            public void onCallback(ArrayList<ProposalRepository.Proposal> result) {
+                Utilities.SharedViewModel.proposalsViewModel.getProposed().setValue(result);
+            }
+        });
+    }
+
+     //public static void managePostsFilter(String filter){
+     //     manageFilter(filter, PostsFilters);
+     //}
+     public static void manageProposedFilter(String filter){
+        manageFilter(filter, proposedFilters);
+     }
 
 }

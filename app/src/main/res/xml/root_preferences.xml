@@ -7,7 +7,7 @@
         app:entries="@array/theme_entries"
         app:entryValues="@array/theme_values"
         app:key="theme"
-        app:title="Seleziona tema"
+        app:title="@string/theme_selection"
         android:icon="@drawable/ic_outline_palette_24"/>
 
     <ListPreference
@@ -15,25 +15,32 @@
         app:entries="@array/font_size_entries"
         app:entryValues="@array/font_size_values"
         app:key="font_size"
-        app:title="Grandezza testo"
+        app:title="@string/font_size"
         android:icon="@drawable/ic_baseline_text_increase_24"/>
 
+    <ListPreference
+        app:defaultValue="it"
+        app:entries="@array/language_entries"
+        app:entryValues="@array/language_values"
+        app:key="language_selection"
+        app:title="@string/language_selection"
+        android:icon="@drawable/ic_baseline_translate_24"/>
+    
     <Preference
-        app:key="logout"
-        app:title="Logout"
-        android:icon="@drawable/ic_baseline_logout_24"
+        app:key="privacy"
+        app:title="@string/privacy"
+        android:icon="@drawable/ic_outline_privacy_tip_24"
         />
-
+    
     <Preference
         app:key="tutorial"
-        app:title="Rivedi tutorial"
+        app:title="@string/tutorial"
         android:icon="@drawable/ic_baseline_help_outline_24"
         />
 
     <Preference
-        app:key="privacy"
-        app:title="Informazioni sulla privacy"
-        android:icon="@drawable/ic_outline_privacy_tip_24"
+        app:key="logout"
+        app:title="@string/logout"
+        android:icon="@drawable/ic_baseline_logout_24"
         />
-
 </PreferenceScreen>

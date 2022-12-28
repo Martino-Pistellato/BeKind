@@ -12,6 +12,7 @@ import android.widget.Switch;
 import androidx.annotation.NonNull;
 
 import com.example.bekind_v2.Utilities.MyCallback;
+import com.example.bekind_v2.Utilities.RepublishTypes;
 import com.example.bekind_v2.Utilities.Types;
 import com.example.bekind_v2.Utilities.Utilities;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -43,6 +44,9 @@ public class ProposalRepository {
         private String publisherID; //we could save the ID of the publisher
         private ArrayList<String> acceptersID; //and the ID of the accepter
         private int maxParticipants;
+        private RepublishTypes republishTypes;
+        @ServerTimestamp
+        private Date publishingDate;
         @ServerTimestamp
         private Date expiringDate; //must be a date, when stored to database is mapped to a firestore timestamp and viceversa when reading
         private ArrayList<String> filters;
@@ -51,7 +55,7 @@ public class ProposalRepository {
 
         public Proposal(){}
 
-        public Proposal(String title, String body, Date expiringDate, String publisherId, String neighbourhoodID, String id, int maxParticipants, ArrayList<String> filters){
+        public Proposal(String title, String body, Date expiringDate, Date publishingDate, String publisherId, String neighbourhoodID, String id, int maxParticipants, RepublishTypes choice, ArrayList<String> filters){
             this.title = title;
             this.body = body;
             this.expiringDate = expiringDate;
@@ -62,11 +66,18 @@ public class ProposalRepository {
             this.maxParticipants = maxParticipants;
             this.filters = filters;
             this.flagsUsers = new ArrayList<>();
+            this.publishingDate = publishingDate;
+            this.republishTypes = choice;
         }
 
         public String getTitle(){return this.title;}
         public String getBody(){return this.body;}
         public Date getExpiringDate(){return this.expiringDate;}
+
+        public Date getPublishingDate() {
+            return publishingDate;
+        }
+
         public String getPublisherID() {
             return this.publisherID;
         }
@@ -77,6 +88,10 @@ public class ProposalRepository {
         public String getNeighbourhoodID(){return this.neighbourhoodID;}
         public ArrayList<String> getFlagsUsers() {return flagsUsers;}
 
+        public RepublishTypes getRepublishTypes() {
+            return republishTypes;
+        }
+
         public void setTitle(String title){this.title=title;}
         public void setBody(String body){this.body=body;}
         public void setExpiringDate(Date expiringDate){this.expiringDate=expiringDate;}
@@ -84,6 +99,10 @@ public class ProposalRepository {
         public void setMaxParticipants(int maxParticipants) {this.maxParticipants = maxParticipants;}
         public void setNeighbourhoodID(String neighbourhoodID) {this.neighbourhoodID = neighbourhoodID;}
         public void setFilters(ArrayList<String> filters){this.filters=filters;}
+
+        public void setRepublishTypes(RepublishTypes republishTypes) {
+            this.republishTypes = republishTypes;
+        }
 
         public void addParticipant(String participantId){
             this.acceptersID.add(participantId);
@@ -99,9 +118,13 @@ public class ProposalRepository {
         }
     }
 
-    public static void createProposal(String title, String body, Date expiringDate, String publisherID, String neighbourhoodId, int max, ArrayList<String> filters){
+    public static void createProposal(String title, String body, Date expiringDate, String publisherID, String neighbourhoodId, int max, RepublishTypes choice, ArrayList<String> filters){
         String id =  UUID.randomUUID().toString();
-        Proposal proposal = new Proposal(title, body, expiringDate, publisherID, neighbourhoodId, id, max, filters);
+        Date publishDate = new Date();
+        LocalDateTime ldt = LocalDateTime.ofInstant(publishDate.toInstant(), ZoneId.systemDefault());
+        publishDate = Date.from(ldt.atZone(ZoneId.systemDefault()).toInstant());
+
+        Proposal proposal = new Proposal(title, body, expiringDate, publishDate, publisherID, neighbourhoodId, id, max, choice, filters);
 
         FirebaseFirestore.getInstance().collection("Proposals").document(id).set(proposal); //TODO: make it asynchronous?
     }
@@ -118,8 +141,9 @@ public class ProposalRepository {
                         for (DocumentSnapshot snap :  task.getResult()) { //for each element in the query
                             Proposal prop = snap.toObject(Proposal.class); //cast the result to a real proposal
                             LocalDateTime expD = prop.getExpiringDate().toInstant().atZone(ZoneId.of("ECT")).toLocalDateTime(); //gets the expiring date of the proposal
+                            LocalDateTime pubD = prop.getPublishingDate().toInstant().atZone(ZoneId.of("ECT")).toLocalDateTime(); //gets the publishing date of the proposal
 
-                            if (expD.isAfter(start) && expD.isBefore(end)) {//if the proposal expiring date is between the limits
+                            if (expD.isAfter(start) && expD.isBefore(end) && pubD.isBefore(LocalDateTime.now(ZoneId.of("ECT")))) {//if the proposal expiring date is between the limits
                                 if (filters != null && prop.getFilters().containsAll(filters)) {
                                     switch (type) {
                                         case PROPOSED: if (prop.getPublisherID().equals(userId)) res.add(prop); break; //adds the proposal to the Proposal to be shown
@@ -182,8 +206,8 @@ public class ProposalRepository {
         });
     }
 
-    public static void editProposal(String documentId, String title, String body, Date expiringDate, ArrayList<String> filters, MyCallback<Boolean> myCallback){
-        FirebaseFirestore.getInstance().collection("Proposals").document(documentId).update("title", title, "body", body, "expiringDate", expiringDate, "filters", filters).addOnCompleteListener(new OnCompleteListener<Void>() {
+    public static void editProposal(String documentId, String title, String body, Date expiringDate,Date publishingDate, ArrayList<String> filters, MyCallback<Boolean> myCallback){
+        FirebaseFirestore.getInstance().collection("Proposals").document(documentId).update("title", title, "body", body, "expiringDate", expiringDate, "publishingDate", publishingDate, "filters", filters).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 myCallback.onCallback(task.isSuccessful());
@@ -211,11 +235,52 @@ public class ProposalRepository {
                 for(DocumentSnapshot snap : task.getResult()){
                     Proposal prop = snap.toObject(Proposal.class); //cast the result to a real proposal
                     LocalDateTime expD = prop.getExpiringDate().toInstant().atZone(ZoneId.of("ECT")).toLocalDateTime();
-                    if (!expD.isAfter(LocalDateTime.now()))
-                        deleteProposal(prop.getId());
+                    if (!expD.isAfter(LocalDateTime.now())) {
+                        if (prop.getRepublishTypes() == RepublishTypes.MAI)
+                            deleteProposal(prop.getId());
+                        else {
+                            updatePeriodicProposal(prop, new MyCallback<Boolean>() {
+                                @Override
+                                public void onCallback(Boolean result) {
+
+                                }
+                            });
+                        }
+                    }
                 }
             }
         });
+    }
+    public static void updatePeriodicProposal(Proposal prop, MyCallback<Boolean> myCallback) {
+        Date newPublishing = null, newExpiring = null;
+        LocalDateTime ldtPublish, ldtExpiring;
+        switch (prop.getRepublishTypes()) {
+            case GIORNALIERA:
+                ldtPublish = LocalDateTime.ofInstant(prop.getPublishingDate().toInstant(), ZoneId.systemDefault()).plusDays(1).toLocalDate().atTime(0, 0, 0);
+                ldtExpiring = LocalDateTime.ofInstant(prop.getExpiringDate().toInstant(), ZoneId.systemDefault()).plusDays(1);
+                newExpiring = Date.from(ldtExpiring.atZone(ZoneId.systemDefault()).toInstant());
+                newPublishing = Date.from(ldtPublish.atZone(ZoneId.systemDefault()).toInstant());
+                break;
+            case SETTIMANALE:
+                ldtPublish = LocalDateTime.ofInstant(prop.getPublishingDate().toInstant(), ZoneId.systemDefault()).plusDays(7).toLocalDate().atTime(0, 0, 0);
+                ldtExpiring = LocalDateTime.ofInstant(prop.getExpiringDate().toInstant(), ZoneId.systemDefault()).plusDays(7);
+                newExpiring = Date.from(ldtExpiring.atZone(ZoneId.systemDefault()).toInstant());
+                newPublishing = Date.from(ldtPublish.atZone(ZoneId.systemDefault()).toInstant());
+                break;
+            case MENSILE:
+                ldtPublish = LocalDateTime.ofInstant(prop.getPublishingDate().toInstant(), ZoneId.systemDefault()).plusMonths(1).toLocalDate().atTime(0, 0, 0);
+                ldtExpiring = LocalDateTime.ofInstant(prop.getExpiringDate().toInstant(), ZoneId.systemDefault()).plusMonths(1);
+                newExpiring = Date.from(ldtExpiring.atZone(ZoneId.systemDefault()).toInstant());
+                newPublishing = Date.from(ldtPublish.atZone(ZoneId.systemDefault()).toInstant());
+                break;
+            case ANNUALE:
+                ldtPublish = LocalDateTime.ofInstant(prop.getPublishingDate().toInstant(), ZoneId.systemDefault()).plusYears(1).toLocalDate().atTime(0, 0, 0);
+                ldtExpiring = LocalDateTime.ofInstant(prop.getExpiringDate().toInstant(), ZoneId.systemDefault()).plusYears(1);
+                newExpiring = Date.from(ldtExpiring.atZone(ZoneId.systemDefault()).toInstant());
+                newPublishing = Date.from(ldtPublish.atZone(ZoneId.systemDefault()).toInstant());
+                break;
+        }
+        editProposal(prop.getId(), prop.getTitle(), prop.getBody(), newExpiring, newPublishing, prop.getFilters(), myCallback);
     }
 
     public static void updateFlagProposal(String documentId, ArrayList<String> flagUsers, MyCallback<Boolean> myCallback) {

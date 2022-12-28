@@ -2,10 +2,12 @@ package com.example.bekind_v2.UILayer.Authentication;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -39,6 +41,7 @@ public class RegistrationFragment2 extends Fragment {
         TextInputEditText city = view.findViewById(R.id.user_city), neighbourhood = view.findViewById(R.id.user_neigh),
                           street = view.findViewById(R.id.user_street), streetNumber = view.findViewById(R.id.street_number);
         Button backBtn = view.findViewById(R.id.back_button), continueBtn = view.findViewById(R.id.continue_button);
+        ProgressBar progressBar = view.findViewById(R.id.progressbar);
 
         authenticationViewModel.getLocationData(city,neighbourhood,street,streetNumber);
 
@@ -63,11 +66,14 @@ public class RegistrationFragment2 extends Fragment {
                             Toast.makeText(getContext(), "Errore: i campi non sono stati riempiti correttamente", Toast.LENGTH_SHORT).show();
                         }
                         else {
-                            authenticationViewModel.createUser(new MyCallback() {
+                            Log.e("Create USER STEP 1", "call to authentication view model");
+                            authenticationViewModel.createUser(getContext(), new MyCallback() {
                                 @Override
                                 public void onCallback(Object result) {
-                                    if (result != null)
+                                    if (result != null){
+                                        Log.e("STEP 7", "here if link is clicked, ready to start app");
                                         startActivity(new Intent(getContext(), BottomBar.class));
+                                    }
                                 }
                             });
                         }

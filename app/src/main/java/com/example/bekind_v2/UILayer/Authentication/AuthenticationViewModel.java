@@ -1,15 +1,16 @@
 package com.example.bekind_v2.UILayer.Authentication;
 
 import android.content.Context;
-import android.util.Patterns;
+import android.util.Log;
+import android.view.View;
 import android.widget.DatePicker;
+import android.widget.ProgressBar;
 
 import androidx.fragment.app.FragmentTransaction;
 import androidx.fragment.app.FragmentActivity;
 
 import androidx.lifecycle.ViewModel;
 
-import com.example.bekind_v2.DataLayer.NeighbourhoodRepository;
 import com.example.bekind_v2.R;
 import com.example.bekind_v2.UILayer.BottomBarViewModel;
 import com.example.bekind_v2.UILayer.NeighbourhoodViewModel;
@@ -17,11 +18,8 @@ import com.example.bekind_v2.Utilities.MyCallback;
 import com.google.android.material.textfield.TextInputEditText;
 import com.example.bekind_v2.DataLayer.UserManager;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.Locale;
 
 public class AuthenticationViewModel extends ViewModel {
     private String name, surname, email, password, city, street, streetNumber, neighbourhoodName, neighbourhoodID;
@@ -45,37 +43,8 @@ public class AuthenticationViewModel extends ViewModel {
         return UserManager.isLogged();
     }
 
-    public void login(String email, String password, MyCallback<Boolean> myCallback){
-        UserManager.login(email, password, myCallback);
-    }
-
-    private boolean checkEmail(TextInputEditText email, String userEmail){
-        if(userEmail.isEmpty()) {
-            email.setError("Questo campo non può essere vuoto");
-            email.requestFocus();
-            return false;
-        }
-        /*if(Patterns.EMAIL_ADDRESS.matcher(userEmail).matches()){
-            email.setError("L'indirizzo inserito non è nel formato corretto");
-            email.requestFocus();
-            return false;
-        }*/
-
-        //TODO a better solution -> send email verifications
-        ArrayList<String> validServers = new ArrayList<>(Arrays.asList("@gmail.com", "@hotmail.com", "@outlook.com", "@yahoo.com", "@icloud.com", "@libero.it", "@tim.it", "@alice.it", "@tin.it"));
-        boolean valid = false;
-        int i = 0;
-        while(i < validServers.size() && !valid){
-            if ((userEmail.indexOf(validServers.get(i)) == userEmail.lastIndexOf(validServers.get(i))) && userEmail.endsWith(validServers.get(i)) && !userEmail.startsWith(validServers.get(i)))
-                valid = true;
-            else
-                ++i;
-        }
-        if(!valid){
-            email.setError("L'indirizzo inserito non è valido");
-            email.requestFocus();
-        }
-        return valid;
+    public void login(Context context, String email, String password, MyCallback<Boolean> myCallback){
+        UserManager.login(context, email, password, myCallback);
     }
 
     private boolean checkPassword(TextInputEditText password, String userPassword) {
@@ -125,7 +94,13 @@ public class AuthenticationViewModel extends ViewModel {
             return false;
         }
 
-        return checkEmail(email, userEmail) && checkPassword(password, userPassword);
+        if(userEmail.isEmpty()) {
+            email.setError("Questo campo non può essere vuoto");
+            email.requestFocus();
+            return false;
+        }
+
+        return checkPassword(password, userPassword);
     }
 
 
@@ -231,13 +206,15 @@ public class AuthenticationViewModel extends ViewModel {
         streetNumber.setText(this.streetNumber);
     }
 
-    public void createUser(MyCallback<Boolean> myCallback){
+    public void createUser(Context context, MyCallback<Boolean> myCallback){
         NeighbourhoodViewModel.getNeighbourhood(this.neighbourhoodName, this.city, (x) ->{
             if(x != null){
-                UserManager.createUser(name, surname, email, password, birthDate, city.toLowerCase(), x, street.toLowerCase(), streetNumber.toLowerCase(), new MyCallback<Object>() {
+                Log.e("USER CREATE STEP 2", "call to usermanager");
+                UserManager.createUser(context, name, surname, email, password, birthDate, city.toLowerCase(), x, street.toLowerCase(), streetNumber.toLowerCase(), new MyCallback<Object>() {
                     @Override
                     public void onCallback(Object result) {
-                        login(email,password,myCallback);
+                        Log.e("STEP 5", "call to login");
+                        login(context, email,password,myCallback);
                     }
                 });
             }

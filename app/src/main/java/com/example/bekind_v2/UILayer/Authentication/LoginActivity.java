@@ -41,7 +41,7 @@ public class LoginActivity extends AppCompatActivity {
             if(!authenticationViewModel.checkCredentials(email, userEmail, password, userPassword))
                 Toast.makeText(getApplicationContext(), "Errore: le credenziali di accesso non sono corrette", Toast.LENGTH_SHORT).show();
             else{
-                authenticationViewModel.login(userEmail, userPassword, (x) -> {
+                authenticationViewModel.login(getApplicationContext(), userEmail, userPassword, (x) -> {
                     if (x)
                         startActivity(new Intent(LoginActivity.this, BottomBar.class)); //bring me to the main page, passing .this could be a problem but who knows
                     else

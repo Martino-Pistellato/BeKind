@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -99,17 +100,75 @@ public class ProposalRecyclerViewAdapter extends RecyclerView.Adapter<ProposalRe
                     delete.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            ProposalRepository.deleteProposal(documentId, new MyCallback<Boolean>() {
-                                @Override
-                                public void onCallback(Boolean result) {
-                                    if(result){
-                                        Toast.makeText(context, "Attività cancellata correttamente", Toast.LENGTH_SHORT).show();
-                                        Utilities.getProposals(Utilities.day, UserManager.getUserId(), HomeViewModel.filters, Types.PROPOSED);
+                            if(proposal.getRepublishTypes() == RepublishTypes.MAI) {
+                                ProposalRepository.deleteProposal(documentId, new MyCallback<Boolean>() {
+                                    @Override
+                                    public void onCallback(Boolean result) {
+                                        if (result) {
+                                            Toast.makeText(context, "Attività cancellata correttamente", Toast.LENGTH_SHORT).show();
+                                            Utilities.getProposals(Utilities.day, UserManager.getUserId(), HomeViewModel.filters, Types.PROPOSED);
+                                        } else
+                                            Toast.makeText(context, "Impossibile cancellare attività", Toast.LENGTH_SHORT).show();
                                     }
-                                    else
-                                        Toast.makeText(context, "Impossibile cancellare attività", Toast.LENGTH_SHORT).show();
-                                }
-                            });
+                                });
+                            }
+                            else{
+                                Dialog dialog = new Dialog(context);
+                                CheckBox singleProposal, totalProposal;
+                                Button closeBtn, confirmBtn;
+                                dialog.setContentView(R.layout.delete_periodic_proposal);
+                                dialog.setCanceledOnTouchOutside(false);
+
+                                singleProposal = dialog.findViewById(R.id.single_proposal_checkbox);
+                                totalProposal = dialog.findViewById(R.id.total_proposal_checkbox);
+
+                                closeBtn = dialog.findViewById(R.id.close_btn);
+                                confirmBtn = dialog.findViewById(R.id.confirm_btn);
+
+                                closeBtn.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+                                        dialog.dismiss();
+                                    }
+                                });
+
+                                confirmBtn.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+                                        if(!singleProposal.isChecked() && !totalProposal.isChecked())
+                                            Toast.makeText(context, "Prima di confermare scegli una delle opzioni", Toast.LENGTH_SHORT).show();
+                                        else{
+                                            if(totalProposal.isChecked()){
+                                                ProposalRepository.deleteProposal(documentId, new MyCallback<Boolean>() {
+                                                    @Override
+                                                    public void onCallback(Boolean result) {
+                                                        if (result) {
+                                                            Toast.makeText(context, "Attività cancellata correttamente", Toast.LENGTH_SHORT).show();
+                                                            Utilities.getProposals(Utilities.day, UserManager.getUserId(), HomeViewModel.filters, Types.PROPOSED);
+                                                        } else
+                                                            Toast.makeText(context, "Impossibile cancellare attività", Toast.LENGTH_SHORT).show();
+                                                    }
+                                                });
+                                            }
+                                            else{
+                                                ProposalRepository.updatePeriodicProposal(proposal, new MyCallback<Boolean>() {
+                                                    @Override
+                                                    public void onCallback(Boolean result) {
+                                                        if (result) {
+                                                            Toast.makeText(context, "Attività cancellata correttamente", Toast.LENGTH_SHORT).show();
+                                                            Utilities.getProposals(Utilities.day, UserManager.getUserId(), HomeViewModel.filters, Types.PROPOSED);
+                                                        } else
+                                                            Toast.makeText(context, "Impossibile cancellata attività", Toast.LENGTH_SHORT).show();
+                                                    }
+                                                });
+                                            }
+                                            dialog.dismiss();
+                                        }
+                                    }
+                                });
+                            dialog.show();
+                            }
+
                         }
                     });
 
@@ -175,7 +234,7 @@ public class ProposalRecyclerViewAdapter extends RecyclerView.Adapter<ProposalRe
                                     Calendar calendar = Calendar.getInstance();
                                     calendar.set(expiringDate.getYear(), expiringDate.getMonth(), expiringDate.getDayOfMonth(), expiringHour.getHour() - 1, expiringHour.getMinute());
 
-                                    ProposalRepository.editProposal(documentId, activityTitle.getText().toString().trim(), activityBody.getText().toString().trim(), calendar.getTime(), newFilters, new MyCallback<Boolean>() {
+                                    ProposalRepository.editProposal(documentId, activityTitle.getText().toString().trim(), activityBody.getText().toString().trim(), calendar.getTime(), proposal.getPublishingDate(), newFilters, new MyCallback<Boolean>() {
                                         @Override
                                         public void onCallback(Boolean result) {
 
@@ -198,17 +257,30 @@ public class ProposalRecyclerViewAdapter extends RecyclerView.Adapter<ProposalRe
                     confirm.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            ProposalRepository.deleteProposal(documentId, new MyCallback<Boolean>() {
-                                @Override
-                                public void onCallback(Boolean result) {
-                                    if(result){
-                                        Toast.makeText(context, "Attività terminata correttamente", Toast.LENGTH_SHORT).show();
-                                        Utilities.getProposals(Utilities.day, UserManager.getUserId(), HomeViewModel.filters, Types.PROPOSED);
+                            if(proposal.getRepublishTypes() == RepublishTypes.MAI) {
+                                ProposalRepository.deleteProposal(documentId, new MyCallback<Boolean>() {
+                                    @Override
+                                    public void onCallback(Boolean result) {
+                                        if (result) {
+                                            Toast.makeText(context, "Attività terminata correttamente", Toast.LENGTH_SHORT).show();
+                                            Utilities.getProposals(Utilities.day, UserManager.getUserId(), HomeViewModel.filters, Types.PROPOSED);
+                                        } else
+                                            Toast.makeText(context, "Impossibile terminare attività", Toast.LENGTH_SHORT).show();
                                     }
-                                    else
-                                        Toast.makeText(context, "Impossibile terminare attività", Toast.LENGTH_SHORT).show();
-                                }
-                            });
+                                });
+                            }
+                            else{
+                                ProposalRepository.updatePeriodicProposal(proposal, new MyCallback<Boolean>() {
+                                    @Override
+                                    public void onCallback(Boolean result) {
+                                        if (result) {
+                                            Toast.makeText(context, "Attività terminata correttamente", Toast.LENGTH_SHORT).show();
+                                            Utilities.getProposals(Utilities.day, UserManager.getUserId(), HomeViewModel.filters, Types.PROPOSED);
+                                        } else
+                                            Toast.makeText(context, "Impossibile terminare attività", Toast.LENGTH_SHORT).show();
+                                    }
+                                });
+                            }
                         }
                     });
                 }

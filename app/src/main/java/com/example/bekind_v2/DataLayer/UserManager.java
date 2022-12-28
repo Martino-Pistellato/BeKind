@@ -2,19 +2,23 @@ package com.example.bekind_v2.DataLayer;
 
 import android.util.Log;
 
+import android.content.Context;
+import android.view.View;
+import android.widget.ProgressBar;
+
 import com.example.bekind_v2.Utilities.MyCallback;
 
 import java.util.Date;
 
 public class UserManager {
-    public static void createUser(String name, String surname, String email, String password, Date birth, String city, String neighbourhoodID, String street, String street_number, MyCallback myCallback){
-        UserLoginRepository.register(email, password, (x)->{
+    public static void createUser(Context context, String name, String surname, String email, String password, Date birth, String city, String neighbourhoodID, String street, String street_number, MyCallback myCallback){
+        UserLoginRepository.register(context, email, password, (x)->{
             UserDatabaseRepository.createUser(getUserId(), name, surname, birth, email, city, street, street_number, neighbourhoodID, myCallback);
         });
     }
 
-    public static void login(String email, String password, MyCallback<Boolean> myCallback){
-        UserLoginRepository.login(email, password, myCallback);
+    public static void login(Context context, String email, String password, MyCallback<Boolean> myCallback){
+        UserLoginRepository.login(context, email, password, myCallback);
     }
 
     public static void logout(){

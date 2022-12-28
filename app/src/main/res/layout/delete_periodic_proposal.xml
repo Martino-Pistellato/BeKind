@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:id="@+id/container"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true">
+
+        <TextView
+            android:id="@+id/info"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="Stai per cancellare un'attività periodica.
+            Vuoi cancellare:"
+            android:textSize="20sp"
+            android:layout_marginBottom="20dp"/>
+
+        <CheckBox
+            android:id="@+id/single_proposal_checkbox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/info"
+            android:layout_centerHorizontal="true"
+            android:text="Solo questa occorrenza"
+            android:textSize="18sp"
+            android:layoutDirection="ltr">
+
+        </CheckBox>
+
+        <CheckBox
+            android:id="@+id/total_proposal_checkbox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/single_proposal_checkbox"
+            android:layout_centerHorizontal="true"
+            android:text="Tutte le occorrenze"
+            android:textSize="18sp"
+            android:layoutDirection="ltr">
+        </CheckBox>
+
+        <LinearLayout
+            android:id="@+id/buttons_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/total_proposal_checkbox"
+            android:layout_marginTop="11dp"
+            android:gravity="center"
+            android:weightSum="2.2">
+
+            <Button
+                android:id="@+id/close_btn"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/cancel_btn"
+                android:backgroundTint="@color/primaryDarkColor"/>
+
+            <android.widget.Space
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.1" />
+
+            <Button
+                android:id="@+id/confirm_btn"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/confirm_btn"
+                android:backgroundTint="@color/primaryDarkColor"/>
+        </LinearLayout>
+
+
+    </RelativeLayout>
+
+</RelativeLayout>

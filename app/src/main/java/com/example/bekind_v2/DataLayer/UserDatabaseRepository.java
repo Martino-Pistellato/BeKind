@@ -64,6 +64,7 @@ public class UserDatabaseRepository {
         FirebaseFirestore.getInstance().collection("Users").document(userID).set(us).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
+                Log.e("STEP 4", "User created in db");
                 myCallback.onCallback(task.getResult());
             }
         });

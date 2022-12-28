@@ -58,7 +58,7 @@ public class NeighbourhoodFragment extends Fragment {
                     NeighbourhoodViewModel.createNeighbourhood(neighbourhoodName, authenticationViewModel.getCity(), (x)->{
                         if(x) {
                             authenticationViewModel.setNeighbourhood(neighbourhoodName);
-                            authenticationViewModel.createUser((y) -> {
+                            authenticationViewModel.createUser(getContext(), (y) -> {
                                 startActivity(new Intent(getContext(), BottomBar.class));
                             });
                         }

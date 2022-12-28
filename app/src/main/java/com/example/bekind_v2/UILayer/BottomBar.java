@@ -103,6 +103,10 @@ public class BottomBar extends AppCompatActivity {
                     @Override
                     public void onClick(View view) {
                         Dialog dialog = new Dialog(BottomBar.this);
+
+                        bottomBarViewModel.showFirstPopupProposal(getApplicationContext(), dialog, choose_dialog);
+
+                        /*
                         TextInputEditText title, body, maxparticipants;
                         DatePicker expiringDate;
                         TimePicker expiringHour;
@@ -216,7 +220,7 @@ public class BottomBar extends AppCompatActivity {
                             }
                         });
 
-                        dialog.show();
+                        dialog.show();*/
                     }
                 });
 

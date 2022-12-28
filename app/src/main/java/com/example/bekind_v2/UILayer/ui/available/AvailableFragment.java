@@ -120,7 +120,6 @@ public class AvailableFragment extends Fragment {
                         ScheduleBar.ScheduleDate.setScheduleDate(calendar.getTime());
                         Utilities.day = calendar.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
                     }
-
                 });
 
                 Button buttonOk = (Button) datePickerDialog.getButton(datePickerDialog.BUTTON_POSITIVE);
@@ -135,8 +134,6 @@ public class AvailableFragment extends Fragment {
                 });
             }
         });
-
-
 
         simpleSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -168,29 +165,20 @@ public class AvailableFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        /*if (!simpleSwitch.isChecked()){
-            GetProposals.getProposalsDate(ScheduleBar.ScheduleDate.getScheduleLocalDate(), UserManager.getUserId(), HomeViewModel.filters, Types.AVAILABLE);
-        scheduledateText.setVisibility(View.VISIBLE);
-        totalActivities.setVisibility(View.INVISIBLE);
-        }else{
-            GetProposals.getProposalsDate(null, UserManager.getUserId(), HomeViewModel.filters, Types.AVAILABLE);
-            scheduledateText.setVisibility(View.INVISIBLE);
-            totalActivities.setVisibility(View.VISIBLE);
-        }*/
 
         if(Utilities.day == null){
             if(!simpleSwitch.isChecked()){
                 simpleSwitch.setChecked(true);
-                scheduledateText.setVisibility(View.INVISIBLE);
-                totalActivities.setVisibility(View.VISIBLE);
             }
+            scheduledateText.setVisibility(View.INVISIBLE);
+            totalActivities.setVisibility(View.VISIBLE);
         }
         else{
             if(simpleSwitch.isChecked()){
                 simpleSwitch.setChecked(false);
-                scheduledateText.setVisibility(View.VISIBLE);
-                totalActivities.setVisibility(View.INVISIBLE);
             }
+            scheduledateText.setVisibility(View.VISIBLE);
+            totalActivities.setVisibility(View.INVISIBLE);
         }
 
         Utilities.getProposals(Utilities.day, UserManager.getUserId(), HomeViewModel.filters, Types.AVAILABLE);

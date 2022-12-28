@@ -32,6 +32,7 @@ import com.example.bekind_v2.databinding.FragmentProfileBinding;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.textfield.TextInputEditText;
 
+import java.time.ZoneId;
 import java.util.Calendar;
 
 public class ProfileFragment extends Fragment {
@@ -251,10 +252,10 @@ public class ProfileFragment extends Fragment {
         Utilities.getProposals(Utilities.day, UserManager.getUserId(), ProfileViewModel.filters, Types.PROPOSED);
         Utilities.getPosts(Utilities.day, UserManager.getUserId(), ProfileViewModel.filters, PostTypes.MYPOSTS);
 
-        TextView scheduleDate = root.findViewById(R.id.scheduledate_text);
-        ScheduleBar.ScheduleDate.setTextDate(scheduleDate);
+        scheduledateText = root.findViewById(R.id.scheduledate_text);
+        ScheduleBar.ScheduleDate.setTextDate(scheduledateText);
 
-        scheduleDate.setOnClickListener(new View.OnClickListener() {
+        scheduledateText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 DatePickerDialog datePickerDialog = ScheduleBar.ScheduleDate.showDatePickerDialog(context);
@@ -266,6 +267,7 @@ public class ProfileFragment extends Fragment {
                         calendar.set(year, monthOfYear, dayOfMonth);
 
                         ScheduleBar.ScheduleDate.setScheduleDate(calendar.getTime());
+                        Utilities.day = calendar.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
                     }
                 });
 
@@ -273,16 +275,16 @@ public class ProfileFragment extends Fragment {
                 buttonOk.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        ScheduleBar.ScheduleDate.setTextDate(scheduleDate);
+                        ScheduleBar.ScheduleDate.setTextDate(scheduledateText);
                         datePickerDialog.dismiss();
 
-                        Utilities.getProposals(ScheduleBar.ScheduleDate.getScheduleLocalDate(), UserManager.getUserId(), HomeViewModel.filters, Types.ACCEPTED);
+                        Utilities.getProposals(Utilities.day, UserManager.getUserId(), ProfileViewModel.filters, Types.PROPOSED);
+                        Utilities.getPosts(Utilities.day, UserManager.getUserId(), ProfileViewModel.filters, PostTypes.MYPOSTS);
                     }
                 });
             }
         });
 
-        scheduledateText = root.findViewById(R.id.scheduledate_text);
         totalActivities = root.findViewById(R.id.total_activities);
 
         simpleSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -299,7 +301,8 @@ public class ProfileFragment extends Fragment {
                     Utilities.day = null;
                 }
 
-                Utilities.getProposals(Utilities.day, UserManager.getUserId(), HomeViewModel.filters, Types.ACCEPTED);
+                Utilities.getProposals(Utilities.day, UserManager.getUserId(), ProfileViewModel.filters, Types.PROPOSED);
+                Utilities.getPosts(Utilities.day, UserManager.getUserId(), ProfileViewModel.filters, PostTypes.MYPOSTS);
             }
         });
 
@@ -319,19 +322,19 @@ public class ProfileFragment extends Fragment {
         if(Utilities.day == null){
             if(!simpleSwitch.isChecked()){
                 simpleSwitch.setChecked(true);
-                scheduledateText.setVisibility(View.INVISIBLE);
-                totalActivities.setVisibility(View.VISIBLE);
             }
+            scheduledateText.setVisibility(View.INVISIBLE);
+            totalActivities.setVisibility(View.VISIBLE);
         }
         else{
             if(simpleSwitch.isChecked()){
                 simpleSwitch.setChecked(false);
-                scheduledateText.setVisibility(View.VISIBLE);
-                totalActivities.setVisibility(View.INVISIBLE);
             }
+            scheduledateText.setVisibility(View.VISIBLE);
+            totalActivities.setVisibility(View.INVISIBLE);
         }
 
-        Utilities.getProposals(Utilities.day, UserManager.getUserId(), HomeViewModel.filters, Types.PROPOSED);
+        Utilities.getProposals(Utilities.day, UserManager.getUserId(), ProfileViewModel.filters, Types.PROPOSED);
         Utilities.getPosts(Utilities.day, UserManager.getUserId(), ProfileViewModel.filters, PostTypes.MYPOSTS);
     }
 }

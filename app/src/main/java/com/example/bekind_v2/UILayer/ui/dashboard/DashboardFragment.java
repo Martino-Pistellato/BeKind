@@ -98,15 +98,14 @@ public class DashboardFragment extends Fragment {
         Utilities.SharedViewModel.postsViewModel.getOtherPosts().observe(getViewLifecycleOwner(), postObserver);
         Utilities.getPosts(Utilities.day, UserManager.getUserId(), DashboardViewModel.filters, PostTypes.OTHERSPOSTS);
 
-        TextView scheduleDate = root.findViewById(R.id.scheduledate_text);
-        ScheduleBar.ScheduleDate.setTextDate(scheduleDate);
+        scheduledateText = root.findViewById(R.id.scheduledate_text);
+        ScheduleBar.ScheduleDate.setTextDate(scheduledateText);
 
         simpleSwitch = root.findViewById(R.id.simpleSwitch);
         totalActivities = root.findViewById(R.id.total_activities);
-        scheduledateText = root.findViewById(R.id.scheduledate_text);
         Context context = this.getContext();
 
-        scheduleDate.setOnClickListener(new View.OnClickListener() {
+        scheduledateText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 DatePickerDialog datePickerDialog = ScheduleBar.ScheduleDate.showDatePickerDialog(context);
@@ -127,7 +126,7 @@ public class DashboardFragment extends Fragment {
                 buttonOk.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        ScheduleBar.ScheduleDate.setTextDate(scheduleDate);
+                        ScheduleBar.ScheduleDate.setTextDate(scheduledateText);
                         datePickerDialog.dismiss();
 
                         Utilities.getPosts(Utilities.day, UserManager.getUserId(), DashboardViewModel.filters, PostTypes.OTHERSPOSTS);
@@ -152,16 +151,16 @@ public class DashboardFragment extends Fragment {
         if(Utilities.day == null){
             if(!simpleSwitch.isChecked()){
                 simpleSwitch.setChecked(true);
-                scheduledateText.setVisibility(View.INVISIBLE);
-                totalActivities.setVisibility(View.VISIBLE);
             }
+            scheduledateText.setVisibility(View.INVISIBLE);
+            totalActivities.setVisibility(View.VISIBLE);
         }
         else{
             if(simpleSwitch.isChecked()){
                 simpleSwitch.setChecked(false);
-                scheduledateText.setVisibility(View.VISIBLE);
-                totalActivities.setVisibility(View.INVISIBLE);
             }
+            scheduledateText.setVisibility(View.VISIBLE);
+            totalActivities.setVisibility(View.INVISIBLE);
         }
 
         Utilities.getPosts(Utilities.day, UserManager.getUserId(), DashboardViewModel.filters, PostTypes.OTHERSPOSTS);

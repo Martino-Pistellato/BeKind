@@ -18,9 +18,9 @@
     </string-array>
 
     <string-array name="font_size_values">
-        <item>small_font_size</item>
-        <item>medium_font_size</item>
-        <item>large_font_size</item>
+        <item>small</item>
+        <item>medium</item>
+        <item>large</item>
     </string-array>
     
     <!-- Language Preferences -->

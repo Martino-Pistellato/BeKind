@@ -22,6 +22,17 @@ import com.example.bekind_v2.UILayer.Authentication.LoginActivity;
 
 public class SettingsActivity extends AppCompatActivity {
     @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+    }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        onBackPressed();
+        return true;
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.settings_activity);
@@ -30,8 +41,9 @@ public class SettingsActivity extends AppCompatActivity {
 
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
+            actionBar.setDisplayShowHomeEnabled(true);
             actionBar.setDisplayHomeAsUpEnabled(true);
-            actionBar.setTitle("Impostazioni");
+            actionBar.setTitle(R.string.title_settings);
         }
     }
 
@@ -42,7 +54,7 @@ public class SettingsActivity extends AppCompatActivity {
 
             SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
             Preference logoutBtn = findPreference("logout");
-            ListPreference theme = findPreference("theme"), language = findPreference("language_selection"), font_size = findPreference("font_size");
+            ListPreference theme = findPreference("theme"), language = findPreference("language_selection");
 
             logoutBtn.setOnPreferenceClickListener(preference -> {
                 SettingsViewModel.logout();
@@ -53,7 +65,7 @@ public class SettingsActivity extends AppCompatActivity {
             theme.setOnPreferenceChangeListener(((preference, newValue) -> {
                 if(newValue.equals("dark_theme")) {
                     AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_YES);
-                    sharedPreferences.edit().putBoolean("dark_theme", true).commit();
+                    sharedPreferences.edit().putBoolean("dark_theme", true).apply();
                 }
                 else {
                     AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_NO);

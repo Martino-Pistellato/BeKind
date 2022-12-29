@@ -87,7 +87,7 @@ public class PostRecyclerViewAdapter extends RecyclerView.Adapter<PostRecyclerVi
                                       public void onCallback(Boolean result) {
                                           if(result){
                                               Toast.makeText(context, "Post cancellato correttamente", Toast.LENGTH_SHORT).show();
-                                              Utilities.getPosts(Utilities.day, UserManager.getUserId(), ProfileViewModel.filters, PostTypes.MYPOSTS);
+                                              Utilities.getPosts(Utilities.day, UserManager.getUserId(), ProfileViewModel.postsFilters, PostTypes.MYPOSTS);
                                           }
                                           else
                                               Toast.makeText(context, "Impossibile cancellare post", Toast.LENGTH_SHORT).show();
@@ -156,7 +156,7 @@ public class PostRecyclerViewAdapter extends RecyclerView.Adapter<PostRecyclerVi
                                               public void onCallback(Boolean result) {
                                                   if (result){
                                                       Toast.makeText(context, "Post aggiornato correttamente", Toast.LENGTH_SHORT).show();
-                                                    Utilities.getPosts(Utilities.day, UserManager.getUserId(), ProfileViewModel.filters, PostTypes.MYPOSTS);
+                                                    Utilities.getPosts(Utilities.day, UserManager.getUserId(), ProfileViewModel.postsFilters, PostTypes.MYPOSTS);
                                                   }else
                                                       Toast.makeText(context, "Impossibile modificare post", Toast.LENGTH_SHORT).show();
                                               }

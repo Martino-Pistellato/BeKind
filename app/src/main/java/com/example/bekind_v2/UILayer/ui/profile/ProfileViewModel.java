@@ -14,15 +14,18 @@ import com.example.bekind_v2.DataLayer.UserManager;
 import com.example.bekind_v2.UILayer.NeighbourhoodViewModel;
 import com.example.bekind_v2.Utilities.MyCallback;
 import com.example.bekind_v2.Utilities.Types;
+import com.example.bekind_v2.Utilities.PostTypes;
 import com.example.bekind_v2.Utilities.Utilities;
 import com.google.android.material.textfield.TextInputEditText;
 import com.example.bekind_v2.DataLayer.ProposalRepository;
+import com.example.bekind_v2.DataLayer.PostRepository;
+import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
 import java.util.Locale;
 
 public class ProfileViewModel extends ViewModel {
-
+    
     public static class ProfileActivityViewPagerAdapter extends FragmentStateAdapter {
         //constructor, necessary
         public ProfileActivityViewPagerAdapter(@NonNull Fragment fragment) {
@@ -48,9 +51,9 @@ public class ProfileViewModel extends ViewModel {
         }
     }
 
-    public static ArrayList<String> filters = new ArrayList<>();
+    //public static ArrayList<String> filters = new ArrayList<>();
     //we'll need it later to implement manageFilter
-    //public static ArrayList<String> PostsFilters = new ArrayList<>();
+    public static ArrayList<String> postsFilters = new ArrayList<>();
     public static ArrayList<String> proposedFilters = new ArrayList<>();
     private UserDatabaseRepository.User user;
     private String password;
@@ -143,7 +146,7 @@ public class ProfileViewModel extends ViewModel {
             myCallback.onCallback(true);
     }
 
-    public static void manageFilter(String filter, ArrayList<String> filters){
+    /*public static void manageFilter(String filter, ArrayList<String> filters){
         Utilities.manageFilter(filter, filters);
 
         ProposalRepository.getProposals(Utilities.day, UserManager.getUserId(), filters, Types.PROPOSED, new MyCallback<ArrayList<ProposalRepository.Proposal>>() {
@@ -152,13 +155,26 @@ public class ProfileViewModel extends ViewModel {
                 Utilities.SharedViewModel.proposalsViewModel.getProposed().setValue(result);
             }
         });
-    }
+    }*/
 
-     //public static void managePostsFilter(String filter){
-     //     manageFilter(filter, PostsFilters);
-     //}
+     public static void managePostsFilter(String filter){
+        Utilities.manageFilter(filter, postsFilters);
+        PostRepository.getPosts(Utilities.day, UserManager.getUserId(), postsFilters, PostTypes.MYPOSTS, new MyCallback<ArrayList<PostRepository.Post>>() {
+            @Override
+            public void onCallback(ArrayList<PostRepository.Post> result) {
+                Utilities.SharedViewModel.postsViewModel.getMyPosts().setValue(result);
+                    }
+                });
+     }
+
      public static void manageProposedFilter(String filter){
-        manageFilter(filter, proposedFilters);
+        Utilities.manageFilter(filter, proposedFilters);
+        ProposalRepository.getProposals(Utilities.day, UserManager.getUserId(), proposedFilters, Types.PROPOSED, new MyCallback<ArrayList<ProposalRepository.Proposal>>() {
+            @Override
+            public void onCallback(ArrayList<ProposalRepository.Proposal> result) {
+                Utilities.SharedViewModel.proposalsViewModel.getProposed().setValue(result);
+            }
+        });
      }
 
 }

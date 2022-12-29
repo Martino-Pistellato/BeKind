@@ -1,9 +1,12 @@
 package com.example.bekind_v2.UILayer.ui.profile;
 
 import android.app.DatePickerDialog;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.DatePicker;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -19,6 +23,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.viewpager2.widget.ViewPager2;
 
+import com.example.bekind_v2.DataLayer.ProfilePictureRepository;
 import com.example.bekind_v2.DataLayer.UserManager;
 import com.example.bekind_v2.R;
 import com.example.bekind_v2.UILayer.Authentication.LoginActivity;
@@ -31,6 +36,8 @@ import com.example.bekind_v2.Utilities.Utilities;
 import com.example.bekind_v2.databinding.FragmentProfileBinding;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.time.ZoneId;
 import java.util.Calendar;
@@ -41,18 +48,65 @@ public class ProfileFragment extends Fragment {
     private SwitchCompat simpleSwitch;
     private TextView totalActivities, scheduledateText;
 
+    //campi aggiunti per implementare foto profilo
+    ImageView set;
+
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         ProfileViewModel profileViewModel = new ViewModelProvider(this).get(ProfileViewModel.class);
         binding = FragmentProfileBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
-        Button updateUserData = binding.modifyProfileBtn, updateUserLocation = binding.modifyNeighBtn;
+        Button updateUserData = binding.modifyProfileBtn, updateUserLocation = binding.modifyNeighBtn, updatePhoto = binding.modifyPic;
         TextView profileName = binding.profileName;
         simpleSwitch = root.findViewById(R.id.simpleSwitch);
         totalActivities = root.findViewById(R.id.total_activities);
         scheduledateText = root.findViewById(R.id.scheduledate_text);
         Context context = this.getContext();
 
+        //aggiunte per foto profilo
+        set = root.findViewById(R.id.user_photo);
+        //pd = new ProgressDialog(this);
+        //pd.setCanceledOnTouchOutside(false);
+        
+
+
         profileViewModel.getUserName(profileName::setText);
+
+
+        //foto profilo
+        /*updatePhoto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //pd.setMessage("Updating Profile Picture");
+                ProfilePictureRepository.profileOrCoverPhoto = "image";
+                //showImagePicDialog(); TO DO
+
+                //dialog implementation
+                String options[] = {"Camera", "Gallery"};
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder.setTitle("Pick Image From");
+                builder.setItems(options, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        // if access is not given then we will request for permission
+                        if (which == 0) {
+                            if (!checkCameraPermission()) {
+                                //requestCameraPermission();
+                            } else {
+                                pickFromCamera();
+                            }
+                        } else if (which == 1) {
+                            if (!checkStoragePermission()) {
+                                //requestStoragePermission();
+                            } else {
+                                //pickFromGallery();
+                            }
+                       }
+                    }
+                });
+                builder.create().show();
+            }
+        });*/
+        //foto profilo
 
         updateUserData.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -248,8 +302,8 @@ public class ProfileFragment extends Fragment {
             }
         });
 
-        Utilities.getProposals(Utilities.day, UserManager.getUserId(), ProfileViewModel.filters, Types.PROPOSED);
-        Utilities.getPosts(Utilities.day, UserManager.getUserId(), ProfileViewModel.filters, PostTypes.MYPOSTS);
+        Utilities.getProposals(Utilities.day, UserManager.getUserId(), ProfileViewModel.proposedFilters, Types.PROPOSED);
+        Utilities.getPosts(Utilities.day, UserManager.getUserId(), ProfileViewModel.postsFilters, PostTypes.MYPOSTS);
 
         scheduledateText = root.findViewById(R.id.scheduledate_text);
         ScheduleBar.ScheduleDate.setTextDate(scheduledateText);
@@ -277,8 +331,8 @@ public class ProfileFragment extends Fragment {
                         ScheduleBar.ScheduleDate.setTextDate(scheduledateText);
                         datePickerDialog.dismiss();
 
-                        Utilities.getProposals(Utilities.day, UserManager.getUserId(), ProfileViewModel.filters, Types.PROPOSED);
-                        Utilities.getPosts(Utilities.day, UserManager.getUserId(), ProfileViewModel.filters, PostTypes.MYPOSTS);
+                        Utilities.getProposals(Utilities.day, UserManager.getUserId(), ProfileViewModel.proposedFilters, Types.PROPOSED);
+                        Utilities.getPosts(Utilities.day, UserManager.getUserId(), ProfileViewModel.postsFilters, PostTypes.MYPOSTS);
                     }
                 });
             }
@@ -300,8 +354,8 @@ public class ProfileFragment extends Fragment {
                     Utilities.day = null;
                 }
 
-                Utilities.getProposals(Utilities.day, UserManager.getUserId(), ProfileViewModel.filters, Types.PROPOSED);
-                Utilities.getPosts(Utilities.day, UserManager.getUserId(), ProfileViewModel.filters, PostTypes.MYPOSTS);
+                Utilities.getProposals(Utilities.day, UserManager.getUserId(), ProfileViewModel.proposedFilters, Types.PROPOSED);
+                Utilities.getPosts(Utilities.day, UserManager.getUserId(), ProfileViewModel.postsFilters, PostTypes.MYPOSTS);
             }
         });
 
@@ -334,6 +388,6 @@ public class ProfileFragment extends Fragment {
         }
 
         Utilities.getProposals(Utilities.day, UserManager.getUserId(), ProfileViewModel.proposedFilters, Types.PROPOSED);
-        Utilities.getPosts(Utilities.day, UserManager.getUserId(), ProfileViewModel.filters, PostTypes.MYPOSTS);
+        Utilities.getPosts(Utilities.day, UserManager.getUserId(), ProfileViewModel.postsFilters, PostTypes.MYPOSTS);
     }
 }

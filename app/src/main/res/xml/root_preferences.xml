@@ -11,14 +11,6 @@
         android:icon="@drawable/ic_outline_palette_24"/>
 
     <ListPreference
-        app:defaultValue="medium_font_size"
-        app:entries="@array/font_size_entries"
-        app:entryValues="@array/font_size_values"
-        app:key="font_size"
-        app:title="@string/font_size"
-        android:icon="@drawable/ic_baseline_text_increase_24"/>
-
-    <ListPreference
         app:defaultValue="it"
         app:entries="@array/language_entries"
         app:entryValues="@array/language_values"

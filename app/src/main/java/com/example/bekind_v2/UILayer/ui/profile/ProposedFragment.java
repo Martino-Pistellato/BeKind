@@ -46,9 +46,7 @@ public class ProposedFragment extends Fragment {
         shoppingChip.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.e("CHIP", "HAI CLICCATO IL CHIP SHOPPING ");
                 ProfileViewModel.manageProposedFilter(shoppingChip.getText().toString());
-                Log.e("CHIP", "HAI CLICCATO IL CHIP SHOPPING, HA FUNZIONATO? ");
             }
 
         });
@@ -87,11 +85,10 @@ public class ProposedFragment extends Fragment {
         };
 
         proposalsViewModel.getProposed().observe(getViewLifecycleOwner(),proposedObserver);
-        Log.e("CHIP", "La lista è vuota?" + (proposalsViewModel.getProposed().getValue() == null) );
-        //false
+
 
         Utilities.getProposals(Utilities.day, UserManager.getUserId(), ProfileViewModel.proposedFilters, Types.PROPOSED);
-        Log.e("CHIP", "BULA BULA");
+
         return view;
     }
 }

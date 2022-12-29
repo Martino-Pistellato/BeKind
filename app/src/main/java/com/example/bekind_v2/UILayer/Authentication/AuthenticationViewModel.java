@@ -3,6 +3,7 @@ package com.example.bekind_v2.UILayer.Authentication;
 import android.content.Context;
 import android.util.Log;
 import android.view.View;
+import android.widget.AutoCompleteTextView;
 import android.widget.DatePicker;
 import android.widget.ProgressBar;
 
@@ -104,7 +105,7 @@ public class AuthenticationViewModel extends ViewModel {
     }
 
 
-    public void checkLocationFields(TextInputEditText city, String userCity, TextInputEditText neighbourhood, String userNeighbourhood, TextInputEditText street, String userStreet, TextInputEditText streetNumber, String userStreetNumber, MyCallback<Boolean> myCallback){
+    public void checkLocationFields(AutoCompleteTextView city, String userCity, AutoCompleteTextView neighbourhood, String userNeighbourhood, TextInputEditText street, String userStreet, TextInputEditText streetNumber, String userStreetNumber, MyCallback<Boolean> myCallback){
         NeighbourhoodViewModel.doesNeighbourhoodExist(userNeighbourhood.toLowerCase(), userCity.toLowerCase(), new MyCallback<Boolean>() {
             @Override
             public void onCallback(Boolean result) {
@@ -199,7 +200,7 @@ public class AuthenticationViewModel extends ViewModel {
         }
     }
 
-    public void getLocationData(TextInputEditText city, TextInputEditText neighbourhood, TextInputEditText street, TextInputEditText streetNumber){
+    public void getLocationData(AutoCompleteTextView city, AutoCompleteTextView neighbourhood, TextInputEditText street, TextInputEditText streetNumber){
         city.setText(this.city);
         neighbourhood.setText(this.neighbourhoodName);
         street.setText(this.street);

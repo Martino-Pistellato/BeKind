@@ -9,9 +9,11 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.util.ArrayList;
 import java.util.UUID;
 
 public class NeighbourhoodRepository {
+
     public static class Neighbourhood{
         private String city, name, id;
 
@@ -90,6 +92,39 @@ public class NeighbourhoodRepository {
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if(task.isSuccessful())
                     myCallback.onCallback(!task.getResult().isEmpty());
+            }
+        });
+    }
+
+    public static void getNeighbourhoods(String city, MyCallback myCallback) {
+            ArrayList<String> res = new ArrayList<>();
+
+            FirebaseFirestore.getInstance().collection("Neighbourhoods").whereEqualTo("city", city).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                    String[] res1 = new String[task.getResult().size()];
+                    for (DocumentSnapshot snap : task.getResult()) {
+                        String name = snap.getString("name");
+                        res.add(name.substring(0, 1).toUpperCase() + name.substring(1));
+                    }
+
+                    myCallback.onCallback(res.toArray(res1));
+                }
+            });
+    }
+
+    public static void getCities(MyCallback myCallback) {
+        ArrayList<String> res = new ArrayList<>();
+        FirebaseFirestore.getInstance().collection("Neighbourhoods").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                String[] res1 = new String[task.getResult().size()];
+                for(DocumentSnapshot snap : task.getResult()){
+                    String city = snap.getString("city");
+                    res.add(city.substring(0, 1).toUpperCase() + city.substring(1));
+                }
+
+                myCallback.onCallback(res.toArray(res1));
             }
         });
     }

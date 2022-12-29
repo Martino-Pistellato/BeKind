@@ -26,8 +26,8 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/group_checkbox"
             app:boxBackgroundColor="@color/white"
-            app:hintTextColor="@color/teal_700"
-            app:boxStrokeColor="@color/teal_700">
+            app:hintTextColor="@color/primaryDarkColor"
+            app:boxStrokeColor="@color/primaryDarkColor">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/activity_maxparticipants"
@@ -35,7 +35,7 @@
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
                 android:layout_marginBottom="20dp"
-                android:textCursorDrawable="@color/teal_200"
+                android:textCursorDrawable="@color/primaryDarkColor"
                 android:hint="Numero di partecipanti"
                 android:inputType="number"
                 android:textSize="20sp"
@@ -60,7 +60,8 @@
             android:layout_below="@id/periodic_checkbox"
             android:layout_centerHorizontal="true"
             android:visibility="gone"
-            android:choiceMode="singleChoice">
+            android:choiceMode="singleChoice"
+            android:listSelector="@color/primaryDarkColor">
         </ListView>
 
         <LinearLayout
@@ -96,58 +97,5 @@
 
     </RelativeLayout>
 
-    <!--
-    <CheckBox
-        android:id="@+id/group_checkbox"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:text="E' un'attività di gruppo?"
-        android:textSize="18sp"
-        android:layoutDirection="rtl">
-    </CheckBox>
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/maxparticipants_container"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/group_checkbox"
-        app:boxBackgroundColor="@color/white"
-        app:hintTextColor="@color/teal_700"
-        app:boxStrokeColor="@color/teal_700">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/activity_maxparticipants"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_marginBottom="20dp"
-            android:textCursorDrawable="@color/teal_200"
-            android:hint="Numero di partecipanti"
-            android:inputType="number"
-            android:textSize="20sp"
-            android:visibility="gone"/>
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <CheckBox
-        android:id="@+id/periodic_checkbox"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:text="E' un'attività periodica?"
-        android:textSize="18sp"
-        android:layoutDirection="rtl"
-        android:layout_below="@id/maxparticipants_container">
-    </CheckBox>
-
-    <ListView
-        android:id="@+id/periodic_choices"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/periodic_checkbox"
-        android:layout_centerHorizontal="true"
-        android:visibility="gone"
-        android:choiceMode="singleChoice">
-    </ListView> -->
 
 </RelativeLayout>

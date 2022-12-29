@@ -28,53 +28,79 @@
             android:textSize="20sp"
             android:layout_marginBottom="20dp"/>
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/city_container"
+        <!-- <com.google.android.material.textfield.TextInputLayout
+             android:id="@+id/city_container"
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content"
+             app:boxBackgroundColor="@color/white"
+             app:hintTextColor="@color/teal_700"
+             app:boxStrokeColor="@color/teal_700"
+             android:layout_below="@id/neighbourhood_text">
+
+             <com.google.android.material.textfield.TextInputEditText
+                 android:id="@+id/user_city"
+                 android:layout_width="match_parent"
+                 android:layout_height="wrap_content"
+                 android:textCursorDrawable="@color/teal_200"
+                 android:hint="@string/city_hint"
+                 android:inputType="textNoSuggestions"
+                 android:layout_marginBottom="20dp"/>
+
+         </com.google.android.material.textfield.TextInputLayout>
+
+         <com.google.android.material.textfield.TextInputLayout
+             android:id="@+id/neigh_container"
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content"
+             app:boxBackgroundColor="@color/white"
+             app:hintTextColor="@color/teal_700"
+             app:boxStrokeColor="@color/teal_700"
+             android:layout_below="@id/city_container">
+
+             <com.google.android.material.textfield.TextInputEditText
+                 android:id="@+id/user_neigh"
+                 android:layout_width="match_parent"
+                 android:layout_height="wrap_content"
+                 android:textCursorDrawable="@color/teal_200"
+                 android:hint="@string/neighbourhod_hint"
+                 android:inputType="textNoSuggestions"
+                 android:layout_marginBottom="20dp"/>
+         </com.google.android.material.textfield.TextInputLayout>-->
+
+        <AutoCompleteTextView
+            android:id="@+id/user_city"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:boxBackgroundColor="@color/white"
-            app:hintTextColor="@color/teal_700"
-            app:boxStrokeColor="@color/teal_700"
-            android:layout_below="@id/neighbourhood_text">
+            android:layout_below="@id/neighbourhood_text"
+            android:hint="@string/city_hint"
+            android:inputType="text"
+            android:layout_marginBottom="20dp"
+            app:hintTextColor="@color/primaryDarkColor"
+            app:boxStrokeColor="@color/primaryDarkColor"
+            android:textCursorDrawable="@color/primaryDarkColor">
+        </AutoCompleteTextView>
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/user_city"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textCursorDrawable="@color/teal_200"
-                android:hint="@string/city_hint"
-                android:inputType="textNoSuggestions"
-                android:layout_marginBottom="20dp"/>
-
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/neigh_container"
+        <AutoCompleteTextView
+            android:id="@+id/user_neigh"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:boxBackgroundColor="@color/white"
-            app:hintTextColor="@color/teal_700"
-            app:boxStrokeColor="@color/teal_700"
-            android:layout_below="@id/city_container">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/user_neigh"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textCursorDrawable="@color/teal_200"
-                android:hint="@string/neighbourhod_hint"
-                android:inputType="textNoSuggestions"
-                android:layout_marginBottom="20dp"/>
-        </com.google.android.material.textfield.TextInputLayout>
+            android:layout_below="@id/user_city"
+            android:hint="@string/neighbourhod_hint"
+            android:inputType="text"
+            android:layout_marginBottom="20dp"
+            app:hintTextColor="@color/primaryDarkColor"
+            app:boxStrokeColor="@color/primaryDarkColor"
+            android:textCursorDrawable="@color/primaryDarkColor">
+        </AutoCompleteTextView>
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/street_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:boxBackgroundColor="@color/white"
-            app:hintTextColor="@color/teal_700"
-            app:boxStrokeColor="@color/teal_700"
-            android:layout_below="@id/neigh_container"
+            app:hintTextColor="@color/primaryDarkColor"
+            app:boxStrokeColor="@color/primaryDarkColor"
+            android:layout_below="@id/user_neigh"
             android:layout_marginBottom="20dp">
 
             <LinearLayout
@@ -88,7 +114,7 @@
                     android:id="@+id/user_street"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:textCursorDrawable="@color/teal_200"
+                    android:textCursorDrawable="@color/primaryDarkColor"
                     android:layout_weight="1.5"
                     android:hint="@string/street_hint"
                     android:inputType="textNoSuggestions"/>
@@ -99,7 +125,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="0.7"
-                    android:textCursorDrawable="@color/teal_200"
+                    android:textCursorDrawable="@color/primaryDarkColor"
                     android:hint="@string/street_number_hint"
                     android:inputType="textNoSuggestions"/>
 

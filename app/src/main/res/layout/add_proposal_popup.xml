@@ -25,15 +25,15 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/new_activity_header"
             app:boxBackgroundColor="@color/white"
-            app:hintTextColor="@color/teal_700"
-            app:boxStrokeColor="@color/teal_700">
+            app:hintTextColor="@color/primaryDarkColor"
+            app:boxStrokeColor="@color/primaryDarkColor">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/activity_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="20dp"
-                android:textCursorDrawable="@color/teal_200"
+                android:textCursorDrawable="@color/primaryDarkColor"
                 android:hint="Titolo"
                 android:inputType="textNoSuggestions"
                 android:textSize="20sp" />
@@ -45,8 +45,8 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/title_container"
             app:boxBackgroundColor="@color/white"
-            app:hintTextColor="@color/teal_700"
-            app:boxStrokeColor="@color/teal_700">
+            app:hintTextColor="@color/primaryDarkColor"
+            app:boxStrokeColor="@color/primaryDarkColor">
 
             <!-- https://stackoverflow.com/questions/4233626/allow-multi-line-in-edittext-view-in-android -->
             <com.google.android.material.textfield.TextInputEditText
@@ -55,7 +55,7 @@
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
                 android:layout_marginBottom="20dp"
-                android:textCursorDrawable="@color/teal_200"
+                android:textCursorDrawable="@color/primaryDarkColor"
                 android:hint="Descrizione"
                 android:inputType="textMultiLine|textNoSuggestions"
                 android:maxLines="5"

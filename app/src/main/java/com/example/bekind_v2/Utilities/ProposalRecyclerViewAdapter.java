@@ -100,7 +100,7 @@ public class ProposalRecyclerViewAdapter extends RecyclerView.Adapter<ProposalRe
                     delete.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            if(proposal.getRepublishTypes() == RepublishTypes.MAI) {
+                            if(proposal.getRepublishTypes() == RepublishTypes.NEVER) {
                                 ProposalRepository.deleteProposal(documentId, new MyCallback<Boolean>() {
                                     @Override
                                     public void onCallback(Boolean result) {
@@ -257,7 +257,7 @@ public class ProposalRecyclerViewAdapter extends RecyclerView.Adapter<ProposalRe
                     confirm.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            if(proposal.getRepublishTypes() == RepublishTypes.MAI) {
+                            if(proposal.getRepublishTypes() == RepublishTypes.NEVER) {
                                 ProposalRepository.deleteProposal(documentId, new MyCallback<Boolean>() {
                                     @Override
                                     public void onCallback(Boolean result) {

@@ -27,6 +27,7 @@ import com.google.android.material.chip.Chip;
 import com.google.android.material.textfield.TextInputEditText;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.ArrayList;
@@ -46,6 +47,7 @@ public class BottomBarViewModel extends ViewModel {
         filtersPost = new ArrayList<>();
         proposalTitle = "";
         proposalBody = "";
+        proposalExpd = null;
     }
 
     public void createProposal(String title, String body, int max, Date expiringDate, RepublishTypes choice){
@@ -77,13 +79,24 @@ public class BottomBarViewModel extends ViewModel {
     public void setExpiringHour(TimePicker expiringHour){
         //by default, we set time in timepicker to the hour and minute when the add button is clicked (+1 because of LocalDateTime implementation)
         expiringHour.setIs24HourView(true);  //time picker use 24h format
-        expiringHour.setHour(LocalDateTime.now().getHour() + 1);
-        expiringHour.setMinute(LocalDateTime.now().getMinute());
+        if(this.proposalExpd==null){
+            expiringHour.setHour(LocalDateTime.now().getHour() + 1);
+            expiringHour.setMinute(LocalDateTime.now().getMinute());
+        }else{
+            expiringHour.setHour(LocalDateTime.ofInstant(this.proposalExpd.toInstant(), ZoneId.systemDefault()).getHour());
+            expiringHour.setMinute(LocalDateTime.ofInstant(this.proposalExpd.toInstant(), ZoneId.systemDefault()).getMinute());
+        }
     }
 
     public void setExpiringDate(DatePicker expiringDate){
         //by default, we set date in datepicker to today when the add button is clicked (+1/-1 because of LocalDateTime implementation)
-        expiringDate.updateDate(LocalDateTime.now().getYear() - 1, LocalDateTime.now().getMonthValue() + 1, LocalDateTime.now().getDayOfMonth());
+        if(this.proposalExpd == null){
+            expiringDate.updateDate(LocalDateTime.now().getYear() - 1, LocalDateTime.now().getMonthValue() + 1, LocalDateTime.now().getDayOfMonth());
+        }else{
+            //for some reason, if we are using the previously saved date when getting back from second page, there is no need for -1 in year, and month must be -1 and not +1
+            LocalDateTime toSet = LocalDateTime.ofInstant(this.proposalExpd.toInstant(), ZoneId.systemDefault());
+            expiringDate.updateDate(toSet.getYear(), toSet.getMonthValue() - 1, toSet.getDayOfMonth());
+        }
         //we cannot create an activity with an expiringDate that comes before the moment we clicked the add activity button (-1000 (one second) cause we cannot use the EXACT moment)
         expiringDate.setMinDate(System.currentTimeMillis() - 1000);
     }
@@ -116,6 +129,11 @@ public class BottomBarViewModel extends ViewModel {
         }
         if(Integer.valueOf(proposalPartcipants) <=1){
             maxparticipants.setError("Un'attività di gruppo prevede un minimo di 2 partecipanti");
+            maxparticipants.requestFocus();
+            return false;
+        }
+        if(Integer.valueOf(proposalPartcipants) >20){
+            maxparticipants.setError("Un'attività di gruppo prevede un massimo di 20 partecipanti");
             maxparticipants.requestFocus();
             return false;
         }
@@ -269,16 +287,16 @@ public class BottomBarViewModel extends ViewModel {
         periodicProposal = dialog.findViewById(R.id.periodic_checkbox);
         listView = dialog.findViewById(R.id.periodic_choices);
 
-        RepublishTypes[] types = {RepublishTypes.GIORNALIERA, RepublishTypes.SETTIMANALE, RepublishTypes.MENSILE, RepublishTypes.ANNUALE};
-        ArrayAdapter<RepublishTypes> adapter = new ArrayAdapter<>(applicationContext, android.R.layout.simple_list_item_single_choice, types);
+        String[] types = {RepublishTypes.DAILY.getNameToDisplay(), RepublishTypes.WEEKLY.getNameToDisplay(), RepublishTypes.MONTHLY.getNameToDisplay(), RepublishTypes.ANNUALLY.getNameToDisplay()};
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(applicationContext, android.R.layout.simple_list_item_single_choice, types);
         listView.setAdapter(adapter);
         RepublishTypes[] choice = new RepublishTypes[1];
-        choice[0] = RepublishTypes.MAI;
+        choice[0] = RepublishTypes.NEVER;
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                choice[0] = (RepublishTypes) listView.getItemAtPosition(i);
+                choice[0] = RepublishTypes.getValue((String) listView.getItemAtPosition(i));
             }
         });
 
@@ -319,7 +337,7 @@ public class BottomBarViewModel extends ViewModel {
                 }
 
                 if(periodicProposal.isChecked()){
-                    if(choice[0] == RepublishTypes.MAI){
+                    if(choice[0] == RepublishTypes.NEVER){
                         Toast.makeText(applicationContext, "Errore: i campi non sono stati riempiti correttamente", Toast.LENGTH_SHORT).show();
                         publish = false;
                     }
@@ -330,6 +348,7 @@ public class BottomBarViewModel extends ViewModel {
                     Utilities.getProposals(Utilities.day, UserManager.getUserId(), HomeViewModel.filters, Types.PROPOSED);
                     setProposalBody("");
                     setProposalTitle("");
+                    setProposalExpd(null);
                     dialog.dismiss();
                     choose_dialog.dismiss();
                 }
@@ -365,4 +384,7 @@ public class BottomBarViewModel extends ViewModel {
         this.proposalBody = proposalBody;
     }
 
+    public void setProposalExpd(Date proposalExpd) {
+        this.proposalExpd = proposalExpd;
+    }
 }

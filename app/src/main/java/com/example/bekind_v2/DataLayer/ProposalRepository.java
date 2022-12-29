@@ -236,7 +236,7 @@ public class ProposalRepository {
                     Proposal prop = snap.toObject(Proposal.class); //cast the result to a real proposal
                     LocalDateTime expD = prop.getExpiringDate().toInstant().atZone(ZoneId.of("ECT")).toLocalDateTime();
                     if (!expD.isAfter(LocalDateTime.now())) {
-                        if (prop.getRepublishTypes() == RepublishTypes.MAI)
+                        if (prop.getRepublishTypes() == RepublishTypes.NEVER)
                             deleteProposal(prop.getId());
                         else {
                             updatePeriodicProposal(prop, new MyCallback<Boolean>() {
@@ -255,25 +255,25 @@ public class ProposalRepository {
         Date newPublishing = null, newExpiring = null;
         LocalDateTime ldtPublish, ldtExpiring;
         switch (prop.getRepublishTypes()) {
-            case GIORNALIERA:
+            case DAILY:
                 ldtPublish = LocalDateTime.ofInstant(prop.getPublishingDate().toInstant(), ZoneId.systemDefault()).plusDays(1).toLocalDate().atTime(0, 0, 0);
                 ldtExpiring = LocalDateTime.ofInstant(prop.getExpiringDate().toInstant(), ZoneId.systemDefault()).plusDays(1);
                 newExpiring = Date.from(ldtExpiring.atZone(ZoneId.systemDefault()).toInstant());
                 newPublishing = Date.from(ldtPublish.atZone(ZoneId.systemDefault()).toInstant());
                 break;
-            case SETTIMANALE:
+            case WEEKLY:
                 ldtPublish = LocalDateTime.ofInstant(prop.getPublishingDate().toInstant(), ZoneId.systemDefault()).plusDays(7).toLocalDate().atTime(0, 0, 0);
                 ldtExpiring = LocalDateTime.ofInstant(prop.getExpiringDate().toInstant(), ZoneId.systemDefault()).plusDays(7);
                 newExpiring = Date.from(ldtExpiring.atZone(ZoneId.systemDefault()).toInstant());
                 newPublishing = Date.from(ldtPublish.atZone(ZoneId.systemDefault()).toInstant());
                 break;
-            case MENSILE:
+            case MONTHLY:
                 ldtPublish = LocalDateTime.ofInstant(prop.getPublishingDate().toInstant(), ZoneId.systemDefault()).plusMonths(1).toLocalDate().atTime(0, 0, 0);
                 ldtExpiring = LocalDateTime.ofInstant(prop.getExpiringDate().toInstant(), ZoneId.systemDefault()).plusMonths(1);
                 newExpiring = Date.from(ldtExpiring.atZone(ZoneId.systemDefault()).toInstant());
                 newPublishing = Date.from(ldtPublish.atZone(ZoneId.systemDefault()).toInstant());
                 break;
-            case ANNUALE:
+            case ANNUALLY:
                 ldtPublish = LocalDateTime.ofInstant(prop.getPublishingDate().toInstant(), ZoneId.systemDefault()).plusYears(1).toLocalDate().atTime(0, 0, 0);
                 ldtExpiring = LocalDateTime.ofInstant(prop.getExpiringDate().toInstant(), ZoneId.systemDefault()).plusYears(1);
                 newExpiring = Date.from(ldtExpiring.atZone(ZoneId.systemDefault()).toInstant());

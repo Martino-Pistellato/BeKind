@@ -31,6 +31,8 @@ public class PostRepository {
         @ServerTimestamp
         private Date publishingDate;
         private ArrayList<String> filters;
+        private ArrayList<String> usersFlag;
+        private ArrayList<String> usersLike;
 
         public Post() {}
 
@@ -42,32 +44,56 @@ public class PostRepository {
             this.publishingDate = publishingDate;
             this.filters = filters;
             this.neighbourhoodID = neighbourhoodID;
+            this.usersFlag = new ArrayList<>();
+            this.usersLike = new ArrayList<>();
         }
 
-        public String getTitle() {
-            return this.title;
-        }
-        public String getBody() {
-            return this.body;
-        }
-        public String getId() {
-            return this.id;
-        }
-        public String getPublisherID() {
-            return this.publisherID;
-        }
-        public Date getPublishingDate() {
-            return this.publishingDate;
-        }
+        public String getTitle() { return this.title;}
+        public String getBody() { return this.body;}
+        public String getId() { return this.id;}
+        public String getPublisherID() { return this.publisherID;}
+        public Date getPublishingDate() { return this.publishingDate;}
         public ArrayList<String> getFilters() { return filters; }
         public String getNeighbourhoodID() {return neighbourhoodID;}
+        public ArrayList<String> getUsersFlag() { return usersFlag;}
+        public ArrayList<String> getUsersLike() { return usersLike;}
 
-        public void setTitle(String title) {
-            this.title = title;
-        }
+        public void setTitle(String title) { this.title = title;}
         public void setBody(String body) {this.body = body;}
         public void setFilters(ArrayList<String> filters) {this.filters = filters;}
         public void setNeighbourhoodID(String neighbourhoodID) {this.neighbourhoodID = neighbourhoodID;}
+
+        public void addUserFlag(String userId) {
+            if(!usersFlag.contains(userId)) {
+                usersFlag.add(userId);
+            }
+        }
+
+        public void deleteUserFlag(String userId) {
+            if(usersFlag.contains(userId)) {
+                usersFlag.remove(userId);
+            }
+        }
+
+        public boolean hasUserFlagged(String userId){
+            return usersFlag.contains(userId);
+        }
+
+        public void addUserLike(String userId) {
+            if(!usersLike.contains(userId)) {
+                usersLike.add(userId);
+            }
+        }
+
+        public void deleteUserLike(String userId) {
+            if(usersLike.contains(userId)) {
+                usersLike.remove(userId);
+            }
+        }
+
+        public boolean hasUserLiked(String userId){
+            return usersLike.contains(userId);
+        }
     }
 
     public static void createPost(String title, String body, ArrayList<String> filters){
@@ -159,6 +185,94 @@ public class PostRepository {
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 if(task.getResult().exists())
                     myCallback.onCallback(task.getResult().toObject(Post.class));
+            }
+        });
+    }
+
+    public static void updatePostFlag(String documentId, ArrayList<String> usersFlag, MyCallback<Boolean> myCallback) {
+        FirebaseFirestore.getInstance().collection("Posts").document(documentId).update("usersFlag", usersFlag).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                myCallback.onCallback(task.isSuccessful());
+            }
+        });
+    }
+
+    public static void updatePostLike(String documentId, ArrayList<String> usersLike, MyCallback<Boolean> myCallback) {
+        FirebaseFirestore.getInstance().collection("Posts").document(documentId).update("usersLike", usersLike).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                myCallback.onCallback(task.isSuccessful());
+            }
+        });
+    }
+
+    public static void addUserFlag(String documentId, String userId, MyCallback<Boolean> myCallback) {
+        getPost(documentId, new MyCallback<Post>() {
+            @Override
+            public void onCallback(Post result) {
+                if(result != null) {
+                    result.addUserFlag(userId);
+                    updatePostFlag(documentId, result.getUsersFlag(), myCallback);
+                }
+            }
+        });
+    }
+
+    public static void deleteUserFlag(String documentId, String userId, MyCallback<Boolean> myCallback) {
+        getPost(documentId, new MyCallback<Post>() {
+            @Override
+            public void onCallback(Post result) {
+                if(result != null) {
+                    result.deleteUserFlag(userId);
+                    updatePostFlag(documentId, result.getUsersFlag(), myCallback);
+                }
+            }
+        });
+    }
+
+    public static void hasUserFlagged(String documentId, String userId, MyCallback<Boolean> myCallback){
+        getPost(documentId, new MyCallback<Post>() {
+            @Override
+            public void onCallback(Post result) {
+                if(result != null){
+                    myCallback.onCallback(result.hasUserFlagged(userId));
+                }
+            }
+        });
+    }
+
+    public static void addUserLike(String documentId, String userId, MyCallback<Boolean> myCallback) {
+        getPost(documentId, new MyCallback<Post>() {
+            @Override
+            public void onCallback(Post result) {
+                if(result != null) {
+                    result.addUserLike(userId);
+                    updatePostLike(documentId, result.getUsersLike(), myCallback);
+                }
+            }
+        });
+    }
+
+    public static void deleteUserLike(String documentId, String userId, MyCallback<Boolean> myCallback) {
+        getPost(documentId, new MyCallback<Post>() {
+            @Override
+            public void onCallback(Post result) {
+                if(result != null) {
+                    result.deleteUserLike(userId);
+                    updatePostLike(documentId, result.getUsersLike(), myCallback);
+                }
+            }
+        });
+    }
+
+    public static void hasUserLiked(String documentId, String userId, MyCallback<Boolean> myCallback){
+        getPost(documentId, new MyCallback<Post>() {
+            @Override
+            public void onCallback(Post result) {
+                if(result != null){
+                    myCallback.onCallback(result.hasUserLiked(userId));
+                }
             }
         });
     }

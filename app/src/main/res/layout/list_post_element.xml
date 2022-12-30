@@ -110,17 +110,36 @@
         android:orientation="horizontal"
         android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/cardView">
+
+        <android.widget.Space
+            android:layout_width="130dp"
+            android:layout_height="wrap_content"/>
 
         <ImageButton
             android:id="@+id/flag_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="12dp"
+            android:layout_marginStart="10dp"
             android:src="@drawable/ic_flag"
             android:background="@drawable/button_roundcorner"
             android:backgroundTint="@color/primaryColor"
-            android:contentDescription="@string/flag_button" />
+            android:contentDescription="@string/flag_button"
+            android:tag="to_flag"/>
+
+        <android.widget.Space
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"/>
+
+        <ImageButton
+            android:id="@+id/like_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_thumbsup"
+            android:background="@drawable/button_roundcorner"
+            android:backgroundTint="@color/primaryColor"
+            android:tag="thumbsup"/>
 
     </LinearLayout>
 

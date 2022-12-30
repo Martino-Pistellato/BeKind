@@ -2,6 +2,7 @@ package com.example.bekind_v2.Utilities;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -172,18 +173,95 @@ public class PostRecyclerViewAdapter extends RecyclerView.Adapter<PostRecyclerVi
             case OTHERSPOSTS: constraintLayout.setOnClickListener(new View.OnClickListener() {
                   @Override
                   public void onClick(View v) {
-                      ImageButton flag = holder.itemView.findViewById(R.id.flag_button);
+                      ImageButton flag = holder.itemView.findViewById(R.id.flag_button), like = holder.itemView.findViewById(R.id.like_button);
                       LinearLayout linearLayout = holder.itemView.findViewById(R.id.buttons_container_recycler_otherpost);
 
-                      if(linearLayout.getVisibility() == View.GONE)
+                      if(linearLayout.getVisibility() == View.GONE) {
                           linearLayout.setVisibility(View.VISIBLE);
-                      else
+                          PostRepository.hasUserFlagged(postId, pubId, new MyCallback<Boolean>() {
+                              @Override
+                              public void onCallback(Boolean result) {
+                                  if (result) {
+                                      flag.setImageResource(R.drawable.ic_flag_filled);
+                                      flag.setTag("flagged");
+                                  }
+                              }
+                          });
+                          PostRepository.hasUserLiked(postId, pubId, new MyCallback<Boolean>() {
+                              @Override
+                              public void onCallback(Boolean result) {
+                                  if(result) {
+                                      like.setImageResource(R.drawable.ic_thumbsup_filled);
+                                      like.setTag("thumbsup_filled");
+                                  }
+                              }
+                          });
+                      }else
                           linearLayout.setVisibility(View.GONE);
 
                       flag.setOnClickListener(new View.OnClickListener() {
                           @Override
-                          public void onClick(View v) {
-                              Toast.makeText(context, "FLAG POST", Toast.LENGTH_SHORT).show();
+                          public void onClick(View view) {
+                              if(flag.getTag().equals("to_flag"))
+                                  PostRepository.addUserFlag(postId, pubId, new MyCallback<Boolean>() {
+                                      @Override
+                                      public void onCallback(Boolean result) {
+                                          if (result) {
+                                              Toast.makeText(context, "Post segnalato con successo.", Toast.LENGTH_SHORT).show();
+                                              flag.setImageResource(R.drawable.ic_flag_filled);
+                                              flag.setTag("flagged");
+                                          } else {
+                                              Toast.makeText(context, "Impossibile segnalare il post.", Toast.LENGTH_SHORT).show();
+                                          }
+                                      }
+                                  });
+                              else
+                                  PostRepository.deleteUserFlag(postId, pubId, new MyCallback<Boolean>() {
+                                      @Override
+                                      public void onCallback(Boolean result) {
+                                          if (result) {
+                                              Toast.makeText(context, "Post non segnalato con successo.", Toast.LENGTH_SHORT).show();
+                                              flag.setImageResource(R.drawable.ic_flag);
+                                              flag.setTag("to_flag");
+                                          } else {
+                                              Toast.makeText(context, "Impossibile non segnalare il post.", Toast.LENGTH_SHORT).show();
+                                          }
+                                      }
+                                  });
+                          }
+                      });
+
+                      like.setOnClickListener(new View.OnClickListener() {
+                          @Override
+                          public void onClick(View view) {
+                              if(like.getTag().equals("thumbsup")){
+                                  PostRepository.addUserLike(postId, pubId, new MyCallback<Boolean>() {
+                                      @Override
+                                      public void onCallback(Boolean result) {
+                                          if (result) {
+                                              Toast.makeText(context, "Post likkato con successo.", Toast.LENGTH_SHORT).show();
+                                              like.setImageResource(R.drawable.ic_thumbsup_filled);
+                                              like.setTag("thumbsup_filled");
+                                          } else {
+                                              Toast.makeText(context, "Impossibile likkare il post.", Toast.LENGTH_SHORT).show();
+                                          }
+                                      }
+                                  });
+                              }
+                              else{
+                                  PostRepository.deleteUserLike(postId, pubId, new MyCallback<Boolean>() {
+                                      @Override
+                                      public void onCallback(Boolean result) {
+                                          if (result) {
+                                              Toast.makeText(context, "Post unlikkato con successo.", Toast.LENGTH_SHORT).show();
+                                              like.setImageResource(R.drawable.ic_thumbsup);
+                                              like.setTag("thumbsup");
+                                          } else {
+                                              Toast.makeText(context, "Impossibile unlikkare il post.", Toast.LENGTH_SHORT).show();
+                                          }
+                                      }
+                                  });
+                              }
                           }
                       });
                   }

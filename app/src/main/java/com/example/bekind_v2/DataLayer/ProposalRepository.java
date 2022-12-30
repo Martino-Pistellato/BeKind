@@ -116,6 +116,15 @@ public class ProposalRepository {
                 flagsUsers.add(userId);
             }
         }
+
+        public void deleteFlagUser(String userId){
+            if(flagsUsers.contains(userId))
+                flagsUsers.remove(userId);
+        }
+
+        public boolean hasUserFlagged(String userId){
+            return flagsUsers.contains(userId);
+        }
     }
 
     public static void createProposal(String title, String body, Date expiringDate, String publisherID, String neighbourhoodId, int max, RepublishTypes choice, ArrayList<String> filters){
@@ -206,8 +215,8 @@ public class ProposalRepository {
         });
     }
 
-    public static void editProposal(String documentId, String title, String body, Date expiringDate,Date publishingDate, ArrayList<String> filters, MyCallback<Boolean> myCallback){
-        FirebaseFirestore.getInstance().collection("Proposals").document(documentId).update("title", title, "body", body, "expiringDate", expiringDate, "publishingDate", publishingDate, "filters", filters).addOnCompleteListener(new OnCompleteListener<Void>() {
+    public static void editProposal(String documentId, String title, String body, Date expiringDate,Date publishingDate, ArrayList<String> filters, int maxPartecipants, RepublishTypes type, MyCallback<Boolean> myCallback){
+        FirebaseFirestore.getInstance().collection("Proposals").document(documentId).update("title", title, "body", body, "expiringDate", expiringDate, "publishingDate", publishingDate, "filters", filters, "maxParticipants", maxPartecipants, "republishTypes", type).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 myCallback.onCallback(task.isSuccessful());
@@ -280,24 +289,49 @@ public class ProposalRepository {
                 newPublishing = Date.from(ldtPublish.atZone(ZoneId.systemDefault()).toInstant());
                 break;
         }
-        editProposal(prop.getId(), prop.getTitle(), prop.getBody(), newExpiring, newPublishing, prop.getFilters(), myCallback);
+        editProposal(prop.getId(), prop.getTitle(), prop.getBody(), newExpiring, newPublishing, prop.getFilters(), prop.getMaxParticipants(), prop.getRepublishTypes(), myCallback);
     }
 
-    public static void updateFlagProposal(String documentId, ArrayList<String> flagUsers, MyCallback<Boolean> myCallback) {
-        FirebaseFirestore.getInstance().collection("Proposals").document(documentId).update("flagsUsers", flagUsers).addOnCompleteListener(new OnCompleteListener<Void>() {
+    public static void updateProposalFlag(String documentId, ArrayList<String> flagsUsers, MyCallback<Boolean> myCallback) {
+        FirebaseFirestore.getInstance().collection("Proposals").document(documentId).update("flagsUsers", flagsUsers).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 myCallback.onCallback(task.isSuccessful());
             }
         });
     }
+
     public static void addFlagUser(String documentId, String userId, MyCallback<Boolean> myCallback) {
         getProposal(documentId, new MyCallback<Proposal>() {
             @Override
             public void onCallback(Proposal result) {
                 if(result != null) {
                     result.addFlagUser(userId);
-                    updateFlagProposal(documentId, result.getFlagsUsers(), myCallback);
+                    updateProposalFlag(documentId, result.getFlagsUsers(), myCallback);
+                }
+            }
+        });
+    }
+
+    public static void deleteFlagUser(String documentId, String userId, MyCallback<Boolean> myCallback) {
+        getProposal(documentId, new MyCallback<Proposal>() {
+            @Override
+            public void onCallback(Proposal result) {
+                if(result != null) {
+                    result.deleteFlagUser(userId);
+                    updateProposalFlag(documentId, result.getFlagsUsers(), myCallback);
+                }
+            }
+        });
+    }
+
+
+    public static void hasUserFlagged(String documentId, String userId, MyCallback<Boolean> myCallback){
+        getProposal(documentId, new MyCallback<Proposal>() {
+            @Override
+            public void onCallback(Proposal result) {
+                if(result != null){
+                    myCallback.onCallback(result.hasUserFlagged(userId));
                 }
             }
         });

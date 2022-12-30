@@ -107,8 +107,7 @@
                 app:layout_constraintLeft_toRightOf="@id/thumb"
                 app:layout_constraintStart_toEndOf="@id/thumb"
                 android:layout_marginEnd="10dp"
-                android:layout_marginTop="3dp"
-                />
+                android:layout_marginTop="3dp"/>
 
             <TextView
                 android:id="@+id/expiring_hour"
@@ -159,13 +158,13 @@
         android:layout_marginTop="5dp">
 
         <ImageButton
-            android:id="@+id/accept_button"
+            android:id="@+id/map_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_accept"
+            android:src="@drawable/ic_map"
             android:background="@drawable/button_roundcorner"
-            android:contentDescription="@string/accept_prop_btn"
-            android:backgroundTint="@color/primaryColor"/>
+            android:backgroundTint="@color/primaryColor"
+            android:contentDescription="@string/map_button"/>
 
         <android.widget.Space
             android:layout_width="100dp"
@@ -178,20 +177,21 @@
             android:src="@drawable/ic_flag"
             android:background="@drawable/button_roundcorner"
             android:backgroundTint="@color/primaryColor"
-            android:contentDescription="@string/flag_button" />
+            android:contentDescription="@string/flag_button"
+            android:tag="to_flag"/>
 
         <android.widget.Space
             android:layout_width="100dp"
             android:layout_height="wrap_content"/>
 
         <ImageButton
-            android:id="@+id/map_button"
+            android:id="@+id/accept_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_map"
+            android:src="@drawable/ic_accept"
             android:background="@drawable/button_roundcorner"
-            android:backgroundTint="@color/primaryColor"
-            android:contentDescription="@string/map_button" />
+            android:contentDescription="@string/accept_prop_btn"
+            android:backgroundTint="@color/primaryColor"/>
 
     </LinearLayout>
 

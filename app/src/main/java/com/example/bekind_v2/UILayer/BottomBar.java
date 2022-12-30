@@ -97,7 +97,6 @@ public class BottomBar extends AppCompatActivity {
                 Button activityBtn, postBtn;
 
                 choose_dialog.setContentView(R.layout.choose_popup);
-               //choose_dialog.setCanceledOnTouchOutside(false);
 
                 activityBtn = choose_dialog.findViewById(R.id.activity_btn);
                 postBtn = choose_dialog.findViewById(R.id.post_btn);

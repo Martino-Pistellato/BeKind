@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.TextView;
 
@@ -132,6 +133,24 @@ public class DashboardFragment extends Fragment {
                         Utilities.getPosts(Utilities.day, UserManager.getUserId(), DashboardViewModel.filters, PostTypes.OTHERSPOSTS);
                     }
                 });
+            }
+        });
+
+        simpleSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(buttonView.isPressed() && !isChecked){
+                    scheduledateText.setVisibility(View.VISIBLE);
+                    totalActivities.setVisibility(View.INVISIBLE);
+                    Utilities.day = ScheduleBar.ScheduleDate.getScheduleLocalDate();
+
+                }
+                else if (buttonView.isPressed() && isChecked){
+                    scheduledateText.setVisibility(View.INVISIBLE);
+                    totalActivities.setVisibility(View.VISIBLE);
+                    Utilities.day = null;
+                }
+                Utilities.getPosts(Utilities.day, UserManager.getUserId(), DashboardViewModel.filters, PostTypes.OTHERSPOSTS);
             }
         });
 

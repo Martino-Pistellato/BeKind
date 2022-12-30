@@ -6,12 +6,16 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
@@ -20,6 +24,7 @@ import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.bekind_v2.DataLayer.PostRepository;
 import com.example.bekind_v2.DataLayer.UserDatabaseRepository;
 import com.example.bekind_v2.DataLayer.UserManager;
 import com.example.bekind_v2.R;
@@ -175,21 +180,29 @@ public class ProposalRecyclerViewAdapter extends RecyclerView.Adapter<ProposalRe
                     edit.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            Dialog dialog = new Dialog(context);
-                            dialog.setContentView(R.layout.add_proposal_popup);
-                            dialog.setCanceledOnTouchOutside(false);
+                            Log.e("CLICK", "I clicked the dit button");
+                            Dialog firstDialog = new Dialog(context);
+                            firstDialog.setContentView(R.layout.add_proposal_popup);
+                            firstDialog.setCanceledOnTouchOutside(false);
+                            Dialog secondDialog = new Dialog(context);
+                            secondDialog.setContentView(R.layout.add_proposal_popup2);
+                            secondDialog.setCanceledOnTouchOutside(false);
                             Date date = proposal.getExpiringDate();
                             LocalDateTime expiringDateTime = LocalDateTime.ofInstant(date.toInstant(), ZoneId.systemDefault());
                             ArrayList<String> filters = proposal.getFilters(), newFilters = new ArrayList<>();
 
-                            TextView text = dialog.findViewById(R.id.new_activity_header);
-                            TextInputEditText activityTitle = dialog.findViewById(R.id.activity_title), activityBody = dialog.findViewById(R.id.activity_body);
-                            DatePicker expiringDate = dialog.findViewById(R.id.date_picker);
-                            TimePicker expiringHour = dialog.findViewById(R.id.time_picker);
-                            Chip shoppingChip = dialog.findViewById(R.id.shopping_chip_popup), houseworkChip = dialog.findViewById(R.id.houseworks_chip_popup),
-                                    cleaningChip = dialog.findViewById(R.id.cleaning_chip_popup), transportChip = dialog.findViewById(R.id.transport_chip_popup),
-                                    randomChip = dialog.findViewById(R.id.random_chip_popup);
-                            Button closeButton = dialog.findViewById(R.id.close_btn) , publishButton = dialog.findViewById(R.id.publish_btn);
+                            TextView text = firstDialog.findViewById(R.id.new_activity_header);
+                            TextInputEditText activityTitle = firstDialog.findViewById(R.id.activity_title), activityBody = firstDialog.findViewById(R.id.activity_body),
+                                              maxPartecipants = secondDialog.findViewById(R.id.activity_maxparticipants);
+                            DatePicker expiringDate = firstDialog.findViewById(R.id.date_picker);
+                            TimePicker expiringHour = firstDialog.findViewById(R.id.time_picker);
+                            Chip shoppingChip = firstDialog.findViewById(R.id.shopping_chip_popup), houseworkChip = firstDialog.findViewById(R.id.houseworks_chip_popup),
+                                    cleaningChip = firstDialog.findViewById(R.id.cleaning_chip_popup), transportChip = firstDialog.findViewById(R.id.transport_chip_popup),
+                                    randomChip = firstDialog.findViewById(R.id.random_chip_popup);
+                            Button closeButton = firstDialog.findViewById(R.id.close_btn) , continueButton = firstDialog.findViewById(R.id.continue_btn),
+                                    publishButton = secondDialog.findViewById(R.id.publish_btn), backButton = secondDialog.findViewById(R.id.back_btn);
+                            CheckBox groupCheckbox = secondDialog.findViewById(R.id.group_checkbox), periodicCheckbox = secondDialog.findViewById(R.id.periodic_checkbox);
+                            ListView periodicChoices = secondDialog.findViewById(R.id.periodic_choices);
 
                             text.setText("Modifica attività");
                             activityTitle.setText(proposal.getTitle());
@@ -208,12 +221,79 @@ public class ProposalRecyclerViewAdapter extends RecyclerView.Adapter<ProposalRe
                             if(filters.contains(randomChip.getText().toString()))
                                 randomChip.setChecked(true);
 
-                            dialog.show();
+                            if(proposal.getMaxParticipants() != 1){
+                                groupCheckbox.setChecked(true);
+                                maxPartecipants.setVisibility(View.VISIBLE);
+                                maxPartecipants.setText(Integer.toString(proposal.getMaxParticipants()));
+                            }
+
+                            RepublishTypes[] types = {RepublishTypes.DAILY, RepublishTypes.WEEKLY, RepublishTypes.MONTHLY, RepublishTypes.ANNUALLY};
+                            ArrayAdapter<RepublishTypes> adapter = new ArrayAdapter<>(context, android.R.layout.simple_list_item_single_choice, types);
+                            periodicChoices.setAdapter(adapter);
+                            RepublishTypes[] choice = new RepublishTypes[1];
+                            choice[0] = RepublishTypes.NEVER;
+
+                            switch(proposal.getRepublishTypes()){
+                                case DAILY: ; break;
+                                case WEEKLY: break;
+                                case MONTHLY: break;
+                                case ANNUALLY: break;
+                            }
+
+                            periodicChoices.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                                @Override
+                                public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                                    choice[0] = (RepublishTypes) periodicChoices.getItemAtPosition(i);
+                                }
+                            });
+
+                            groupCheckbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                                @Override
+                                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                                    if(isChecked) {
+                                        maxPartecipants.setVisibility(View.VISIBLE);
+                                        maxPartecipants.setText(Integer.toString(proposal.getMaxParticipants()));
+                                    }else{
+                                        Log.e("Checked", "ho cliccato e NON è di gruppo");
+                                        maxPartecipants.setVisibility(View.GONE);
+                                        maxPartecipants.setText("");
+                                    }
+                                }
+                            });
+
+                            periodicCheckbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                                @Override
+                                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                                    if(isChecked)
+                                        periodicChoices.setVisibility(View.VISIBLE);
+                                    else
+                                        periodicChoices.setVisibility(View.GONE);
+                                }
+                            });
+
+                            firstDialog.show();
 
                             closeButton.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
-                                    dialog.dismiss();
+                                    firstDialog.dismiss();
+                                }
+                            });
+
+                            continueButton.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    firstDialog.dismiss();
+                                    secondDialog.show();
+                                }
+                            });
+
+                            backButton.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    secondDialog.dismiss();
+                                    firstDialog.show();
+
                                 }
                             });
 
@@ -233,8 +313,9 @@ public class ProposalRecyclerViewAdapter extends RecyclerView.Adapter<ProposalRe
 
                                     Calendar calendar = Calendar.getInstance();
                                     calendar.set(expiringDate.getYear(), expiringDate.getMonth(), expiringDate.getDayOfMonth(), expiringHour.getHour() - 1, expiringHour.getMinute());
+                                    int maxPartecipantsNumber = (maxPartecipants.getText().toString() == "") ? 1 : Integer.parseInt(maxPartecipants.getText().toString());
 
-                                    ProposalRepository.editProposal(documentId, activityTitle.getText().toString().trim(), activityBody.getText().toString().trim(), calendar.getTime(), proposal.getPublishingDate(), newFilters, new MyCallback<Boolean>() {
+                                    ProposalRepository.editProposal(documentId, activityTitle.getText().toString().trim(), activityBody.getText().toString().trim(), calendar.getTime(), proposal.getPublishingDate(), newFilters, maxPartecipantsNumber, choice[0], new MyCallback<Boolean>() {
                                         @Override
                                         public void onCallback(Boolean result) {
 
@@ -244,7 +325,7 @@ public class ProposalRecyclerViewAdapter extends RecyclerView.Adapter<ProposalRe
                                             }
                                             else
                                                 Toast.makeText(context, "Impossibile modificare attività", Toast.LENGTH_SHORT).show();
-                                            dialog.dismiss();
+                                            secondDialog.dismiss();
                                         }
                                     });
                                 }
@@ -322,9 +403,16 @@ public class ProposalRecyclerViewAdapter extends RecyclerView.Adapter<ProposalRe
                                 map = holder.itemView.findViewById(R.id.map_button);
                     LinearLayout linearLayout = holder.itemView.findViewById(R.id.buttons_container_recycler_available);
 
-                    if(linearLayout.getVisibility() == View.GONE)
+                    if(linearLayout.getVisibility() == View.GONE) {
                         linearLayout.setVisibility(View.VISIBLE);
-                    else
+                        ProposalRepository.hasUserFlagged(documentId, userId, new MyCallback<Boolean>() {
+                            @Override
+                            public void onCallback(Boolean result) {
+                                if(result)
+                                    flag.setImageResource(R.drawable.ic_flag_filled);
+                            }
+                        });
+                    }else
                         linearLayout.setVisibility(View.GONE);
 
                     accept.setOnClickListener(new View.OnClickListener() {
@@ -346,17 +434,32 @@ public class ProposalRecyclerViewAdapter extends RecyclerView.Adapter<ProposalRe
                     flag.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            //TODO: evolution flag
-                            ProposalRepository.addFlagUser(documentId, userId, new MyCallback<Boolean>() {
-                                @Override
-                                public void onCallback(Boolean result) {
-                                    if (result) {
-                                        Toast.makeText(context, "Attività segnalata con successo.", Toast.LENGTH_LONG).show();
-                                    } else {
-                                        Toast.makeText(context, "Impossibile segnalare l'attività.", Toast.LENGTH_LONG).show();
+                            if(flag.getTag().equals("to_flag"))
+                                ProposalRepository.addFlagUser(documentId, pubId, new MyCallback<Boolean>() {
+                                    @Override
+                                    public void onCallback(Boolean result) {
+                                        if (result) {
+                                            Toast.makeText(context, "Attività segnalato con successo.", Toast.LENGTH_SHORT).show();
+                                            flag.setImageResource(R.drawable.ic_flag_filled);
+                                            flag.setTag("flagged");
+                                        } else {
+                                            Toast.makeText(context, "Impossibile segnalare l'attività.", Toast.LENGTH_SHORT).show();
+                                        }
                                     }
-                                }
-                            });
+                                });
+                            else
+                                ProposalRepository.deleteFlagUser(documentId, pubId, new MyCallback<Boolean>() {
+                                    @Override
+                                    public void onCallback(Boolean result) {
+                                        if (result) {
+                                            Toast.makeText(context, "Attività non segnalata con successo.", Toast.LENGTH_SHORT).show();
+                                            flag.setImageResource(R.drawable.ic_flag);
+                                            flag.setTag("to_flag");
+                                        } else {
+                                            Toast.makeText(context, "Impossibile non segnalare l'attività.", Toast.LENGTH_SHORT).show();
+                                        }
+                                    }
+                                });
                         }
                     });
 

@@ -233,11 +233,15 @@ public class ProposalRecyclerViewAdapter extends RecyclerView.Adapter<ProposalRe
                             RepublishTypes[] choice = new RepublishTypes[1];
                             choice[0] = RepublishTypes.NEVER;
 
-                            switch(proposal.getRepublishTypes()){
-                                case DAILY: ; break;
-                                case WEEKLY: break;
-                                case MONTHLY: break;
-                                case ANNUALLY: break;
+                            if(proposal.getRepublishTypes() != RepublishTypes.NEVER){
+                                periodicCheckbox.setChecked(true);
+                                periodicChoices.setVisibility(View.VISIBLE);
+                                switch(proposal.getRepublishTypes()){
+                                    case DAILY: periodicChoices.setItemChecked(0, true); break;
+                                    case WEEKLY: periodicChoices.setItemChecked(1, true); break;
+                                    case MONTHLY: periodicChoices.setItemChecked(2, true); break;
+                                    case ANNUALLY: periodicChoices.setItemChecked(3, true); break;
+                                }
                             }
 
                             periodicChoices.setOnItemClickListener(new AdapterView.OnItemClickListener() {

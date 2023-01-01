@@ -253,10 +253,12 @@ public class ProposalRecyclerViewAdapter extends RecyclerView.Adapter<ProposalRe
                                     if(isChecked) {
                                         maxPartecipants.setVisibility(View.VISIBLE);
                                         maxPartecipants.setText(Integer.toString(proposal.getMaxParticipants()));
+                                        Log.e("MAX GROUP", maxPartecipants.getText().toString());
+
                                     }else{
-                                        Log.e("Checked", "ho cliccato e NON è di gruppo");
                                         maxPartecipants.setVisibility(View.GONE);
                                         maxPartecipants.setText("");
+                                        Log.e("MAX NO GROUP", maxPartecipants.getText().toString());
                                     }
                                 }
                             });
@@ -313,7 +315,14 @@ public class ProposalRecyclerViewAdapter extends RecyclerView.Adapter<ProposalRe
 
                                     Calendar calendar = Calendar.getInstance();
                                     calendar.set(expiringDate.getYear(), expiringDate.getMonth(), expiringDate.getDayOfMonth(), expiringHour.getHour() - 1, expiringHour.getMinute());
-                                    int maxPartecipantsNumber = (maxPartecipants.getText().toString() == "") ? 1 : Integer.parseInt(maxPartecipants.getText().toString());
+                                    int maxPartecipantsNumber;
+
+                                    if(!groupCheckbox.isChecked())
+                                        maxPartecipantsNumber = 1;
+                                    else {
+                                        Log.e("HERE", "sono qui anche se non dovrei");
+                                        maxPartecipantsNumber = Integer.parseInt(maxPartecipants.getText().toString());
+                                    }
 
                                     ProposalRepository.editProposal(documentId, activityTitle.getText().toString().trim(), activityBody.getText().toString().trim(), calendar.getTime(), proposal.getPublishingDate(), newFilters, maxPartecipantsNumber, choice[0], new MyCallback<Boolean>() {
                                         @Override

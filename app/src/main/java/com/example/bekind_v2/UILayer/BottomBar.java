@@ -4,22 +4,13 @@ import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_NO;
 import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_YES;
 
 import android.app.Dialog;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.res.Configuration;
-import android.content.res.Resources;
 import android.os.Bundle;
-import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
-import android.widget.DatePicker;
-import android.widget.TimePicker;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -34,12 +25,9 @@ import androidx.preference.PreferenceManager;
 
 import com.example.bekind_v2.DataLayer.UserManager;
 import com.example.bekind_v2.R;
-import com.example.bekind_v2.UILayer.ui.dashboard.DashboardViewModel;
-import com.example.bekind_v2.UILayer.ui.home.HomeViewModel;
 import com.example.bekind_v2.Utilities.PostTypes;
 import com.example.bekind_v2.Utilities.PostsViewModel;
 import com.example.bekind_v2.Utilities.ProposalsViewModel;
-import com.example.bekind_v2.Utilities.Types;
 import com.example.bekind_v2.Utilities.Utilities;
 import com.example.bekind_v2.databinding.ActivityBottomBarBinding;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -48,7 +36,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textfield.TextInputEditText;
 
 import java.time.LocalDate;
-import java.util.Date;
+import java.util.ArrayList;
 
 public class BottomBar extends AppCompatActivity {
 
@@ -176,10 +164,8 @@ public class BottomBar extends AppCompatActivity {
                                 if(!bottomBarViewModel.checkPostConstraints(title, postTitle, body, postBody))
                                     Toast.makeText(getApplicationContext(), "Errore: i campi non sono stati riempiti correttamente", Toast.LENGTH_SHORT).show();
                                 else{
-                                    bottomBarViewModel.createPost(postTitle, postBody);
-
+                                    bottomBarViewModel.createPost(postTitle, postBody, result -> { Utilities.getPosts(Utilities.day, UserManager.getUserId(), new ArrayList<>(), PostTypes.MYPOSTS); });
                                     //TODO i think that this getposts is no longer necessary ---> cancel this, or have two arrays in postsViewModel for my posts and other posts?
-                                    Utilities.getPosts(Utilities.day, UserManager.getUserId(), DashboardViewModel.filters, PostTypes.MYPOSTS);
                                 }
                                 dialog.dismiss();
                                 choose_dialog.dismiss();

@@ -129,7 +129,7 @@ public class ProposalRepository {
         }
     }
 
-    public static void createProposal(String title, String body, Date expiringDate, String publisherID, String neighbourhoodId, int max, RepublishTypes choice, ArrayList<String> filters){
+    public static void createProposal(String title, String body, Date expiringDate, String publisherID, String neighbourhoodId, int max, RepublishTypes choice, ArrayList<String> filters, MyCallback<Boolean> myCallback){
         String id =  UUID.randomUUID().toString();
         Date publishDate = new Date();
         LocalDateTime ldt = LocalDateTime.ofInstant(publishDate.toInstant(), ZoneId.systemDefault());
@@ -137,7 +137,7 @@ public class ProposalRepository {
 
         Proposal proposal = new Proposal(title, body, expiringDate, publishDate, publisherID, neighbourhoodId, id, max, choice, filters);
 
-        FirebaseFirestore.getInstance().collection("Proposals").document(id).set(proposal); //TODO: make it asynchronous?
+        FirebaseFirestore.getInstance().collection("Proposals").document(id).set(proposal).addOnCompleteListener((t)->{ myCallback.onCallback(t.isSuccessful()); });
     }
 
     public static void getProposals(LocalDate day, String userId, ArrayList<String> filters, Types type, MyCallback<ArrayList<Proposal>> myCallback){

@@ -86,7 +86,6 @@ public class ProposedFragment extends Fragment {
 
         proposalsViewModel.getProposed().observe(getViewLifecycleOwner(),proposedObserver);
 
-
         Utilities.getProposals(Utilities.day, UserManager.getUserId(), ProfileViewModel.proposedFilters, Types.PROPOSED);
 
         return view;

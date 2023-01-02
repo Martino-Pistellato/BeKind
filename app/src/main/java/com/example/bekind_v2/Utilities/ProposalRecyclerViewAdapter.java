@@ -29,7 +29,10 @@ import com.example.bekind_v2.DataLayer.UserDatabaseRepository;
 import com.example.bekind_v2.DataLayer.UserManager;
 import com.example.bekind_v2.R;
 import com.example.bekind_v2.DataLayer.ProposalRepository;
+import com.example.bekind_v2.UILayer.ui.available.AvailableViewModel;
+import com.example.bekind_v2.UILayer.ui.dashboard.DashboardViewModel;
 import com.example.bekind_v2.UILayer.ui.home.HomeViewModel;
+import com.example.bekind_v2.UILayer.ui.profile.ProfileViewModel;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.textfield.TextInputEditText;
 
@@ -112,7 +115,7 @@ public class ProposalRecyclerViewAdapter extends RecyclerView.Adapter<ProposalRe
                                     public void onCallback(Boolean result) {
                                         if (result) {
                                             Toast.makeText(context, "Attività cancellata correttamente", Toast.LENGTH_SHORT).show();
-                                            Utilities.getProposals(Utilities.day, UserManager.getUserId(), HomeViewModel.filters, Types.PROPOSED);
+                                            Utilities.getProposals(Utilities.day, UserManager.getUserId(), ProfileViewModel.proposedFilters, Types.PROPOSED);
                                         } else
                                             Toast.makeText(context, "Impossibile cancellare attività", Toast.LENGTH_SHORT).show();
                                     }
@@ -150,7 +153,7 @@ public class ProposalRecyclerViewAdapter extends RecyclerView.Adapter<ProposalRe
                                                     public void onCallback(Boolean result) {
                                                         if (result) {
                                                             Toast.makeText(context, "Attività cancellata correttamente", Toast.LENGTH_SHORT).show();
-                                                            Utilities.getProposals(Utilities.day, UserManager.getUserId(), HomeViewModel.filters, Types.PROPOSED);
+                                                            Utilities.getProposals(Utilities.day, UserManager.getUserId(), ProfileViewModel.proposedFilters, Types.PROPOSED);
                                                         } else
                                                             Toast.makeText(context, "Impossibile cancellare attività", Toast.LENGTH_SHORT).show();
                                                     }
@@ -162,7 +165,7 @@ public class ProposalRecyclerViewAdapter extends RecyclerView.Adapter<ProposalRe
                                                     public void onCallback(Boolean result) {
                                                         if (result) {
                                                             Toast.makeText(context, "Attività cancellata correttamente", Toast.LENGTH_SHORT).show();
-                                                            Utilities.getProposals(Utilities.day, UserManager.getUserId(), HomeViewModel.filters, Types.PROPOSED);
+                                                            Utilities.getProposals(Utilities.day, UserManager.getUserId(), ProfileViewModel.proposedFilters, Types.PROPOSED);
                                                         } else
                                                             Toast.makeText(context, "Impossibile cancellata attività", Toast.LENGTH_SHORT).show();
                                                     }
@@ -336,7 +339,7 @@ public class ProposalRecyclerViewAdapter extends RecyclerView.Adapter<ProposalRe
 
                                             if(result){
                                                 Toast.makeText(context, "Attività modificata correttamente", Toast.LENGTH_SHORT).show();
-                                                Utilities.getProposals(Utilities.day, UserManager.getUserId(), HomeViewModel.filters, Types.PROPOSED);
+                                                Utilities.getProposals(Utilities.day, UserManager.getUserId(), ProfileViewModel.proposedFilters, Types.PROPOSED);
                                             }
                                             else
                                                 Toast.makeText(context, "Impossibile modificare attività", Toast.LENGTH_SHORT).show();
@@ -359,7 +362,7 @@ public class ProposalRecyclerViewAdapter extends RecyclerView.Adapter<ProposalRe
                                     public void onCallback(Boolean result) {
                                         if (result) {
                                             Toast.makeText(context, "Attività terminata correttamente", Toast.LENGTH_SHORT).show();
-                                            Utilities.getProposals(Utilities.day, UserManager.getUserId(), HomeViewModel.filters, Types.PROPOSED);
+                                            Utilities.getProposals(Utilities.day, UserManager.getUserId(), ProfileViewModel.proposedFilters, Types.PROPOSED);
                                         } else
                                             Toast.makeText(context, "Impossibile terminare attività", Toast.LENGTH_SHORT).show();
                                     }
@@ -371,7 +374,7 @@ public class ProposalRecyclerViewAdapter extends RecyclerView.Adapter<ProposalRe
                                     public void onCallback(Boolean result) {
                                         if (result) {
                                             Toast.makeText(context, "Attività terminata correttamente", Toast.LENGTH_SHORT).show();
-                                            Utilities.getProposals(Utilities.day, UserManager.getUserId(), HomeViewModel.filters, Types.PROPOSED);
+                                            Utilities.getProposals(Utilities.day, UserManager.getUserId(), ProfileViewModel.proposedFilters, Types.PROPOSED);
                                         } else
                                             Toast.makeText(context, "Impossibile terminare attività", Toast.LENGTH_SHORT).show();
                                     }
@@ -438,7 +441,7 @@ public class ProposalRecyclerViewAdapter extends RecyclerView.Adapter<ProposalRe
                                 public void onCallback(Boolean result) {
                                     if(result) {
                                         Toast.makeText(context, "Attività accettata correttamente", Toast.LENGTH_SHORT).show();
-                                        Utilities.getProposals(Utilities.day, UserManager.getUserId(), HomeViewModel.filters, Types.AVAILABLE);
+                                        Utilities.getProposals(Utilities.day, UserManager.getUserId(), AvailableViewModel.filters, Types.AVAILABLE);
                                     }else
                                         Toast.makeText(context, "Errore nell'accettazione dell'attività", Toast.LENGTH_SHORT).show();
                                 }

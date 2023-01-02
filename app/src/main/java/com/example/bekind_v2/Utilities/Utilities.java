@@ -1,7 +1,5 @@
 package com.example.bekind_v2.Utilities;
 
-import android.util.Log;
-
 import com.example.bekind_v2.DataLayer.PostRepository;
 import com.example.bekind_v2.DataLayer.ProposalRepository;
 
@@ -41,24 +39,6 @@ public class Utilities {
         }
         public int getYear() {
             return this.c.get(Calendar.YEAR);
-        }
-    }
-
-    public static class MyMonitor{
-        private int counter;
-
-        public MyMonitor(int counter){
-            this.counter = counter;
-        }
-
-        public synchronized void myWait() throws InterruptedException {
-            while (counter < 0)
-                wait();
-        }
-
-        public synchronized void myNotify(){
-            if(counter++ >= 0)
-                notifyAll();
         }
     }
 

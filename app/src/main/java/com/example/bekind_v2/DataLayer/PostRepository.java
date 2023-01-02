@@ -96,7 +96,7 @@ public class PostRepository {
         }
     }
 
-    public static void createPost(String title, String body, ArrayList<String> filters){
+    public static void createPost(String title, String body, ArrayList<String> filters, MyCallback<Boolean> myCallback){
         String id =  UUID.randomUUID().toString();
         String publisherID = UserManager.getUserId();
         LocalDateTime ldt = LocalDateTime.ofInstant(new Date().toInstant(), ZoneId.systemDefault());
@@ -105,7 +105,7 @@ public class PostRepository {
         UserManager.getUser(publisherID, user -> {
             if(user != null) {
                 PostRepository.Post post = new PostRepository.Post(title, body, id, publisherID, user.getNeighbourhoodID(), date, filters);
-                FirebaseFirestore.getInstance().collection("Posts").document(id).set(post); //TODO: make it asynchronous?
+                FirebaseFirestore.getInstance().collection("Posts").document(id).set(post).addOnCompleteListener((t)->{ myCallback.onCallback(t.isSuccessful()); });
             }
         });
     }

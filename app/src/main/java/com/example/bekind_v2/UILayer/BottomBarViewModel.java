@@ -2,7 +2,6 @@ package com.example.bekind_v2.UILayer;
 
 import android.app.Dialog;
 import android.content.Context;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -18,7 +17,8 @@ import androidx.lifecycle.ViewModel;
 
 import com.example.bekind_v2.DataLayer.PostRepository;
 import com.example.bekind_v2.R;
-import com.example.bekind_v2.UILayer.ui.home.HomeViewModel;
+import com.example.bekind_v2.UILayer.ui.profile.ProfileViewModel;
+import com.example.bekind_v2.Utilities.MyCallback;
 import com.example.bekind_v2.Utilities.RepublishTypes;
 import com.example.bekind_v2.Utilities.Types;
 import com.example.bekind_v2.Utilities.Utilities;
@@ -50,11 +50,11 @@ public class BottomBarViewModel extends ViewModel {
         proposalExpd = null;
     }
 
-    public void createProposal(String title, String body, int max, Date expiringDate, RepublishTypes choice){
+    public void createProposal(String title, String body, int max, Date expiringDate, RepublishTypes choice, MyCallback<Boolean> myCallback){
         String userId = UserManager.getUserId();
         UserManager.getUser(userId, user -> {
             if(user != null)
-                ProposalRepository.createProposal(title, body, expiringDate, userId, user.getNeighbourhoodID(), max, choice, filtersProposal);
+                ProposalRepository.createProposal(title, body, expiringDate, userId, user.getNeighbourhoodID(), max, choice, filtersProposal, myCallback);
         });
     }
 
@@ -64,8 +64,8 @@ public class BottomBarViewModel extends ViewModel {
         return expiringDate.getTime();
     }
 
-    public void createPost(String title, String body){
-        PostRepository.createPost(title, body, filtersPost);
+    public void createPost(String title, String body, MyCallback<Boolean> myCallback){
+        PostRepository.createPost(title, body, filtersPost, myCallback);
     }
 
     public void manageFilterProposal(String filter){
@@ -332,7 +332,7 @@ public class BottomBarViewModel extends ViewModel {
                         publish = false;
                     }
                     else{
-                        proposalMaxParticipants = Integer.valueOf(maxParticipants.getText().toString().trim());
+                        proposalMaxParticipants = Integer.parseInt(maxParticipants.getText().toString().trim());
                     }
                 }
 
@@ -344,8 +344,11 @@ public class BottomBarViewModel extends ViewModel {
                 }
 
                 if(publish){
-                    createProposal(getProposalTitle(), getProposalBody(), proposalMaxParticipants, getProposalExpd(), choice[0]);
-                    Utilities.getProposals(Utilities.day, UserManager.getUserId(), HomeViewModel.filters, Types.PROPOSED);
+                    createProposal(getProposalTitle(), getProposalBody(), proposalMaxParticipants, getProposalExpd(), choice[0], (result -> {
+                        if (result) Utilities.getProposals(Utilities.day, UserManager.getUserId(), ProfileViewModel.proposedFilters, Types.PROPOSED);
+                        else Toast.makeText(applicationContext, "Errore nella pubblicazione dell'attività", Toast.LENGTH_SHORT).show();
+                    }));
+
                     setProposalBody("");
                     setProposalTitle("");
                     setProposalExpd(null);

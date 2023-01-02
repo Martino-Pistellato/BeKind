@@ -159,7 +159,7 @@ public class ProposalRepository {
                                     switch (type) {
                                         case PROPOSED: if (prop.getPublisherID().equals(userId)) res.add(prop); break; //adds the proposal to the Proposal to be shown
                                         case ACCEPTED: if (prop.getAcceptersID().contains(userId)) res.add(prop); break;
-                                        case AVAILABLE: if (!prop.getPublisherID().equals(userId) && (!prop.getAcceptersID().contains((String) userId)) && (prop.getMaxParticipants() - prop.getAcceptersID().size() > 0)) {
+                                        case AVAILABLE: if (!prop.getPublisherID().equals(userId) && (!prop.getAcceptersID().contains((String) userId)) && (prop.getMaxParticipants() - prop.getAcceptersID().size() > 0) && prop.getFlagsUsers().size() < 5) {
                                                             if (user.getNeighbourhoodID().equals(prop.getNeighbourhoodID()))
                                                                 res.add(prop);
                                                         }
@@ -333,6 +333,7 @@ public class ProposalRepository {
         getProposal(documentId, new MyCallback<Proposal>() {
             @Override
             public void onCallback(Proposal result) {
+                Log.e("Callback", "ho fatto la funzione");
                 if(result != null){
                     myCallback.onCallback(result.hasUserFlagged(userId));
                 }

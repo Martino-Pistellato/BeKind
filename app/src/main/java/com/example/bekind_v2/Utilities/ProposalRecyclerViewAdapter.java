@@ -2,6 +2,7 @@ package com.example.bekind_v2.Utilities;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.graphics.Color;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,7 +25,6 @@ import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.bekind_v2.DataLayer.PostRepository;
 import com.example.bekind_v2.DataLayer.UserDatabaseRepository;
 import com.example.bekind_v2.DataLayer.UserManager;
 import com.example.bekind_v2.R;
@@ -35,8 +35,6 @@ import com.example.bekind_v2.UILayer.ui.home.HomeViewModel;
 import com.example.bekind_v2.UILayer.ui.profile.ProfileViewModel;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.textfield.TextInputEditText;
-
-import org.w3c.dom.Text;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -76,7 +74,10 @@ public class ProposalRecyclerViewAdapter extends RecyclerView.Adapter<ProposalRe
         UserManager.getUser(pubId, new MyCallback<UserDatabaseRepository.User>() {
             @Override
             public void onCallback(UserDatabaseRepository.User result) {
-                holder.proposalPublisher.setText(result.getName()+" "+result.getSurname());
+                if(type != Types.PROPOSED)
+                    holder.proposalPublisher.setText(result.getName()+" "+result.getSurname());
+                else
+                    holder.proposalPublisher.setText("Tu");
                 holder.proposalTitle.setText(proposal.getTitle());
                 holder.proposalBody.setText(proposal.getBody());
                 if(proposal.getMaxParticipants() > 1)
@@ -87,13 +88,20 @@ public class ProposalRecyclerViewAdapter extends RecyclerView.Adapter<ProposalRe
                 LocalDateTime expiring_date_time = LocalDateTime.ofInstant(date.toInstant(), ZoneId.systemDefault());
                 holder.expiringHour.setText((String.format("%02d", expiring_date_time.getHour()+1)) + ":" + (String.format("%02d", expiring_date_time.getMinute())));
                 holder.expiringDate.setText((String.format("%02d", expiring_date_time.getDayOfMonth())) + "/" + (String.format("%02d", expiring_date_time.getMonthValue())) + "/" + expiring_date_time.getYear());
+
+                if(proposal.getFlagsUsers().size() >= 1 && type == Types.PROPOSED){
+                    holder.proposalPublisher.setVisibility(View.INVISIBLE);
+                    holder.proposalFlagged.setText("Attività segnalata");
+                    holder.proposalFlagged.setVisibility(View.VISIBLE);
+                    holder.constraintLayout.setBackgroundResource(R.drawable.list_element_roundcorner_red);
+                }
             }
         });
 
        ConstraintLayout constraintLayout = holder.itemView.findViewById(R.id.proposal);
 
         switch(type){
-            case PROPOSED: constraintLayout.setOnClickListener(new View.OnClickListener() {
+            case PROPOSED:constraintLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     ImageButton delete = holder.itemView.findViewById(R.id.delete_button),
@@ -426,8 +434,13 @@ public class ProposalRecyclerViewAdapter extends RecyclerView.Adapter<ProposalRe
                         ProposalRepository.hasUserFlagged(documentId, userId, new MyCallback<Boolean>() {
                             @Override
                             public void onCallback(Boolean result) {
-                                if(result)
+                                Log.e("FLAG", "lo ho flaggato, dovrei colorarlo");
+                                if(result) {
                                     flag.setImageResource(R.drawable.ic_flag_filled);
+                                    flag.setTag("flagged");
+                                }
+                                else
+                                    Log.e("STRONZO", ":(");
                             }
                         });
                     }else
@@ -453,7 +466,7 @@ public class ProposalRecyclerViewAdapter extends RecyclerView.Adapter<ProposalRe
                         @Override
                         public void onClick(View v) {
                             if(flag.getTag().equals("to_flag"))
-                                ProposalRepository.addFlagUser(documentId, pubId, new MyCallback<Boolean>() {
+                                ProposalRepository.addFlagUser(documentId, userId, new MyCallback<Boolean>() {
                                     @Override
                                     public void onCallback(Boolean result) {
                                         if (result) {
@@ -466,7 +479,7 @@ public class ProposalRecyclerViewAdapter extends RecyclerView.Adapter<ProposalRe
                                     }
                                 });
                             else
-                                ProposalRepository.deleteFlagUser(documentId, pubId, new MyCallback<Boolean>() {
+                                ProposalRepository.deleteFlagUser(documentId, userId, new MyCallback<Boolean>() {
                                     @Override
                                     public void onCallback(Boolean result) {
                                         if (result) {
@@ -500,7 +513,8 @@ public class ProposalRecyclerViewAdapter extends RecyclerView.Adapter<ProposalRe
 
     public static class MyViewHolder extends RecyclerView.ViewHolder {
         ImageView userProfilePic;
-        TextView proposalPublisher, proposalTitle, proposalBody, proposalParticipants, expiringHour, expiringDate;
+        TextView proposalPublisher, proposalTitle, proposalBody, proposalParticipants, expiringHour, expiringDate, proposalFlagged;
+        ConstraintLayout constraintLayout;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -512,6 +526,8 @@ public class ProposalRecyclerViewAdapter extends RecyclerView.Adapter<ProposalRe
             proposalParticipants = itemView.findViewById(R.id.proposal_participants);
             expiringHour = itemView.findViewById(R.id.expiring_hour);
             expiringDate = itemView.findViewById(R.id.expiring_date);
+            constraintLayout = itemView.findViewById(R.id.outer_constraintlayout);
+            proposalFlagged = itemView.findViewById(R.id.proposal_flagged);
         }
     }
 }

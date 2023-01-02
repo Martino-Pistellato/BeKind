@@ -2,6 +2,8 @@ package com.example.bekind_v2.Utilities;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,6 +12,7 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Space;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -27,6 +30,7 @@ import com.example.bekind_v2.UILayer.ui.profile.ProfileViewModel;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.textfield.TextInputEditText;
 
+import java.io.File;
 import java.util.ArrayList;
 
 public class PostRecyclerViewAdapter extends RecyclerView.Adapter<PostRecyclerViewAdapter.MyViewHolder> {
@@ -55,12 +59,24 @@ public class PostRecyclerViewAdapter extends RecyclerView.Adapter<PostRecyclerVi
         PostRepository.Post post = posts.get(position);
         String postId = posts.get(position).getId();
         String pubId = post.getPublisherID();
+        String userId = UserManager.getUserId();
+
         UserManager.getUser(pubId, new MyCallback<UserDatabaseRepository.User>() {
             @Override
             public void onCallback(UserDatabaseRepository.User result) {
-                holder.proposal_publisher.setText(result.getName()+" "+result.getSurname());
-                holder.proposal_title.setText(post.getTitle());
-                holder.proposal_body.setText(post.getBody());
+                if(type != PostTypes.MYPOSTS)
+                    holder.postPublisher.setText(result.getName()+" "+result.getSurname());
+                else
+                    holder.postPublisher.setText("Tu");
+                holder.postTitle.setText(post.getTitle());
+                holder.postBody.setText(post.getBody());
+
+                if(post.getUsersFlag().size() >= 1 && type == PostTypes.MYPOSTS){
+                    holder.postPublisher.setVisibility(View.INVISIBLE);
+                    holder.postFlagged.setText("Post segnalato");
+                    holder.postFlagged.setVisibility(View.VISIBLE);
+                    holder.constraintLayout.setBackgroundResource(R.drawable.list_element_roundcorner_red);
+                }
             }
         });
 
@@ -203,7 +219,7 @@ public class PostRecyclerViewAdapter extends RecyclerView.Adapter<PostRecyclerVi
                           @Override
                           public void onClick(View view) {
                               if(flag.getTag().equals("to_flag"))
-                                  PostRepository.addUserFlag(postId, pubId, new MyCallback<Boolean>() {
+                                  PostRepository.addUserFlag(postId, userId, new MyCallback<Boolean>() {
                                       @Override
                                       public void onCallback(Boolean result) {
                                           if (result) {
@@ -216,7 +232,7 @@ public class PostRecyclerViewAdapter extends RecyclerView.Adapter<PostRecyclerVi
                                       }
                                   });
                               else
-                                  PostRepository.deleteUserFlag(postId, pubId, new MyCallback<Boolean>() {
+                                  PostRepository.deleteUserFlag(postId, userId, new MyCallback<Boolean>() {
                                       @Override
                                       public void onCallback(Boolean result) {
                                           if (result) {
@@ -275,16 +291,19 @@ public class PostRecyclerViewAdapter extends RecyclerView.Adapter<PostRecyclerVi
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        ImageView user_profile_pic;
-        TextView proposal_title, proposal_publisher, proposal_body;
+        ImageView userProfilePic;
+        TextView postTitle, postPublisher, postBody, postFlagged;
+        ConstraintLayout constraintLayout;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
 
-            user_profile_pic = itemView.findViewById(R.id.user_profile_pic);
-            proposal_publisher = itemView.findViewById(R.id.post_publisher);
-            proposal_title = itemView.findViewById(R.id.post_title);
-            proposal_body = itemView.findViewById(R.id.post_body);
+            userProfilePic = itemView.findViewById(R.id.user_profile_pic);
+            postPublisher = itemView.findViewById(R.id.post_publisher);
+            postTitle = itemView.findViewById(R.id.post_title);
+            postBody = itemView.findViewById(R.id.post_body);
+            constraintLayout = itemView.findViewById(R.id.outer_constraintlayout);
+            postFlagged = itemView.findViewById(R.id.post_flagged);
         }
     }
 }

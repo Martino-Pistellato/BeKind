@@ -169,7 +169,8 @@ public class PostRepository {
                             if (pubD.isAfter(start) && pubD.isBefore(end)){
                                 if (filters != null && post.getFilters().containsAll(filters))
                                     if(user.getNeighbourhoodID().equals(post.getNeighbourhoodID()))
-                                        res.add(post); //adds the proposal to the Proposal to be shown
+                                        if(post.getUsersFlag().size() < 5)
+                                            res.add(post); //adds the proposal to the Proposal to be shown
                             }
                         }
                         myCallback.onCallback(res);

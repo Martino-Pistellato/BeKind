@@ -8,8 +8,7 @@
     android:layout_gravity="center_horizontal"
     android:layout_marginBottom="10dp"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@drawable/list_element_roundcorner"
-    android:backgroundTint="@color/primaryColor">
+    android:background="@drawable/list_element_roundcorner">
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cardView"
@@ -57,6 +56,23 @@
                 android:text="proposal_publisher"
                 android:textSize="16sp"
                 android:textStyle="bold"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintRight_toRightOf="@id/proposal"
+                app:layout_constraintLeft_toRightOf="@id/thumb"
+                app:layout_constraintStart_toEndOf="@id/thumb"
+                android:layout_marginEnd="10dp"
+                android:layout_marginTop="7dp" />
+
+            <TextView
+                android:id="@+id/proposal_flagged"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="100dp"
+                android:gravity="start"
+                android:text="flagged proposal"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:visibility="invisible"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintRight_toRightOf="@id/proposal"
                 app:layout_constraintLeft_toRightOf="@id/thumb"

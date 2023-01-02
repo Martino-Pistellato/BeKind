@@ -144,7 +144,7 @@ public class ProposalRepository {
         ArrayList<Proposal> res = new ArrayList<>();
         LocalDateTime start = (day == null) ? LocalDateTime.MIN : day.atTime(0,0,0), end = (day == null) ? LocalDateTime.MAX : day.atTime(23,59,59);
 
-        FirebaseFirestore.getInstance().collection("Proposals").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+        FirebaseFirestore.getInstance().collection("Proposals").orderBy("expiringDate").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful()){
@@ -169,11 +169,6 @@ public class ProposalRepository {
 
                             }
                         }
-                        Collections.sort(res, new Comparator<Proposal>(){
-                            public int compare(Proposal p1, Proposal p2){
-                                return p1.getExpiringDate().compareTo(p2.getExpiringDate());
-                            }
-                        });
 
                         myCallback.onCallback(res);
                     });

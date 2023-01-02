@@ -38,6 +38,7 @@ import org.w3c.dom.Text;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -208,6 +209,7 @@ public class ProposalRecyclerViewAdapter extends RecyclerView.Adapter<ProposalRe
                             activityTitle.setText(proposal.getTitle());
                             activityBody.setText(proposal.getBody());
                             expiringDate.updateDate(expiringDateTime.getYear(), expiringDateTime.getMonthValue() - 1, expiringDateTime.getDayOfMonth());
+                            expiringHour.setIs24HourView(true);
                             expiringHour.setHour(expiringDateTime.getHour() + 1);
                             expiringHour.setMinute(expiringDateTime.getMinute());
                             if(filters.contains(shoppingChip.getText().toString()))
@@ -227,8 +229,8 @@ public class ProposalRecyclerViewAdapter extends RecyclerView.Adapter<ProposalRe
                                 maxPartecipants.setText(Integer.toString(proposal.getMaxParticipants()));
                             }
 
-                            RepublishTypes[] types = {RepublishTypes.DAILY, RepublishTypes.WEEKLY, RepublishTypes.MONTHLY, RepublishTypes.ANNUALLY};
-                            ArrayAdapter<RepublishTypes> adapter = new ArrayAdapter<>(context, android.R.layout.simple_list_item_single_choice, types);
+                            ArrayList<String> types = new ArrayList<>(Arrays.asList(RepublishTypes.DAILY.getNameToDisplay(), RepublishTypes.WEEKLY.getNameToDisplay(), RepublishTypes.MONTHLY.getNameToDisplay(), RepublishTypes.ANNUALLY.getNameToDisplay()));
+                            ArrayAdapter<String> adapter = new ArrayAdapter<>(context, android.R.layout.simple_list_item_single_choice, types);
                             periodicChoices.setAdapter(adapter);
                             RepublishTypes[] choice = new RepublishTypes[1];
                             choice[0] = RepublishTypes.NEVER;
@@ -247,7 +249,7 @@ public class ProposalRecyclerViewAdapter extends RecyclerView.Adapter<ProposalRe
                             periodicChoices.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                                 @Override
                                 public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                                    choice[0] = (RepublishTypes) periodicChoices.getItemAtPosition(i);
+                                    choice[0] = RepublishTypes.getValue((String) periodicChoices.getItemAtPosition(i));
                                 }
                             });
 

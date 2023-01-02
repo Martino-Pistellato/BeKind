@@ -27,6 +27,7 @@ import com.google.android.material.textfield.TextInputEditText;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.ArrayList;
@@ -286,7 +287,7 @@ public class BottomBarViewModel extends ViewModel {
         periodicProposal = dialog.findViewById(R.id.periodic_checkbox);
         listView = dialog.findViewById(R.id.periodic_choices);
 
-        String[] types = {RepublishTypes.DAILY.getNameToDisplay(), RepublishTypes.WEEKLY.getNameToDisplay(), RepublishTypes.MONTHLY.getNameToDisplay(), RepublishTypes.ANNUALLY.getNameToDisplay()};
+        ArrayList<String> types = new ArrayList<>(Arrays.asList(RepublishTypes.DAILY.getNameToDisplay(), RepublishTypes.WEEKLY.getNameToDisplay(), RepublishTypes.MONTHLY.getNameToDisplay(), RepublishTypes.ANNUALLY.getNameToDisplay()));
         ArrayAdapter<String> adapter = new ArrayAdapter<>(applicationContext, android.R.layout.simple_list_item_single_choice, types);
         listView.setAdapter(adapter);
         RepublishTypes[] choice = new RepublishTypes[1];

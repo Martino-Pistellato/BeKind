@@ -29,6 +29,8 @@ import com.example.bekind_v2.UILayer.ui.home.HomeFragment;
 import com.example.bekind_v2.Utilities.MyCallback;
 import com.google.android.material.textfield.TextInputEditText;
 
+import java.util.ArrayList;
+
 public class RegistrationFragment2 extends Fragment {
 
     private AuthenticationViewModel authenticationViewModel;
@@ -77,7 +79,7 @@ public class RegistrationFragment2 extends Fragment {
         NeighbourhoodRepository.getCities(new MyCallback() {
             @Override
             public void onCallback(Object result) {
-                ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1, (String[])result);
+                ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1, (ArrayList<String>) result);
                 city.setAdapter(adapter);
             }
         });
@@ -89,7 +91,7 @@ public class RegistrationFragment2 extends Fragment {
                     NeighbourhoodRepository.getNeighbourhoods(city.getText().toString().toLowerCase(), new MyCallback() {
                         @Override
                         public void onCallback(Object result) {
-                            ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1, (String[]) result);
+                            ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1, (ArrayList<String>) result);
                             neighbourhood.setAdapter(adapter);
                         }
                     });

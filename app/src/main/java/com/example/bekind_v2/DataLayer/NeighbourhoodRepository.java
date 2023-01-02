@@ -102,13 +102,12 @@ public class NeighbourhoodRepository {
             FirebaseFirestore.getInstance().collection("Neighbourhoods").whereEqualTo("city", city).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                 @Override
                 public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                    String[] res1 = new String[task.getResult().size()];
                     for (DocumentSnapshot snap : task.getResult()) {
                         String name = snap.getString("name");
                         res.add(name.substring(0, 1).toUpperCase() + name.substring(1));
                     }
 
-                    myCallback.onCallback(res.toArray(res1));
+                    myCallback.onCallback(res);
                 }
             });
     }
@@ -118,13 +117,12 @@ public class NeighbourhoodRepository {
         FirebaseFirestore.getInstance().collection("Neighbourhoods").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                String[] res1 = new String[task.getResult().size()];
                 for(DocumentSnapshot snap : task.getResult()){
                     String city = snap.getString("city");
                     res.add(city.substring(0, 1).toUpperCase() + city.substring(1));
                 }
 
-                myCallback.onCallback(res.toArray(res1));
+                myCallback.onCallback(res);
             }
         });
     }

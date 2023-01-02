@@ -33,6 +33,8 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.UUID;
 
@@ -167,6 +169,12 @@ public class ProposalRepository {
 
                             }
                         }
+                        Collections.sort(res, new Comparator<Proposal>(){
+                            public int compare(Proposal p1, Proposal p2){
+                                return p1.getExpiringDate().compareTo(p2.getExpiringDate());
+                            }
+                        });
+
                         myCallback.onCallback(res);
                     });
 

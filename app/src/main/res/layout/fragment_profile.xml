@@ -18,12 +18,12 @@
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/user_photo"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:layout_marginTop="20dp"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
             android:layout_marginStart="10dp"
-            app:srcCompat="@drawable/ic_profile_selected_24"
-            app:tint="@color/primaryDarkColor"
+            android:src="@drawable/ic_profile_selected_24"
             android:contentDescription="@string/profile_image_description" />
 
         <TextView
@@ -31,7 +31,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:layout_centerHorizontal="true"
+            android:layout_marginStart="140dp"
             android:textSize="20sp"
             android:text="@string/username_text"/>
 
@@ -53,16 +53,6 @@
             android:layout_marginTop="5dp"
             android:layout_marginStart="140dp"
             android:text="@string/modify_residence"
-            android:backgroundTint="@color/primaryDarkColor"/>
-            
-        <Button
-            android:id="@+id/modifyPic"
-            android:layout_width="wrap_content"
-            android:layout_height="40dp"
-            android:layout_below="@+id/modifyNeighBtn"
-            android:layout_marginTop="5dp"
-            android:layout_marginStart="140dp"
-            android:text="Modifica foto profilo" 
             android:backgroundTint="@color/primaryDarkColor"/>
 
     </RelativeLayout>

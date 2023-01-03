@@ -211,9 +211,9 @@ public class AuthenticationViewModel extends ViewModel {
         NeighbourhoodViewModel.getNeighbourhood(this.neighbourhoodName, this.city, (x) ->{
             if(x != null){
                 Log.e("USER CREATE STEP 2", "call to usermanager");
-                UserManager.createUser(context, name, surname, email, password, birthDate, city.toLowerCase(), x, street.toLowerCase(), streetNumber.toLowerCase(), new MyCallback<Object>() {
+                UserManager.createUser(context, name, surname, email, password, birthDate, city.toLowerCase(), x, street.toLowerCase(), streetNumber.toLowerCase(), new MyCallback<Boolean>() {
                     @Override
-                    public void onCallback(Object result) {
+                    public void onCallback(Boolean result) {
                         Log.e("STEP 5", "call to login");
                         login(context, email,password,myCallback);
                     }

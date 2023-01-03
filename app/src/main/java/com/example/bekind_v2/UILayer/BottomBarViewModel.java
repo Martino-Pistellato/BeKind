@@ -65,7 +65,10 @@ public class BottomBarViewModel extends ViewModel {
     }
 
     public void createPost(String title, String body, MyCallback<Boolean> myCallback){
-        PostRepository.createPost(title, body, filtersPost, myCallback);
+        PostRepository.createPost(title, body, filtersPost, result -> {
+            filtersPost.clear();
+            myCallback.onCallback(result);
+        });
     }
 
     public void manageFilterProposal(String filter){

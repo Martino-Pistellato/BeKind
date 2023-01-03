@@ -3,13 +3,17 @@ package com.example.bekind_v2.DataLayer;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.example.bekind_v2.Utilities.MyCallback;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.ServerTimestamp;
 
@@ -26,10 +30,11 @@ public class UserDatabaseRepository {
         private String street;
         private String street_number;
         private String neighbourhoodID;
+        private String image;
 
         public User(){}
 
-        public User(String name, String surname, Date birth, String email, String city, String street, String street_number, String neighbourhoodID){
+        public User(String name, String surname, Date birth, String email, String city, String street, String street_number, String neighbourhoodID,String image){
             this.name = name;
             this.surname = surname;
             this.birth = birth;
@@ -38,6 +43,7 @@ public class UserDatabaseRepository {
             this.street = street;
             this.street_number = street_number;
             this.neighbourhoodID = neighbourhoodID;
+            this.image = image;
         }
 
         public String getName(){return this.name;}
@@ -48,6 +54,7 @@ public class UserDatabaseRepository {
         public String getStreet(){return this.street;}
         public String getStreet_number(){return this.street_number;}
         public String getNeighbourhoodID() {return neighbourhoodID;}
+        public String getImage(){return this.image;}
 
         public void setName(String name){this.name=name;}
         public void setSurname(String surname){this.surname=surname;}
@@ -56,16 +63,16 @@ public class UserDatabaseRepository {
         public void setStreet(String street){this.street=street;}
         public void setStreet_number(String street_number){this.street_number=street_number;}
         public void setNeighbourhoodID(String neighbourhoodID){this.neighbourhoodID = neighbourhoodID;}
+        public void setImage(String image){this.image = image;}
     }
 
-    public static void createUser(String userID, String name, String surname, Date birth, String email, String  city, String street, String street_number, String neighbourhoodID, MyCallback myCallback){
-        User us = new User(name, surname, birth, email, city, street, street_number,neighbourhoodID);
+    public static void createUser(String userID, String name, String surname, Date birth, String email, String  city, String street, String street_number, String neighbourhoodID, MyCallback<Boolean> myCallback){
+        User us = new User(name, surname, birth, email, city, street, street_number,neighbourhoodID, "");
 
         FirebaseFirestore.getInstance().collection("Users").document(userID).set(us).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
-                Log.e("STEP 4", "User created in db");
-                myCallback.onCallback(task.getResult());
+                myCallback.onCallback(task.isSuccessful());
             }
         });
     }

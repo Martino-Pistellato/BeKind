@@ -1,43 +1,65 @@
 package com.example.bekind_v2.UILayer.ui.profile;
 
-import android.app.DatePickerDialog;
+import static com.example.bekind_v2.DataLayer.ProfilePictureRepository.databaseReference;
+import static com.example.bekind_v2.DataLayer.ProfilePictureRepository.storageReference;
+import static com.example.bekind_v2.UILayer.ui.profile.ProfileViewModel.CAMERA_REQUEST;
+import static com.example.bekind_v2.UILayer.ui.profile.ProfileViewModel.IMAGEPICK_GALLERY_REQUEST;
+import static com.example.bekind_v2.UILayer.ui.profile.ProfileViewModel.IMAGE_PICKCAMERA_REQUEST;
+import static com.example.bekind_v2.UILayer.ui.profile.ProfileViewModel.STORAGE_REQUEST;
+import static com.example.bekind_v2.UILayer.ui.profile.ProfileViewModel.imageuri;
+import static com.example.bekind_v2.UILayer.ui.profile.ProfileViewModel.profileOrCoverPhoto;
+import static com.example.bekind_v2.UILayer.ui.profile.ProfileViewModel.storagepath;
+
+import android.Manifest;
+import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.DialogInterface;
+import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SwitchCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.viewpager2.widget.ViewPager2;
 
-import com.example.bekind_v2.DataLayer.ProfilePictureRepository;
+import com.bumptech.glide.Glide;
 import com.example.bekind_v2.DataLayer.UserManager;
 import com.example.bekind_v2.R;
-import com.example.bekind_v2.UILayer.Authentication.LoginActivity;
-import com.example.bekind_v2.UILayer.ui.home.HomeViewModel;
 import com.example.bekind_v2.Utilities.MyCallback;
 import com.example.bekind_v2.Utilities.PostTypes;
 import com.example.bekind_v2.Utilities.ScheduleBar;
 import com.example.bekind_v2.Utilities.Types;
 import com.example.bekind_v2.Utilities.Utilities;
 import com.example.bekind_v2.databinding.FragmentProfileBinding;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.textfield.TextInputEditText;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 import java.time.ZoneId;
 import java.util.Calendar;
@@ -50,6 +72,28 @@ public class ProfileFragment extends Fragment {
 
     //campi aggiunti per implementare foto profilo
     ImageView set;
+    /*private ActivityResultLauncher<String> requestCameraPermissionLauncher =
+            registerForActivityResult(new ActivityResultContracts.RequestPermission(), new ActivityResultCallback<Boolean>() {
+                @Override
+                public void onActivityResult(Boolean result) {
+
+                }
+            });*/
+
+        private ActivityResultLauncher<String> requestGalleryPermissionLauncher =
+                registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted -> {
+                    /*if (isGranted) {
+
+                        // Permission is granted. Continue the action or workflow in your
+                        // app.
+                    } else {
+                        // Explain to the user that the feature is unavailable because the
+                        // feature requires a permission that the user has denied. At the
+                        // same time, respect the user's decision. Don't link to system
+                        // settings in an effort to convince the user to change their
+                        // decision.
+                    }*/
+        });
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         ProfileViewModel profileViewModel = new ViewModelProvider(this).get(ProfileViewModel.class);
@@ -66,46 +110,28 @@ public class ProfileFragment extends Fragment {
         set = root.findViewById(R.id.user_photo);
         //pd = new ProgressDialog(this);
         //pd.setCanceledOnTouchOutside(false);
-        
-
 
         profileViewModel.getUserName(profileName::setText);
+        UserManager.getUser(UserManager.getUserId(), (user) ->{
+            String image = user.getImage();
+            if(!image.isEmpty()) {
+                try {
+                    Glide.with(this).load(image).into(set);
+                } catch (Exception e) {
+                    Log.e("ERROR", "errore nel glide");
+                }
+            }
 
-
+        });
         //foto profilo
-        /*updatePhoto.setOnClickListener(new View.OnClickListener() {
+        updatePhoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //pd.setMessage("Updating Profile Picture");
-                ProfilePictureRepository.profileOrCoverPhoto = "image";
-                //showImagePicDialog(); TO DO
-
-                //dialog implementation
-                String options[] = {"Camera", "Gallery"};
-                AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                builder.setTitle("Pick Image From");
-                builder.setItems(options, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        // if access is not given then we will request for permission
-                        if (which == 0) {
-                            if (!checkCameraPermission()) {
-                                //requestCameraPermission();
-                            } else {
-                                pickFromCamera();
-                            }
-                        } else if (which == 1) {
-                            if (!checkStoragePermission()) {
-                                //requestStoragePermission();
-                            } else {
-                                //pickFromGallery();
-                            }
-                       }
-                    }
-                });
-                builder.create().show();
+                profileOrCoverPhoto = "image";
+                showImagePicDialog();
             }
-        });*/
+        });
         //foto profilo
 
         updateUserData.setOnClickListener(new View.OnClickListener() {
@@ -191,11 +217,10 @@ public class ProfileFragment extends Fragment {
                 dialog.setCanceledOnTouchOutside(false);
 
                 TextView textCreateNeighbourhood = dialog.findViewById(R.id.text_create_neigh), title = dialog.findViewById(R.id.neighbourhood_text);
-                TextInputEditText city = dialog.findViewById(R.id.user_city), neighbourhood = dialog.findViewById(R.id.user_neigh),
-                                  street = dialog.findViewById(R.id.user_street), streetNumber = dialog.findViewById(R.id.street_number);
+                TextInputEditText street = dialog.findViewById(R.id.user_street), streetNumber = dialog.findViewById(R.id.street_number);
                 Button cancelBtn = dialog.findViewById(R.id.back_button), continueBtn = dialog.findViewById(R.id.continue_button);
-
-                title.setText("Modifica dati residenza");
+                AutoCompleteTextView city = dialog.findViewById(R.id.user_city), neighbourhood = dialog.findViewById(R.id.user_neigh);
+                title.setText("Modifica dati residenza");//TODO: metti la stringa
                 city.setText(profileViewModel.getUser().getCity());
                 street.setText(profileViewModel.getUser().getStreet());
                 streetNumber.setText(profileViewModel.getUser().getStreet_number());
@@ -241,8 +266,8 @@ public class ProfileFragment extends Fragment {
                         TextInputEditText neighbourhood = dialog.findViewById(R.id.neigh_name);
                         Button backBtn = dialog.findViewById(R.id.back_button), confirmBtn = dialog.findViewById(R.id.continue_button);
 
-                        backBtn.setText("CHIUDI");
-                        confirmBtn.setText("CONFERMA");
+                        backBtn.setText("CHIUDI"); //TODO: toString
+                        confirmBtn.setText("CONFERMA"); //TODO: toString
 
                         backBtn.setOnClickListener(new View.OnClickListener() {
                             @Override
@@ -307,7 +332,6 @@ public class ProfileFragment extends Fragment {
 
         scheduledateText = root.findViewById(R.id.scheduledate_text);
         ScheduleBar.ScheduleDate.setTextDate(scheduledateText);
-
         scheduledateText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -389,5 +413,129 @@ public class ProfileFragment extends Fragment {
 
         Utilities.getProposals(Utilities.day, UserManager.getUserId(), ProfileViewModel.proposedFilters, Types.PROPOSED);
         Utilities.getPosts(Utilities.day, UserManager.getUserId(), ProfileViewModel.postsFilters, PostTypes.MYPOSTS);
+    }
+
+    // requesting for camera permission if not given. Must be here because of the call inside
+    private void requestCameraPermission() {
+        /*requestPermissionLauncher.launch(Manifest.permission.CAMERA);
+        requestCameraPermissionsLauncher.launch(Manifest.permission.WRITE_EXTERNAL_STORAGE);*/
+        //requestPermissions(cameraPermission, CAMERA_REQUEST);
+    }
+
+    // checking storage permission, if given then we can add something in our storage
+    private Boolean checkStoragePermission() {
+        return ContextCompat.checkSelfPermission(getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) == (PackageManager.PERMISSION_GRANTED);
+    }
+
+    // requesting for storage permission
+    private void requestStoragePermission() {
+        //requestPermissions(storagePermission, STORAGE_REQUEST);
+        requestGalleryPermissionLauncher.launch(Manifest.permission.WRITE_EXTERNAL_STORAGE);
+    }
+
+    // checking camera permission ,if given then we can click image using our camera
+    private Boolean checkCameraPermission() {
+        boolean result = ContextCompat.checkSelfPermission(getContext(), Manifest.permission.CAMERA) == (PackageManager.PERMISSION_GRANTED);
+        boolean result1 = ContextCompat.checkSelfPermission(getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) == (PackageManager.PERMISSION_GRANTED);
+        return result && result1;
+    }
+
+    // Here we will click a photo and then go to startactivityforresult for updating data
+    private void pickFromCamera() {
+        startActivityForResult(ProfileViewModel.getCameraIntent(getContext()), IMAGE_PICKCAMERA_REQUEST);
+    }
+
+    // We will select an image from gallery
+    private void pickFromGallery() {
+        startActivityForResult(ProfileViewModel.getGalleryIntent(), IMAGEPICK_GALLERY_REQUEST);
+    }
+
+    private void showImagePicDialog() {
+        String[] options = {"Camera", "Gallery"};
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setTitle("Pick Image From");
+        builder.setItems(options, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                // if access is not given then we will request for permission
+                if (which == 0) {
+                    if (!checkCameraPermission()) requestCameraPermission();
+                    else pickFromCamera();
+                }
+                else if (which == 1) {
+                    if (!checkStoragePermission()) requestStoragePermission();
+                    else pickFromGallery();
+                }
+            }
+        });
+        builder.create().show();
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        if (resultCode == Activity.RESULT_OK) {
+            if (requestCode == IMAGEPICK_GALLERY_REQUEST) {
+                imageuri = data.getData();
+                uploadProfileCoverPhoto(imageuri);
+            }
+            if (requestCode == IMAGE_PICKCAMERA_REQUEST) {
+                uploadProfileCoverPhoto(imageuri);
+            }
+        }
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        switch (requestCode) {
+            case CAMERA_REQUEST: {
+                if (grantResults.length > 0) {
+                    boolean camera_accepted = grantResults[0] == PackageManager.PERMISSION_GRANTED;
+                    boolean writeStorageaccepted = grantResults[1] == PackageManager.PERMISSION_GRANTED;
+                    if (camera_accepted && writeStorageaccepted) pickFromCamera();
+                    else Toast.makeText(getContext(), "Please Enable Camera and Storage Permissions", Toast.LENGTH_LONG).show();
+                }
+            }
+            break;
+            case STORAGE_REQUEST: {
+                if (grantResults.length > 0) {
+                    boolean writeStorageaccepted = grantResults[0] == PackageManager.PERMISSION_GRANTED;
+                    if (writeStorageaccepted)  pickFromGallery();
+                    else  Toast.makeText(getContext(), "Please Enable Storage Permissions", Toast.LENGTH_LONG).show();
+                }
+            }
+            break;
+        }
+    }
+
+    // We will upload the image from here.
+    private void uploadProfileCoverPhoto(final Uri uri) { //TODO spostala da qualche altra parte
+        // We are taking the filepath as storagepath + firebaseauth.getUid()+".png"
+        String filepathname = storagepath + "" + profileOrCoverPhoto + "_" + UserManager.getUserId();
+        storageReference.child(filepathname).putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                taskSnapshot.getStorage().getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Uri> task) {
+                        if (task.isSuccessful())
+                            databaseReference.document(UserManager.getUserId()).update("image", task.getResult().toString()).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+                                    if (task.isSuccessful())
+                                        Toast.makeText(getContext(), "Updated", Toast.LENGTH_LONG).show(); //Glide.with(this).load(image).into(set);
+                                    else
+                                        Toast.makeText(getContext(), "Error Updating ", Toast.LENGTH_LONG).show();
+                                }
+                            });
+                    }
+                });
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(getContext(), "Error", Toast.LENGTH_LONG).show();
+            }
+        });
     }
 }

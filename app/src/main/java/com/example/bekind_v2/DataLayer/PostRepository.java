@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 
 import com.example.bekind_v2.Utilities.MyCallback;
 import com.example.bekind_v2.Utilities.PostTypes;
+import com.example.bekind_v2.Utilities.Utilities;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
@@ -33,10 +34,11 @@ public class PostRepository {
         private ArrayList<String> filters;
         private ArrayList<String> usersFlag;
         private ArrayList<String> usersLike;
+        private boolean priority;
 
         public Post() {}
 
-        public Post(String title, String body, String id, String publisherID,String neighbourhoodID, final Date publishingDate, ArrayList<String> filters) {
+        public Post(String title, String body, String id, String publisherID,String neighbourhoodID, final Date publishingDate, ArrayList<String> filters, boolean priority) {
             this.title = title;
             this.body = body;
             this.id = id;
@@ -46,6 +48,7 @@ public class PostRepository {
             this.neighbourhoodID = neighbourhoodID;
             this.usersFlag = new ArrayList<>();
             this.usersLike = new ArrayList<>();
+            this.priority = priority;
         }
 
         public String getTitle() { return this.title;}
@@ -53,6 +56,7 @@ public class PostRepository {
         public String getId() { return this.id;}
         public String getPublisherID() { return this.publisherID;}
         public Date getPublishingDate() { return this.publishingDate;}
+        public boolean getPriority() {return this.priority;}
         public ArrayList<String> getFilters() { return filters; }
         public String getNeighbourhoodID() {return neighbourhoodID;}
         public ArrayList<String> getUsersFlag() { return usersFlag;}
@@ -62,6 +66,7 @@ public class PostRepository {
         public void setBody(String body) {this.body = body;}
         public void setFilters(ArrayList<String> filters) {this.filters = filters;}
         public void setNeighbourhoodID(String neighbourhoodID) {this.neighbourhoodID = neighbourhoodID;}
+        public void setPriority(boolean priority){this.priority = priority;}
 
         public void addUserFlag(String userId) {
             if(!usersFlag.contains(userId)) {
@@ -104,7 +109,7 @@ public class PostRepository {
 
         UserManager.getUser(publisherID, user -> {
             if(user != null) {
-                PostRepository.Post post = new PostRepository.Post(title, body, id, publisherID, user.getNeighbourhoodID(), date, filters);
+                PostRepository.Post post = new PostRepository.Post(title, body, id, publisherID, user.getNeighbourhoodID(), date, filters, Utilities.isOldAge(user.getBirth()));
                 FirebaseFirestore.getInstance().collection("Posts").document(id).set(post).addOnCompleteListener((t)->{ myCallback.onCallback(t.isSuccessful()); });
             }
         });
@@ -149,7 +154,7 @@ public class PostRepository {
     }
 
     public static void getPosts(LocalDate day, String userID, ArrayList<String> filters, PostTypes type, MyCallback<ArrayList<Post>> myCallback){
-        ArrayList<PostRepository.Post> res = new ArrayList<>();
+        ArrayList<Post> withPriority = new ArrayList<>(), withoutPriority = new ArrayList<>();
         LocalDateTime start = (day == null) ? LocalDateTime.MIN : day.atTime(0,0,0), end = (day == null) ? LocalDateTime.MAX : day.atTime(23,59,59);
         CollectionReference db = FirebaseFirestore.getInstance().collection("Posts");
         Query postsQuery = null;
@@ -170,10 +175,12 @@ public class PostRepository {
                                 if (filters != null && post.getFilters().containsAll(filters))
                                     if(user.getNeighbourhoodID().equals(post.getNeighbourhoodID()))
                                         if(post.getUsersFlag().size() < 5)
-                                            res.add(post); //adds the proposal to the Proposal to be shown
+                                            if(post.getPriority()) withPriority.add(post);
+                                            else withoutPriority.add(post); //adds the proposal to the Proposal to be shown
                             }
                         }
-                        myCallback.onCallback(res);
+                        withPriority.addAll(withoutPriority);
+                        myCallback.onCallback(withPriority);
                     });
                 }
             }

@@ -2,6 +2,7 @@ package com.example.bekind_v2.Utilities;
 
 import com.example.bekind_v2.DataLayer.PostRepository;
 import com.example.bekind_v2.DataLayer.ProposalRepository;
+import com.example.bekind_v2.DataLayer.UserManager;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -72,5 +73,10 @@ public class Utilities {
                 }
             }
         });
+    }
+
+    //the following method returns true when there are at least 60 years between the year uf the input Date object and the year of today
+    public static boolean isOldAge(Date birth){
+        return (LocalDate.now()).getYear() - (new BetterCalendar(birth)).getYear() >= 60;
     }
 }

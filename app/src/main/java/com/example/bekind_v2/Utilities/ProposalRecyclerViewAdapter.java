@@ -44,7 +44,6 @@ import java.util.Calendar;
 import java.util.Date;
 
 public class ProposalRecyclerViewAdapter extends RecyclerView.Adapter<ProposalRecyclerViewAdapter.MyViewHolder> {
-    private ProposalsViewModel proposalsViewModel;
     ArrayList<ProposalRepository.Proposal> proposals;
     Context context;
     Types type;
@@ -88,6 +87,8 @@ public class ProposalRecyclerViewAdapter extends RecyclerView.Adapter<ProposalRe
                 LocalDateTime expiring_date_time = LocalDateTime.ofInstant(date.toInstant(), ZoneId.systemDefault());
                 holder.expiringHour.setText((String.format("%02d", expiring_date_time.getHour()+1)) + ":" + (String.format("%02d", expiring_date_time.getMinute())));
                 holder.expiringDate.setText((String.format("%02d", expiring_date_time.getDayOfMonth())) + "/" + (String.format("%02d", expiring_date_time.getMonthValue())) + "/" + expiring_date_time.getYear());
+
+                if(proposal.getPriority()) holder.constraintLayout.setBackgroundResource(R.drawable.list_element_roundcorner_priority);
 
                 if(proposal.getFlagsUsers().size() >= 1 && type == Types.PROPOSED){
                     holder.proposalPublisher.setVisibility(View.INVISIBLE);

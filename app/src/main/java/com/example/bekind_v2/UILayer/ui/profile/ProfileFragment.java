@@ -1,27 +1,20 @@
 package com.example.bekind_v2.UILayer.ui.profile;
 
-import static com.example.bekind_v2.DataLayer.ProfilePictureRepository.databaseReference;
-import static com.example.bekind_v2.DataLayer.ProfilePictureRepository.storageReference;
-import static com.example.bekind_v2.UILayer.ui.profile.ProfileViewModel.CAMERA_REQUEST;
-import static com.example.bekind_v2.UILayer.ui.profile.ProfileViewModel.IMAGEPICK_GALLERY_REQUEST;
-import static com.example.bekind_v2.UILayer.ui.profile.ProfileViewModel.IMAGE_PICKCAMERA_REQUEST;
-import static com.example.bekind_v2.UILayer.ui.profile.ProfileViewModel.STORAGE_REQUEST;
+import static com.example.bekind_v2.UILayer.ui.profile.ProfileViewModel.checkCameraPermission;
+import static com.example.bekind_v2.UILayer.ui.profile.ProfileViewModel.checkStoragePermission;
 import static com.example.bekind_v2.UILayer.ui.profile.ProfileViewModel.imageuri;
-import static com.example.bekind_v2.UILayer.ui.profile.ProfileViewModel.profileOrCoverPhoto;
-import static com.example.bekind_v2.UILayer.ui.profile.ProfileViewModel.storagepath;
+import static com.example.bekind_v2.DataLayer.ProfilePictureRepository.profileOrCoverPhoto;
+import static com.example.bekind_v2.UILayer.ui.profile.ProfileViewModel.setImageUri;
+import static com.example.bekind_v2.UILayer.ui.profile.ProfileViewModel.uploadProfileCoverPhoto;
 
 import android.Manifest;
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,9 +28,7 @@ import android.widget.Toast;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SwitchCompat;
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.viewpager2.widget.ViewPager2;
@@ -51,13 +42,8 @@ import com.example.bekind_v2.Utilities.ScheduleBar;
 import com.example.bekind_v2.Utilities.Types;
 import com.example.bekind_v2.Utilities.Utilities;
 import com.example.bekind_v2.databinding.FragmentProfileBinding;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.textfield.TextInputEditText;
-import com.google.firebase.storage.UploadTask;
 
 import java.time.ZoneId;
 import java.util.Calendar;
@@ -70,49 +56,50 @@ public class ProfileFragment extends Fragment {
     private SwitchCompat simpleSwitch;
     private TextView totalActivities, scheduledateText;
 
-    //campi aggiunti per implementare foto profilo
-    CircleImageView set;
+    CircleImageView profilePic;
     private final ActivityResultLauncher<String> requestCameraPermissionLauncher = registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted -> {
-            if (isGranted) pickFromCamera();
+            if (isGranted)
+                registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted1 -> {
+                    if (isGranted1) pickFromCamera();
+                    else Toast.makeText(getContext(), "Camera permissions not granted", Toast.LENGTH_LONG).show();
+                }).launch(Manifest.permission.WRITE_EXTERNAL_STORAGE);
             else Toast.makeText(getContext(), "Camera permissions not granted", Toast.LENGTH_LONG).show();
-        });
+    });
     private final ActivityResultLauncher<String> requestGalleryPermissionLauncher = registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted -> {
         if (isGranted) pickFromGallery();
         else Toast.makeText(getContext(), "Gallery permissions not granted", Toast.LENGTH_LONG).show();
     });
+    private final ActivityResultLauncher<Uri> pickFromCamera = registerForActivityResult(new ActivityResultContracts.TakePicture(), res -> { if(res) uploadProfileCoverPhoto(imageuri, getContext(), profilePic); });
+    private final ActivityResultLauncher<String> pickFromGallery = registerForActivityResult(new ActivityResultContracts.GetContent(), res -> { uploadProfileCoverPhoto(imageuri = res, getContext(), profilePic); });
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         ProfileViewModel profileViewModel = new ViewModelProvider(this).get(ProfileViewModel.class);
         binding = FragmentProfileBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
+        Context context = this.getContext();
         Button updateUserData = binding.modifyProfileBtn, updateUserLocation = binding.modifyNeighBtn;
         TextView profileName = binding.profileName;
+        ViewPager2 viewPager2 = root.findViewById(R.id.pager);
+        TabLayout tabLayout = root.findViewById(R.id.tab_layout);
         simpleSwitch = root.findViewById(R.id.simpleSwitch);
         totalActivities = root.findViewById(R.id.total_activities);
         scheduledateText = root.findViewById(R.id.scheduledate_text);
-        Context context = this.getContext();
+        profilePic = root.findViewById(R.id.user_photo);
+        scheduledateText = root.findViewById(R.id.scheduledate_text);
+        totalActivities = root.findViewById(R.id.total_activities);
 
-        //aggiunte per foto profilo
-        set = root.findViewById(R.id.user_photo);
-        //pd = new ProgressDialog(this);
-        //pd.setCanceledOnTouchOutside(false);
+        Utilities.getProposals(Utilities.day, UserManager.getUserId(), ProfileViewModel.proposedFilters, Types.PROPOSED);
+        Utilities.getPosts(Utilities.day, UserManager.getUserId(), ProfileViewModel.postsFilters, PostTypes.MYPOSTS);
 
-        profileViewModel.getUserName(profileName::setText);
         UserManager.getUser(UserManager.getUserId(), (user) ->{
             String image = user.getImage();
-            if(!image.isEmpty()) {
-                try {
-                    Glide.with(this).load(image).into(set);
-                } catch (Exception e) {
-                    Log.e("ERROR", "Errore: immagine non presente");
-                }
-            }
+            if(!image.isEmpty()) { Glide.with(this).load(image).into(profilePic); }
         });
 
-        set.setOnClickListener(new View.OnClickListener() {
+        profileViewModel.getUserName(profileName::setText);
+        profilePic.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //pd.setMessage("Updating Profile Picture");
                 profileOrCoverPhoto = "image";
                 showImagePicDialog();
             }
@@ -286,9 +273,7 @@ public class ProfileFragment extends Fragment {
             }
         });
 
-        ViewPager2 viewPager2 = root.findViewById(R.id.pager);
         viewPager2.setAdapter(new ProfileViewModel.ProfileActivityViewPagerAdapter(this));
-        TabLayout tabLayout = root.findViewById(R.id.tab_layout);
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) { //when we select a tab
@@ -301,7 +286,6 @@ public class ProfileFragment extends Fragment {
             @Override
             public void onTabReselected(TabLayout.Tab tab) {}
         });
-
         viewPager2.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             @Override
             public void onPageSelected(int position) {
@@ -310,10 +294,6 @@ public class ProfileFragment extends Fragment {
             }
         });
 
-        Utilities.getProposals(Utilities.day, UserManager.getUserId(), ProfileViewModel.proposedFilters, Types.PROPOSED);
-        Utilities.getPosts(Utilities.day, UserManager.getUserId(), ProfileViewModel.postsFilters, PostTypes.MYPOSTS);
-
-        scheduledateText = root.findViewById(R.id.scheduledate_text);
         ScheduleBar.ScheduleDate.setTextDate(scheduledateText);
         scheduledateText.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -344,9 +324,6 @@ public class ProfileFragment extends Fragment {
                 });
             }
         });
-
-        totalActivities = root.findViewById(R.id.total_activities);
-
         simpleSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -398,38 +375,13 @@ public class ProfileFragment extends Fragment {
         Utilities.getPosts(Utilities.day, UserManager.getUserId(), ProfileViewModel.postsFilters, PostTypes.MYPOSTS);
     }
 
-    // requesting for camera permission if not given. Must be here because of the call inside
-    private void requestCameraPermission() {
-        /*requestPermissionLauncher.launch(Manifest.permission.CAMERA);
-        requestCameraPermissionsLauncher.launch(Manifest.permission.WRITE_EXTERNAL_STORAGE);*/
-        //requestPermissions(cameraPermission, CAMERA_REQUEST);
-    }
-
-    // checking storage permission, if given then we can add something in our storage
-    private Boolean checkStoragePermission() {
-        return ContextCompat.checkSelfPermission(getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) == (PackageManager.PERMISSION_GRANTED);
-    }
-
-    // requesting for storage permission
-    private void requestStoragePermission() {
-        requestCameraPermissionLauncher.launch(Manifest.permission.WRITE_EXTERNAL_STORAGE);
-    }
-
-    // checking camera permission ,if given then we can click image using our camera
-    private Boolean checkCameraPermission() {
-        boolean result = ContextCompat.checkSelfPermission(getContext(), Manifest.permission.CAMERA) == (PackageManager.PERMISSION_GRANTED);
-        boolean result1 = ContextCompat.checkSelfPermission(getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) == (PackageManager.PERMISSION_GRANTED);
-        return result && result1;
-    }
-
-    // Here we will click a photo and then go to startactivityforresult for updating data
     private void pickFromCamera() {
-        startActivityForResult(ProfileViewModel.getCameraIntent(getContext()), IMAGE_PICKCAMERA_REQUEST);
+        setImageUri(getContext());
+        pickFromCamera.launch(imageuri);
     }
 
-    // We will select an image from gallery
     private void pickFromGallery() {
-        startActivityForResult(ProfileViewModel.getGalleryIntent(), IMAGEPICK_GALLERY_REQUEST);
+        pickFromGallery.launch("image/*");
     }
 
     private void showImagePicDialog() {
@@ -445,15 +397,15 @@ public class ProfileFragment extends Fragment {
                 builder1.setTitle("Grant access to camera");
 
                 if (which == 0) {
-                    if (checkCameraPermission()) pickFromCamera();
-                    else if (shouldShowRequestPermissionRationale(Manifest.permission.WRITE_EXTERNAL_STORAGE))
+                    if (checkCameraPermission(getContext())) pickFromCamera();
+                    else if (shouldShowRequestPermissionRationale(Manifest.permission.CAMERA) || shouldShowRequestPermissionRationale(Manifest.permission.WRITE_EXTERNAL_STORAGE))
                         builder1.setItems(permissions, (dialog1, which1) -> {
-                            if (which1 == 1) requestCameraPermissionLauncher.launch(Manifest.permission.WRITE_EXTERNAL_STORAGE);
+                            if (which1 == 1) requestCameraPermissionLauncher.launch(Manifest.permission.CAMERA);
                         }).create().show();
-                    else requestCameraPermissionLauncher.launch(Manifest.permission.WRITE_EXTERNAL_STORAGE);
+                    else requestCameraPermissionLauncher.launch(Manifest.permission.CAMERA);
                 }
                 else if (which == 1) {
-                    if (checkStoragePermission()) pickFromGallery();
+                    if (checkStoragePermission(getContext())) pickFromGallery();
                     else if (shouldShowRequestPermissionRationale(Manifest.permission.READ_EXTERNAL_STORAGE))
                         builder1.setItems(permissions, (dialog1, which1) -> {
                             if (which1 == 1) requestGalleryPermissionLauncher.launch(Manifest.permission.READ_EXTERNAL_STORAGE);
@@ -464,74 +416,5 @@ public class ProfileFragment extends Fragment {
         });
 
         builder.create().show();
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        if (resultCode == Activity.RESULT_OK) {
-            if (requestCode == IMAGEPICK_GALLERY_REQUEST) {
-                imageuri = data.getData();
-                uploadProfileCoverPhoto(imageuri);
-            }
-            if (requestCode == IMAGE_PICKCAMERA_REQUEST) {
-                uploadProfileCoverPhoto(imageuri);
-            }
-        }
-        super.onActivityResult(requestCode, resultCode, data);
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        switch (requestCode) {
-            case CAMERA_REQUEST: {
-                if (grantResults.length > 0) {
-                    boolean camera_accepted = grantResults[0] == PackageManager.PERMISSION_GRANTED;
-                    boolean writeStorageaccepted = grantResults[1] == PackageManager.PERMISSION_GRANTED;
-                    if (camera_accepted && writeStorageaccepted) pickFromCamera();
-                    else Toast.makeText(getContext(), "Please Enable Camera and Storage Permissions", Toast.LENGTH_LONG).show();
-                }
-            }
-            break;
-            case STORAGE_REQUEST: {
-                if (grantResults.length > 0) {
-                    boolean writeStorageaccepted = grantResults[0] == PackageManager.PERMISSION_GRANTED;
-                    if (writeStorageaccepted)  pickFromGallery();
-                    else  Toast.makeText(getContext(), "Please Enable Storage Permissions", Toast.LENGTH_LONG).show();
-                }
-            }
-            break;
-        }
-    }
-
-    // We will upload the image from here.
-    private void uploadProfileCoverPhoto(final Uri uri) { //TODO spostala da qualche altra parte
-        String filepathname = storagepath + "" + profileOrCoverPhoto + "_" + UserManager.getUserId(); // We are taking the filepath as storagepath + firebaseauth.getUid()+".png"
-        storageReference.child(filepathname).putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-            @Override
-            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                taskSnapshot.getStorage().getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Uri> task) {
-                        if (task.isSuccessful())
-                            databaseReference.document(UserManager.getUserId()).update("image", task.getResult().toString()).addOnCompleteListener(new OnCompleteListener<Void>() {
-                                @Override
-                                public void onComplete(@NonNull Task<Void> task1) {
-                                    if (task1.isSuccessful()) {
-                                        Toast.makeText(getContext(), "Updated", Toast.LENGTH_LONG).show();
-                                        Glide.with(getContext()).load(task.getResult().toString()).into(set);
-                                    }
-                                    else
-                                        Toast.makeText(getContext(), "Error Updating ", Toast.LENGTH_LONG).show();
-                                }
-                            });
-                    }
-                });
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Toast.makeText(getContext(), "Error: could not load the image", Toast.LENGTH_LONG).show();
-            }
-        });
     }
 }

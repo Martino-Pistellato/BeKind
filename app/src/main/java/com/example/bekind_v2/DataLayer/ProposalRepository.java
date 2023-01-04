@@ -1,6 +1,7 @@
 package com.example.bekind_v2.DataLayer;
 
 import static com.example.bekind_v2.Utilities.Utilities.day;
+import static com.example.bekind_v2.Utilities.Utilities.isOldAge;
 import static java.lang.Thread.sleep;
 
 import android.os.AsyncTask;
@@ -54,10 +55,11 @@ public class ProposalRepository {
         private ArrayList<String> filters;
         private String neighbourhoodID;
         private ArrayList<String> flagsUsers;
+        private boolean priority;
 
         public Proposal(){}
 
-        public Proposal(String title, String body, Date expiringDate, Date publishingDate, String publisherId, String neighbourhoodID, String id, int maxParticipants, RepublishTypes choice, ArrayList<String> filters){
+        public Proposal(String title, String body, Date expiringDate, Date publishingDate, String publisherId, String neighbourhoodID, String id, int maxParticipants, RepublishTypes choice, ArrayList<String> filters, boolean priority){
             this.title = title;
             this.body = body;
             this.expiringDate = expiringDate;
@@ -70,16 +72,15 @@ public class ProposalRepository {
             this.flagsUsers = new ArrayList<>();
             this.publishingDate = publishingDate;
             this.republishTypes = choice;
+            this.priority = priority; //default value
         }
 
         public String getTitle(){return this.title;}
         public String getBody(){return this.body;}
         public Date getExpiringDate(){return this.expiringDate;}
-
         public Date getPublishingDate() {
             return publishingDate;
         }
-
         public String getPublisherID() {
             return this.publisherID;
         }
@@ -88,12 +89,12 @@ public class ProposalRepository {
         public int getMaxParticipants() {return this.maxParticipants;}
         public ArrayList<String> getFilters(){return this.filters;}
         public String getNeighbourhoodID(){return this.neighbourhoodID;}
+        public boolean getPriority() {return this.priority;}
         public ArrayList<String> getFlagsUsers() {return flagsUsers;}
-
         public RepublishTypes getRepublishTypes() {
             return republishTypes;
         }
-
+        
         public void setTitle(String title){this.title=title;}
         public void setBody(String body){this.body=body;}
         public void setExpiringDate(Date expiringDate){this.expiringDate=expiringDate;}
@@ -101,7 +102,7 @@ public class ProposalRepository {
         public void setMaxParticipants(int maxParticipants) {this.maxParticipants = maxParticipants;}
         public void setNeighbourhoodID(String neighbourhoodID) {this.neighbourhoodID = neighbourhoodID;}
         public void setFilters(ArrayList<String> filters){this.filters=filters;}
-
+        public void setPriority(boolean priority){this.priority = priority;}
         public void setRepublishTypes(RepublishTypes republishTypes) {
             this.republishTypes = republishTypes;
         }
@@ -131,17 +132,17 @@ public class ProposalRepository {
 
     public static void createProposal(String title, String body, Date expiringDate, String publisherID, String neighbourhoodId, int max, RepublishTypes choice, ArrayList<String> filters, MyCallback<Boolean> myCallback){
         String id =  UUID.randomUUID().toString();
-        Date publishDate = new Date();
-        LocalDateTime ldt = LocalDateTime.ofInstant(publishDate.toInstant(), ZoneId.systemDefault());
-        publishDate = Date.from(ldt.atZone(ZoneId.systemDefault()).toInstant());
+        LocalDateTime ldt = LocalDateTime.ofInstant(new Date().toInstant(), ZoneId.systemDefault());
+        final Date publishDate = Date.from(ldt.atZone(ZoneId.systemDefault()).toInstant());
 
-        Proposal proposal = new Proposal(title, body, expiringDate, publishDate, publisherID, neighbourhoodId, id, max, choice, filters);
-
-        FirebaseFirestore.getInstance().collection("Proposals").document(id).set(proposal).addOnCompleteListener((t)->{ myCallback.onCallback(t.isSuccessful()); });
+        UserManager.getUser(publisherID, user -> {
+            Proposal proposal = new Proposal(title, body, expiringDate, publishDate, publisherID, neighbourhoodId, id, max, choice, filters, isOldAge(user.getBirth()));
+            FirebaseFirestore.getInstance().collection("Proposals").document(id).set(proposal).addOnCompleteListener((t)->{ myCallback.onCallback(t.isSuccessful()); });
+        });
     }
 
     public static void getProposals(LocalDate day, String userId, ArrayList<String> filters, Types type, MyCallback<ArrayList<Proposal>> myCallback){
-        ArrayList<Proposal> res = new ArrayList<>();
+        ArrayList<Proposal> withPriority = new ArrayList<>(), withoutPriority = new ArrayList<>();
         LocalDateTime start = (day == null) ? LocalDateTime.MIN : day.atTime(0,0,0), end = (day == null) ? LocalDateTime.MAX : day.atTime(23,59,59);
 
         FirebaseFirestore.getInstance().collection("Proposals").orderBy("expiringDate").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -157,22 +158,33 @@ public class ProposalRepository {
                             if (expD.isAfter(start) && expD.isBefore(end) && pubD.isBefore(LocalDateTime.now(ZoneId.of("ECT")))) {//if the proposal expiring date is between the limits
                                 if (filters != null && prop.getFilters().containsAll(filters)) {
                                     switch (type) {
-                                        case PROPOSED: if (prop.getPublisherID().equals(userId)) res.add(prop); break; //adds the proposal to the Proposal to be shown
-                                        case ACCEPTED: if (prop.getAcceptersID().contains(userId)) res.add(prop); break;
-                                        case AVAILABLE: if (!prop.getPublisherID().equals(userId) && (!prop.getAcceptersID().contains((String) userId)) && (prop.getMaxParticipants() - prop.getAcceptersID().size() > 0) && prop.getFlagsUsers().size() < 5) {
-                                                            if (user.getNeighbourhoodID().equals(prop.getNeighbourhoodID()))
-                                                                res.add(prop);
-                                                        }
-                                                        break;
+                                        case PROPOSED:
+                                            if (prop.getPublisherID().equals(userId)) {
+                                                if (prop.getPriority()) withPriority.add(prop);
+                                                else withoutPriority.add(prop);
+                                            }
+                                            break; //adds the proposal to the Proposal to be shown
+                                        case ACCEPTED:
+                                            if (prop.getAcceptersID().contains(userId)) {
+                                                if (prop.getPriority()) withPriority.add(prop);
+                                                else withoutPriority.add(prop);
+                                            }
+                                            break;
+                                        case AVAILABLE:
+                                            if (!prop.getPublisherID().equals(userId) && (!prop.getAcceptersID().contains((String) userId)) && (prop.getMaxParticipants() - prop.getAcceptersID().size() > 0) && prop.getFlagsUsers().size() < 5) {
+                                                if (user.getNeighbourhoodID().equals(prop.getNeighbourhoodID()))
+                                                    if (prop.getPriority()) withPriority.add(prop);
+                                                    else withoutPriority.add(prop);
+                                            }
+                                            break;
                                     }
                                 }
 
                             }
                         }
-
-                        myCallback.onCallback(res);
+                        withPriority.addAll(withoutPriority);
+                        myCallback.onCallback(withPriority);
                     });
-
                 }
             }
         });

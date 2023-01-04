@@ -71,6 +71,8 @@ public class PostRecyclerViewAdapter extends RecyclerView.Adapter<PostRecyclerVi
                 holder.postTitle.setText(post.getTitle());
                 holder.postBody.setText(post.getBody());
 
+                if(post.getPriority()) {holder.constraintLayout.setBackgroundResource(R.drawable.list_element_roundcorner_priority);}
+
                 if(post.getUsersFlag().size() >= 1 && type == PostTypes.MYPOSTS){
                     holder.postPublisher.setVisibility(View.INVISIBLE);
                     holder.postFlagged.setText("Post segnalato");

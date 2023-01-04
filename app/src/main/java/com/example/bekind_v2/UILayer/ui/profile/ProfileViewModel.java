@@ -3,49 +3,38 @@ package com.example.bekind_v2.UILayer.ui.profile;
 import android.Manifest;
 import android.content.ContentValues;
 import android.content.Context;
-import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.provider.MediaStore;
-import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModel;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 
+import com.example.bekind_v2.DataLayer.PostRepository;
+import com.example.bekind_v2.DataLayer.ProfilePictureRepository;
+import com.example.bekind_v2.DataLayer.ProposalRepository;
 import com.example.bekind_v2.DataLayer.UserDatabaseRepository;
 import com.example.bekind_v2.DataLayer.UserManager;
 import com.example.bekind_v2.UILayer.NeighbourhoodViewModel;
 import com.example.bekind_v2.Utilities.MyCallback;
-import com.example.bekind_v2.Utilities.Types;
 import com.example.bekind_v2.Utilities.PostTypes;
+import com.example.bekind_v2.Utilities.Types;
 import com.example.bekind_v2.Utilities.Utilities;
-import com.example.bekind_v2.DataLayer.ProposalRepository;
-import com.example.bekind_v2.DataLayer.PostRepository;
 
 import java.util.ArrayList;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 public class ProfileViewModel extends ViewModel {
-    //public static ArrayList<String> filters = new ArrayList<>();
-    //we'll need it later to implement manageFilter
     public static ArrayList<String> postsFilters = new ArrayList<>();
     public static ArrayList<String> proposedFilters = new ArrayList<>();
     private UserDatabaseRepository.User user;
     private String password;
-
-    public static String[] cameraPermission = new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE};
-    public static String[] storagePermission = new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE};
-    public static String storagepath = "Users_Profile_Cover_image/";
-    public static final int STORAGE_REQUEST = 200;
-    public static final int CAMERA_REQUEST = 100;
-    public static final int IMAGEPICK_GALLERY_REQUEST = 300;
-    public static final int IMAGE_PICKCAMERA_REQUEST = 400;
     public static Uri imageuri;
-    public static String profileOrCoverPhoto;
-    //String uid;
-    //ImageView set;
-    //ProgressDialog pd;
 
     public static class ProfileActivityViewPagerAdapter extends FragmentStateAdapter {
         //constructor, necessary
@@ -169,7 +158,7 @@ public class ProfileViewModel extends ViewModel {
                 });
     }
 
-     public static void manageProposedFilter(String filter){
+    public static void manageProposedFilter(String filter){
         Utilities.manageFilter(filter, proposedFilters);
         ProposalRepository.getProposals(Utilities.day, UserManager.getUserId(), proposedFilters, Types.PROPOSED, new MyCallback<ArrayList<ProposalRepository.Proposal>>() {
             @Override
@@ -179,28 +168,28 @@ public class ProfileViewModel extends ViewModel {
         });
      }
 
-    public static Intent getCameraIntent(Context context){
+    public static void setImageUri(Context context){
         ContentValues contentValues = new ContentValues();
         contentValues.put(MediaStore.Images.Media.TITLE, "Profile_pic");
         contentValues.put(MediaStore.Images.Media.DESCRIPTION, "Profile picture");
         imageuri = context.getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues);
-        Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, imageuri);
-        return cameraIntent;
+    }
+    
+    // checking storage permission, if given then we can add something in our storage
+    static Boolean checkStoragePermission(Context context) {
+        return ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE) == (PackageManager.PERMISSION_GRANTED);
     }
 
-    public static Intent getGalleryIntent(){
-        Intent galleryIntent = new Intent(Intent.ACTION_PICK);
-        galleryIntent.setType("image/*");
-        return galleryIntent;
+    // checking camera permission ,if given then we can click image using our camera
+    static Boolean checkCameraPermission(Context context) {
+        boolean result = ContextCompat.checkSelfPermission(context, Manifest.permission.CAMERA) == (PackageManager.PERMISSION_GRANTED);
+        boolean result1 = ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE) == (PackageManager.PERMISSION_GRANTED);
+        return result && result1;
     }
 
-
-
-
-
-
-
+    public static void uploadProfileCoverPhoto(final Uri uri, Context context, CircleImageView profilePic) { //TODO spostala da qualche altra parte
+        ProfilePictureRepository.uploadProfileCoverPhoto(uri, context,profilePic);
+    }
 
 
 }

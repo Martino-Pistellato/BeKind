@@ -417,7 +417,8 @@ public class BottomBarViewModel extends ViewModel {
 
                 try {
                     address = geo.getFromLocationName(addresstext, 1);
-                    if(address.size() > 0){
+                    if(address.size() > 0 && address.get(0).getAddressLine(0).matches(".*\\d.*")){
+                        Log.e("ADDRESS", address.get(0).getAddressLine(0));
                         lat = address.get(0).getLatitude();
                         longitude = address.get(0).getLongitude();
                     }else{
@@ -427,6 +428,7 @@ public class BottomBarViewModel extends ViewModel {
 
                 } catch (IOException e) {
                     e.printStackTrace();
+                    publish = false;
                 }
 
                 if(publish){

@@ -20,6 +20,7 @@ import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.bekind_v2.DataLayer.PostRepository;
 import com.example.bekind_v2.DataLayer.ProposalRepository;
 import com.example.bekind_v2.DataLayer.UserDatabaseRepository;
@@ -64,6 +65,8 @@ public class PostRecyclerViewAdapter extends RecyclerView.Adapter<PostRecyclerVi
         UserManager.getUser(pubId, new MyCallback<UserDatabaseRepository.User>() {
             @Override
             public void onCallback(UserDatabaseRepository.User result) {
+                if(!result.getImage().isEmpty()) Glide.with(context).load(result.getImage()).into(holder.userProfilePic);
+
                 if(type != PostTypes.MYPOSTS)
                     holder.postPublisher.setText(result.getName()+" "+result.getSurname());
                 else
@@ -300,7 +303,7 @@ public class PostRecyclerViewAdapter extends RecyclerView.Adapter<PostRecyclerVi
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
 
-            userProfilePic = itemView.findViewById(R.id.user_profile_pic);
+            userProfilePic = itemView.findViewById(R.id.post_user_pic);
             postPublisher = itemView.findViewById(R.id.post_publisher);
             postTitle = itemView.findViewById(R.id.post_title);
             postBody = itemView.findViewById(R.id.post_body);

@@ -26,6 +26,8 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 import androidx.preference.PreferenceManager;
 
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.RequestOptions;
 import com.example.bekind_v2.DataLayer.UserManager;
 import com.example.bekind_v2.R;
 import com.example.bekind_v2.Utilities.PostTypes;

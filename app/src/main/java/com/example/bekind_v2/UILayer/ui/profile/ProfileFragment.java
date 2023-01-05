@@ -51,18 +51,17 @@ import java.util.Calendar;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class ProfileFragment extends Fragment {
-
     private FragmentProfileBinding binding;
     private SwitchCompat simpleSwitch;
     private TextView totalActivities, scheduledateText;
 
     CircleImageView profilePic;
+    private final ActivityResultLauncher<String> requestWriteExternalStoragePermissionLauncher = registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted -> {
+        if (isGranted) pickFromCamera();
+        else Toast.makeText(getContext(), "Write external storage permissions not granted", Toast.LENGTH_LONG).show();
+    });
     private final ActivityResultLauncher<String> requestCameraPermissionLauncher = registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted -> {
-            if (isGranted)
-                registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted1 -> {
-                    if (isGranted1) pickFromCamera();
-                    else Toast.makeText(getContext(), "Camera permissions not granted", Toast.LENGTH_LONG).show();
-                }).launch(Manifest.permission.WRITE_EXTERNAL_STORAGE);
+            if (isGranted) requestWriteExternalStoragePermissionLauncher.launch(Manifest.permission.WRITE_EXTERNAL_STORAGE);
             else Toast.makeText(getContext(), "Camera permissions not granted", Toast.LENGTH_LONG).show();
     });
     private final ActivityResultLauncher<String> requestGalleryPermissionLauncher = registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted -> {

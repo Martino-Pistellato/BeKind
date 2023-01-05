@@ -278,7 +278,7 @@ public class BottomBarViewModel extends ViewModel {
         continueBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Date proposalExpiringDate = BottomBarViewModel.toDate(expiringDate.getYear(), expiringDate.getMonth(), expiringDate.getDayOfMonth(), expiringHour.getHour(), expiringHour.getMinute());
+                Date proposalExpiringDate = BottomBarViewModel.toDate(expiringDate.getYear(), expiringDate.getMonth(), expiringDate.getDayOfMonth(), expiringHour.getHour()-1, expiringHour.getMinute());
                 String proposalTitle = title.getText().toString().trim(); //gets the content of the title
                 String proposalBody = body.getText().toString().trim(); //gets the content of the body
 

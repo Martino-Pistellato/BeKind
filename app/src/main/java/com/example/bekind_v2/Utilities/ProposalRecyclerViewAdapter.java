@@ -2,7 +2,6 @@ package com.example.bekind_v2.Utilities;
 
 import android.app.Dialog;
 import android.content.Context;
-import android.graphics.Color;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,13 +26,14 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+import com.example.bekind_v2.DataLayer.ProposalRepository;
 import com.example.bekind_v2.DataLayer.UserDatabaseRepository;
 import com.example.bekind_v2.DataLayer.UserManager;
 import com.example.bekind_v2.R;
 import com.example.bekind_v2.DataLayer.ProposalRepository;
 import com.example.bekind_v2.UILayer.ui.available.AvailableFragment;
 import com.example.bekind_v2.UILayer.ui.available.AvailableViewModel;
-import com.example.bekind_v2.UILayer.ui.dashboard.DashboardViewModel;
 import com.example.bekind_v2.UILayer.ui.home.HomeViewModel;
 import com.example.bekind_v2.UILayer.ui.profile.ProfileViewModel;
 import com.google.android.gms.maps.GoogleMap;
@@ -89,16 +89,21 @@ public class ProposalRecyclerViewAdapter extends RecyclerView.Adapter<ProposalRe
         UserManager.getUser(pubId, new MyCallback<UserDatabaseRepository.User>() {
             @Override
             public void onCallback(UserDatabaseRepository.User result) {
+                if(!result.getImage().isEmpty()) Glide.with(context).load(result.getImage()).into(holder.userProfilePic);
+                
                 if(type != Types.PROPOSED)
                     holder.proposalPublisher.setText(result.getName()+" "+result.getSurname());
                 else
                     holder.proposalPublisher.setText("Tu");
+
                 holder.proposalTitle.setText(proposal.getTitle());
                 holder.proposalBody.setText(proposal.getBody());
+
                 if(proposal.getMaxParticipants() > 1)
                     holder.proposalParticipants.setText("N. partecipanti attuali: "+proposal.getAcceptersID().size()+"/"+proposal.getMaxParticipants());
                 else
                     holder.proposalParticipants.setText("");
+
                 Date date = proposal.getExpiringDate();
                 LocalDateTime expiring_date_time = LocalDateTime.ofInstant(date.toInstant(), ZoneId.systemDefault());
                 holder.expiringHour.setText((String.format("%02d", expiring_date_time.getHour()+1)) + ":" + (String.format("%02d", expiring_date_time.getMinute())));
@@ -543,7 +548,7 @@ public class ProposalRecyclerViewAdapter extends RecyclerView.Adapter<ProposalRe
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
 
-            userProfilePic = itemView.findViewById(R.id.user_profile_pic);
+            userProfilePic = itemView.findViewById(R.id.proposal_user_pic);
             proposalPublisher = itemView.findViewById(R.id.proposal_publisher);
             proposalTitle = itemView.findViewById(R.id.proposal_title);
             proposalBody = itemView.findViewById(R.id.proposal_body);

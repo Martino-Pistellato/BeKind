@@ -84,4 +84,5 @@
     <string name="logout">Esci</string>
     <string name="tutorial">Rivedi tutorial</string>
     <string name="privacy">Informazioni sulla privacy</string>
+    <string name="google_maps_key">AIzaSyA3HPOduQGsgbyQ9ZNoXvKr7t_M9yXmxqw</string>
 </resources>

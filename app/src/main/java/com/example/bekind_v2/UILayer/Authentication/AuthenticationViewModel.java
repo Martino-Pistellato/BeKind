@@ -2,10 +2,8 @@ package com.example.bekind_v2.UILayer.Authentication;
 
 import android.content.Context;
 import android.util.Log;
-import android.view.View;
 import android.widget.AutoCompleteTextView;
 import android.widget.DatePicker;
-import android.widget.ProgressBar;
 
 import androidx.fragment.app.FragmentTransaction;
 import androidx.fragment.app.FragmentActivity;
@@ -15,6 +13,7 @@ import androidx.lifecycle.ViewModel;
 import com.example.bekind_v2.R;
 import com.example.bekind_v2.UILayer.BottomBarViewModel;
 import com.example.bekind_v2.UILayer.NeighbourhoodViewModel;
+import com.example.bekind_v2.Utilities.MapViewModel;
 import com.example.bekind_v2.Utilities.MyCallback;
 import com.google.android.material.textfield.TextInputEditText;
 import com.example.bekind_v2.DataLayer.UserManager;
@@ -105,7 +104,7 @@ public class AuthenticationViewModel extends ViewModel {
     }
 
 
-    public void checkLocationFields(AutoCompleteTextView city, String userCity, AutoCompleteTextView neighbourhood, String userNeighbourhood, TextInputEditText street, String userStreet, TextInputEditText streetNumber, String userStreetNumber, MyCallback<Boolean> myCallback){
+    public void checkLocationFields(TextInputEditText city, String userCity, AutoCompleteTextView neighbourhood, String userNeighbourhood, TextInputEditText street, String userStreet, TextInputEditText streetNumber, String userStreetNumber, MyCallback<Boolean> myCallback){
         NeighbourhoodViewModel.doesNeighbourhoodExist(userNeighbourhood.toLowerCase(), userCity.toLowerCase(), new MyCallback<Boolean>() {
             @Override
             public void onCallback(Boolean result) {
@@ -154,15 +153,15 @@ public class AuthenticationViewModel extends ViewModel {
         birthDate.setMinDate(minDate.getTime());
     }
 
-    public void changeFragment(FragmentActivity activity, int fragmentId, AuthenticationViewModel authenticationViewModel){
+    public void changeFragment(FragmentActivity activity, int fragmentId, AuthenticationViewModel authenticationViewModel, MapViewModel mapViewModel){
         //we start a fragment transaction and we replace current view with the new fragment
         FragmentTransaction fragmentTransaction = activity.getSupportFragmentManager().beginTransaction();
 
         if(fragmentId == R.id.fragment_registration1) {
-            RegistrationFragment2 registrationFragment2 = new RegistrationFragment2(authenticationViewModel);
+            RegistrationFragment2 registrationFragment2 = new RegistrationFragment2(authenticationViewModel, mapViewModel);
             fragmentTransaction.replace(R.id.fragment_container, registrationFragment2).commit();
         }else{
-            RegistrationFragment1 registrationFragment1 = new RegistrationFragment1(authenticationViewModel);
+            RegistrationFragment1 registrationFragment1 = new RegistrationFragment1(authenticationViewModel, mapViewModel);
             fragmentTransaction.replace(R.id.fragment_container, registrationFragment1).commit();
         }
     }
@@ -200,7 +199,7 @@ public class AuthenticationViewModel extends ViewModel {
         }
     }
 
-    public void getLocationData(AutoCompleteTextView city, AutoCompleteTextView neighbourhood, TextInputEditText street, TextInputEditText streetNumber){
+    public void getLocationData(TextInputEditText city, AutoCompleteTextView neighbourhood, TextInputEditText street, TextInputEditText streetNumber){
         city.setText(this.city);
         neighbourhood.setText(this.neighbourhoodName);
         street.setText(this.street);

@@ -14,6 +14,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.example.bekind_v2.R;
+import com.example.bekind_v2.Utilities.MapViewModel;
 import com.google.android.material.textfield.TextInputEditText;
 
 import java.util.Date;
@@ -21,9 +22,11 @@ import java.util.Date;
 public class RegistrationFragment1 extends Fragment {
 
     private AuthenticationViewModel authenticationViewModel;
+    private MapViewModel mapViewModel;
 
-    public RegistrationFragment1(AuthenticationViewModel authenticationViewModel){
+    public RegistrationFragment1(AuthenticationViewModel authenticationViewModel, MapViewModel mapViewModel){
         this.authenticationViewModel = authenticationViewModel;
+        this.mapViewModel = mapViewModel;
     }
 
     @Override
@@ -57,7 +60,7 @@ public class RegistrationFragment1 extends Fragment {
                     Toast.makeText(getContext(), "Errore: i campi non sono stati riempiti correttamente", Toast.LENGTH_SHORT).show();
                 else{
                     authenticationViewModel.saveUserData(userName, userSurname, userEmail, userPassword, birthDate);
-                    authenticationViewModel.changeFragment(getActivity(), R.id.fragment_registration1, authenticationViewModel);
+                    authenticationViewModel.changeFragment(getActivity(), R.id.fragment_registration1, authenticationViewModel, mapViewModel);
                 }
             }
         });

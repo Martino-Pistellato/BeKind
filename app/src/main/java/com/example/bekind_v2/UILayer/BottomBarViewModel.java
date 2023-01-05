@@ -2,6 +2,10 @@ package com.example.bekind_v2.UILayer;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.location.Address;
+import android.location.Geocoder;
+import android.location.Location;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -13,24 +17,47 @@ import android.widget.ListView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.lifecycle.ViewModel;
 
 import com.example.bekind_v2.DataLayer.PostRepository;
+import com.example.bekind_v2.DataLayer.UserDatabaseRepository;
 import com.example.bekind_v2.R;
 import com.example.bekind_v2.UILayer.ui.profile.ProfileViewModel;
 import com.example.bekind_v2.Utilities.MyCallback;
 import com.example.bekind_v2.Utilities.RepublishTypes;
 import com.example.bekind_v2.Utilities.Types;
 import com.example.bekind_v2.Utilities.Utilities;
+import com.google.android.gms.common.api.Status;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.CameraPosition;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.libraries.places.api.Places;
+import com.google.android.libraries.places.api.model.Place;
+import com.google.android.libraries.places.api.net.PlacesClient;
+import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
+import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.textfield.TextInputEditText;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
+import java.util.StringTokenizer;
 
 import com.example.bekind_v2.DataLayer.ProposalRepository;
 import com.example.bekind_v2.DataLayer.UserManager;
@@ -42,6 +69,20 @@ public class BottomBarViewModel extends ViewModel {
     private String proposalTitle, proposalBody;
     private Date proposalExpd;
 
+
+    private PlacesClient placesClient;
+    private FusedLocationProviderClient fusedLocationProviderClient;
+    private boolean locationPermissionGranted;
+    private Location lastKnownLocation;
+    private CameraPosition cameraPosition;
+    private LatLng defaultLocation = new LatLng(41.902782, 12.496366);
+
+    private static final String KEY_CAMERA_POSITION = "camera_position";
+    private static final String KEY_LOCATION = "location";
+    private static final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
+    private static final int DEFAULT_ZOOM = 15;
+
+
     public BottomBarViewModel() {
         filtersProposal = new ArrayList<>();
         filtersPost = new ArrayList<>();
@@ -50,11 +91,11 @@ public class BottomBarViewModel extends ViewModel {
         proposalExpd = null;
     }
 
-    public void createProposal(String title, String body, int max, Date expiringDate, RepublishTypes choice, MyCallback<Boolean> myCallback){
+    public void createProposal(String title, String body, int max, Date expiringDate, double lat, double longitude, RepublishTypes choice, MyCallback<Boolean> myCallback){
         String userId = UserManager.getUserId();
         UserManager.getUser(userId, user -> {
             if(user != null)
-                ProposalRepository.createProposal(title, body, expiringDate, userId, user.getNeighbourhoodID(), max, choice, filtersProposal, myCallback);
+                ProposalRepository.createProposal(title, body, expiringDate, userId, user.getNeighbourhoodID(), max, lat, longitude, choice, filtersProposal, myCallback);
         });
     }
 
@@ -165,7 +206,7 @@ public class BottomBarViewModel extends ViewModel {
     }
 
 
-    public void showFirstPopupProposal(Context applicationContext, Dialog dialog, Dialog choose_dialog) {
+    public void showFirstPopupProposal(Context applicationContext, Dialog dialog, Dialog choose_dialog, GoogleMap[] map) {
         TextInputEditText title, body;
         DatePicker expiringDate;
         TimePicker expiringHour;
@@ -245,7 +286,7 @@ public class BottomBarViewModel extends ViewModel {
                     Toast.makeText(applicationContext, "Errore: i campi non sono stati riempiti correttamente", Toast.LENGTH_SHORT).show();
                 else{
                     saveProposalData(proposalTitle, proposalBody, proposalExpiringDate);
-                    showSecondPopupProposal(applicationContext,dialog,choose_dialog);
+                    showSecondPopupProposal(applicationContext,dialog,choose_dialog, map);
                 }
             }
         });
@@ -264,13 +305,16 @@ public class BottomBarViewModel extends ViewModel {
         }
     }
 
-    private void showSecondPopupProposal(Context applicationContext, Dialog dialog, Dialog choose_dialog) {
+    private void showSecondPopupProposal(Context applicationContext, Dialog dialog, Dialog choose_dialog, GoogleMap[] map) {
         CheckBox groupProposal, periodicProposal;
         TextInputEditText maxParticipants;
         ListView listView;
         Button backBtn, publishBtn;
 
         dialog.setContentView(R.layout.add_proposal_popup2);
+
+        TextInputEditText city = dialog.findViewById(R.id.user_city), //neighbourhood = view.findViewById(R.id.user_neigh),
+                     street = dialog.findViewById(R.id.user_street), streetNumber = dialog.findViewById(R.id.street_number);
 
         groupProposal = dialog.findViewById(R.id.group_checkbox);
         maxParticipants = dialog.findViewById(R.id.activity_maxparticipants);
@@ -313,13 +357,25 @@ public class BottomBarViewModel extends ViewModel {
             }
         });
 
+        UserManager.getUser(UserManager.getUserId(), new MyCallback<UserDatabaseRepository.User>() {
+            @Override
+            public void onCallback(UserDatabaseRepository.User result) {
+                String cityName = result.getCity();
+                city.setText(cityName.substring(0, 1).toUpperCase() + cityName.substring(1));
+                city.setTextColor(applicationContext.getResources().getColor(R.color.black, applicationContext.getTheme()));
+                city.setEnabled(false);
+            }
+        });
+
+
+
         backBtn = dialog.findViewById(R.id.back_btn);
         publishBtn = dialog.findViewById(R.id.publish_btn);
 
         backBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showFirstPopupProposal(applicationContext, dialog, choose_dialog);
+                showFirstPopupProposal(applicationContext, dialog, choose_dialog, map);
             }
         });
 
@@ -328,6 +384,9 @@ public class BottomBarViewModel extends ViewModel {
             public void onClick(View view) {
                 int proposalMaxParticipants= 1;
                 boolean publish = true;
+                String cityText = city.getText().toString();
+                String streetNumb = streetNumber.getText().toString();
+                String streetText = street.getText().toString();
 
                 if(groupProposal.isChecked()) {
                     if (!checkGroupProposalConstraints(maxParticipants, maxParticipants.getText().toString().trim())) {
@@ -346,8 +405,33 @@ public class BottomBarViewModel extends ViewModel {
                     }
                 }
 
+                if(!checkAddress(city, cityText, street,streetText, streetNumber, streetNumb)){
+                    Toast.makeText(applicationContext, "Errore: i campi non sono stati riempiti correttamente", Toast.LENGTH_SHORT).show();
+                    publish = false;
+                }
+
+                Geocoder geo = new Geocoder(applicationContext);
+                List<Address> address;
+                String addresstext = streetText + ", "+streetNumb+", "+cityText;
+                double lat = 0, longitude = 0;
+
+                try {
+                    address = geo.getFromLocationName(addresstext, 1);
+                    if(address.size() > 0){
+                        lat = address.get(0).getLatitude();
+                        longitude = address.get(0).getLongitude();
+                    }else{
+                        Toast.makeText(applicationContext, "Errore: l'indirizzo inserito non è corretto", Toast.LENGTH_SHORT).show();
+                        publish = false;
+                    }
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
                 if(publish){
-                    createProposal(getProposalTitle(), getProposalBody(), proposalMaxParticipants, getProposalExpd(), choice[0], (result -> {
+
+                    createProposal(getProposalTitle(), getProposalBody(), proposalMaxParticipants, getProposalExpd(), lat, longitude, choice[0], (result -> {
                         if (result) Utilities.getProposals(Utilities.day, UserManager.getUserId(), ProfileViewModel.proposedFilters, Types.PROPOSED);
                         else Toast.makeText(applicationContext, "Errore nella pubblicazione dell'attività", Toast.LENGTH_SHORT).show();
                     }));
@@ -362,6 +446,25 @@ public class BottomBarViewModel extends ViewModel {
             }
         });
         dialog.show();
+    }
+
+    private boolean checkAddress(TextInputEditText city, String cityText, TextInputEditText street, String streetText, TextInputEditText streetNumber, String streetNumb) {
+        if(cityText.isEmpty()){
+            city.requestFocus();
+            city.setError("Questo campo non può essere vuoto");
+            return false;
+        }
+        if(streetNumb.isEmpty()){
+            streetNumber.requestFocus();
+            streetNumber.setError("Questo campo non può essere vuoto");
+            return false;
+        }
+        if(streetText.isEmpty()){
+            street.requestFocus();
+            street.setError("Questo campo non può essere vuoto");
+            return false;
+        }
+        return true;
     }
 
     private void saveProposalData(String proposalTitle, String proposalBody, Date proposalExpd) {
@@ -393,4 +496,95 @@ public class BottomBarViewModel extends ViewModel {
     public void setProposalExpd(Date proposalExpd) {
         this.proposalExpd = proposalExpd;
     }
+
+    private void initializeMap(Context context, GoogleMap[] map, AutocompleteSupportFragment autocompleteFragment, SupportMapFragment mapFragment, TextInputEditText city, TextInputEditText street, TextInputEditText streetNumber){
+
+        //set searchbar
+        autocompleteFragment.getView().setBackground(ContextCompat.getDrawable(context, R.color.white));
+        autocompleteFragment.setCountry("IT");
+        autocompleteFragment.setPlaceFields(Arrays.asList(Place.Field.ID, Place.Field.NAME, Place.Field.ADDRESS, Place.Field.LAT_LNG));
+        autocompleteFragment.setMenuVisibility(false);
+        autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
+        @Override
+        public void onPlaceSelected(Place place) {
+            // TODO: Get info about the selected place.
+            LatLng newLatLng = place.getLatLng();
+            map[0].moveCamera(CameraUpdateFactory.newLatLng(newLatLng));
+            map[0].animateCamera(CameraUpdateFactory.zoomTo(17));
+            map[0].addMarker(new MarkerOptions().position(newLatLng).draggable(true));
+
+            map[0].setOnMarkerDragListener(new GoogleMap.OnMarkerDragListener() {
+                @Override
+                public void onMarkerDrag(@NonNull Marker marker) {
+
+                }
+
+                @Override
+                public void onMarkerDragEnd(@NonNull Marker marker) {
+                    LatLng markercoord = new LatLng(marker.getPosition().latitude, marker.getPosition().longitude);
+                    showGeocoderInfo(context, markercoord, city, street, streetNumber);
+                }
+
+                @Override
+                public void onMarkerDragStart(@NonNull Marker marker) {
+
+                }
+            });
+            showGeocoderInfo(context, newLatLng, city, street, streetNumber);
+
+        }
+
+        @Override
+        public void onError(Status status) {
+            // TODO: Handle the error.
+            //Log.i(TAG, "An error occurred: " + status);
+        }
+
+    });
+
+        Places.initialize(context, context.getResources().getString(R.string.google_maps_key));
+    placesClient = Places.createClient(context);
+
+    // Construct a FusedLocationProviderClient.
+    fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(context);
+
+        mapFragment.getMapAsync(new OnMapReadyCallback() {
+        @Override
+        public void onMapReady(@NonNull GoogleMap googleMap) {
+            map[0] = googleMap;
+
+            //updateLocationUI();
+
+            // Get the current location of the device and set the position of the map.
+            //getDeviceLocation();
+        }
+    });
+}
+    private void showGeocoderInfo(Context context, LatLng coord, TextInputEditText city, TextInputEditText street, TextInputEditText streetNumber) {
+        Geocoder geocoder = new Geocoder(context, Locale.getDefault());
+        try {
+            List<Address> addresses = geocoder.getFromLocation(coord.latitude, coord.longitude, 1);
+            city.setText(addresses.get(0).getLocality());
+            String address = addresses.get(0).getAddressLine(0);
+            StringTokenizer st2 = new StringTokenizer(address, ",");
+            int commas=0;
+            String streetname="";
+            String number="";
+            while (st2.hasMoreElements() && commas <2) {
+                if(commas==0)
+                    streetname = (String)st2.nextElement();
+                else
+                    number =(String)st2.nextElement();
+                ++commas;
+            }
+            street.setText(streetname);
+            streetNumber.setText(number);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+
+
 }

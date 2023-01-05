@@ -27,6 +27,48 @@
             android:textSize="20sp"
             android:layout_marginBottom="20dp"/>
 
+        <fragment android:id="@+id/autocomplete_fragment"
+            android:layout_width="350dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/neighbourhood_text"
+            android:layout_below="@id/neighbourhood_text"
+            app:layout_constraintBottom_toTopOf="@id/map"
+            android:name="com.google.android.libraries.places.widget.AutocompleteSupportFragment"
+            tools:layout="@layout/fragment_registration2" />
+
+        <fragment
+            android:layout_width="350dp"
+            android:layout_height="220dp"
+            app:layout_constraintBottom_toTopOf="@id/city_container"
+            app:layout_constraintTop_toBottomOf="@id/autocomplete_fragment"
+            android:layout_below="@id/autocomplete_fragment"
+            android:id="@+id/map"
+            android:layout_centerHorizontal="true"
+            tools:context=".MapsActivity"
+            android:name="com.google.android.gms.maps.SupportMapFragment"
+            tools:layout="@layout/fragment_registration2"></fragment>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/city_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:boxBackgroundColor="@color/white"
+            app:hintTextColor="@color/teal_700"
+            app:boxStrokeColor="@color/teal_700"
+            android:layout_below="@id/map">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/user_city"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textCursorDrawable="@color/teal_200"
+                android:hint="@string/city_hint"
+                android:inputType="textNoSuggestions"
+                android:layout_marginBottom="20dp"/>
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+
         <!-- <com.google.android.material.textfield.TextInputLayout
              android:id="@+id/city_container"
              android:layout_width="match_parent"
@@ -64,26 +106,26 @@
                  android:hint="@string/neighbourhod_hint"
                  android:inputType="textNoSuggestions"
                  android:layout_marginBottom="20dp"/>
-         </com.google.android.material.textfield.TextInputLayout>-->
+         </com.google.android.material.textfield.TextInputLayout>
 
         <AutoCompleteTextView
             android:id="@+id/user_city"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/neighbourhood_text"
+            android:layout_below="@id/map"
             android:hint="@string/city_hint"
             android:inputType="text"
             android:layout_marginBottom="20dp"
             app:hintTextColor="@color/primaryDarkColor"
             app:boxStrokeColor="@color/primaryDarkColor"
             android:textCursorDrawable="@color/primaryDarkColor">
-        </AutoCompleteTextView>
+        </AutoCompleteTextView> -->
 
         <AutoCompleteTextView
             android:id="@+id/user_neigh"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/user_city"
+            android:layout_below="@id/city_container"
             android:hint="@string/neighbourhod_hint"
             android:inputType="text"
             android:layout_marginBottom="20dp"

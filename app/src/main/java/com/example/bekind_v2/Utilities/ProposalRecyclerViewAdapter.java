@@ -23,16 +23,22 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.bekind_v2.DataLayer.UserDatabaseRepository;
 import com.example.bekind_v2.DataLayer.UserManager;
 import com.example.bekind_v2.R;
 import com.example.bekind_v2.DataLayer.ProposalRepository;
+import com.example.bekind_v2.UILayer.ui.available.AvailableFragment;
 import com.example.bekind_v2.UILayer.ui.available.AvailableViewModel;
 import com.example.bekind_v2.UILayer.ui.dashboard.DashboardViewModel;
 import com.example.bekind_v2.UILayer.ui.home.HomeViewModel;
 import com.example.bekind_v2.UILayer.ui.profile.ProfileViewModel;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.textfield.TextInputEditText;
 
@@ -43,15 +49,25 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 
+import dagger.hilt.android.internal.managers.FragmentComponentManager;
+
 public class ProposalRecyclerViewAdapter extends RecyclerView.Adapter<ProposalRecyclerViewAdapter.MyViewHolder> {
     ArrayList<ProposalRepository.Proposal> proposals;
     Context context;
     Types type;
+    MapViewModel mapViewModel;
+    SupportMapFragment mapFragment;
+    Dialog mapDialog;
+    FragmentActivity activity;
 
-    public ProposalRecyclerViewAdapter(ArrayList<ProposalRepository.Proposal> proposals, Context context, Types type) {
+    public ProposalRecyclerViewAdapter(MapViewModel mapViewModel, Dialog mapdialog, SupportMapFragment mapFragment, ArrayList<ProposalRepository.Proposal> proposals, Context context, FragmentActivity activity, Types type) {
         this.proposals = proposals;
         this.context = context;
         this.type = type;
+        this.mapDialog = mapdialog;
+        this.mapFragment = mapFragment;
+        this.mapViewModel = mapViewModel;
+        this.activity = activity;
     }
 
     @NonNull
@@ -499,7 +515,14 @@ public class ProposalRecyclerViewAdapter extends RecyclerView.Adapter<ProposalRe
                         @Override
                         public void onClick(View v) {
                             //TODO: evolution geo-localization
-                            Toast.makeText(context, "MAPPA ATTIVITA'", Toast.LENGTH_LONG).show();
+                            mapDialog.findViewById(R.id.map_container).setVisibility(View.VISIBLE);
+
+                            LatLng coord = new LatLng(proposal.getLatitude(), proposal.getLongitude());
+                            GoogleMap[] map = new GoogleMap[1];
+
+                            mapViewModel.setMap(activity, context, mapFragment, coord);
+
+                            mapDialog.show();
                         }
                     });
                 }

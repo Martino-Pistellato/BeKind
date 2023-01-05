@@ -1,32 +1,20 @@
 package com.example.bekind_v2.DataLayer;
 
-import static com.example.bekind_v2.Utilities.Utilities.day;
 import static com.example.bekind_v2.Utilities.Utilities.isOldAge;
 import static java.lang.Thread.sleep;
 
-import android.os.AsyncTask;
-import android.os.ParcelUuid;
 import android.util.Log;
-import android.util.Pair;
-import android.widget.Switch;
 
 import androidx.annotation.NonNull;
 
 import com.example.bekind_v2.Utilities.MyCallback;
 import com.example.bekind_v2.Utilities.RepublishTypes;
 import com.example.bekind_v2.Utilities.Types;
-import com.example.bekind_v2.Utilities.Utilities;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.Query;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.ServerTimestamp;
 
@@ -34,8 +22,6 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.Date;
 import java.util.UUID;
 
@@ -56,10 +42,12 @@ public class ProposalRepository {
         private String neighbourhoodID;
         private ArrayList<String> flagsUsers;
         private boolean priority;
+        private double latitude;
+        private double longitude;
 
         public Proposal(){}
 
-        public Proposal(String title, String body, Date expiringDate, Date publishingDate, String publisherId, String neighbourhoodID, String id, int maxParticipants, RepublishTypes choice, ArrayList<String> filters, boolean priority){
+        public Proposal(String title, String body, Date expiringDate, Date publishingDate, String publisherId, String neighbourhoodID, String id, int maxParticipants, double lat, double longitude, RepublishTypes choice, ArrayList<String> filters, boolean priority){
             this.title = title;
             this.body = body;
             this.expiringDate = expiringDate;
@@ -73,6 +61,8 @@ public class ProposalRepository {
             this.publishingDate = publishingDate;
             this.republishTypes = choice;
             this.priority = priority; //default value
+            this.latitude = lat;
+            this.longitude = longitude;
         }
 
         public String getTitle(){return this.title;}
@@ -94,7 +84,15 @@ public class ProposalRepository {
         public RepublishTypes getRepublishTypes() {
             return republishTypes;
         }
-        
+
+        public double getLongitude() {
+            return longitude;
+        }
+
+        public double getLatitude() {
+            return latitude;
+        }
+
         public void setTitle(String title){this.title=title;}
         public void setBody(String body){this.body=body;}
         public void setExpiringDate(Date expiringDate){this.expiringDate=expiringDate;}
@@ -114,6 +112,14 @@ public class ProposalRepository {
             this.acceptersID.remove(participantId);
         }
 
+        public void setLongitude(double longitude) {
+            this.longitude = longitude;
+        }
+
+        public void setLatitude(double latitude) {
+            this.latitude = latitude;
+        }
+
         public void addFlagUser(String userId) {
             if(!flagsUsers.contains(userId)) {
                 flagsUsers.add(userId);
@@ -130,13 +136,13 @@ public class ProposalRepository {
         }
     }
 
-    public static void createProposal(String title, String body, Date expiringDate, String publisherID, String neighbourhoodId, int max, RepublishTypes choice, ArrayList<String> filters, MyCallback<Boolean> myCallback){
+    public static void createProposal(String title, String body, Date expiringDate, String publisherID, String neighbourhoodId, int max, double lat, double longitude, RepublishTypes choice, ArrayList<String> filters, MyCallback<Boolean> myCallback){
         String id =  UUID.randomUUID().toString();
         LocalDateTime ldt = LocalDateTime.ofInstant(new Date().toInstant(), ZoneId.systemDefault());
         final Date publishDate = Date.from(ldt.atZone(ZoneId.systemDefault()).toInstant());
 
         UserManager.getUser(publisherID, user -> {
-            Proposal proposal = new Proposal(title, body, expiringDate, publishDate, publisherID, neighbourhoodId, id, max, choice, filters, isOldAge(user.getBirth()));
+            Proposal proposal = new Proposal(title, body, expiringDate, publishDate, publisherID, neighbourhoodId, id, max, lat, longitude, choice, filters, isOldAge(user.getBirth()));
             FirebaseFirestore.getInstance().collection("Proposals").document(id).set(proposal).addOnCompleteListener((t)->{ myCallback.onCallback(t.isSuccessful()); });
         });
     }

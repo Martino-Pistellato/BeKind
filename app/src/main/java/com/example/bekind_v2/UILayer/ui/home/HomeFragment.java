@@ -87,7 +87,7 @@ public class HomeFragment extends Fragment {
         final Observer<ArrayList<ProposalRepository.Proposal>> acceptedObserver = new Observer<ArrayList<ProposalRepository.Proposal>>() {
             @Override
             public void onChanged(@Nullable final ArrayList<ProposalRepository.Proposal> accepted) {
-                ProposalRecyclerViewAdapter adapter = new ProposalRecyclerViewAdapter(accepted, getContext(), Types.ACCEPTED);
+                ProposalRecyclerViewAdapter adapter = new ProposalRecyclerViewAdapter(null,null, null, accepted, getContext(),getActivity(), Types.ACCEPTED);
 
                 recyclerView.setAdapter(adapter);
                 adapter.notifyDataSetChanged();

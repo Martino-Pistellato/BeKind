@@ -1,5 +1,7 @@
 package com.example.bekind_v2.DataLayer;
 
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 
 import com.example.bekind_v2.Utilities.MyCallback;
@@ -41,7 +43,7 @@ public class NeighbourhoodRepository {
                     FirebaseFirestore.getInstance().collection("Neighbourhoods").document(Id).set(neighbourhood).addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
-                            myCallback.onCallback(task.isSuccessful());
+                                myCallback.onCallback(task.isSuccessful());
                         }
                     });
                 }

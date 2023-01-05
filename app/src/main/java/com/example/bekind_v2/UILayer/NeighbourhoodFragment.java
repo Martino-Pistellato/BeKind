@@ -19,15 +19,18 @@ import android.widget.Toast;
 import com.example.bekind_v2.R;
 import com.example.bekind_v2.UILayer.Authentication.AuthenticationViewModel;
 import com.example.bekind_v2.UILayer.Authentication.RegistrationFragment2;
+import com.example.bekind_v2.Utilities.MapViewModel;
 import com.google.android.material.textfield.TextInputEditText;
 
 public class NeighbourhoodFragment extends Fragment {
 
     private NeighbourhoodViewModel neighbourhoodViewModel;
     private final AuthenticationViewModel authenticationViewModel;
+    private MapViewModel mapViewModel;
 
-    public NeighbourhoodFragment(AuthenticationViewModel authenticationViewModel){
+    public NeighbourhoodFragment(AuthenticationViewModel authenticationViewModel, MapViewModel mapViewModel){
         this.authenticationViewModel = authenticationViewModel;
+        this.mapViewModel = mapViewModel;
     }
 
     @Override
@@ -42,7 +45,7 @@ public class NeighbourhoodFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
-                RegistrationFragment2 registrationFragment2 = new RegistrationFragment2(authenticationViewModel);
+                RegistrationFragment2 registrationFragment2 = new RegistrationFragment2(authenticationViewModel, mapViewModel);
                 fragmentTransaction.replace(R.id.fragment_container, registrationFragment2).commit();
             }
         });

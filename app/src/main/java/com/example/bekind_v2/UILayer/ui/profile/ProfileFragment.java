@@ -18,7 +18,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.DatePicker;
@@ -29,6 +28,7 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.SwitchCompat;
+import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.viewpager2.widget.ViewPager2;
@@ -36,7 +36,8 @@ import androidx.viewpager2.widget.ViewPager2;
 import com.bumptech.glide.Glide;
 import com.example.bekind_v2.DataLayer.UserManager;
 import com.example.bekind_v2.R;
-import com.example.bekind_v2.Utilities.MyCallback;
+import com.example.bekind_v2.Utilities.MapViewModel;
+import com.example.bekind_v2.Utilities.UpdateUserLocationDialog;
 import com.example.bekind_v2.Utilities.PostTypes;
 import com.example.bekind_v2.Utilities.ScheduleBar;
 import com.example.bekind_v2.Utilities.Types;
@@ -73,6 +74,7 @@ public class ProfileFragment extends Fragment {
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         ProfileViewModel profileViewModel = new ViewModelProvider(this).get(ProfileViewModel.class);
+        MapViewModel mapViewModel = new ViewModelProvider(this).get(MapViewModel.class);
         binding = FragmentProfileBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
         Context context = this.getContext();
@@ -182,93 +184,10 @@ public class ProfileFragment extends Fragment {
         updateUserLocation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Dialog dialog = new Dialog(getContext());
-                dialog.setContentView(R.layout.fragment_registration2);
-                dialog.setCanceledOnTouchOutside(false);
+                DialogFragment dialog = new UpdateUserLocationDialog(profileViewModel, mapViewModel, profileName);
 
-                TextView textCreateNeighbourhood = dialog.findViewById(R.id.text_create_neigh), title = dialog.findViewById(R.id.neighbourhood_text);
-                TextInputEditText street = dialog.findViewById(R.id.user_street), streetNumber = dialog.findViewById(R.id.street_number);
-                Button cancelBtn = dialog.findViewById(R.id.back_button), continueBtn = dialog.findViewById(R.id.continue_button);
-                AutoCompleteTextView city = dialog.findViewById(R.id.user_city), neighbourhood = dialog.findViewById(R.id.user_neigh);
-                title.setText("Modifica dati residenza");//TODO: metti la stringa
-                city.setText(profileViewModel.getUser().getCity());
-                street.setText(profileViewModel.getUser().getStreet());
-                streetNumber.setText(profileViewModel.getUser().getStreet_number());
-                profileViewModel.getNeighbourhood(profileViewModel.getUser().getNeighbourhoodID(), neighbourhood::setText);
 
-                continueBtn.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        profileViewModel.setCity(city.getText().toString().trim());
-                        profileViewModel.setStreet(street.getText().toString().trim());
-                        profileViewModel.setStreet_number(streetNumber.getText().toString().trim());
-                        profileViewModel.setNeighbourhood(neighbourhood, new MyCallback<Boolean>() {
-                            @Override
-                            public void onCallback(Boolean result) {
-                                profileViewModel.updateUser();
-                            }
-                        });
-
-                        profileViewModel.getUserName(profileName::setText);
-                        dialog.dismiss();
-                    }
-                });
-
-                cancelBtn.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        dialog.dismiss();
-                    }
-                });
-
-                textCreateNeighbourhood.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        profileViewModel.setCity(city.getText().toString().trim());
-                        profileViewModel.setStreet(street.getText().toString().trim());
-                        profileViewModel.setStreet_number(streetNumber.getText().toString().trim());
-
-                        dialog.dismiss();
-                        Dialog dialog = new Dialog(getContext());
-                        dialog.setContentView(R.layout.fragment_neighbourhood);
-                        dialog.setCanceledOnTouchOutside(false);
-
-                        TextInputEditText neighbourhood = dialog.findViewById(R.id.neigh_name);
-                        Button backBtn = dialog.findViewById(R.id.back_button), confirmBtn = dialog.findViewById(R.id.continue_button);
-
-                        backBtn.setText("CHIUDI"); //TODO: toString
-                        confirmBtn.setText("CONFERMA"); //TODO: toString
-
-                        backBtn.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                dialog.dismiss();
-                            }
-                        });
-
-                        confirmBtn.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                profileViewModel.createNeighbourhood(neighbourhood.getText().toString().trim(), (x) -> {
-                                   if (x)
-                                       profileViewModel.setNeighbourhood(neighbourhood, (y) -> {
-                                           profileViewModel.updateUser();
-
-                                           profileViewModel.getUserName(profileName::setText);
-                                           dialog.dismiss();
-                                       });
-                                   else {
-                                       neighbourhood.setError("Il quartiere esiste già");
-                                   }
-                                });
-                            }
-                        });
-
-                        dialog.show();
-                    }
-                });
-
-                dialog.show();
+                dialog.show(getChildFragmentManager(), null);
             }
         });
 

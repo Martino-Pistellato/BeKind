@@ -525,7 +525,7 @@ public class ProposalRecyclerViewAdapter extends RecyclerView.Adapter<ProposalRe
                             LatLng coord = new LatLng(proposal.getLatitude(), proposal.getLongitude());
                             GoogleMap[] map = new GoogleMap[1];
 
-                            mapViewModel.setMap(activity, context, mapFragment, coord);
+                            mapViewModel.initializeMap(activity, context,null, mapFragment,null,null,null, coord);
 
                             mapDialog.show();
                         }

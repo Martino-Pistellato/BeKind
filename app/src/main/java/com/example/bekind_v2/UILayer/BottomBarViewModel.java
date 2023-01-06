@@ -293,7 +293,7 @@ public class BottomBarViewModel extends ViewModel {
         dialog.show();
     }
 
-    private void setSelectedChips(Chip shoppingChip, Chip houseworksChip, Chip cleaningChip, Chip transportChip, Chip randomChip) {
+    public void setSelectedChips(Chip shoppingChip, Chip houseworksChip, Chip cleaningChip, Chip transportChip, Chip randomChip) {
         for(String s : filtersProposal){
             switch(s){
                 case "Spesa": shoppingChip.setChecked(true);break;
@@ -450,7 +450,7 @@ public class BottomBarViewModel extends ViewModel {
         dialog.show();
     }
 
-    private boolean checkAddress(TextInputEditText city, String cityText, TextInputEditText street, String streetText, TextInputEditText streetNumber, String streetNumb) {
+    public boolean checkAddress(TextInputEditText city, String cityText, TextInputEditText street, String streetText, TextInputEditText streetNumber, String streetNumb) {
         if(cityText.isEmpty()){
             city.requestFocus();
             city.setError("Questo campo non può essere vuoto");
@@ -469,7 +469,7 @@ public class BottomBarViewModel extends ViewModel {
         return true;
     }
 
-    private void saveProposalData(String proposalTitle, String proposalBody, Date proposalExpd) {
+    public void saveProposalData(String proposalTitle, String proposalBody, Date proposalExpd) {
         this.proposalTitle=proposalTitle;
         this.proposalBody=proposalBody;
         this.proposalExpd = proposalExpd;

@@ -12,10 +12,10 @@
         android:layout_centerVertical="true">
 
 
-        <!--<fragment android:id="@+id/autocomplete_fragment_prop"
+        <fragment android:id="@+id/autocomplete_fragment_prop"
             android:layout_width="350dp"
             android:layout_height="wrap_content"
-            app:layout_constraintBottom_toTopOf="@id/map"
+            app:layout_constraintBottom_toTopOf="@id/map_prop"
             android:name="com.google.android.libraries.places.widget.AutocompleteSupportFragment"
             tools:layout="@layout/add_proposal_popup2" />
 
@@ -30,11 +30,12 @@
             tools:context=".MapsActivity"
             android:name="com.google.android.gms.maps.SupportMapFragment"
             tools:layout="@layout/add_proposal_popup2"></fragment>
-        -->
+
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/city_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_below="@id/map_prop"
             app:boxBackgroundColor="@color/white"
             app:hintTextColor="@color/teal_700"
             app:boxStrokeColor="@color/teal_700"

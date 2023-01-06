@@ -19,6 +19,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
+import androidx.fragment.app.DialogFragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -30,6 +31,8 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.bekind_v2.DataLayer.UserManager;
 import com.example.bekind_v2.R;
+import com.example.bekind_v2.Utilities.CreateActivityDialog;
+import com.example.bekind_v2.Utilities.MapViewModel;
 import com.example.bekind_v2.Utilities.PostTypes;
 import com.example.bekind_v2.Utilities.PostsViewModel;
 import com.example.bekind_v2.Utilities.ProposalsViewModel;
@@ -51,7 +54,7 @@ public class BottomBar extends AppCompatActivity {
     private ActivityBottomBarBinding binding;
     private BottomBarViewModel bottomBarViewModel;
     private FloatingActionButton addProposalButton;
-    private GoogleMap[] map = new GoogleMap[1];
+    private  MapViewModel mapViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,6 +87,7 @@ public class BottomBar extends AppCompatActivity {
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(binding.navView, navController);
         bottomBarViewModel = new ViewModelProvider(this).get(BottomBarViewModel.class);
+        mapViewModel = new ViewModelProvider(this).get(MapViewModel.class);
 
         addProposalButton = findViewById(R.id.add_proposal_btn);
 
@@ -102,9 +106,11 @@ public class BottomBar extends AppCompatActivity {
                 activityBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        Dialog dialog = new Dialog(BottomBar.this);
+                        //Dialog dialog = new Dialog(BottomBar.this);
+                        //bottomBarViewModel.showFirstPopupProposal(getApplicationContext(), dialog, choose_dialog, map);
+                        DialogFragment dialogFragment = new CreateActivityDialog(bottomBarViewModel, choose_dialog, mapViewModel);
 
-                        bottomBarViewModel.showFirstPopupProposal(getApplicationContext(), dialog, choose_dialog, map);
+                        dialogFragment.show(getSupportFragmentManager(), null);
                     }
                 });
 

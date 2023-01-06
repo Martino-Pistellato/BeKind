@@ -101,7 +101,7 @@ public class RegistrationFragment2 extends Fragment {
         AutocompleteSupportFragment autocompleteFragment = (AutocompleteSupportFragment) getChildFragmentManager().findFragmentById(R.id.autocomplete_fragment);
         SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
 
-        mapViewModel.initializeMap(getActivity(), getContext(), autocompleteFragment, mapFragment, city, street, streetNumber);
+        mapViewModel.initializeMap(getActivity(), getContext(), autocompleteFragment, mapFragment, city, street, streetNumber, null);
 
         authenticationViewModel.getLocationData(city, neighbourhood, street, streetNumber);
 

@@ -57,10 +57,10 @@ public class MapViewModel extends ViewModel implements ActivityCompat.OnRequestP
     private Context context;
     private FragmentActivity fragmentActivity;
 
-    public void setMap(FragmentActivity activity, Context context, SupportMapFragment mapFragment, LatLng coord){
-        this.map = new GoogleMap[1];
+    public void setMap(/*FragmentActivity activity, Context context*/ GoogleMap[] map, SupportMapFragment mapFragment, LatLng coord, Marker[] marker){
+        /*this.map = new GoogleMap[1];
         this.context = context;
-        this.fragmentActivity = activity;
+        this.fragmentActivity = activity;*/
         mapFragment.getMapAsync(new OnMapReadyCallback() {
             @Override
             public void onMapReady(@NonNull GoogleMap googleMap) {
@@ -71,15 +71,27 @@ public class MapViewModel extends ViewModel implements ActivityCompat.OnRequestP
                 try {
                     List<Address> addresses = geocoder.getFromLocation(coord.latitude, coord.longitude, 1);
                     if(addresses.size() > 0)
-                        map[0].addMarker(new MarkerOptions().position(coord).title(addresses.get(0).getAddressLine(0)));//todo add address
+                        marker[0] = map[0].addMarker(new MarkerOptions().position(coord).title(addresses.get(0).getAddressLine(0)));//todo add address
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
             }
         });
+
+        /*Log.e("Set map", "setting map with previous location info");
+        map[0].moveCamera(CameraUpdateFactory.newLatLng(coord));
+        map[0].animateCamera(CameraUpdateFactory.zoomTo(17));
+        Geocoder geocoder = new Geocoder(context, Locale.getDefault());
+        try {
+            List<Address> addresses = geocoder.getFromLocation(coord.latitude, coord.longitude, 1);
+            if(addresses.size() > 0)
+                marker = map[0].addMarker(new MarkerOptions().position(coord).title(addresses.get(0).getAddressLine(0)));//todo add address
+        } catch (IOException e) {
+            e.printStackTrace();
+        }*/
     }
 
-    public void initializeMap(FragmentActivity activity, Context context, AutocompleteSupportFragment autocompleteFragment, SupportMapFragment mapFragment, TextInputEditText city, TextInputEditText street, TextInputEditText streetNumber){
+    public void initializeMap(FragmentActivity activity, Context context, AutocompleteSupportFragment autocompleteFragment, SupportMapFragment mapFragment, TextInputEditText city, TextInputEditText street, TextInputEditText streetNumber, LatLng coord){
 
         this.fragmentActivity = activity;
         this.context = context;
@@ -88,52 +100,55 @@ public class MapViewModel extends ViewModel implements ActivityCompat.OnRequestP
         Marker[] marker = new Marker[1];
 
         //set searchbar
-        autocompleteFragment.getView().setBackground(ContextCompat.getDrawable(context, R.color.white));
-        autocompleteFragment.setCountry("IT");
-        autocompleteFragment.setPlaceFields(Arrays.asList(Place.Field.ID, Place.Field.NAME, Place.Field.ADDRESS, Place.Field.LAT_LNG));
-        autocompleteFragment.setMenuVisibility(false);
+        if(autocompleteFragment != null){
+            Log.e("Search bar", "setting search bar up");
+            autocompleteFragment.getView().setBackground(ContextCompat.getDrawable(context, R.color.white));
+            autocompleteFragment.setCountry("IT");
+            autocompleteFragment.setPlaceFields(Arrays.asList(Place.Field.ID, Place.Field.NAME, Place.Field.ADDRESS, Place.Field.LAT_LNG));
+            autocompleteFragment.setMenuVisibility(false);
 
-        autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
-            @Override
-            public void onPlaceSelected(Place place) {
-                // TODO: Get info about the selected place.
-                LatLng newLatLng = place.getLatLng();
-                map[0].moveCamera(CameraUpdateFactory.newLatLng(newLatLng));
-                map[0].animateCamera(CameraUpdateFactory.zoomTo(17));
-                if(marker[0]!=null)
-                        marker[0].remove();
+            autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
+                @Override
+                public void onPlaceSelected(Place place) {
+                    // TODO: Get info about the selected place.
+                    LatLng newLatLng = place.getLatLng();
+                    map[0].moveCamera(CameraUpdateFactory.newLatLng(newLatLng));
+                    map[0].animateCamera(CameraUpdateFactory.zoomTo(17));
+                    if(marker[0]!=null)
+                            marker[0].remove();
 
-                marker[0] = map[0].addMarker(new MarkerOptions().position(newLatLng).draggable(true));
+                    marker[0] = map[0].addMarker(new MarkerOptions().position(newLatLng).draggable(true));
 
-                map[0].setOnMarkerDragListener(new GoogleMap.OnMarkerDragListener() {
-                    @Override
-                    public void onMarkerDrag(@NonNull Marker marker) {
+                    map[0].setOnMarkerDragListener(new GoogleMap.OnMarkerDragListener() {
+                        @Override
+                        public void onMarkerDrag(@NonNull Marker marker) {
 
-                    }
+                        }
 
-                    @Override
-                    public void onMarkerDragEnd(@NonNull Marker marker) {
-                        LatLng markercoord = new LatLng(marker.getPosition().latitude, marker.getPosition().longitude);
-                        showGeocoderInfo(markercoord, city, street, streetNumber);
-                    }
+                        @Override
+                        public void onMarkerDragEnd(@NonNull Marker marker) {
+                            LatLng markercoord = new LatLng(marker.getPosition().latitude, marker.getPosition().longitude);
+                            showGeocoderInfo(markercoord, city, street, streetNumber);
+                        }
 
-                    @Override
-                    public void onMarkerDragStart(@NonNull Marker marker) {
+                        @Override
+                        public void onMarkerDragStart(@NonNull Marker marker) {
 
-                    }
-                });
+                        }
+                    });
 
-                showGeocoderInfo(newLatLng, city, street, streetNumber);
+                    showGeocoderInfo(newLatLng, city, street, streetNumber);
 
-            }
+                }
 
-            @Override
-            public void onError(Status status) {
-                // TODO: Handle the error.
-                //Log.i(TAG, "An error occurred: " + status);
-            }
+                @Override
+                public void onError(Status status) {
+                    // TODO: Handle the error.
+                    //Log.i(TAG, "An error occurred: " + status);
+                }
 
-        });
+            });
+        }
 
         Places.initialize(context, context.getResources().getString(R.string.google_maps_key));
         placesClient = Places.createClient(context);
@@ -141,17 +156,21 @@ public class MapViewModel extends ViewModel implements ActivityCompat.OnRequestP
         // Construct a FusedLocationProviderClient.
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(context);
 
-        mapFragment.getMapAsync(new OnMapReadyCallback() {
-            @Override
-            public void onMapReady(@NonNull GoogleMap googleMap) {
-                map[0] = googleMap;
+        if(coord != null)
+            setMap(map, mapFragment, coord, marker);
+        else {
+            mapFragment.getMapAsync(new OnMapReadyCallback() {
+                @Override
+                public void onMapReady(@NonNull GoogleMap googleMap) {
+                    map[0] = googleMap;
 
-                updateLocationUI(map[0]);
+                    updateLocationUI(map[0]);
 
-                // Get the current location of the device and set the position of the map.
-                //getDeviceLocation();
-            }
-        });
+                    // Get the current location of the device and set the position of the map.
+                    //getDeviceLocation();
+                }
+            });
+        }
     }
 
     private void showGeocoderInfo(LatLng coord, TextInputEditText city, TextInputEditText street, TextInputEditText streetNumber) {

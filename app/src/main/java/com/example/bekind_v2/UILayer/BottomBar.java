@@ -25,7 +25,9 @@ import androidx.navigation.ui.NavigationUI;
 import androidx.preference.PreferenceManager;
 
 import com.example.bekind_v2.DataLayer.UserManager;
+import com.example.bekind_v2.MainActivity;
 import com.example.bekind_v2.R;
+import com.example.bekind_v2.UILayer.Authentication.LoginActivity;
 import com.example.bekind_v2.Utilities.CreateActivityDialog;
 import com.example.bekind_v2.Utilities.MapViewModel;
 import com.example.bekind_v2.Utilities.PostTypes;
@@ -51,6 +53,12 @@ public class BottomBar extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        if(!BottomBarViewModel.isLogged()) {
+            startActivity(new Intent(BottomBar.this, LoginActivity.class));
+            finish();
+        }
+
         BottomBarViewModel.clearProposals();
         BottomBarViewModel.clearPosts();
 

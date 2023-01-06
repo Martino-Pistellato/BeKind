@@ -33,6 +33,7 @@ public class SettingsActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        if(!SettingsViewModel.isLogged()) startActivity(new Intent(this, LoginActivity.class));
         super.onCreate(savedInstanceState);
         setContentView(R.layout.settings_activity);
         if (savedInstanceState == null)

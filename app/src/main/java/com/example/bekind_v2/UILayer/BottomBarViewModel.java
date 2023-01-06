@@ -37,6 +37,10 @@ public class BottomBarViewModel extends ViewModel {
         proposalExpd = null;
     }
 
+    public static boolean isLogged() {
+        return UserManager.isLogged();
+    }
+
     public void createProposal(String title, String body, int max, Date expiringDate, double lat, double longitude, RepublishTypes choice, MyCallback<Boolean> myCallback){
         String userId = UserManager.getUserId();
         UserManager.getUser(userId, user -> {
@@ -245,5 +249,4 @@ public class BottomBarViewModel extends ViewModel {
     public void setProposalStreetNumber(String proposalStreetNumber) {
         this.proposalStreetNumber = proposalStreetNumber;
     }
-
 }

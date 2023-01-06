@@ -1,8 +1,9 @@
 package com.example.bekind_v2.DataLayer;
 
-
 import android.content.Context;
+
 import androidx.annotation.NonNull;
+
 import com.example.bekind_v2.Utilities.MyCallback;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -42,9 +43,8 @@ public class UserLoginRepository {
         if (email != null) {
             user.updateEmail(email);
         }
-        if (newPassword != null){
-            user.updatePassword(newPassword);
-        } //TODO: add check for oldPassword.equals(storedPassword)
+        if (newPassword != null)
+            user.updatePassword(newPassword); //TODO: add check for oldPassword.equals(storedPassword)
     }
 
     public static boolean isLogged(){

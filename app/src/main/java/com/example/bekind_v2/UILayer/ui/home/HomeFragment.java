@@ -93,7 +93,7 @@ public class HomeFragment extends Fragment {
 
         Utilities.SharedViewModel.proposalsViewModel.getAccepted().observe(getViewLifecycleOwner(),acceptedObserver);
 
-        Utilities.getProposals(Utilities.day, UserManager.getUserId(), HomeViewModel.filters, Types.ACCEPTED);
+        //Utilities.getProposals(Utilities.day, UserManager.getUserId(), HomeViewModel.filters, Types.ACCEPTED);
 
         scheduledateText = root.findViewById(R.id.scheduledate_text);
         ScheduleBar.ScheduleDate.setTextDate(scheduledateText);
@@ -174,7 +174,6 @@ public class HomeFragment extends Fragment {
             scheduledateText.setVisibility(View.VISIBLE);
             totalActivities.setVisibility(View.INVISIBLE);
         }
-
         Utilities.getProposals(Utilities.day, UserManager.getUserId(), HomeViewModel.filters, Types.ACCEPTED);
     }
 }

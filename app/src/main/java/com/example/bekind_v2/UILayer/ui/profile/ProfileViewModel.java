@@ -6,7 +6,9 @@ import android.content.Context;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.provider.MediaStore;
+import android.view.View;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
@@ -187,8 +189,10 @@ public class ProfileViewModel extends ViewModel {
         return result && result1;
     }
 
-    public static void uploadProfileCoverPhoto(final Uri uri, Context context, CircleImageView profilePic) { //TODO spostala da qualche altra parte
-        ProfilePictureRepository.uploadProfileCoverPhoto(uri, context,profilePic);
+    public static void uploadProfileCoverPhoto(final Uri uri, Context context, CircleImageView profilePic, ProgressBar progressBar) { //TODO spostala da qualche altra parte
+        progressBar.setVisibility(View.VISIBLE);
+        profilePic.setVisibility(View.GONE);
+        ProfilePictureRepository.uploadProfileCoverPhoto(uri, context,profilePic, progressBar);
     }
 
 

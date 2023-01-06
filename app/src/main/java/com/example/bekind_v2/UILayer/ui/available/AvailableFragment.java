@@ -108,7 +108,7 @@ public class AvailableFragment extends Fragment {
 
         proposalsViewModel.getAvailable().observe(getViewLifecycleOwner(),availableObserver);
 
-        Utilities.getProposals(Utilities.day, UserManager.getUserId(), AvailableViewModel.filters, Types.AVAILABLE);
+        //Utilities.getProposals(Utilities.day, UserManager.getUserId(), AvailableViewModel.filters, Types.AVAILABLE);
 
         scheduledateText = root.findViewById(R.id.scheduledate_text);
         totalActivities = root.findViewById(R.id.total_activities);

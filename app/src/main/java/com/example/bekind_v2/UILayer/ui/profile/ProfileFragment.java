@@ -11,8 +11,10 @@ import android.Manifest;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -21,12 +23,14 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.DatePicker;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SwitchCompat;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
@@ -34,6 +38,10 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.load.engine.GlideException;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
 import com.example.bekind_v2.DataLayer.UserManager;
 import com.example.bekind_v2.R;
 import com.example.bekind_v2.Utilities.MapViewModel;
@@ -55,6 +63,7 @@ public class ProfileFragment extends Fragment {
     private FragmentProfileBinding binding;
     private SwitchCompat simpleSwitch;
     private TextView totalActivities, scheduledateText;
+    ProgressBar progressBar;
 
     CircleImageView profilePic;
     private final ActivityResultLauncher<String> requestWriteExternalStoragePermissionLauncher = registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted -> {
@@ -69,8 +78,8 @@ public class ProfileFragment extends Fragment {
         if (isGranted) pickFromGallery();
         else Toast.makeText(getContext(), "Gallery permissions not granted", Toast.LENGTH_LONG).show();
     });
-    private final ActivityResultLauncher<Uri> pickFromCamera = registerForActivityResult(new ActivityResultContracts.TakePicture(), res -> { if(res) uploadProfileCoverPhoto(imageuri, getContext(), profilePic); });
-    private final ActivityResultLauncher<String> pickFromGallery = registerForActivityResult(new ActivityResultContracts.GetContent(), res -> { uploadProfileCoverPhoto(imageuri = res, getContext(), profilePic); });
+    private final ActivityResultLauncher<Uri> pickFromCamera = registerForActivityResult(new ActivityResultContracts.TakePicture(), res -> { if(res) uploadProfileCoverPhoto(imageuri, getContext(), profilePic, progressBar); });
+    private final ActivityResultLauncher<String> pickFromGallery = registerForActivityResult(new ActivityResultContracts.GetContent(), res -> { uploadProfileCoverPhoto(imageuri = res, getContext(), profilePic, progressBar); });
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         ProfileViewModel profileViewModel = new ViewModelProvider(this).get(ProfileViewModel.class);
@@ -88,13 +97,25 @@ public class ProfileFragment extends Fragment {
         profilePic = root.findViewById(R.id.user_photo);
         scheduledateText = root.findViewById(R.id.scheduledate_text);
         totalActivities = root.findViewById(R.id.total_activities);
+        progressBar = root.findViewById(R.id.progressbar);
 
-        Utilities.getProposals(Utilities.day, UserManager.getUserId(), ProfileViewModel.proposedFilters, Types.PROPOSED);
-        Utilities.getPosts(Utilities.day, UserManager.getUserId(), ProfileViewModel.postsFilters, PostTypes.MYPOSTS);
-
+        progressBar.setVisibility(View.VISIBLE);
         UserManager.getUser(UserManager.getUserId(), (user) ->{
             String image = user.getImage();
-            if(!image.isEmpty()) { Glide.with(this).load(image).into(profilePic); }
+            if(!image.isEmpty()) {
+                Glide.with(this).load(image).addListener(new RequestListener<Drawable>() {
+                    @Override
+                    public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+                        return false;
+                    }
+
+                    @Override
+                    public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+                        progressBar.setVisibility(View.GONE);
+                        return false;
+                    }
+                }).into(profilePic);
+            }
         });
 
         profileViewModel.getUserName(profileName::setText);

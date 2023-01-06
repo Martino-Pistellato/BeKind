@@ -26,6 +26,21 @@
             android:src="@drawable/ic_profile_selected_24"
             android:contentDescription="@string/profile_image_description" />
 
+        <ProgressBar
+            android:id="@+id/progressbar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignStart="@+id/user_photo"
+            android:layout_alignTop="@+id/user_photo"
+            android:layout_alignEnd="@+id/user_photo"
+            android:layout_alignBottom="@+id/user_photo"
+            android:layout_marginStart="36dp"
+            android:layout_marginTop="36dp"
+            android:layout_marginEnd="36dp"
+            android:layout_marginBottom="36dp"
+            android:indeterminateTint="@color/primaryDarkColor"
+            android:visibility="gone"/>
+
         <TextView
             android:id="@+id/profile_name"
             android:layout_width="wrap_content"

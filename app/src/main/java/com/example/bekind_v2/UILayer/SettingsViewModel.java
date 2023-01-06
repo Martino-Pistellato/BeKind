@@ -7,4 +7,5 @@ public class SettingsViewModel extends ViewModel {
     public static void logout(){
         UserManager.logout();
     }
+    public static boolean isLogged(){ return UserManager.isLogged(); }
 }

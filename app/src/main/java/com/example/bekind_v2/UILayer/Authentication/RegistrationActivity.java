@@ -1,7 +1,6 @@
 package com.example.bekind_v2.UILayer.Authentication;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.os.Bundle;

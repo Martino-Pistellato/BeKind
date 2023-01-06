@@ -96,6 +96,12 @@ public class CreateActivityFirstPage extends Fragment {
         closeBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                bottomBarViewModel.setProposalBody("");
+                bottomBarViewModel.setProposalTitle("");
+                bottomBarViewModel.setProposalCity("");
+                bottomBarViewModel.setProposalStreet("");
+                bottomBarViewModel.setProposalStreetNumber("");
+                bottomBarViewModel.setProposalExpd(null);
                 createActivityDialog.dismiss(); //close dialog
             }
         });
@@ -103,24 +109,16 @@ public class CreateActivityFirstPage extends Fragment {
         continueBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Date proposalExpiringDate = BottomBarViewModel.toDate(expiringDate.getYear(), expiringDate.getMonth(), expiringDate.getDayOfMonth(), expiringHour.getHour()-1, expiringHour.getMinute());
+                Date proposalExpiringDate = BottomBarViewModel.toDate(expiringDate.getYear(), expiringDate.getMonth(), expiringDate.getDayOfMonth(), expiringHour.getHour(), expiringHour.getMinute());
                 String proposalTitle = title.getText().toString().trim(); //gets the content of the title
                 String proposalBody = body.getText().toString().trim(); //gets the content of the body
-
+                
                 if(!bottomBarViewModel.checkConstraints(title, proposalTitle, body, proposalBody, proposalExpiringDate))
-                    Toast.makeText(getContext(), "Errore: i campi non sono stati riempiti correttamente", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), "Errore: i campi non sono stati riempiti correttamente", Toast.LENGTH_SHORT).show();
                 else{
                     bottomBarViewModel.saveProposalData(proposalTitle, proposalBody, proposalExpiringDate);
-                    createActivityDialog.changeFragment(getActivity(), R.layout.add_proposal_popup);
-                    /*
-                    FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
-                    //Out of simplicity, i am creating ChildFragment2 every time user presses the button.
-                    //However, you should keep the instance somewhere to avoid creation.
-                    transaction.replace(R.id.proposal_popup1, createActivity2);
-                    //You can add here as well your fragment in and out animation how you like.
-                    transaction.addToBackStack("childFragment2");
-                    transaction.commit();
-                    //showSecondPopupProposal(applicationContext,dialog,choose_dialog, map);*/
+                    createActivityDialog.changeFragment(R.layout.add_proposal_popup);
+
                 }
             }
         });

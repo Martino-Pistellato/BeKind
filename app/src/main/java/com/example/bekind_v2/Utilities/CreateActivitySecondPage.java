@@ -1,10 +1,7 @@
 package com.example.bekind_v2.Utilities;
 
 import android.app.Dialog;
-import android.location.Address;
-import android.location.Geocoder;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,13 +22,12 @@ import com.example.bekind_v2.R;
 import com.example.bekind_v2.UILayer.BottomBarViewModel;
 import com.example.bekind_v2.UILayer.ui.profile.ProfileViewModel;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
 import com.google.android.material.textfield.TextInputEditText;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 public class CreateActivitySecondPage extends Fragment {
     private View view;
@@ -39,6 +35,7 @@ public class CreateActivitySecondPage extends Fragment {
     private MapViewModel mapViewModel;
     private Dialog choose_dialog;
     private CreateActivityDialog createActivityDialog;
+
 
     public CreateActivitySecondPage(BottomBarViewModel bottomBarViewModel, Dialog choose_dialog, CreateActivityDialog createActivityDialog, MapViewModel mapViewModel){
         this.bottomBarViewModel = bottomBarViewModel;
@@ -59,8 +56,12 @@ public class CreateActivitySecondPage extends Fragment {
         Button backBtn, publishBtn;
 
 
-        TextInputEditText city = view.findViewById(R.id.user_city), //neighbourhood = view.findViewById(R.id.user_neigh),
+        TextInputEditText city = view.findViewById(R.id.user_city),
                 street = view.findViewById(R.id.user_street), streetNumber = view.findViewById(R.id.street_number);
+
+        city.setText(bottomBarViewModel.getProposalCity());
+        street.setText(bottomBarViewModel.getProposalStreet());
+        streetNumber.setText(bottomBarViewModel.getProposalStreetNumber());
 
         groupProposal = view.findViewById(R.id.group_checkbox);
         maxParticipants = view.findViewById(R.id.activity_maxparticipants);
@@ -105,7 +106,8 @@ public class CreateActivitySecondPage extends Fragment {
         AutocompleteSupportFragment autocompleteFragment = (AutocompleteSupportFragment) getChildFragmentManager().findFragmentById(R.id.autocomplete_fragment_prop);
         SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map_prop);
 
-        mapViewModel.initializeMap(getActivity(), getContext(),autocompleteFragment, mapFragment, city, street, streetNumber, null);
+        mapViewModel.initializeMap(getActivity(), getContext(), autocompleteFragment, mapFragment, city, street, streetNumber, null);
+
 
         /*
         UserManager.getUser(UserManager.getUserId(), new MyCallback<UserDatabaseRepository.User>() {
@@ -118,24 +120,18 @@ public class CreateActivitySecondPage extends Fragment {
             }
         });*/
 
-
-
         backBtn = view.findViewById(R.id.back_btn);
         publishBtn = view.findViewById(R.id.publish_btn);
 
         backBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                createActivityDialog.changeFragment(getActivity(), R.layout.add_proposal_popup2);
+                String cityText = city.getText().toString().trim(),
+                        streetText = street.getText().toString().trim(), streetNumb = streetNumber.getText().toString().trim();
 
-                /*FragmentManager manager = getChildFragmentManager();
-                //Out of simplicity, i am creating ChildFragment2 every time user presses the button.
-                //However, you should keep the instance somewhere to avoid creation.
-                //transaction.replace(R.id.add_proposal_container, createActivity2);
-                //You can add here as well your fragment in and out animation how you like.
-                manager.popBackStack("childFragment2", FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                bottomBarViewModel.saveProposalLocationData(cityText, streetText, streetNumb);
+                createActivityDialog.changeFragment(R.layout.add_proposal_popup2);
 
-                //showFirstPopupProposal(applicationContext, dialog, choose_dialog, map);*/
             }
         });
 
@@ -150,7 +146,7 @@ public class CreateActivitySecondPage extends Fragment {
 
                 if(groupProposal.isChecked()) {
                     if (!bottomBarViewModel.checkGroupProposalConstraints(maxParticipants, maxParticipants.getText().toString().trim())) {
-                        Toast.makeText(getContext(), "Errore: i campi non sono stati riempiti correttamente", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), "Errore: i campi non sono stati riempiti correttamente", Toast.LENGTH_SHORT).show();
                         publish = false;
                     }
                     else{
@@ -160,56 +156,46 @@ public class CreateActivitySecondPage extends Fragment {
 
                 if(periodicProposal.isChecked()){
                     if(choice[0] == RepublishTypes.NEVER){
-                        Toast.makeText(getContext(), "Errore: i campi non sono stati riempiti correttamente", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), "Errore: i campi non sono stati riempiti correttamente", Toast.LENGTH_SHORT).show();
                         publish = false;
                     }
                 }
 
                 if(!bottomBarViewModel.checkAddress(city, cityText, street,streetText, streetNumber, streetNumb)){
-                    Toast.makeText(getContext(), "Errore: i campi non sono stati riempiti correttamente", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), "Errore: i campi non sono stati riempiti correttamente", Toast.LENGTH_SHORT).show();
                     publish = false;
                 }
 
-                Geocoder geo = new Geocoder(getContext());
-                List<Address> address;
-                String addresstext = streetText + ", "+streetNumb+", "+cityText;
-                double lat = 0, longitude = 0;
-
-                try {
-                    address = geo.getFromLocationName(addresstext, 1);
-                    if(address.size() > 0 && address.get(0).getAddressLine(0).matches(".*\\d.*")){
-                        Log.e("ADDRESS", address.get(0).getAddressLine(0));
-                        lat = address.get(0).getLatitude();
-                        longitude = address.get(0).getLongitude();
-                    }else{
-                        Toast.makeText(getContext(), "Errore: l'indirizzo inserito non è corretto", Toast.LENGTH_SHORT).show();
-                        publish = false;
-                    }
-
-                } catch (IOException e) {
-                    e.printStackTrace();
+                LatLng coord = mapViewModel.getCoordinatesFromAddress(getContext(), city, street, streetNumber);
+                if (coord == null) {
+                    Toast.makeText(getActivity(), "Errore: l'indirizzo inserito non è corretto", Toast.LENGTH_SHORT).show();
                     publish = false;
                 }
 
-                if(publish){
+                if (publish) {
+                    bottomBarViewModel.createProposal(bottomBarViewModel.getProposalTitle(), bottomBarViewModel.getProposalBody(), proposalMaxParticipants, bottomBarViewModel.getProposalExpd(), coord.latitude, coord.longitude, choice[0], (result -> {
+                        if (result) {
+                            Toast.makeText(getActivity(), "Attività pubblicata correttamente", Toast.LENGTH_SHORT).show();
+                            Utilities.getProposals(Utilities.day, UserManager.getUserId(), ProfileViewModel.proposedFilters, Types.PROPOSED);
 
-                    bottomBarViewModel.createProposal(bottomBarViewModel.getProposalTitle(), bottomBarViewModel.getProposalBody(), proposalMaxParticipants, bottomBarViewModel.getProposalExpd(), lat, longitude, choice[0], (result -> {
-                        if (result) Utilities.getProposals(Utilities.day, UserManager.getUserId(), ProfileViewModel.proposedFilters, Types.PROPOSED);
-                        else Toast.makeText(getContext(), "Errore nella pubblicazione dell'attività", Toast.LENGTH_SHORT).show();
+                            bottomBarViewModel.setProposalBody("");
+                            bottomBarViewModel.setProposalTitle("");
+                            bottomBarViewModel.setProposalCity("");
+                            bottomBarViewModel.setProposalStreet("");
+                            bottomBarViewModel.setProposalStreetNumber("");
+                            bottomBarViewModel.setProposalExpd(null);
+
+                            createActivityDialog.dismiss();
+                            choose_dialog.dismiss();
+
+                        } else
+                            Toast.makeText(getActivity(), "Errore nella pubblicazione dell'attività", Toast.LENGTH_SHORT).show();
                     }));
 
-                    bottomBarViewModel.setProposalBody("");
-                    bottomBarViewModel.setProposalTitle("");
-                    bottomBarViewModel.setProposalExpd(null);
-                    createActivityDialog.dismiss();
-
-                    choose_dialog.dismiss();
                 }
-
             }
+
         });
-
-
 
         return view;
     }

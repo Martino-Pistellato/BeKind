@@ -53,12 +53,14 @@ public class NeighbourhoodFragment extends Fragment {
         continueBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String neighbourhoodName = name.getText().toString().trim();
+                String neighbourhoodName = name.getText().toString().trim().substring(0,1).toUpperCase() + name.getText().toString().trim().substring(1);
+                String city = authenticationViewModel.getCity();
                 if(!neighbourhoodViewModel.checkNeighbourhoodName(name, neighbourhoodName)){
                     Toast.makeText(getContext(), "Errore: i campi non sono stati riempiti correttamente", Toast.LENGTH_SHORT).show();
                 }
                 else{
-                    NeighbourhoodViewModel.createNeighbourhood(neighbourhoodName, authenticationViewModel.getCity(), (x)->{
+                    city = city.substring(0,1).toUpperCase()+city.substring(1);
+                    NeighbourhoodViewModel.createNeighbourhood(neighbourhoodName, city, (x)->{
                         if(x) {
                             authenticationViewModel.setNeighbourhood(neighbourhoodName);
                             authenticationViewModel.createUser(getContext(), (y) -> {

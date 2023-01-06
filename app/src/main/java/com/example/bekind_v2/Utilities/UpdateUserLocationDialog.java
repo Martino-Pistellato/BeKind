@@ -56,32 +56,12 @@ public class UpdateUserLocationDialog extends DialogFragment {
         streetNumber.setText(profileViewModel.getUser().getStreet_number());
         profileViewModel.getNeighbourhood(profileViewModel.getUser().getNeighbourhoodID(), neighbourhood::setText);
 
-        Log.e("Starting", "getting support fragment");
         AutocompleteSupportFragment autocompleteFragment = (AutocompleteSupportFragment) getChildFragmentManager().findFragmentById(R.id.autocomplete_fragment);
         SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
-        Log.e("Fragments", " "+mapFragment.toString());
 
-        Geocoder geo = new Geocoder(getContext());
-        List<Address> address;
-        String addresstext = street.getText().toString() + ", "+streetNumber.getText().toString()+", "+city.getText().toString();
-        double lat = 0, longitude = 0;
+        LatLng coord = mapViewModel.getCoordinatesFromAddress(getContext(), city, street, streetNumber);
 
-        try {
-            address = geo.getFromLocationName(addresstext, 1);
-            if(address.size() > 0 && address.get(0).getAddressLine(0).matches(".*\\d.*")){
-                Log.e("ADDRESS", address.get(0).getAddressLine(0));
-                lat = address.get(0).getLatitude();
-                longitude = address.get(0).getLongitude();
-                LatLng coord = new LatLng(lat, longitude);
-                Log.e("Initialize", "call to init map");
-                mapViewModel.initializeMap(getActivity(), getContext(),autocompleteFragment, mapFragment,city,street,streetNumber, coord);
-
-            }
-
-        } catch (IOException e) {
-            e.printStackTrace();
-
-        }
+        mapViewModel.initializeMap(getActivity(), getContext(),autocompleteFragment, mapFragment,city,street,streetNumber, coord);
 
 
         continueBtn.setOnClickListener(new View.OnClickListener() {

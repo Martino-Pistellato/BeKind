@@ -9,7 +9,6 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
-import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.example.bekind_v2.R;
@@ -39,7 +38,7 @@ public class CreateActivityDialog extends DialogFragment {
     }
 
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
         transaction.replace(R.id.add_proposal_container, createActivity1);
         transaction.addToBackStack("childFragment1");
@@ -52,18 +51,15 @@ public class CreateActivityDialog extends DialogFragment {
         return view;
     }
 
-    public void changeFragment(FragmentActivity activity, int fragmentId){
-        //we start a fragment transaction and we replace current view with the new fragment
+    public void changeFragment(int fragmentId){
         FragmentTransaction fragmentTransaction = getChildFragmentManager().beginTransaction();
 
         if(fragmentId == R.layout.add_proposal_popup) {
             fragmentTransaction.replace(R.id.add_proposal_container, createActivity2);
-            //You can add here as well your fragment in and out animation how you like.
             fragmentTransaction.addToBackStack("childFragment2");
             fragmentTransaction.commit();
         }else{
             fragmentTransaction.replace(R.id.add_proposal_container, createActivity1);
-            //You can add here as well your fragment in and out animation how you like.
             fragmentTransaction.addToBackStack("childFragment1");
             fragmentTransaction.commit();
         }

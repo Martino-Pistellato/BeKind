@@ -48,9 +48,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="20dp"
-                android:textCursorDrawable="@color/primaryDarkColor"
                 android:hint="@string/email_hint"
-                android:inputType="textEmailAddress" />
+                android:inputType="textEmailAddress"
+                android:textCursorDrawable="@color/primaryDarkColor" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -68,9 +68,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="20dp"
-                android:textCursorDrawable="@color/primaryDarkColor"
                 android:hint="@string/password_hint"
-                android:inputType="textPassword" />
+                android:inputType="textPassword"
+                android:textCursorDrawable="@color/primaryDarkColor" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <LinearLayout
@@ -86,8 +86,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="20dp"
-                android:text="@string/access_btn"
-                android:backgroundTint="@color/primaryDarkColor"/>
+                android:backgroundTint="@color/primaryDarkColor"
+                android:text="@string/access_btn"/>
         </LinearLayout>
 
         <TextView

@@ -24,6 +24,8 @@ public class RegistrationFragment1 extends Fragment {
     private AuthenticationViewModel authenticationViewModel;
     private MapViewModel mapViewModel;
 
+    public RegistrationFragment1(){}
+
     public RegistrationFragment1(AuthenticationViewModel authenticationViewModel, MapViewModel mapViewModel){
         this.authenticationViewModel = authenticationViewModel;
         this.mapViewModel = mapViewModel;

@@ -1,7 +1,5 @@
 package com.example.bekind_v2.DataLayer;
 
-import android.util.Log;
-
 import androidx.annotation.NonNull;
 
 import com.example.bekind_v2.Utilities.MyCallback;
@@ -77,8 +75,7 @@ public class NeighbourhoodRepository {
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 if(task.isSuccessful()){
                     if(task.getResult().exists()) {
-                        Neighbourhood neighbourhood = new Neighbourhood();
-                        neighbourhood = task.getResult().toObject(Neighbourhood.class);
+                        Neighbourhood neighbourhood = task.getResult().toObject(Neighbourhood.class);
                         myCallback.onCallback(neighbourhood.getName());
                     }
                 }
@@ -98,7 +95,7 @@ public class NeighbourhoodRepository {
         });
     }
 
-    public static void getNeighbourhoods(String city, MyCallback myCallback) {
+    public static void getNeighbourhoods(String city, MyCallback<ArrayList<String>> myCallback) {
             ArrayList<String> res = new ArrayList<>();
 
             FirebaseFirestore.getInstance().collection("Neighbourhoods").whereEqualTo("city", city).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -106,7 +103,7 @@ public class NeighbourhoodRepository {
                 public void onComplete(@NonNull Task<QuerySnapshot> task) {
                     for (DocumentSnapshot snap : task.getResult()) {
                         String name = snap.getString("name");
-                        res.add(name.substring(0, 1).toUpperCase() + name.substring(1));
+                        res.add(name);
                     }
 
                     myCallback.onCallback(res);
@@ -114,14 +111,14 @@ public class NeighbourhoodRepository {
             });
     }
 
-    public static void getCities(MyCallback myCallback) {
+    public static void getCities(MyCallback<ArrayList<String>> myCallback) {
         ArrayList<String> res = new ArrayList<>();
         FirebaseFirestore.getInstance().collection("Neighbourhoods").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 for(DocumentSnapshot snap : task.getResult()){
                     String city = snap.getString("city");
-                    res.add(city.substring(0, 1).toUpperCase() + city.substring(1));
+                    res.add(city);
                 }
 
                 myCallback.onCallback(res);

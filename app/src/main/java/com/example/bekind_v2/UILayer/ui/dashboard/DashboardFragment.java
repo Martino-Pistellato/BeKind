@@ -23,11 +23,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.bekind_v2.DataLayer.PostRepository;
 import com.example.bekind_v2.DataLayer.UserManager;
 import com.example.bekind_v2.R;
-import com.example.bekind_v2.UILayer.ui.home.HomeViewModel;
 import com.example.bekind_v2.Utilities.PostRecyclerViewAdapter;
 import com.example.bekind_v2.Utilities.PostTypes;
 import com.example.bekind_v2.Utilities.ScheduleBar;
-import com.example.bekind_v2.Utilities.Types;
 import com.example.bekind_v2.Utilities.Utilities;
 import com.example.bekind_v2.databinding.FragmentDashboardBinding;
 import com.google.android.material.chip.Chip;
@@ -35,8 +33,6 @@ import com.google.android.material.chip.Chip;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Calendar;
-
-//TODO add filters and datepicker
 
 public class DashboardFragment extends Fragment {
 

@@ -1,7 +1,6 @@
 package com.example.bekind_v2.DataLayer;
 
 import static com.example.bekind_v2.Utilities.Utilities.isOldAge;
-import static java.lang.Thread.sleep;
 
 import android.util.Log;
 

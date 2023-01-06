@@ -1,11 +1,6 @@
 package com.example.bekind_v2.UILayer.Authentication;
 
-import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.location.Address;
-import android.location.Geocoder;
-import android.location.Location;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -21,64 +16,29 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
-import androidx.lifecycle.ViewModelProvider;
 
 import com.example.bekind_v2.DataLayer.NeighbourhoodRepository;
 import com.example.bekind_v2.R;
-//import com.example.bekind_v2.UILayer.NeighbourhoodActivity;
 import com.example.bekind_v2.UILayer.BottomBar;
 import com.example.bekind_v2.UILayer.NeighbourhoodFragment;
 import com.example.bekind_v2.Utilities.MapViewModel;
 import com.example.bekind_v2.Utilities.MyCallback;
-import com.google.android.gms.common.api.Status;
-import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
-import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.android.libraries.places.api.Places;
-import com.google.android.libraries.places.api.model.Place;
-import com.google.android.libraries.places.api.net.PlacesClient;
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
-import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
 import com.google.android.material.textfield.TextInputEditText;
 
-import java.io.IOException;
+
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Locale;
-import java.util.StringTokenizer;
 
 public class RegistrationFragment2 extends Fragment {
 
     private AuthenticationViewModel authenticationViewModel;
     private MapViewModel mapViewModel;
 
-    /*
-    private PlacesClient placesClient;
-    private FusedLocationProviderClient fusedLocationProviderClient;
-    private boolean locationPermissionGranted;
-    private Location lastKnownLocation;
-    private CameraPosition cameraPosition;
-    private LatLng defaultLocation = new LatLng(41.902782, 12.496366);
-
-    private static final String KEY_CAMERA_POSITION = "camera_position";
-    private static final String KEY_LOCATION = "location";
-    private static final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
-    private static final int DEFAULT_ZOOM = 15;
-    */
+    public RegistrationFragment2(){}
 
     public RegistrationFragment2(AuthenticationViewModel authenticationViewModel, MapViewModel mapViewModel) {
         this.authenticationViewModel = authenticationViewModel;
@@ -101,9 +61,12 @@ public class RegistrationFragment2 extends Fragment {
         AutocompleteSupportFragment autocompleteFragment = (AutocompleteSupportFragment) getChildFragmentManager().findFragmentById(R.id.autocomplete_fragment);
         SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
 
-        mapViewModel.initializeMap(getActivity(), getContext(), autocompleteFragment, mapFragment, city, street, streetNumber, null);
-
         authenticationViewModel.getLocationData(city, neighbourhood, street, streetNumber);
+
+        LatLng coord = mapViewModel.getCoordinatesFromAddress(requireContext(), city, street, streetNumber);
+
+        mapViewModel.initializeMap(getActivity(), getContext(), autocompleteFragment, mapFragment, city, street, streetNumber, coord);
+
 
         if (city.getText().toString().isEmpty())
             neighbourhood.setEnabled(false);
@@ -132,10 +95,10 @@ public class RegistrationFragment2 extends Fragment {
             @Override
             public void onFocusChange(View view, boolean b) {
                 if (b) {
-                    NeighbourhoodRepository.getNeighbourhoods(city.getText().toString().toLowerCase(), new MyCallback() {
+                    NeighbourhoodRepository.getNeighbourhoods(city.getText().toString(), new MyCallback<ArrayList<String>>() {
                         @Override
-                        public void onCallback(Object result) {
-                            ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1, (ArrayList<String>) result);
+                        public void onCallback(ArrayList<String> result) {
+                            ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1, result);
                             neighbourhood.setAdapter(adapter);
                         }
                     });
@@ -160,6 +123,9 @@ public class RegistrationFragment2 extends Fragment {
             public void onClick(View v) {
                 String userCity = city.getText().toString().trim(), userNeighbourhood = neighbourhood.getText().toString().trim(),
                         userStreet = street.getText().toString().trim(), userStreetNumber = streetNumber.getText().toString().trim();
+                userCity = userCity.substring(0,1).toUpperCase() + userCity.substring(1);
+                userStreet = userStreet.substring(0,1).toUpperCase() + userStreet.substring(1);
+                userStreetNumber = userStreetNumber.substring(0,1).toUpperCase() + userStreetNumber.substring(1);
 
                 authenticationViewModel.saveLocationData(userCity, userNeighbourhood, userStreet, userStreetNumber);
                 authenticationViewModel.checkLocationFields(city, userCity, neighbourhood, userNeighbourhood, street, userStreet, streetNumber, userStreetNumber, new MyCallback() {
@@ -168,12 +134,10 @@ public class RegistrationFragment2 extends Fragment {
                         if (!(boolean) result) {
                             Toast.makeText(getContext(), "Errore: i campi non sono stati riempiti correttamente", Toast.LENGTH_SHORT).show();
                         } else {
-                            Log.e("Create USER STEP 1", "call to authentication view model");
                             authenticationViewModel.createUser(getContext(), new MyCallback() {
                                 @Override
                                 public void onCallback(Object result) {
                                     if (result != null) {
-                                        Log.e("STEP 7", "here if link is clicked, ready to start app");
                                         startActivity(new Intent(getContext(), BottomBar.class));
                                     }
                                 }
@@ -187,6 +151,11 @@ public class RegistrationFragment2 extends Fragment {
         textCreateNeighbourhood.setOnClickListener((v) -> {
             String userCity = city.getText().toString().trim(), userNeighbourhood = "",
                     userStreet = street.getText().toString().trim(), userStreetNumber = streetNumber.getText().toString().trim();
+            userCity = userCity.substring(0,1).toUpperCase() + userCity.substring(1);
+            userStreet = userStreet.substring(0,1).toUpperCase() + userStreet.substring(1);
+            userStreetNumber = userStreetNumber.substring(0,1).toUpperCase() + userStreetNumber.substring(1);
+
+
             authenticationViewModel.saveLocationData(userCity, userNeighbourhood, userStreet, userStreetNumber);
 
             FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();

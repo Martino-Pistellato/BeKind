@@ -4,12 +4,9 @@ import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_NO;
 import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_YES;
 
 import android.app.Dialog;
-import android.app.Fragment;
-import android.content.ClipData;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -27,8 +24,6 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 import androidx.preference.PreferenceManager;
 
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.request.RequestOptions;
 import com.example.bekind_v2.DataLayer.UserManager;
 import com.example.bekind_v2.R;
 import com.example.bekind_v2.Utilities.CreateActivityDialog;
@@ -38,9 +33,6 @@ import com.example.bekind_v2.Utilities.PostsViewModel;
 import com.example.bekind_v2.Utilities.ProposalsViewModel;
 import com.example.bekind_v2.Utilities.Utilities;
 import com.example.bekind_v2.databinding.ActivityBottomBarBinding;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -54,7 +46,7 @@ public class BottomBar extends AppCompatActivity {
     private ActivityBottomBarBinding binding;
     private BottomBarViewModel bottomBarViewModel;
     private FloatingActionButton addProposalButton;
-    private  MapViewModel mapViewModel;
+    private MapViewModel mapViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -106,8 +98,6 @@ public class BottomBar extends AppCompatActivity {
                 activityBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        //Dialog dialog = new Dialog(BottomBar.this);
-                        //bottomBarViewModel.showFirstPopupProposal(getApplicationContext(), dialog, choose_dialog, map);
                         DialogFragment dialogFragment = new CreateActivityDialog(bottomBarViewModel, choose_dialog, mapViewModel);
 
                         dialogFragment.show(getSupportFragmentManager(), null);

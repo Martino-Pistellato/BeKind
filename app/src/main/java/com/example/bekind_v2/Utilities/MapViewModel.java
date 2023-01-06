@@ -1,10 +1,12 @@
 package com.example.bekind_v2.Utilities;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
+import android.os.Build;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -21,7 +23,6 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -29,14 +30,12 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.model.Place;
-import com.google.android.libraries.places.api.model.TypeFilter;
 import com.google.android.libraries.places.api.net.PlacesClient;
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
 import com.google.android.material.textfield.TextInputEditText;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
@@ -44,7 +43,7 @@ import java.util.StringTokenizer;
 
 public class MapViewModel extends ViewModel implements ActivityCompat.OnRequestPermissionsResultCallback {
 
-    private GoogleMap[] map;
+    private GoogleMap[] map = null;
     private PlacesClient placesClient;
     private FusedLocationProviderClient fusedLocationProviderClient;
     private boolean locationPermissionGranted;
@@ -57,10 +56,8 @@ public class MapViewModel extends ViewModel implements ActivityCompat.OnRequestP
     private Context context;
     private FragmentActivity fragmentActivity;
 
-    public void setMap(/*FragmentActivity activity, Context context*/ GoogleMap[] map, SupportMapFragment mapFragment, LatLng coord, Marker[] marker){
-        /*this.map = new GoogleMap[1];
-        this.context = context;
-        this.fragmentActivity = activity;*/
+    public void setMap(SupportMapFragment mapFragment, LatLng coord, Marker[] marker){
+
         mapFragment.getMapAsync(new OnMapReadyCallback() {
             @Override
             public void onMapReady(@NonNull GoogleMap googleMap) {
@@ -69,112 +66,161 @@ public class MapViewModel extends ViewModel implements ActivityCompat.OnRequestP
                 map[0].animateCamera(CameraUpdateFactory.zoomTo(17));
                 Geocoder geocoder = new Geocoder(context, Locale.getDefault());
                 try {
-                    List<Address> addresses = geocoder.getFromLocation(coord.latitude, coord.longitude, 1);
-                    if(addresses.size() > 0)
-                        marker[0] = map[0].addMarker(new MarkerOptions().position(coord).title(addresses.get(0).getAddressLine(0)));//todo add address
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                        geocoder.getFromLocation(coord.latitude, coord.longitude, 1, new Geocoder.GeocodeListener() {
+                            @Override
+                            public void onGeocode(@NonNull List<Address> list) {
+                                if(list.size() > 0)
+                                    marker[0] = map[0].addMarker(new MarkerOptions().position(coord).title(list.get(0).getAddressLine(0)));//todo add address
+                            }
+                        });
+                    }
+                    else{
+                        List<Address> addresses = geocoder.getFromLocation(coord.latitude, coord.longitude, 1);
+                        if(addresses.size() > 0)
+                            marker[0] = map[0].addMarker(new MarkerOptions().position(coord).title(addresses.get(0).getAddressLine(0)));//todo add address
+
+                    }
+
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
             }
         });
 
-        /*Log.e("Set map", "setting map with previous location info");
-        map[0].moveCamera(CameraUpdateFactory.newLatLng(coord));
-        map[0].animateCamera(CameraUpdateFactory.zoomTo(17));
-        Geocoder geocoder = new Geocoder(context, Locale.getDefault());
-        try {
-            List<Address> addresses = geocoder.getFromLocation(coord.latitude, coord.longitude, 1);
-            if(addresses.size() > 0)
-                marker = map[0].addMarker(new MarkerOptions().position(coord).title(addresses.get(0).getAddressLine(0)));//todo add address
-        } catch (IOException e) {
-            e.printStackTrace();
-        }*/
     }
 
-    public void initializeMap(FragmentActivity activity, Context context, AutocompleteSupportFragment autocompleteFragment, SupportMapFragment mapFragment, TextInputEditText city, TextInputEditText street, TextInputEditText streetNumber, LatLng coord){
+    public void initializeMap(FragmentActivity activity, Context context, AutocompleteSupportFragment autocompleteFragment, SupportMapFragment mapFragment, TextInputEditText city, TextInputEditText street, TextInputEditText streetNumber, LatLng coord) {
 
-        this.fragmentActivity = activity;
-        this.context = context;
-        this.map = new GoogleMap[1];
+            this.fragmentActivity = activity;
+            this.context = context;
+            this.map = new GoogleMap[1];
 
-        Marker[] marker = new Marker[1];
+            Marker[] marker = new Marker[1];
 
-        //set searchbar
-        if(autocompleteFragment != null){
-            Log.e("Search bar", "setting search bar up");
-            autocompleteFragment.getView().setBackground(ContextCompat.getDrawable(context, R.color.white));
-            autocompleteFragment.setCountry("IT");
-            autocompleteFragment.setPlaceFields(Arrays.asList(Place.Field.ID, Place.Field.NAME, Place.Field.ADDRESS, Place.Field.LAT_LNG));
-            autocompleteFragment.setMenuVisibility(false);
+            //set searchbar
+            if (autocompleteFragment != null) {
+                Log.e("Search bar", "setting search bar up");
+                autocompleteFragment.getView().setBackground(ContextCompat.getDrawable(context, R.color.white));
+                autocompleteFragment.setCountry("IT");
+                autocompleteFragment.setPlaceFields(Arrays.asList(Place.Field.ID, Place.Field.NAME, Place.Field.ADDRESS, Place.Field.LAT_LNG));
+                autocompleteFragment.setMenuVisibility(false);
 
-            autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
-                @Override
-                public void onPlaceSelected(Place place) {
-                    // TODO: Get info about the selected place.
-                    LatLng newLatLng = place.getLatLng();
-                    map[0].moveCamera(CameraUpdateFactory.newLatLng(newLatLng));
-                    map[0].animateCamera(CameraUpdateFactory.zoomTo(17));
-                    if(marker[0]!=null)
+                autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
+                    @Override
+                    public void onPlaceSelected(Place place) {
+                        // TODO: Get info about the selected place.
+                        LatLng newLatLng = place.getLatLng();
+                        map[0].moveCamera(CameraUpdateFactory.newLatLng(newLatLng));
+                        map[0].animateCamera(CameraUpdateFactory.zoomTo(17));
+                        if (marker[0] != null)
                             marker[0].remove();
 
-                    marker[0] = map[0].addMarker(new MarkerOptions().position(newLatLng).draggable(true));
+                        marker[0] = map[0].addMarker(new MarkerOptions().position(newLatLng).draggable(true));
 
-                    map[0].setOnMarkerDragListener(new GoogleMap.OnMarkerDragListener() {
+                        map[0].setOnMarkerDragListener(new GoogleMap.OnMarkerDragListener() {
+                            @Override
+                            public void onMarkerDrag(@NonNull Marker marker) {
+
+                            }
+
+                            @Override
+                            public void onMarkerDragEnd(@NonNull Marker marker) {
+                                LatLng markercoord = new LatLng(marker.getPosition().latitude, marker.getPosition().longitude);
+                                showGeocoderInfo(markercoord, city, street, streetNumber);
+                            }
+
+                            @Override
+                            public void onMarkerDragStart(@NonNull Marker marker) {
+
+                            }
+                        });
+
+                        showGeocoderInfo(newLatLng, city, street, streetNumber);
+
+                    }
+
+                    @Override
+                    public void onError(Status status) {
+                        // TODO: Handle the error.
+                        //Log.i(TAG, "An error occurred: " + status);
+                    }
+
+                });
+            }
+
+            Places.initialize(context, context.getResources().getString(R.string.google_maps_key));
+            placesClient = Places.createClient(context);
+
+            // Construct a FusedLocationProviderClient.
+            fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(context);
+
+
+
+            if (coord != null)
+                setMap(mapFragment, coord, marker);
+            else {
+                mapFragment.getMapAsync(new OnMapReadyCallback() {
+                    @Override
+                    public void onMapReady(@NonNull GoogleMap googleMap) {
+                        map[0] = googleMap;
+
+                        updateLocationUI(map[0]);
+
+                        // Get the current location of the device and set the position of the map.
+                        //getDeviceLocation();
+                    }
+                });
+            }
+
+    }
+
+    public LatLng getCoordinatesFromAddress(Context context, TextInputEditText city, TextInputEditText street, TextInputEditText streetNumber){
+
+        Geocoder geo = new Geocoder(context, Locale.getDefault());
+        LatLng[] latLng = new LatLng[1];
+        latLng[0] = null;
+        List<Address> address;
+        String cityText = city.getText().toString().trim(), streetText = street.getText().toString().trim(),
+                streetNumb =streetNumber.getText().toString().trim();
+
+        if( ( !cityText.isEmpty() ) && ( !streetText.isEmpty() ) && ( !streetNumb.isEmpty() ) ) {
+            String addressText = streetText + ", " + streetNumb + ", " + cityText;
+
+
+            try {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                    geo.getFromLocationName(addressText, 1, new Geocoder.GeocodeListener() {
                         @Override
-                        public void onMarkerDrag(@NonNull Marker marker) {
-
-                        }
-
-                        @Override
-                        public void onMarkerDragEnd(@NonNull Marker marker) {
-                            LatLng markercoord = new LatLng(marker.getPosition().latitude, marker.getPosition().longitude);
-                            showGeocoderInfo(markercoord, city, street, streetNumber);
-                        }
-
-                        @Override
-                        public void onMarkerDragStart(@NonNull Marker marker) {
-
+                        public void onGeocode(@NonNull List<Address> list) {
+                            if (list.size() > 0 && list.get(0).getAddressLine(0).matches(".*\\d.*")) {
+                                Address ad = list.get(0);
+                                latLng[0] = new LatLng(ad.getLatitude(), ad.getLongitude());
+                            }
                         }
                     });
-
-                    showGeocoderInfo(newLatLng, city, street, streetNumber);
-
+                }
+                else
+                {
+                    address = geo.getFromLocationName(addressText, 1);
+                    if (address.size() > 0 && address.get(0).getAddressLine(0).matches(".*\\d.*")) {
+                        Address ad = address.get(0);
+                       latLng[0] = new LatLng(ad.getLatitude(), ad.getLongitude());
+                    }
                 }
 
-                @Override
-                public void onError(Status status) {
-                    // TODO: Handle the error.
-                    //Log.i(TAG, "An error occurred: " + status);
-                }
+            }catch (IOException e) {
+                e.printStackTrace();
 
-            });
+            }
         }
 
-        Places.initialize(context, context.getResources().getString(R.string.google_maps_key));
-        placesClient = Places.createClient(context);
-
-        // Construct a FusedLocationProviderClient.
-        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(context);
-
-        if(coord != null)
-            setMap(map, mapFragment, coord, marker);
-        else {
-            mapFragment.getMapAsync(new OnMapReadyCallback() {
-                @Override
-                public void onMapReady(@NonNull GoogleMap googleMap) {
-                    map[0] = googleMap;
-
-                    updateLocationUI(map[0]);
-
-                    // Get the current location of the device and set the position of the map.
-                    //getDeviceLocation();
-                }
-            });
-        }
+        return latLng[0];
     }
 
     private void showGeocoderInfo(LatLng coord, TextInputEditText city, TextInputEditText street, TextInputEditText streetNumber) {
         Geocoder geocoder = new Geocoder(this.context, Locale.getDefault());
+
         try {
             List<Address> addresses = geocoder.getFromLocation(coord.latitude, coord.longitude, 1);
             city.setText(addresses.get(0).getLocality());
@@ -189,10 +235,7 @@ public class MapViewModel extends ViewModel implements ActivityCompat.OnRequestP
                 else{
                     //ToDO check if number is wrong sometimes
                     String numberText = (String)st2.nextElement();
-                    Log.e("NUMBER", numberText);
-                    if(numberText.length()>5)
-                        number = "";
-                    else
+                    if(numberText.length()<5)
                         number = numberText;
                 }
                 ++commas;
@@ -212,12 +255,12 @@ public class MapViewModel extends ViewModel implements ActivityCompat.OnRequestP
          * onRequestPermissionsResult.
          */
         if (ContextCompat.checkSelfPermission(context,
-                android.Manifest.permission.ACCESS_FINE_LOCATION)
+                Manifest.permission.ACCESS_FINE_LOCATION)
                 == PackageManager.PERMISSION_GRANTED) {
             locationPermissionGranted = true;
         } else {
             ActivityCompat.requestPermissions(activity,
-                    new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION},
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
                     PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
         }
     }
@@ -244,7 +287,6 @@ public class MapViewModel extends ViewModel implements ActivityCompat.OnRequestP
 
     @SuppressWarnings("MissingPermission")
     private void getDeviceLocation() {
-        Log.e("INSIDE", "getting device loc");
         Marker marker = null;
         /*
          * Get the best and most recent location of the device, which may be null in rare
@@ -252,17 +294,14 @@ public class MapViewModel extends ViewModel implements ActivityCompat.OnRequestP
          */
         try {
             if (locationPermissionGranted) {
-                Log.e("GRANTED", "permission ok");
                 Task<Location> locationResult = fusedLocationProviderClient.getLastLocation();
                 locationResult.addOnCompleteListener(this.fragmentActivity, new OnCompleteListener<Location>() {
                     @Override
                     public void onComplete(@NonNull Task<Location> task) {
                         if (task.isSuccessful()) {
-                            Log.e("TASK", "success");
                             // Set the map's camera position to the current location of the device.
                             lastKnownLocation = task.getResult();
                             if (lastKnownLocation != null) {
-                                Log.e("HERE", "FIND YOR LOCATION" + lastKnownLocation.toString());
                                 map[0].moveCamera(CameraUpdateFactory.newLatLngZoom(
                                         new LatLng(lastKnownLocation.getLatitude(),
                                                 lastKnownLocation.getLongitude()), DEFAULT_ZOOM));
@@ -270,13 +309,11 @@ public class MapViewModel extends ViewModel implements ActivityCompat.OnRequestP
                                  map[0].addMarker(new MarkerOptions()
                                         .position(home));
                             }else {
-                                Log.e("UNKNown", "no last location");
                                 map[0].moveCamera(CameraUpdateFactory
                                         .newLatLngZoom(defaultLocation, DEFAULT_ZOOM));
                                 map[0].getUiSettings().setMyLocationButtonEnabled(false);
                             }
                         }else {
-                            Log.e("TASK SAD", "unsuccess");
                             map[0].moveCamera(CameraUpdateFactory
                                     .newLatLngZoom(defaultLocation, DEFAULT_ZOOM));
                             map[0].getUiSettings().setMyLocationButtonEnabled(false);
@@ -285,7 +322,6 @@ public class MapViewModel extends ViewModel implements ActivityCompat.OnRequestP
                 });
             }
         } catch (SecurityException e)  {
-            Log.e("WRONG", "wtf");
             Log.e("Exception: %s", e.getMessage(), e);
         }
     }
@@ -299,8 +335,6 @@ public class MapViewModel extends ViewModel implements ActivityCompat.OnRequestP
                     && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 locationPermissionGranted = true;
             }
-        } else {
-           // super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         }
         updateLocationUI(this.map[0]);
     }

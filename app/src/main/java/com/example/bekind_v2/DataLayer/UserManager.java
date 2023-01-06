@@ -1,19 +1,25 @@
 package com.example.bekind_v2.DataLayer;
 
-import android.util.Log;
 
 import android.content.Context;
-import android.view.View;
-import android.widget.ProgressBar;
-
+import android.widget.Toast;
 import com.example.bekind_v2.Utilities.MyCallback;
+import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 
 import java.util.Date;
 
 public class UserManager {
     public static void createUser(Context context, String name, String surname, String email, String password, Date birth, String city, String neighbourhoodID, String street, String street_number, MyCallback<Boolean> myCallback){
         UserLoginRepository.register(context, email, password, (x)->{
-            UserDatabaseRepository.createUser(getUserId(), name, surname, birth, email, city, street, street_number, neighbourhoodID, myCallback);
+            if(x.isSuccessful())
+                UserDatabaseRepository.createUser(getUserId(), name, surname, birth, email, city, street, street_number, neighbourhoodID, myCallback);
+            else{
+                if(x.getException() instanceof FirebaseAuthUserCollisionException){
+                    Toast.makeText(context, "L'indirizzo email inserito risulta già registrato", Toast.LENGTH_LONG).show();
+                    myCallback.onCallback(false);
+                }
+            }
+
         });
     }
 
@@ -44,17 +50,5 @@ public class UserManager {
 
     public static void getUser(String userId, MyCallback<UserDatabaseRepository.User> myCallback){
         UserDatabaseRepository.getUser(userId, myCallback);
-    }
-
-    public static void check_neighbourhoods(String firstUserId, String secondUserId, MyCallback<Boolean> myCallback){
-        getUser(firstUserId, (firstUser->{
-            if(firstUser != null){
-                getUser(secondUserId, secondUser->{
-                    if(secondUser != null){
-                        myCallback.onCallback(firstUser.getNeighbourhoodID().equals(secondUser.getNeighbourhoodID()));
-                    }
-                });
-            }
-        }));
     }
 }

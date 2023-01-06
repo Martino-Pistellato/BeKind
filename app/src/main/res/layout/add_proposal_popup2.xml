@@ -37,15 +37,15 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/map_prop"
             app:boxBackgroundColor="@color/white"
-            app:hintTextColor="@color/teal_700"
-            app:boxStrokeColor="@color/teal_700"
+            app:hintTextColor="@color/primaryDarkColor"
+            app:boxStrokeColor="@color/primaryDarkColor"
             >
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/user_city"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textCursorDrawable="@color/teal_200"
+            android:textCursorDrawable="@color/primaryDarkColor"
             android:hint="@string/city_hint"
             android:inputType="textNoSuggestions"
             android:layout_marginBottom="20dp"/>

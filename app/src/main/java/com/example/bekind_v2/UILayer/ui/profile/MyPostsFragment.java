@@ -1,7 +1,6 @@
 package com.example.bekind_v2.UILayer.ui.profile;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,15 +12,11 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.bekind_v2.DataLayer.PostRepository;
-import com.example.bekind_v2.DataLayer.ProposalRepository;
 import com.example.bekind_v2.DataLayer.UserManager;
 import com.example.bekind_v2.R;
 import com.example.bekind_v2.Utilities.PostRecyclerViewAdapter;
 import com.example.bekind_v2.Utilities.PostTypes;
 import com.example.bekind_v2.Utilities.PostsViewModel;
-import com.example.bekind_v2.Utilities.ProposalRecyclerViewAdapter;
-import com.example.bekind_v2.Utilities.ProposalsViewModel;
-import com.example.bekind_v2.Utilities.Types;
 import com.example.bekind_v2.Utilities.Utilities;
 import com.google.android.material.chip.Chip;
 

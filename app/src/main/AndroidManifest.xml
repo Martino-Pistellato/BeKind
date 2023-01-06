@@ -36,6 +36,7 @@
         <activity
             android:name=".UILayer.SettingsActivity"
             android:exported="false"
+            android:configChanges="orientation|screenSize|screenLayout|keyboardHidden"
             android:label="@string/title_activity_settings">
             <meta-data
                 android:name="android.app.lib_name"
@@ -43,7 +44,8 @@
         </activity>
         <activity
             android:name=".UILayer.Authentication.RegistrationActivity"
-            android:exported="false">
+            android:exported="false"
+            android:configChanges="orientation|screenSize|screenLayout|keyboardHidden">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
@@ -51,6 +53,7 @@
         <activity
             android:name=".UILayer.Authentication.LoginActivity"
             android:exported="false"
+            android:configChanges="orientation|screenSize|screenLayout|keyboardHidden"
             android:noHistory="true">
             <meta-data
                 android:name="android.app.lib_name"
@@ -59,6 +62,7 @@
         <activity
             android:name=".UILayer.BottomBar"
             android:exported="false"
+            android:configChanges="orientation|screenSize|screenLayout|keyboardHidden"
             android:label="@string/title_activity_bottom_bar">
             <meta-data
                 android:name="android.app.lib_name"
@@ -67,22 +71,21 @@
         <activity
             android:name=".MainActivity"
             android:exported="true"
+            android:configChanges="orientation|screenSize|screenLayout|keyboardHidden"
             android:noHistory="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
             <meta-data
                 android:name="android.app.lib_name"
-                android:value="" />
+                android:value=""/>
         </activity>
 
         <!--MAPS META DATA-->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyA3HPOduQGsgbyQ9ZNoXvKr7t_M9yXmxqw" />
+            android:value="AIzaSyA3HPOduQGsgbyQ9ZNoXvKr7t_M9yXmxqw"/>
     </application>
 
 </manifest>

@@ -1,14 +1,10 @@
 package com.example.bekind_v2.UILayer.ui.home;
 
-import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModel;
-import androidx.viewpager2.adapter.FragmentStateAdapter;
 
 import com.example.bekind_v2.DataLayer.ProposalRepository;
 import com.example.bekind_v2.DataLayer.UserManager;
 import com.example.bekind_v2.Utilities.MyCallback;
-import com.example.bekind_v2.Utilities.ProposalsViewModel;
 import com.example.bekind_v2.Utilities.Types;
 import com.example.bekind_v2.Utilities.Utilities;
 

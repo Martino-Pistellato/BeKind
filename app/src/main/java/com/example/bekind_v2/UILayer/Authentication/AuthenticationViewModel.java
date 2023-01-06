@@ -1,7 +1,6 @@
 package com.example.bekind_v2.UILayer.Authentication;
 
 import android.content.Context;
-import android.util.Log;
 import android.widget.AutoCompleteTextView;
 import android.widget.DatePicker;
 
@@ -105,7 +104,7 @@ public class AuthenticationViewModel extends ViewModel {
 
 
     public void checkLocationFields(TextInputEditText city, String userCity, AutoCompleteTextView neighbourhood, String userNeighbourhood, TextInputEditText street, String userStreet, TextInputEditText streetNumber, String userStreetNumber, MyCallback<Boolean> myCallback){
-        NeighbourhoodViewModel.doesNeighbourhoodExist(userNeighbourhood.toLowerCase(), userCity.toLowerCase(), new MyCallback<Boolean>() {
+        NeighbourhoodViewModel.doesNeighbourhoodExist(userNeighbourhood, userCity, new MyCallback<Boolean>() {
             @Override
             public void onCallback(Boolean result) {
                 boolean res = true;
@@ -144,10 +143,8 @@ public class AuthenticationViewModel extends ViewModel {
     public void setBirthDate(DatePicker birthDate){
         Calendar calendar = Calendar.getInstance();
         calendar.add(Calendar.YEAR, -100);
-        //calendar.set(1920,1,1);
         Date minDate = calendar.getTime(), maxDate;
         calendar.add(Calendar.YEAR, 82);
-        //calendar.set(2008, 11, 31);
         maxDate = calendar.getTime();
         birthDate.setMaxDate(maxDate.getTime());
         birthDate.setMinDate(minDate.getTime());
@@ -209,12 +206,15 @@ public class AuthenticationViewModel extends ViewModel {
     public void createUser(Context context, MyCallback<Boolean> myCallback){
         NeighbourhoodViewModel.getNeighbourhood(this.neighbourhoodName, this.city, (x) ->{
             if(x != null){
-                Log.e("USER CREATE STEP 2", "call to usermanager");
-                UserManager.createUser(context, name, surname, email, password, birthDate, city.toLowerCase(), x, street.toLowerCase(), streetNumber.toLowerCase(), new MyCallback<Boolean>() {
+                UserManager.createUser(context, name, surname, email, password, birthDate, city, x, street, streetNumber, new MyCallback<Boolean>() {
                     @Override
                     public void onCallback(Boolean result) {
-                        Log.e("STEP 5", "call to login");
-                        login(context, email,password,myCallback);
+                        if(result){
+                            login(context, email,password,myCallback);
+                        }
+                        else{
+                            myCallback.onCallback(null);
+                        }
                     }
                 });
             }

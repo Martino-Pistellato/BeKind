@@ -1,13 +1,15 @@
 package com.example.bekind_v2.Utilities;
 
+import android.util.Log;
+
 import com.example.bekind_v2.DataLayer.PostRepository;
 import com.example.bekind_v2.DataLayer.ProposalRepository;
-import com.example.bekind_v2.DataLayer.UserManager;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.StringTokenizer;
 
 public class Utilities {
     public static LocalDate day = LocalDate.now();
@@ -75,8 +77,25 @@ public class Utilities {
         });
     }
 
-    //the following method returns true when there are at least 60 years between the year uf the input Date object and the year of today
+    //the following method returns true when there are at least 60 years between the year of the input Date object and the year of today
     public static boolean isOldAge(Date birth){
         return (LocalDate.now()).getYear() - (new BetterCalendar(birth)).getYear() >= 60;
+    }
+
+    public static String convertToProperForm(String s) {
+        String newForm = "";
+        StringTokenizer st2 = new StringTokenizer(s, " ");
+
+        if(st2.hasMoreElements()){
+            String piece = (String)st2.nextElement();
+            piece = piece.substring(0,1).toUpperCase() + piece.substring(1).toLowerCase();
+            newForm+=piece;
+        }
+        while (st2.hasMoreElements()){
+            String piece = (String)st2.nextElement();
+            piece = piece.substring(0,1).toUpperCase() + piece.substring(1).toLowerCase();
+            newForm+=" "+piece;
+        }
+        return newForm;
     }
 }

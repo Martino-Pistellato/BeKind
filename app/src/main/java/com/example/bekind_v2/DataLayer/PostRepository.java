@@ -35,8 +35,10 @@ public class PostRepository {
         private ArrayList<String> usersLike;
         private boolean priority;
 
+        //empty constructor, necessary
         public Post() {}
 
+        //constructor with all fields
         public Post(String title, String body, String id, String publisherID,String neighbourhoodID, final Date publishingDate, ArrayList<String> filters, boolean priority) {
             this.title = title;
             this.body = body;
@@ -50,6 +52,7 @@ public class PostRepository {
             this.priority = priority;
         }
 
+        //getters and setters
         public String getTitle() { return this.title;}
         public String getBody() { return this.body;}
         public String getId() { return this.id;}
@@ -67,54 +70,60 @@ public class PostRepository {
         public void setNeighbourhoodID(String neighbourhoodID) {this.neighbourhoodID = neighbourhoodID;}
         public void setPriority(boolean priority){this.priority = priority;}
 
+        //method used to add a user id to the arraylist of users that flagged this post
         public void addUserFlag(String userId) {
             if(!usersFlag.contains(userId)) {
                 usersFlag.add(userId);
             }
         }
-
+        //method used to remove a user id from the arraylist of users that flagged this post
         public void deleteUserFlag(String userId) {
             if(usersFlag.contains(userId)) {
                 usersFlag.remove(userId);
             }
         }
 
+        //method used to check if a certain user has flagged this post
         public boolean hasUserFlagged(String userId){
             return usersFlag.contains(userId);
         }
 
+        //method used to add a user id to the arraylist of users that liked this post
         public void addUserLike(String userId) {
             if(!usersLike.contains(userId)) {
                 usersLike.add(userId);
             }
         }
 
+        //method used to remove a user id from the arraylist of users that liked this post
         public void deleteUserLike(String userId) {
             if(usersLike.contains(userId)) {
                 usersLike.remove(userId);
             }
         }
 
+        //method used to check if a certain user has liked this post
         public boolean hasUserLiked(String userId){
             return usersLike.contains(userId);
         }
     }
 
+    //method used to create a post and add it to the database
     public static void createPost(String title, String body, ArrayList<String> filters, MyCallback<Boolean> myCallback){
         String id =  UUID.randomUUID().toString();
         String publisherID = UserManager.getUserId();
         LocalDateTime ldt = LocalDateTime.ofInstant(new Date().toInstant(), ZoneId.systemDefault());
-        Date date = Date.from(ldt.atZone(ZoneId.systemDefault()).toInstant());
+        Date publishingDate = Date.from(ldt.atZone(ZoneId.systemDefault()).toInstant());
 
         UserManager.getUser(publisherID, user -> {
             if(user != null) {
-                PostRepository.Post post = new PostRepository.Post(title, body, id, publisherID, user.getNeighbourhoodID(), date, filters, Utilities.isOldAge(user.getBirth()));
+                PostRepository.Post post = new PostRepository.Post(title, body, id, publisherID, user.getNeighbourhoodID(), publishingDate, filters, Utilities.isOldAge(user.getBirth()));
                 FirebaseFirestore.getInstance().collection("Posts").document(id).set(post).addOnCompleteListener((t)->{ myCallback.onCallback(t.isSuccessful()); });
             }
         });
     }
 
-
+    //method used to edit a certain post
     public static void editPost(String documentId, String title, String body, ArrayList<String> filters, MyCallback<Boolean> myCallback){
         FirebaseFirestore.getInstance().collection("Posts").document(documentId).update("title", title, "body", body, "filters", filters).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
@@ -124,10 +133,12 @@ public class PostRepository {
         });
     }
 
+    //method used to delete a certain post
     public static void deletePost(String documentId){
         FirebaseFirestore.getInstance().collection("Posts").document(documentId).delete();
     }
 
+    //method used to delete a post, giving information about the success or failure of the task
     public static void deletePost(String documentId, MyCallback<Boolean> myCallback){
         FirebaseFirestore.getInstance().collection("Posts").document(documentId).delete().addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
@@ -137,29 +148,38 @@ public class PostRepository {
         });
     }
 
+    //method used to delete posts from the database
     public static void clearPosts(){
+        //we get all the posts in the database
         FirebaseFirestore.getInstance().collection("Posts").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 for(DocumentSnapshot snap : task.getResult()){
-                    Post post = snap.toObject(Post.class); //cast the result to a real proposal
-                    LocalDateTime pubD = post.getPublishingDate().toInstant().atZone(ZoneId.of("ECT")).toLocalDateTime();
-                    LocalDateTime expD = LocalDateTime.now().minusMonths(3);
-                    if (pubD.isBefore(expD))
+                    Post post = snap.toObject(Post.class); //cast the result to a real post
+                    LocalDateTime pubD = post.getPublishingDate().toInstant().atZone(ZoneId.of("ECT")).toLocalDateTime(); //we get the publishingDate
+                    LocalDateTime expD = LocalDateTime.now().minusMonths(3); //we set a life span for a post equivalent to 3 months
+                    if (pubD.isBefore(expD)) //if the post has been published more than 3 months ago, we delete it
                         deletePost(post.getId());
                 }
             }
         });
     }
 
+    //method use to collect the posts present in the database, depending on the page we are currently in
     public static void getPosts(LocalDate day, String userID, ArrayList<String> filters, PostTypes type, MyCallback<ArrayList<Post>> myCallback){
+        //we create two arraylist, one for the posts with priority, one for the others
         ArrayList<Post> withPriority = new ArrayList<>(), withoutPriority = new ArrayList<>();
+
+        //we set a min and max time, set to the very beginning (00:00:00) and very ending (23:59:59) of the given day in input. If day is null, we use today
         LocalDateTime start = (day == null) ? LocalDateTime.MIN : day.atTime(0,0,0), end = (day == null) ? LocalDateTime.MAX : day.atTime(23,59,59);
+
         CollectionReference db = FirebaseFirestore.getInstance().collection("Posts");
         Query postsQuery = null;
+        //depending on which page we are currently in, we collect the user's posts or the other's posts. In both cases, posts are ordered chronologically by ascending publishingDate
+        //TODO should we order posts by publishingDate?
         switch (type){
-            case MYPOSTS: postsQuery = db.whereEqualTo("publisherID", userID); break;
-            case OTHERSPOSTS: postsQuery = db.whereNotEqualTo("publisherID", userID);break;
+            case MYPOSTS: postsQuery = db.whereEqualTo("publisherID", userID); break; //we are in profile page
+            case OTHERSPOSTS: postsQuery = db.whereNotEqualTo("publisherID", userID);break; //we are in dashboard page
         }
 
         postsQuery.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -168,17 +188,17 @@ public class PostRepository {
                 if(task.isSuccessful()) {
                     UserManager.getUser(userID, user -> {
                         for (DocumentSnapshot snap : task.getResult()) { //for each element in the query
-                            PostRepository.Post post = snap.toObject(PostRepository.Post.class);
-                            LocalDateTime pubD = post.getPublishingDate().toInstant().atZone(ZoneId.of("ECT")).toLocalDateTime();
-                            if (pubD.isAfter(start) && pubD.isBefore(end)){
-                                if (filters != null && post.getFilters().containsAll(filters))
-                                    if(user.getNeighbourhoodID().equals(post.getNeighbourhoodID()))
-                                        if(post.getUsersFlag().size() < 5)
-                                            if(post.getPriority()) withPriority.add(post);
-                                            else withoutPriority.add(post); //adds the proposal to the Proposal to be shown
+                            PostRepository.Post post = snap.toObject(PostRepository.Post.class); //we cast the element to a real post
+                            LocalDateTime pubD = post.getPublishingDate().toInstant().atZone(ZoneId.of("ECT")).toLocalDateTime(); //we get the post publishingDate
+                            if (pubD.isAfter(start) && pubD.isBefore(end)){ //we show only the posts published on the selected day
+                                if (filters != null && post.getFilters().containsAll(filters)) //that are associated with the selected filters, if any
+                                    if(user.getNeighbourhoodID().equals(post.getNeighbourhoodID())) //associated with the same neighbourhood of the current user
+                                        if(post.getUsersFlag().size() < 5) // and not flagged by more than 4 users
+                                            if(post.getPriority()) withPriority.add(post); //if it has priority, we add it to the first arraylist
+                                            else withoutPriority.add(post); //else to the other
                             }
                         }
-                        withPriority.addAll(withoutPriority);
+                        withPriority.addAll(withoutPriority); //we merge the two arraylists, in this way the ones with priority will be shown on top of the others
                         myCallback.onCallback(withPriority);
                     });
                 }
@@ -186,6 +206,7 @@ public class PostRepository {
         });
     }
 
+    //method used to get a certain post
     public static void getPost(String documentId, MyCallback<Post> myCallback){
         FirebaseFirestore.getInstance().collection("Posts").document(documentId).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
@@ -196,6 +217,7 @@ public class PostRepository {
         });
     }
 
+    //method used to update the arraylist of users that flagged a certain post, in the database
     public static void updatePostFlag(String documentId, ArrayList<String> usersFlag, MyCallback<Boolean> myCallback) {
         FirebaseFirestore.getInstance().collection("Posts").document(documentId).update("usersFlag", usersFlag).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
@@ -205,6 +227,7 @@ public class PostRepository {
         });
     }
 
+    //method used to update the arraylist of users that liked a certain post, in the database
     public static void updatePostLike(String documentId, ArrayList<String> usersLike, MyCallback<Boolean> myCallback) {
         FirebaseFirestore.getInstance().collection("Posts").document(documentId).update("usersLike", usersLike).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
@@ -214,6 +237,7 @@ public class PostRepository {
         });
     }
 
+    //method used to add a user to the users that flagged a certain post
     public static void addUserFlag(String documentId, String userId, MyCallback<Boolean> myCallback) {
         getPost(documentId, new MyCallback<Post>() {
             @Override
@@ -226,6 +250,7 @@ public class PostRepository {
         });
     }
 
+    //method used to remove a user from the users that flagged a certain post
     public static void deleteUserFlag(String documentId, String userId, MyCallback<Boolean> myCallback) {
         getPost(documentId, new MyCallback<Post>() {
             @Override
@@ -238,6 +263,7 @@ public class PostRepository {
         });
     }
 
+    //method used to check if a user has flagged a certain post
     public static void hasUserFlagged(String documentId, String userId, MyCallback<Boolean> myCallback){
         getPost(documentId, new MyCallback<Post>() {
             @Override
@@ -249,6 +275,7 @@ public class PostRepository {
         });
     }
 
+    //method used to add a user to the users that liked a certain post
     public static void addUserLike(String documentId, String userId, MyCallback<Boolean> myCallback) {
         getPost(documentId, new MyCallback<Post>() {
             @Override
@@ -261,6 +288,7 @@ public class PostRepository {
         });
     }
 
+    //method used to remove a user from the users that liked a certain post
     public static void deleteUserLike(String documentId, String userId, MyCallback<Boolean> myCallback) {
         getPost(documentId, new MyCallback<Post>() {
             @Override
@@ -273,6 +301,7 @@ public class PostRepository {
         });
     }
 
+    //method used to check if a user has liked a certain post
     public static void hasUserLiked(String documentId, String userId, MyCallback<Boolean> myCallback){
         getPost(documentId, new MyCallback<Post>() {
             @Override

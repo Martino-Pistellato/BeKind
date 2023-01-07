@@ -2,9 +2,6 @@ package com.example.bekind_v2.Utilities;
 
 import android.app.DatePickerDialog;
 import android.content.Context;
-import android.util.Log;
-import android.view.View;
-import android.widget.DatePicker;
 import android.widget.TextView;
 
 

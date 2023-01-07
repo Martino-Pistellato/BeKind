@@ -12,6 +12,9 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 public class UserLoginRepository {
+
+    //TODO context was used in email verification, should we delete it?
+    //method used to login a user in the app. Check if credentials are correct and returns the success or failure of the task, confirming or not the login
     public static void login(Context context, String email, String password, MyCallback<Boolean> myCallback){
         FirebaseAuth.getInstance().signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
@@ -23,10 +26,14 @@ public class UserLoginRepository {
         });
     }
 
+    //method used to logout form the app
     public static void logout(){
         FirebaseAuth.getInstance().signOut();
     }
 
+    //TODO see login for context
+    //TODO see why callback has been changed from boolean to Task<AuthResult> in UserManager.createUser
+    //method used to register a user in the app. Create a user and returns the success or failure of the task
     public static void register(Context context, String email, String password, MyCallback<Task<AuthResult>> myCallback){
         if(!email.isEmpty() && !password.isEmpty())
             FirebaseAuth.getInstance().createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {

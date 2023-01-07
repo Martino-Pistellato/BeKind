@@ -1,6 +1,7 @@
 package com.example.bekind_v2.UILayer.Authentication;
 
 import android.content.Context;
+import android.util.Log;
 import android.widget.AutoCompleteTextView;
 import android.widget.DatePicker;
 
@@ -19,6 +20,7 @@ import com.example.bekind_v2.DataLayer.UserManager;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.StringTokenizer;
 
 public class AuthenticationViewModel extends ViewModel {
     private String name, surname, email, password, city, street, streetNumber, neighbourhoodName, neighbourhoodID;
@@ -231,4 +233,5 @@ public class AuthenticationViewModel extends ViewModel {
     public void setNeighbourhood(String neighbourhoodName){
         this.neighbourhoodName = neighbourhoodName;
     }
+
 }

@@ -20,6 +20,7 @@ import com.example.bekind_v2.R;
 import com.example.bekind_v2.UILayer.Authentication.AuthenticationViewModel;
 import com.example.bekind_v2.UILayer.Authentication.RegistrationFragment2;
 import com.example.bekind_v2.Utilities.MapViewModel;
+import com.example.bekind_v2.Utilities.Utilities;
 import com.google.android.material.textfield.TextInputEditText;
 
 public class NeighbourhoodFragment extends Fragment {
@@ -41,6 +42,7 @@ public class NeighbourhoodFragment extends Fragment {
         TextInputEditText name = view.findViewById(R.id.neigh_name);
         Button backBtn = view.findViewById(R.id.back_button), continueBtn = view.findViewById(R.id.continue_button);
 
+        //if we press the back button, we are redirected to second page of the registration
         backBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -50,21 +52,30 @@ public class NeighbourhoodFragment extends Fragment {
             }
         });
 
+        //if we press the continue button
         continueBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String neighbourhoodName = name.getText().toString().trim().substring(0,1).toUpperCase() + name.getText().toString().trim().substring(1);
+                //we extract the text from the neighbourhood form field and we get the city inserted in the second page of the registration
+                //both are converted to a proper form
+                //(Ex. venezia, VENEZIA, vENezIa, ecc.., will all be converted to Venezia)
+                String neighbourhoodName = Utilities.convertToProperForm(name.getText().toString().trim());
                 String city = authenticationViewModel.getCity();
+                //we check if the neighbourhood form field is correct
+                //if it is empty, a message will be shown
                 if(!neighbourhoodViewModel.checkNeighbourhoodName(name, neighbourhoodName)){
                     Toast.makeText(getContext(), "Errore: i campi non sono stati riempiti correttamente", Toast.LENGTH_SHORT).show();
                 }
                 else{
-                    city = city.substring(0,1).toUpperCase()+city.substring(1);
+                    //if everything is fine, we attempt to create the new neighbourhood. Once its done, we attempt to create the new user
+                    //if everything is fine, we are redirected to the home page
+                    city = Utilities.convertToProperForm(city);
                     NeighbourhoodViewModel.createNeighbourhood(neighbourhoodName, city, (x)->{
                         if(x) {
                             authenticationViewModel.setNeighbourhood(neighbourhoodName);
                             authenticationViewModel.createUser(getContext(), (y) -> {
-                                startActivity(new Intent(getContext(), BottomBar.class));
+                                if(y != null)
+                                    startActivity(new Intent(getContext(), BottomBar.class));
                             });
                         }
                         else

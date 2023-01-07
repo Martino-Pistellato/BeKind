@@ -7,7 +7,7 @@ public enum RepublishTypes {
     MONTHLY("MENSILE"),
     ANNUALLY("ANNUALE");
 
-    private String nameToDisplay;
+    private final String nameToDisplay;
 
     RepublishTypes(String nameToDisplay){this.nameToDisplay=nameToDisplay;}
 

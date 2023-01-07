@@ -19,7 +19,7 @@ public class UserDatabaseRepository {
         private String name;
         private String surname;
         @ServerTimestamp
-        private Date birth; //is a String, not a Date.
+        private Date birth;
         private String email;
         private String city;
         private String street;
@@ -27,8 +27,10 @@ public class UserDatabaseRepository {
         private String neighbourhoodID;
         private String image;
 
+        //empty constructor, necessary
         public User(){}
 
+        //constructor with all fields
         public User(String name, String surname, Date birth, String email, String city, String street, String street_number, String neighbourhoodID,String image){
             this.name = name;
             this.surname = surname;
@@ -41,6 +43,7 @@ public class UserDatabaseRepository {
             this.image = image;
         }
 
+        //getters and setters
         public String getName(){return this.name;}
         public String getSurname(){return this.surname;}
         public Date getBirth(){return this.birth;}
@@ -61,6 +64,7 @@ public class UserDatabaseRepository {
         public void setImage(String image){this.image = image;}
     }
 
+    //method used to create a user and add it to the database
     public static void createUser(String userID, String name, String surname, Date birth, String email, String  city, String street, String street_number, String neighbourhoodID, MyCallback<Boolean> myCallback){
         User us = new User(name, surname, birth, email, city, street, street_number,neighbourhoodID, "");
 
@@ -72,6 +76,7 @@ public class UserDatabaseRepository {
         });
     }
 
+    //method used to update a user's information
     public static void updateUser(String userID, String name, String surname, String email, String  city, String street, String street_number, String neighbourhoodID){
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         DocumentReference doc = db.collection("Users").document(userID);
@@ -92,6 +97,7 @@ public class UserDatabaseRepository {
             doc.update("neighbourhoodID", neighbourhoodID);
     }
 
+    //method used to get a user by giving its id
     public static void getUser(String userId, MyCallback<User> myCallback){
         FirebaseFirestore.getInstance().collection("Users").document(userId).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
@@ -102,6 +108,8 @@ public class UserDatabaseRepository {
         });
     }
 
+    //TODO since it is no longer used (see UserManager.createUser to see how the collision is handled), should we delete it?
+    //method used to check if an email is already present in the database
     public static void doesEmailExist(String email, MyCallback<Boolean> myCallback){
         FirebaseFirestore.getInstance().collection("Users").whereEqualTo("email", email).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override

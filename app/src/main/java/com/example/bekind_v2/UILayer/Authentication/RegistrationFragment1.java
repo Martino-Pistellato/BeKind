@@ -41,9 +41,11 @@ public class RegistrationFragment1 extends Fragment {
         DatePicker birth = view.findViewById(R.id.registration_date_picker);
         Button cancelBtn = view.findViewById(R.id.cancel_button), continueBtn = view.findViewById(R.id.continue_button);
 
+        //methods used to populate form fields in case we are getting back from the second registration page
         authenticationViewModel.setBirthDate(birth);
         authenticationViewModel.getUserData(name, surname, email, password, birth);
 
+        //if we press the cancel button, we are redirected to the login activity
         cancelBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -51,6 +53,7 @@ public class RegistrationFragment1 extends Fragment {
             }
         });
 
+        //if we press continue button
         continueBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -58,6 +61,8 @@ public class RegistrationFragment1 extends Fragment {
                        userEmail = email.getText().toString().trim(), userPassword = password.getText().toString().trim();
                 Date birthDate = AuthenticationViewModel.toDate(birth);
 
+                //extract text and date from the form fileds and check if they are correct (text not empty)
+                //if something is wrong, a message will appear, else we save the inserted data and we move to the next registration page
                 if(!authenticationViewModel.checkUserFields(name, userName, surname, userSurname, email, userEmail, password, userPassword))
                     Toast.makeText(getContext(), "Errore: i campi non sono stati riempiti correttamente", Toast.LENGTH_SHORT).show();
                 else{

@@ -97,10 +97,8 @@ public class BottomBarViewModel extends ViewModel {
 
     public boolean checkDateConstraint(Date expiringDate){
         LocalDateTime current = LocalDateTime.now(ZoneId.of("ECT"));
-
         Date currentDate = toDate(current.getYear(), current.getMonthValue() - 1, current.getDayOfMonth(), current.getHour(), current.getMinute());
-        Log.e("CURRENT", currentDate.toString());
-        Log.e("EXPD", expiringDate.toString());
+
         return expiringDate.after(currentDate);
     }
 

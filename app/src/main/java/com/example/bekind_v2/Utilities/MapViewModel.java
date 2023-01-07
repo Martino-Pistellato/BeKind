@@ -100,7 +100,6 @@ public class MapViewModel extends ViewModel implements ActivityCompat.OnRequestP
 
             //set searchbar
             if (autocompleteFragment != null) {
-                Log.e("Search bar", "setting search bar up");
                 autocompleteFragment.getView().setBackground(ContextCompat.getDrawable(context, R.color.white));
                 autocompleteFragment.setCountry("IT");
                 autocompleteFragment.setPlaceFields(Arrays.asList(Place.Field.ID, Place.Field.NAME, Place.Field.ADDRESS, Place.Field.LAT_LNG));

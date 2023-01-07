@@ -1,13 +1,14 @@
 package com.example.bekind_v2.Utilities;
 
 import android.app.Dialog;
-import android.location.Address;
-import android.location.Geocoder;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.TextView;
@@ -16,6 +17,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
+import com.example.bekind_v2.DataLayer.NeighbourhoodRepository;
 import com.example.bekind_v2.R;
 import com.example.bekind_v2.UILayer.ui.profile.ProfileViewModel;
 import com.google.android.gms.maps.SupportMapFragment;
@@ -23,8 +25,8 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
 import com.google.android.material.textfield.TextInputEditText;
 
-import java.io.IOException;
-import java.util.List;
+import java.util.ArrayList;
+
 
 public class UpdateUserLocationDialog extends DialogFragment {
 
@@ -56,6 +58,39 @@ public class UpdateUserLocationDialog extends DialogFragment {
         streetNumber.setText(profileViewModel.getUser().getStreet_number());
         profileViewModel.getNeighbourhood(profileViewModel.getUser().getNeighbourhoodID(), neighbourhood::setText);
 
+        city.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                neighbourhood.setEnabled(!city.getText().toString().isEmpty());
+            }
+        });
+
+        neighbourhood.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean b) {
+                if (b) {
+                    NeighbourhoodRepository.getNeighbourhoods(city.getText().toString(), new MyCallback<ArrayList<String>>() {
+                        @Override
+                        public void onCallback(ArrayList<String> result) {
+                            ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1, result);
+                            neighbourhood.setAdapter(adapter);
+                        }
+                    });
+                }
+            }
+        });
+
+
         AutocompleteSupportFragment autocompleteFragment = (AutocompleteSupportFragment) getChildFragmentManager().findFragmentById(R.id.autocomplete_fragment);
         SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
 
@@ -67,9 +102,14 @@ public class UpdateUserLocationDialog extends DialogFragment {
         continueBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                profileViewModel.setCity(city.getText().toString().trim());
-                profileViewModel.setStreet(street.getText().toString().trim());
-                profileViewModel.setStreet_number(streetNumber.getText().toString().trim());
+                String cityText = Utilities.convertToProperForm(city.getText().toString().trim());
+                String streetText = Utilities.convertToProperForm(street.getText().toString().trim());
+                String streetNumb = Utilities.convertToProperForm(streetNumber.getText().toString().trim());
+
+                profileViewModel.setCity(cityText);
+                profileViewModel.setStreet(streetText);
+                profileViewModel.setStreet_number(streetNumb);
+
                 profileViewModel.setNeighbourhood(neighbourhood, new MyCallback<Boolean>() {
                     @Override
                     public void onCallback(Boolean result) {

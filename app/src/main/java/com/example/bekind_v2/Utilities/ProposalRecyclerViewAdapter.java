@@ -23,7 +23,6 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.FragmentActivity;
-import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -31,12 +30,9 @@ import com.example.bekind_v2.DataLayer.ProposalRepository;
 import com.example.bekind_v2.DataLayer.UserDatabaseRepository;
 import com.example.bekind_v2.DataLayer.UserManager;
 import com.example.bekind_v2.R;
-import com.example.bekind_v2.DataLayer.ProposalRepository;
-import com.example.bekind_v2.UILayer.ui.available.AvailableFragment;
 import com.example.bekind_v2.UILayer.ui.available.AvailableViewModel;
 import com.example.bekind_v2.UILayer.ui.home.HomeViewModel;
 import com.example.bekind_v2.UILayer.ui.profile.ProfileViewModel;
-import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.material.chip.Chip;
@@ -48,8 +44,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
-
-import dagger.hilt.android.internal.managers.FragmentComponentManager;
 
 public class ProposalRecyclerViewAdapter extends RecyclerView.Adapter<ProposalRecyclerViewAdapter.MyViewHolder> {
     ArrayList<ProposalRepository.Proposal> proposals;
@@ -214,7 +208,6 @@ public class ProposalRecyclerViewAdapter extends RecyclerView.Adapter<ProposalRe
                     edit.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            Log.e("CLICK", "I clicked the dit button");
                             Dialog firstDialog = new Dialog(context);
                             firstDialog.setContentView(R.layout.add_proposal_popup);
                             firstDialog.setCanceledOnTouchOutside(false);
@@ -292,12 +285,10 @@ public class ProposalRecyclerViewAdapter extends RecyclerView.Adapter<ProposalRe
                                     if(isChecked) {
                                         maxPartecipants.setVisibility(View.VISIBLE);
                                         maxPartecipants.setText(Integer.toString(proposal.getMaxParticipants()));
-                                        Log.e("MAX GROUP", maxPartecipants.getText().toString());
 
                                     }else{
                                         maxPartecipants.setVisibility(View.GONE);
                                         maxPartecipants.setText("");
-                                        Log.e("MAX NO GROUP", maxPartecipants.getText().toString());
                                     }
                                 }
                             });
@@ -359,7 +350,6 @@ public class ProposalRecyclerViewAdapter extends RecyclerView.Adapter<ProposalRe
                                     if(!groupCheckbox.isChecked())
                                         maxPartecipantsNumber = 1;
                                     else {
-                                        Log.e("HERE", "sono qui anche se non dovrei");
                                         maxPartecipantsNumber = Integer.parseInt(maxPartecipants.getText().toString());
                                     }
 
@@ -378,8 +368,6 @@ public class ProposalRecyclerViewAdapter extends RecyclerView.Adapter<ProposalRe
                                     });
                                 }
                             });
-                            //ProposalRepository.editProposal();
-                            //Toast.makeText(context, "MODIFICA ATTIVITA'", Toast.LENGTH_SHORT).show();
                         }
                     });
 
@@ -417,7 +405,6 @@ public class ProposalRecyclerViewAdapter extends RecyclerView.Adapter<ProposalRe
             case ACCEPTED: constraintLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Log.e("ACCEPTED", "drop down");
                     ImageButton reject = holder.itemView.findViewById(R.id.reject_button);
                     LinearLayout linearLayout = holder.itemView.findViewById(R.id.buttons_container_recycler_accepted);
 
@@ -456,13 +443,10 @@ public class ProposalRecyclerViewAdapter extends RecyclerView.Adapter<ProposalRe
                         ProposalRepository.hasUserFlagged(documentId, userId, new MyCallback<Boolean>() {
                             @Override
                             public void onCallback(Boolean result) {
-                                Log.e("FLAG", "lo ho flaggato, dovrei colorarlo");
                                 if(result) {
                                     flag.setImageResource(R.drawable.ic_flag_filled);
                                     flag.setTag("flagged");
                                 }
-                                else
-                                    Log.e("STRONZO", ":(");
                             }
                         });
                     }else
@@ -523,7 +507,6 @@ public class ProposalRecyclerViewAdapter extends RecyclerView.Adapter<ProposalRe
                             mapDialog.findViewById(R.id.map_container).setVisibility(View.VISIBLE);
 
                             LatLng coord = new LatLng(proposal.getLatitude(), proposal.getLongitude());
-                            GoogleMap[] map = new GoogleMap[1];
 
                             mapViewModel.initializeMap(activity, context,null, mapFragment,null,null,null, coord);
 

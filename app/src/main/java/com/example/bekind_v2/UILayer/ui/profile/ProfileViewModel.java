@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ProgressBar;
@@ -113,12 +114,12 @@ public class ProfileViewModel extends ViewModel {
     }
     
     public void setNeighbourhood(EditText neighbourhood, MyCallback<Boolean> myCallback){
-        String name = neighbourhood.getText().toString().trim().toLowerCase();
-        NeighbourhoodViewModel.doesNeighbourhoodExist(name, user.getCity().toLowerCase(), new MyCallback<Boolean>() {
+        String name = Utilities.convertToProperForm(neighbourhood.getText().toString().trim());
+        NeighbourhoodViewModel.doesNeighbourhoodExist(name, user.getCity(), new MyCallback<Boolean>() {
             @Override
             public void onCallback(Boolean result) {
                 if(result) {
-                    NeighbourhoodViewModel.getNeighbourhood(name, user.getCity().toLowerCase(), new MyCallback<String>() {
+                    NeighbourhoodViewModel.getNeighbourhood(name, user.getCity(), new MyCallback<String>() {
                         @Override
                         public void onCallback(String result) {
                             user.setNeighbourhoodID(result);

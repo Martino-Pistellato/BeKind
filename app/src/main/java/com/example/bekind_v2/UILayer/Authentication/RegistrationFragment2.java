@@ -25,6 +25,7 @@ import com.example.bekind_v2.UILayer.BottomBar;
 import com.example.bekind_v2.UILayer.NeighbourhoodFragment;
 import com.example.bekind_v2.Utilities.MapViewModel;
 import com.example.bekind_v2.Utilities.MyCallback;
+import com.example.bekind_v2.Utilities.Utilities;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
@@ -61,16 +62,25 @@ public class RegistrationFragment2 extends Fragment {
         AutocompleteSupportFragment autocompleteFragment = (AutocompleteSupportFragment) getChildFragmentManager().findFragmentById(R.id.autocomplete_fragment);
         SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
 
+        //if we have previously inserted something in the form fields, we get those data and set the fields correctly
         authenticationViewModel.getLocationData(city, neighbourhood, street, streetNumber);
 
+        //get the coordinates from the address (city+street+streetnumber)
+        //if nothing is returned (form fields are empty or address is invalid), coord will be null
         LatLng coord = mapViewModel.getCoordinatesFromAddress(requireContext(), city, street, streetNumber);
 
+        //initialize the map, setting a marker on the given coordinates (if coord != null) and
+        //set the search bar for addresses and the map
+        //if necessary, it will ask for geolocalization permission
         mapViewModel.initializeMap(getActivity(), getContext(), autocompleteFragment, mapFragment, city, street, streetNumber, coord);
 
-
+        //if the city form field is empty, the neighbourhood form field is not editable (we cannot write in it)
         if (city.getText().toString().isEmpty())
             neighbourhood.setEnabled(false);
 
+        //the city form field has a listener for changes in text
+        //if the city form field is empty, neighbourhood form field is not editable
+        //else, it is
         city.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -84,13 +94,14 @@ public class RegistrationFragment2 extends Fragment {
 
             @Override
             public void afterTextChanged(Editable editable) {
-                if (!city.getText().toString().isEmpty())
-                    neighbourhood.setEnabled(true);
-                else
-                    neighbourhood.setEnabled(false);
+                neighbourhood.setEnabled(!city.getText().toString().isEmpty());
             }
         });
 
+        //neighbourhood form field has a focus changed listener
+        //whenever we select this form field (N.B. this is possible only if city form filed is NOT empty)
+        //a method to get all the neighbourhoods associated with the city specified in the city form field is triggered
+        //while writing on this field, if any result of the query matches the written text, it will be shown in a drop down list
         neighbourhood.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View view, boolean b) {
@@ -107,6 +118,7 @@ public class RegistrationFragment2 extends Fragment {
         });
 
 
+        //if we press the back button, we save the location data inserted in the form fields and we are redirected to the first page of the registration
         backBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -118,15 +130,22 @@ public class RegistrationFragment2 extends Fragment {
             }
         });
 
+        //if we press the continue button
         continueBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //we extract the texts from the fields and we convert them to a proper form
+                //(Ex. venezia, VENEZIA, vENezIa, ecc.., will all be converted to Venezia)
                 String userCity = city.getText().toString().trim(), userNeighbourhood = neighbourhood.getText().toString().trim(),
                         userStreet = street.getText().toString().trim(), userStreetNumber = streetNumber.getText().toString().trim();
-                userCity = userCity.substring(0,1).toUpperCase() + userCity.substring(1);
-                userStreet = userStreet.substring(0,1).toUpperCase() + userStreet.substring(1);
-                userStreetNumber = userStreetNumber.substring(0,1).toUpperCase() + userStreetNumber.substring(1);
+                userCity = Utilities.convertToProperForm(userCity);
+                userStreet = Utilities.convertToProperForm(userStreet);
+                userStreetNumber = Utilities.convertToProperForm(userStreetNumber);
+                userNeighbourhood = Utilities.convertToProperForm(userNeighbourhood);
 
+                //we save the data and we check if everything is correct (texts are not empty, the specified neighbourhood exists)
+                //if something is wrong, messages depending on the situation will be shown
+                //else, we attempt to create the user, and if everything goes fine we are redirected to the home page
                 authenticationViewModel.saveLocationData(userCity, userNeighbourhood, userStreet, userStreetNumber);
                 authenticationViewModel.checkLocationFields(city, userCity, neighbourhood, userNeighbourhood, street, userStreet, streetNumber, userStreetNumber, new MyCallback() {
                     @Override
@@ -148,15 +167,20 @@ public class RegistrationFragment2 extends Fragment {
             }
         });
 
+        //if the neighbourhood inserted does not exists, a message is shown, suggesting its creation
+        //we click on this text to do so
         textCreateNeighbourhood.setOnClickListener((v) -> {
+            //we extract the text from the fields and we convert it to a proper form
+            //(Ex. venezia, VENEZIA, vENezIa, ecc.., will all be converted to Venezia)
             String userCity = city.getText().toString().trim(), userNeighbourhood = "",
                     userStreet = street.getText().toString().trim(), userStreetNumber = streetNumber.getText().toString().trim();
-            userCity = userCity.substring(0,1).toUpperCase() + userCity.substring(1);
-            userStreet = userStreet.substring(0,1).toUpperCase() + userStreet.substring(1);
-            userStreetNumber = userStreetNumber.substring(0,1).toUpperCase() + userStreetNumber.substring(1);
+            userCity = Utilities.convertToProperForm(userCity);
+            userStreet = Utilities.convertToProperForm(userStreet);
+            userStreetNumber = Utilities.convertToProperForm(userStreetNumber);
 
-
+            //we save the data inserted in the form fields and we are redirected to the neighbourhood creation page
             authenticationViewModel.saveLocationData(userCity, userNeighbourhood, userStreet, userStreetNumber);
+            //TODO check if fields are empty??????????????
 
             FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
             NeighbourhoodFragment neighbourhoodFragment = new NeighbourhoodFragment(authenticationViewModel, mapViewModel);
@@ -166,200 +190,3 @@ public class RegistrationFragment2 extends Fragment {
         return view;
     }
 }
-
-//TODO cancel all down here
-
-
-
-
-
-
-
-
-
-
-/*
-    private void initializeMap(Context context, GoogleMap[] map, TextInputEditText city, TextInputEditText street, TextInputEditText streetNumber){
-
-        //set searchbar
-        AutocompleteSupportFragment autocompleteFragment = (AutocompleteSupportFragment) getChildFragmentManager().findFragmentById(R.id.autocomplete_fragment);
-        autocompleteFragment.getView().setBackground(ContextCompat.getDrawable(getContext(), R.color.white));
-        autocompleteFragment.setCountry("IT");
-        autocompleteFragment.setPlaceFields(Arrays.asList(Place.Field.ID, Place.Field.NAME, Place.Field.ADDRESS, Place.Field.LAT_LNG));
-        autocompleteFragment.setMenuVisibility(false);
-        autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
-            @Override
-            public void onPlaceSelected(Place place) {
-                // TODO: Get info about the selected place.
-                LatLng newLatLng = place.getLatLng();
-                map[0].moveCamera(CameraUpdateFactory.newLatLng(newLatLng));
-                map[0].animateCamera(CameraUpdateFactory.zoomTo(17));
-                map[0].addMarker(new MarkerOptions().position(newLatLng).draggable(true));
-
-                map[0].setOnMarkerDragListener(new GoogleMap.OnMarkerDragListener() {
-                    @Override
-                    public void onMarkerDrag(@NonNull Marker marker) {
-
-                    }
-
-                    @Override
-                    public void onMarkerDragEnd(@NonNull Marker marker) {
-                        LatLng markercoord = new LatLng(marker.getPosition().latitude, marker.getPosition().longitude);
-                        showGeocoderInfo(markercoord, city, street, streetNumber);
-                    }
-
-                    @Override
-                    public void onMarkerDragStart(@NonNull Marker marker) {
-
-                    }
-                });
-                showGeocoderInfo(newLatLng, city, street, streetNumber);
-
-            }
-
-            @Override
-            public void onError(Status status) {
-                // TODO: Handle the error.
-                //Log.i(TAG, "An error occurred: " + status);
-            }
-
-        });
-
-        SupportMapFragment mapFragment = (SupportMapFragment) this.getChildFragmentManager().findFragmentById(R.id.map);
-
-        Places.initialize(getContext(), getString(R.string.google_maps_key));
-        placesClient = Places.createClient(getContext());
-
-        // Construct a FusedLocationProviderClient.
-        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(getContext());
-
-        mapFragment.getMapAsync(new OnMapReadyCallback() {
-            @Override
-            public void onMapReady(@NonNull GoogleMap googleMap) {
-                map[0] = googleMap;
-
-                updateLocationUI();
-
-                // Get the current location of the device and set the position of the map.
-                getDeviceLocation();
-            }
-        });
-    }
-
-    private void showGeocoderInfo(LatLng coord, TextInputEditText city, TextInputEditText street, TextInputEditText streetNumber) {
-        Geocoder geocoder = new Geocoder(getContext(), Locale.getDefault());
-        try {
-            List<Address> addresses = geocoder.getFromLocation(coord.latitude, coord.longitude, 1);
-            city.setText(addresses.get(0).getLocality());
-            String address = addresses.get(0).getAddressLine(0);
-            StringTokenizer st2 = new StringTokenizer(address, ",");
-            int commas=0;
-            String streetname="";
-            String number="";
-            while (st2.hasMoreElements() && commas <2) {
-                if(commas==0)
-                    streetname = (String)st2.nextElement();
-                else
-                    number =(String)st2.nextElement();
-                ++commas;
-            }
-            street.setText(streetname);
-            streetNumber.setText(number);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-    }
-
-    private void getLocationPermission() {
-        /*
-         * Request location permission, so that we can get the location of the
-         * device. The result of the permission request is handled by a callback,
-         * onRequestPermissionsResult.
-         *//*
-        if (ContextCompat.checkSelfPermission(getContext(),
-                android.Manifest.permission.ACCESS_FINE_LOCATION)
-                == PackageManager.PERMISSION_GRANTED) {
-            locationPermissionGranted = true;
-        } else {
-            ActivityCompat.requestPermissions(getActivity(),
-                    new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION},
-                    PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
-        }
-    }
-
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode,
-                                           @NonNull String[] permissions,
-                                           @NonNull int[] grantResults) {
-        locationPermissionGranted = false;
-        if (requestCode
-                == PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION) {// If request is cancelled, the result arrays are empty.
-            if (grantResults.length > 0
-                    && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                locationPermissionGranted = true;
-            }
-        } else {
-            super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        }
-        mapViewModel.updateLocationUI(getContext(), getActivity());
-    }
-
-
-    @SuppressWarnings("MissingPermission")
-    private void updateLocationUI() {
-        if (map[0] == null) {
-            return;
-        }
-        try {
-            if (locationPermissionGranted) {
-                map[0].setMyLocationEnabled(true);
-                map[0].getUiSettings().setMyLocationButtonEnabled(true);
-            } else {
-                map[0].setMyLocationEnabled(false);
-                map[0].getUiSettings().setMyLocationButtonEnabled(false);
-                lastKnownLocation = null;
-                getLocationPermission();
-            }
-        } catch (SecurityException e)  {
-            Log.e("Exception: %s", e.getMessage());
-        }
-    }*/
-/*
-    @SuppressWarnings("MissingPermission")
-    private void getDeviceLocation() {
-        /*
-         * Get the best and most recent location of the device, which may be null in rare
-         * cases when a location is not available.
-         *//*
-        try {
-            if (locationPermissionGranted) {
-                Task<Location> locationResult = fusedLocationProviderClient.getLastLocation();
-                locationResult.addOnCompleteListener(getActivity(), new OnCompleteListener<Location>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Location> task) {
-                        if (task.isSuccessful()) {
-                            // Set the map's camera position to the current location of the device.
-                            lastKnownLocation = task.getResult();
-                            if (lastKnownLocation != null) {
-                                Log.e("HERE", "FIND YOR LOCATION" + lastKnownLocation.toString());
-                                map[0].moveCamera(CameraUpdateFactory.newLatLngZoom(
-                                        new LatLng(lastKnownLocation.getLatitude(),
-                                                lastKnownLocation.getLongitude()), DEFAULT_ZOOM));
-                                LatLng home = new LatLng(lastKnownLocation.getLatitude(), lastKnownLocation.getLongitude());
-                                map[0].addMarker(new MarkerOptions()
-                                        .position(home));
-                            }else {
-                                map[0].moveCamera(CameraUpdateFactory
-                                        .newLatLngZoom(defaultLocation, DEFAULT_ZOOM));
-                                map[0].getUiSettings().setMyLocationButtonEnabled(false);
-                            }
-                        }
-                    }
-                });
-            }
-        } catch (SecurityException e)  {
-            Log.e("Exception: %s", e.getMessage(), e);
-        }
-    }*/

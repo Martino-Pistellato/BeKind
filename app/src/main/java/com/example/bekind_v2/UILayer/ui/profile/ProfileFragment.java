@@ -116,6 +116,7 @@ public class ProfileFragment extends Fragment {
                     }
                 }).into(profilePic);
             }
+            else progressBar.setVisibility(View.GONE);
         });
 
         profileViewModel.getUserName(profileName::setText);

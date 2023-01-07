@@ -1,7 +1,5 @@
 package com.example.bekind_v2.Utilities;
 
-import android.util.Log;
-
 import com.example.bekind_v2.DataLayer.PostRepository;
 import com.example.bekind_v2.DataLayer.ProposalRepository;
 
@@ -94,7 +92,7 @@ public class Utilities {
         while (st2.hasMoreElements()){
             String piece = (String)st2.nextElement();
             piece = piece.substring(0,1).toUpperCase() + piece.substring(1).toLowerCase();
-            newForm+=" "+piece;
+            newForm += " " + piece;
         }
         return newForm;
     }

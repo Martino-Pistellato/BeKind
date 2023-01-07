@@ -7,7 +7,8 @@
     <string name="title_profile">Profile</string>
     <string name="title_settings">Settings</string>
     <string name="title_activity_settings">SettingsActivity</string>
-    
+    <string name="title_activity_splashscreen">SplashScreenActivity</string>
+
     <string name="preferences_key">preferences_key</string>
     <string name="made_by_roundtable">Made by RoundTable</string>
     <string name="access_btn">Access</string>

@@ -54,8 +54,7 @@ public class CreateActivitySecondPage extends Fragment {
         TextInputEditText maxParticipants;
         ListView listView;
         Button backBtn, publishBtn;
-
-
+        
         TextInputEditText city = view.findViewById(R.id.user_city),
                 street = view.findViewById(R.id.user_street), streetNumber = view.findViewById(R.id.street_number);
 
@@ -107,19 +106,7 @@ public class CreateActivitySecondPage extends Fragment {
         SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map_prop);
 
         mapViewModel.initializeMap(getActivity(), getContext(), autocompleteFragment, mapFragment, city, street, streetNumber, null);
-
-
-        /*
-        UserManager.getUser(UserManager.getUserId(), new MyCallback<UserDatabaseRepository.User>() {
-            @Override
-            public void onCallback(UserDatabaseRepository.User result) {
-                String cityName = result.getCity();
-                city.setText(cityName.substring(0, 1).toUpperCase() + cityName.substring(1));
-                city.setTextColor(getContext().getResources().getColor(R.color.black, getContext().getTheme()));
-                city.setEnabled(false);
-            }
-        });*/
-
+        
         backBtn = view.findViewById(R.id.back_btn);
         publishBtn = view.findViewById(R.id.publish_btn);
 

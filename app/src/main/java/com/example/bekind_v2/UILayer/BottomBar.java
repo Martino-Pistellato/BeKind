@@ -1,11 +1,7 @@
 package com.example.bekind_v2.UILayer;
 
-import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_NO;
-import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_YES;
-
 import android.app.Dialog;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -15,19 +11,15 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.app.AppCompatDelegate;
 import androidx.fragment.app.DialogFragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
-import androidx.preference.PreferenceManager;
 
 import com.example.bekind_v2.DataLayer.UserManager;
-import com.example.bekind_v2.MainActivity;
 import com.example.bekind_v2.R;
-import com.example.bekind_v2.UILayer.Authentication.LoginActivity;
 import com.example.bekind_v2.Utilities.CreateActivityDialog;
 import com.example.bekind_v2.Utilities.MapViewModel;
 import com.example.bekind_v2.Utilities.PostTypes;
@@ -54,20 +46,10 @@ public class BottomBar extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if(!BottomBarViewModel.isLogged()) {
-            startActivity(new Intent(BottomBar.this, LoginActivity.class));
-            finish();
-        }
+        
 
         BottomBarViewModel.clearProposals();
         BottomBarViewModel.clearPosts();
-
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-        boolean is_dark = sharedPreferences.getBoolean("dark_theme", false);
-        if(is_dark)
-            AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_YES);
-        else
-            AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_NO);
 
         Utilities.SharedViewModel.postsViewModel = new ViewModelProvider(this).get(PostsViewModel.class);
         Utilities.SharedViewModel.proposalsViewModel = new ViewModelProvider(this).get(ProposalsViewModel.class);
@@ -77,8 +59,8 @@ public class BottomBar extends AppCompatActivity {
         setContentView(binding.getRoot());
 
         BottomNavigationView navView = findViewById(R.id.nav_view);
-        // Passing each menu ID as a set of Ids because each
-        // menu should be considered as top level destinations.
+        /* Passing each menu ID as a set of Ids because each
+        * menu should be considered as top level destinations.*/
         AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
                 R.id.navigation_home, R.id.navigation_available, R.id.navigation_dashboard, R.id.navigation_profile)
                 .build();
@@ -90,7 +72,6 @@ public class BottomBar extends AppCompatActivity {
         mapViewModel = new ViewModelProvider(this).get(MapViewModel.class);
 
         addProposalButton = findViewById(R.id.add_proposal_btn);
-
 
         addProposalButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -174,17 +155,14 @@ public class BottomBar extends AppCompatActivity {
                                 String postTitle = title.getText().toString().trim();
                                 String postBody = body.getText().toString().trim();
 
-
                                 if(!bottomBarViewModel.checkPostConstraints(title, postTitle, body, postBody))
                                     Toast.makeText(getApplicationContext(), "Errore: i campi non sono stati riempiti correttamente", Toast.LENGTH_SHORT).show();
-                                else{
+                                else
                                     bottomBarViewModel.createPost(postTitle, postBody, result -> { Utilities.getPosts(Utilities.day, UserManager.getUserId(), new ArrayList<>(), PostTypes.MYPOSTS); });
-                                    //TODO i think that this getposts is no longer necessary ---> cancel this, or have two arrays in postsViewModel for my posts and other posts?
-                                }
+                                
                                 dialog.dismiss();
                                 choose_dialog.dismiss();
                             }
-
                         });
                         dialog.show();
                     }

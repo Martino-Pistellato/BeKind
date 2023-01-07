@@ -16,8 +16,8 @@
         app:layout_constraintRight_toRightOf="parent"
         app:menu="@menu/bottom_nav_menu"
         app:elevation="1dp"
-        app:itemIconTint="@color/primaryDarkColor"
-        app:itemTextColor="@color/primaryDarkColor" />
+        app:itemIconTint="?colorPrimary"
+        app:itemTextColor="?colorPrimary" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/add_proposal_btn"
@@ -31,7 +31,7 @@
         app:layout_constraintBottom_toTopOf="@id/nav_view"
         app:layout_constraintTop_toTopOf="@id/nav_view"
         android:contentDescription="@string/add_btn"
-        android:backgroundTint="@color/primaryDarkColor"/>
+        android:backgroundTint="?colorPrimary"/>
 
     <fragment
         android:id="@+id/nav_host_fragment"

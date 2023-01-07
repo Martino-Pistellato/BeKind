@@ -1,6 +1,5 @@
 package com.example.bekind_v2.DataLayer;
 
-
 import androidx.annotation.NonNull;
 
 import com.example.bekind_v2.Utilities.MyCallback;
@@ -104,18 +103,6 @@ public class UserDatabaseRepository {
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 if(task.getResult().exists())
                     myCallback.onCallback(task.getResult().toObject(User.class));
-            }
-        });
-    }
-
-    //TODO since it is no longer used (see UserManager.createUser to see how the collision is handled), should we delete it?
-    //method used to check if an email is already present in the database
-    public static void doesEmailExist(String email, MyCallback<Boolean> myCallback){
-        FirebaseFirestore.getInstance().collection("Users").whereEqualTo("email", email).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                if(task.isSuccessful())
-                    myCallback.onCallback(!task.getResult().isEmpty());
             }
         });
     }

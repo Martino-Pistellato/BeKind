@@ -22,7 +22,7 @@ import com.example.bekind_v2.Utilities.Utilities;
 
 import java.util.ArrayList;
 
-public class AcceptedFragment extends Fragment /*implements ProposalRecyclerViewInterface */{
+public class AcceptedFragment extends Fragment{
     private final ProposalsViewModel proposalsViewModel;
 
     public AcceptedFragment() {

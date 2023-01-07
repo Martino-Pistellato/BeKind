@@ -1,7 +1,5 @@
 package com.example.bekind_v2.DataLayer;
 
-import android.util.Log;
-
 import androidx.annotation.NonNull;
 
 import com.example.bekind_v2.Utilities.MyCallback;

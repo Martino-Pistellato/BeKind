@@ -2,7 +2,6 @@ package com.example.bekind_v2.Utilities;
 
 import android.app.Dialog;
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -201,7 +200,6 @@ public class ProposalRecyclerViewAdapter extends RecyclerView.Adapter<ProposalRe
                                 });
                             dialog.show();
                             }
-
                         }
                     });
 
@@ -238,6 +236,7 @@ public class ProposalRecyclerViewAdapter extends RecyclerView.Adapter<ProposalRe
                             expiringHour.setIs24HourView(true);
                             expiringHour.setHour(expiringDateTime.getHour() + 1);
                             expiringHour.setMinute(expiringDateTime.getMinute());
+                            
                             if(filters.contains(shoppingChip.getText().toString()))
                                 shoppingChip.setChecked(true);
                             if(filters.contains(houseworkChip.getText().toString()))
@@ -325,7 +324,6 @@ public class ProposalRecyclerViewAdapter extends RecyclerView.Adapter<ProposalRe
                                 public void onClick(View v) {
                                     secondDialog.dismiss();
                                     firstDialog.show();
-
                                 }
                             });
 
@@ -402,6 +400,7 @@ public class ProposalRecyclerViewAdapter extends RecyclerView.Adapter<ProposalRe
                     });
                 }
             }); break;
+            
             case ACCEPTED: constraintLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -430,6 +429,7 @@ public class ProposalRecyclerViewAdapter extends RecyclerView.Adapter<ProposalRe
                     });
                 }
             }); break;
+            
             case AVAILABLE: constraintLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -503,7 +503,6 @@ public class ProposalRecyclerViewAdapter extends RecyclerView.Adapter<ProposalRe
                     map.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            //TODO: evolution geo-localization
                             mapDialog.findViewById(R.id.map_container).setVisibility(View.VISIBLE);
 
                             LatLng coord = new LatLng(proposal.getLatitude(), proposal.getLongitude());

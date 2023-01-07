@@ -63,6 +63,12 @@ public class AvailableFragment extends Fragment {
         transportChip = root.findViewById(R.id.transport_chip);
         randomChip = root.findViewById(R.id.random_chip);
 
+        totalActivities = root.findViewById(R.id.total_activities);
+        scheduledateText = root.findViewById(R.id.scheduledate_text);
+        simpleSwitch = root.findViewById(R.id.simpleSwitch);
+
+        ScheduleBar.ScheduleDate.setTextDate(scheduledateText);
+
         shoppingChip.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) { availableViewModel.manageFilter(shoppingChip.getText().toString()); }
@@ -107,14 +113,6 @@ public class AvailableFragment extends Fragment {
         };
 
         proposalsViewModel.getAvailable().observe(getViewLifecycleOwner(),availableObserver);
-
-        //Utilities.getProposals(Utilities.day, UserManager.getUserId(), AvailableViewModel.filters, Types.AVAILABLE);
-
-        scheduledateText = root.findViewById(R.id.scheduledate_text);
-        totalActivities = root.findViewById(R.id.total_activities);
-        ScheduleBar.ScheduleDate.setTextDate(scheduledateText);
-
-        simpleSwitch = root.findViewById(R.id.simpleSwitch);
 
         scheduledateText.setOnClickListener(new View.OnClickListener() {
             @Override

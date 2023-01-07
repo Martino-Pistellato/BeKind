@@ -6,7 +6,6 @@ import android.content.Context;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ProgressBar;
@@ -139,9 +138,9 @@ public class ProfileViewModel extends ViewModel {
         });
     }
 
-    public void updateUser(){ //TODO: should we check the old password?
+    public void updateUser(){ 
         UserManager.updateUser(user.getName(), user.getSurname(), user.getEmail(), user.getCity(), user.getStreet(),
-                               user.getStreet_number(), user.getNeighbourhoodID(), null, password);
+                               user.getStreet_number(), user.getNeighbourhoodID(), password);
     }
 
     public void createNeighbourhood (String name, MyCallback<Boolean> myCallback){
@@ -195,6 +194,4 @@ public class ProfileViewModel extends ViewModel {
         profilePic.setVisibility(View.GONE);
         ProfilePictureRepository.uploadProfileCoverPhoto(uri, context,profilePic, progressBar);
     }
-
-
 }

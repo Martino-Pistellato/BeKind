@@ -2,8 +2,6 @@ package com.example.bekind_v2.DataLayer;
 
 import static com.example.bekind_v2.Utilities.Utilities.isOldAge;
 
-import android.util.Log;
-
 import androidx.annotation.NonNull;
 
 import com.example.bekind_v2.Utilities.MyCallback;
@@ -59,7 +57,7 @@ public class ProposalRepository {
             this.flagsUsers = new ArrayList<>();
             this.publishingDate = publishingDate;
             this.republishTypes = choice;
-            this.priority = priority; //default value
+            this.priority = priority;
             this.latitude = lat;
             this.longitude = longitude;
         }
@@ -83,11 +81,9 @@ public class ProposalRepository {
         public RepublishTypes getRepublishTypes() {
             return republishTypes;
         }
-
         public double getLongitude() {
             return longitude;
         }
-
         public double getLatitude() {
             return latitude;
         }
@@ -103,20 +99,18 @@ public class ProposalRepository {
         public void setRepublishTypes(RepublishTypes republishTypes) {
             this.republishTypes = republishTypes;
         }
-
         public void addParticipant(String participantId){
             this.acceptersID.add(participantId);
         }
-        public void removeParticipant(String participantId){
-            this.acceptersID.remove(participantId);
-        }
-
         public void setLongitude(double longitude) {
             this.longitude = longitude;
         }
-
         public void setLatitude(double latitude) {
             this.latitude = latitude;
+        }
+
+        public void removeParticipant(String participantId){
+            this.acceptersID.remove(participantId);
         }
 
         public void addFlagUser(String userId) {
@@ -168,7 +162,7 @@ public class ProposalRepository {
                                                 if (prop.getPriority()) withPriority.add(prop);
                                                 else withoutPriority.add(prop);
                                             }
-                                            break; //adds the proposal to the Proposal to be shown
+                                            break;
                                         case ACCEPTED:
                                             if (prop.getAcceptersID().contains(userId)) {
                                                 if (prop.getPriority()) withPriority.add(prop);
@@ -271,7 +265,7 @@ public class ProposalRepository {
                             updatePeriodicProposal(prop, new MyCallback<Boolean>() {
                                 @Override
                                 public void onCallback(Boolean result) {
-
+                                    //TOTO: finish the callback
                                 }
                             });
                         }
@@ -350,7 +344,6 @@ public class ProposalRepository {
         getProposal(documentId, new MyCallback<Proposal>() {
             @Override
             public void onCallback(Proposal result) {
-                Log.e("Callback", "ho fatto la funzione");
                 if(result != null){
                     myCallback.onCallback(result.hasUserFlagged(userId));
                 }

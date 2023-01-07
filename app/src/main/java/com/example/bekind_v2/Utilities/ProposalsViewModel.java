@@ -14,21 +14,21 @@ public class ProposalsViewModel extends ViewModel {
 
     public MutableLiveData<ArrayList<Proposal>> getProposed() {
         if (proposed == null) {
-            proposed = new MutableLiveData<ArrayList<Proposal>>();
+            proposed = new MutableLiveData<>();
         }
         return proposed;
     }
 
     public MutableLiveData<ArrayList<Proposal>> getAccepted() {
         if (accepted == null) {
-            accepted = new MutableLiveData<ArrayList<Proposal>>();
+            accepted = new MutableLiveData<>();
         }
         return accepted;
     }
 
     public MutableLiveData<ArrayList<Proposal>> getAvailable() {
         if (available == null) {
-            available = new MutableLiveData<ArrayList<Proposal>>();
+            available = new MutableLiveData<>();
         }
         return available;
     }

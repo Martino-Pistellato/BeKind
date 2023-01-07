@@ -7,7 +7,6 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.os.Build;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
@@ -81,7 +80,6 @@ public class MapViewModel extends ViewModel implements ActivityCompat.OnRequestP
                             marker[0] = map[0].addMarker(new MarkerOptions().position(coord).title(addresses.get(0).getAddressLine(0)));//todo add address
 
                     }
-
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -108,7 +106,6 @@ public class MapViewModel extends ViewModel implements ActivityCompat.OnRequestP
                 autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
                     @Override
                     public void onPlaceSelected(Place place) {
-                        // TODO: Get info about the selected place.
                         LatLng newLatLng = place.getLatLng();
                         map[0].moveCamera(CameraUpdateFactory.newLatLng(newLatLng));
                         map[0].animateCamera(CameraUpdateFactory.zoomTo(17));
@@ -119,9 +116,7 @@ public class MapViewModel extends ViewModel implements ActivityCompat.OnRequestP
 
                         map[0].setOnMarkerDragListener(new GoogleMap.OnMarkerDragListener() {
                             @Override
-                            public void onMarkerDrag(@NonNull Marker marker) {
-
-                            }
+                            public void onMarkerDrag(@NonNull Marker marker) { }
 
                             @Override
                             public void onMarkerDragEnd(@NonNull Marker marker) {
@@ -130,13 +125,10 @@ public class MapViewModel extends ViewModel implements ActivityCompat.OnRequestP
                             }
 
                             @Override
-                            public void onMarkerDragStart(@NonNull Marker marker) {
-
-                            }
+                            public void onMarkerDragStart(@NonNull Marker marker) { }
                         });
 
                         showGeocoderInfo(newLatLng, city, street, streetNumber);
-
                     }
 
                     @Override
@@ -153,8 +145,6 @@ public class MapViewModel extends ViewModel implements ActivityCompat.OnRequestP
 
             // Construct a FusedLocationProviderClient.
             fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(context);
-
-
 
             if (coord != null)
                 setMap(mapFragment, coord, marker);
@@ -186,7 +176,6 @@ public class MapViewModel extends ViewModel implements ActivityCompat.OnRequestP
         if( ( !cityText.isEmpty() ) && ( !streetText.isEmpty() ) && ( !streetNumb.isEmpty() ) ) {
             String addressText = streetText + ", " + streetNumb + ", " + cityText;
 
-
             try {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                     geo.getFromLocationName(addressText, 1, new Geocoder.GeocodeListener() {
@@ -199,21 +188,17 @@ public class MapViewModel extends ViewModel implements ActivityCompat.OnRequestP
                         }
                     });
                 }
-                else
-                {
+                else {
                     address = geo.getFromLocationName(addressText, 1);
                     if (address.size() > 0 && address.get(0).getAddressLine(0).matches(".*\\d.*")) {
                         Address ad = address.get(0);
                        latLng[0] = new LatLng(ad.getLatitude(), ad.getLongitude());
                     }
                 }
-
             }catch (IOException e) {
                 e.printStackTrace();
-
             }
         }
-
         return latLng[0];
     }
 
@@ -244,15 +229,12 @@ public class MapViewModel extends ViewModel implements ActivityCompat.OnRequestP
         } catch (IOException e) {
             e.printStackTrace();
         }
-
     }
 
     private void getLocationPermission(Context context, FragmentActivity activity) {
-        /*
-         * Request location permission, so that we can get the location of the
+        /* Request location permission, so that we can get the location of the
          * device. The result of the permission request is handled by a callback,
-         * onRequestPermissionsResult.
-         */
+         * onRequestPermissionsResult. */
         if (ContextCompat.checkSelfPermission(context,
                 Manifest.permission.ACCESS_FINE_LOCATION)
                 == PackageManager.PERMISSION_GRANTED) {
@@ -279,18 +261,14 @@ public class MapViewModel extends ViewModel implements ActivityCompat.OnRequestP
                 lastKnownLocation = null;
                 getLocationPermission(this.context, this.fragmentActivity);
             }
-        } catch (SecurityException e)  {
-            Log.e("Exception: %s", e.getMessage());
-        }
+        } catch (SecurityException e)  { }
     }
 
     @SuppressWarnings("MissingPermission")
     private void getDeviceLocation() {
         Marker marker = null;
-        /*
-         * Get the best and most recent location of the device, which may be null in rare
-         * cases when a location is not available.
-         */
+        /* Get the best and most recent location of the device, which may be null in rare
+         * cases when a location is not available. */
         try {
             if (locationPermissionGranted) {
                 Task<Location> locationResult = fusedLocationProviderClient.getLastLocation();
@@ -320,16 +298,14 @@ public class MapViewModel extends ViewModel implements ActivityCompat.OnRequestP
                     }
                 });
             }
-        } catch (SecurityException e)  {
-            Log.e("Exception: %s", e.getMessage(), e);
-        }
+        } catch (SecurityException e)  { }
     }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         locationPermissionGranted = false;
         if (requestCode
-                == PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION) {// If request is cancelled, the result arrays are empty.
+                == PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION) { // If request is cancelled, the result arrays are empty.
             if (grantResults.length > 0
                     && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 locationPermissionGranted = true;

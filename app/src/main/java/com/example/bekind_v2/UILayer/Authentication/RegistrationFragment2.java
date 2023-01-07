@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -65,22 +64,22 @@ public class RegistrationFragment2 extends Fragment {
         //if we have previously inserted something in the form fields, we get those data and set the fields correctly
         authenticationViewModel.getLocationData(city, neighbourhood, street, streetNumber);
 
-        //get the coordinates from the address (city+street+streetnumber)
-        //if nothing is returned (form fields are empty or address is invalid), coord will be null
+        /*get the coordinates from the address (city+street+streetnumber)
+        * if nothing is returned (form fields are empty or address is invalid), coord will be null*/
         LatLng coord = mapViewModel.getCoordinatesFromAddress(requireContext(), city, street, streetNumber);
 
-        //initialize the map, setting a marker on the given coordinates (if coord != null) and
-        //set the search bar for addresses and the map
-        //if necessary, it will ask for geolocalization permission
+        /*initialize the map, setting a marker on the given coordinates (if coord != null) and
+        * set the search bar for addresses and the map
+        * if necessary, it will ask for geolocalization permission*/
         mapViewModel.initializeMap(getActivity(), getContext(), autocompleteFragment, mapFragment, city, street, streetNumber, coord);
 
         //if the city form field is empty, the neighbourhood form field is not editable (we cannot write in it)
         if (city.getText().toString().isEmpty())
             neighbourhood.setEnabled(false);
 
-        //the city form field has a listener for changes in text
-        //if the city form field is empty, neighbourhood form field is not editable
-        //else, it is
+        /*the city form field has a listener for changes in text
+        * if the city form field is empty, neighbourhood form field is not editable
+        * else, it is*/
         city.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -98,10 +97,10 @@ public class RegistrationFragment2 extends Fragment {
             }
         });
 
-        //neighbourhood form field has a focus changed listener
-        //whenever we select this form field (N.B. this is possible only if city form filed is NOT empty)
-        //a method to get all the neighbourhoods associated with the city specified in the city form field is triggered
-        //while writing on this field, if any result of the query matches the written text, it will be shown in a drop down list
+        /*neighbourhood form field has a focus changed listener
+        * whenever we select this form field (N.B. this is possible only if city form filed is NOT empty)
+        * a method to get all the neighbourhoods associated with the city specified in the city form field is triggered
+        * while writing on this field, if any result of the query matches the written text, it will be shown in a drop down list */
         neighbourhood.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View view, boolean b) {
@@ -134,8 +133,8 @@ public class RegistrationFragment2 extends Fragment {
         continueBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //we extract the texts from the fields and we convert them to a proper form
-                //(Ex. venezia, VENEZIA, vENezIa, ecc.., will all be converted to Venezia)
+                /*we extract the texts from the fields and we convert them to a proper form
+                * (Ex. venezia, VENEZIA, vENezIa, ecc.., will all be converted to Venezia)*/
                 String userCity = city.getText().toString().trim(), userNeighbourhood = neighbourhood.getText().toString().trim(),
                         userStreet = street.getText().toString().trim(), userStreetNumber = streetNumber.getText().toString().trim();
                 userCity = Utilities.convertToProperForm(userCity);
@@ -143,9 +142,9 @@ public class RegistrationFragment2 extends Fragment {
                 userStreetNumber = Utilities.convertToProperForm(userStreetNumber);
                 userNeighbourhood = Utilities.convertToProperForm(userNeighbourhood);
 
-                //we save the data and we check if everything is correct (texts are not empty, the specified neighbourhood exists)
-                //if something is wrong, messages depending on the situation will be shown
-                //else, we attempt to create the user, and if everything goes fine we are redirected to the home page
+                /* we save the data and we check if everything is correct (texts are not empty, the specified neighbourhood exists)
+                * if something is wrong, messages depending on the situation will be shown
+                * else, we attempt to create the user, and if everything goes fine we are redirected to the home page */
                 authenticationViewModel.saveLocationData(userCity, userNeighbourhood, userStreet, userStreetNumber);
                 authenticationViewModel.checkLocationFields(city, userCity, neighbourhood, userNeighbourhood, street, userStreet, streetNumber, userStreetNumber, new MyCallback() {
                     @Override
@@ -167,25 +166,26 @@ public class RegistrationFragment2 extends Fragment {
             }
         });
 
-        //if the neighbourhood inserted does not exists, a message is shown, suggesting its creation
-        //we click on this text to do so
+        /*if the neighbourhood inserted does not exists, a message is shown, suggesting its creation
+        * we click on this text to do so */
         textCreateNeighbourhood.setOnClickListener((v) -> {
-            //we extract the text from the fields and we convert it to a proper form
-            //(Ex. venezia, VENEZIA, vENezIa, ecc.., will all be converted to Venezia)
+            /*we extract the text from the fields and we convert it to a proper form
+             * (Ex. venezia, VENEZIA, vENezIa, ecc.., will all be converted to Venezia)*/
             String userCity = city.getText().toString().trim(), userNeighbourhood = "",
-                    userStreet = street.getText().toString().trim(), userStreetNumber = streetNumber.getText().toString().trim();
+                   userStreet = street.getText().toString().trim(), userStreetNumber = streetNumber.getText().toString().trim();
             userCity = Utilities.convertToProperForm(userCity);
             userStreet = Utilities.convertToProperForm(userStreet);
             userStreetNumber = Utilities.convertToProperForm(userStreetNumber);
 
-            //we save the data inserted in the form fields and we are redirected to the neighbourhood creation page
-            authenticationViewModel.saveLocationData(userCity, userNeighbourhood, userStreet, userStreetNumber);
-            //TODO check if fields are empty??????????????
+            if(authenticationViewModel.checkLocationFields(city, userCity, street, userStreet, streetNumber, userStreetNumber)){
+                authenticationViewModel.saveLocationData(userCity, userNeighbourhood, userStreet, userStreetNumber);
+                //we save the data inserted in the form fields and we are redirected to the neighbourhood creation page
 
-            FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
-            NeighbourhoodFragment neighbourhoodFragment = new NeighbourhoodFragment(authenticationViewModel, mapViewModel);
-            fragmentTransaction.replace(R.id.fragment_container, neighbourhoodFragment).commit();
-        }); //TODO:make a generic replacefragment
+                FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
+                NeighbourhoodFragment neighbourhoodFragment = new NeighbourhoodFragment(authenticationViewModel, mapViewModel);
+                fragmentTransaction.replace(R.id.fragment_container, neighbourhoodFragment).commit();
+            }
+        });
 
         return view;
     }

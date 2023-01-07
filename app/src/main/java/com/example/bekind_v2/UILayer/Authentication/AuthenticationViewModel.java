@@ -1,7 +1,6 @@
 package com.example.bekind_v2.UILayer.Authentication;
 
 import android.content.Context;
-import android.util.Log;
 import android.widget.AutoCompleteTextView;
 import android.widget.DatePicker;
 
@@ -20,7 +19,6 @@ import com.example.bekind_v2.DataLayer.UserManager;
 
 import java.util.Calendar;
 import java.util.Date;
-import java.util.StringTokenizer;
 
 public class AuthenticationViewModel extends ViewModel {
     private String name, surname, email, password, city, street, streetNumber, neighbourhoodName, neighbourhoodID;
@@ -82,28 +80,28 @@ public class AuthenticationViewModel extends ViewModel {
     }
 
     public boolean checkUserFields(TextInputEditText name, String userName, TextInputEditText surname, String userSurname, TextInputEditText email, String userEmail, TextInputEditText password, String userPassword){
-        //boolean res = true;
+        boolean res = true;
 
         if(userName.isEmpty()){
             name.setError("Questo campo non può essere vuoto");
             name.requestFocus();
-            return false;
+            res = false;
         }
+
         if(userSurname.isEmpty()){
             surname.setError("Questo campo non può essere vuoto");
             surname.requestFocus();
-            return false;
+            res = false;
         }
 
         if(userEmail.isEmpty()) {
             email.setError("Questo campo non può essere vuoto");
             email.requestFocus();
-            return false;
+            res = false;
         }
 
-        return checkPassword(password, userPassword);
+        return checkPassword(password, userPassword) && res;
     }
-
 
     public void checkLocationFields(TextInputEditText city, String userCity, AutoCompleteTextView neighbourhood, String userNeighbourhood, TextInputEditText street, String userStreet, TextInputEditText streetNumber, String userStreetNumber, MyCallback<Boolean> myCallback){
         NeighbourhoodViewModel.doesNeighbourhoodExist(userNeighbourhood, userCity, new MyCallback<Boolean>() {
@@ -140,6 +138,28 @@ public class AuthenticationViewModel extends ViewModel {
                 myCallback.onCallback(result && res);
             }
         });
+    }
+
+    public boolean checkLocationFields(TextInputEditText city, String userCity, TextInputEditText street, String userStreet, TextInputEditText streetNumber, String userStreetNumber){
+        boolean res = true;
+
+        if(userCity.isEmpty()){
+            city.setError("Questo campo non può essere vuoto");
+            city.requestFocus();
+            res = false;
+        }
+        if(userStreet.isEmpty()){
+            street.setError("Questo campo non può essere vuoto");
+            street.requestFocus();
+            res = false;
+        }
+        if(userStreetNumber.isEmpty()){
+            streetNumber.setError("Questo campo non può essere vuoto");
+            streetNumber.requestFocus();
+            res = false;
+        }
+
+        return res;
     }
 
     public void setBirthDate(DatePicker birthDate){

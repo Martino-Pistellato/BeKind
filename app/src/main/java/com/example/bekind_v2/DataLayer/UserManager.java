@@ -1,6 +1,5 @@
 package com.example.bekind_v2.DataLayer;
 
-
 import android.content.Context;
 import android.widget.Toast;
 import com.example.bekind_v2.Utilities.MyCallback;
@@ -52,8 +51,8 @@ public class UserManager {
     }
 
     //method used to update user's credentials
-    public static void updateUser(String name, String surname, String email, String city, String street, String street_number, String setNeighbourhoodID, String oldPassword, String newPassword){
-        UserLoginRepository.updateCredentials(email,oldPassword,newPassword);
+    public static void updateUser(String name, String surname, String email, String city, String street, String street_number, String setNeighbourhoodID, String newPassword){
+        UserLoginRepository.updateCredentials(email,newPassword);
         UserDatabaseRepository.updateUser(getUserId(), name, surname, email, city, street, street_number, setNeighbourhoodID);
     }
 

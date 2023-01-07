@@ -65,10 +65,12 @@ public class SettingsActivity extends AppCompatActivity {
             theme.setOnPreferenceChangeListener(((preference, newValue) -> {
                 if(newValue.equals("dark_theme")) {
                     AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_YES);
+                    //getContext().setTheme(R.style.Theme_BeKind_v2);
                     sharedPreferences.edit().putBoolean("dark_theme", true).apply();
                 }
                 else {
                     AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_NO);
+                    //getContext().setTheme(R.style.Theme_BeKind_v2);
                     sharedPreferences.edit().putBoolean("dark_theme", false).apply();
                 }
 

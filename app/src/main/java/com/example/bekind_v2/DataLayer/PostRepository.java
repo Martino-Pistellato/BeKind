@@ -76,6 +76,7 @@ public class PostRepository {
                 usersFlag.add(userId);
             }
         }
+
         //method used to remove a user id from the arraylist of users that flagged this post
         public void deleteUserFlag(String userId) {
             if(usersFlag.contains(userId)) {
@@ -176,7 +177,6 @@ public class PostRepository {
         CollectionReference db = FirebaseFirestore.getInstance().collection("Posts");
         Query postsQuery = null;
         //depending on which page we are currently in, we collect the user's posts or the other's posts. In both cases, posts are ordered chronologically by ascending publishingDate
-        //TODO should we order posts by publishingDate?
         switch (type){
             case MYPOSTS: postsQuery = db.whereEqualTo("publisherID", userID); break; //we are in profile page
             case OTHERSPOSTS: postsQuery = db.whereNotEqualTo("publisherID", userID);break; //we are in dashboard page

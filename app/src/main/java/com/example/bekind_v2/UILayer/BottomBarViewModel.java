@@ -1,6 +1,5 @@
 package com.example.bekind_v2.UILayer;
 
-import android.util.Log;
 import android.widget.DatePicker;
 import android.widget.TimePicker;
 
@@ -170,22 +169,24 @@ public class BottomBarViewModel extends ViewModel {
     }
 
     public boolean checkAddress(TextInputEditText city, String cityText, TextInputEditText street, String streetText, TextInputEditText streetNumber, String streetNumb) {
+        boolean res = true;
+        
         if(cityText.isEmpty()){
             city.requestFocus();
             city.setError("Questo campo non può essere vuoto");
-            return false;
+            res = false;
         }
         if(streetNumb.isEmpty()){
             streetNumber.requestFocus();
             streetNumber.setError("Questo campo non può essere vuoto");
-            return false;
+            res = false;
         }
         if(streetText.isEmpty()){
             street.requestFocus();
             street.setError("Questo campo non può essere vuoto");
-            return false;
+            res = false;
         }
-        return true;
+        return res;
     }
 
     public void saveProposalData(String proposalTitle, String proposalBody, Date proposalExpd) {

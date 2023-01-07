@@ -72,9 +72,7 @@ public class MyPostsFragment extends Fragment {
             @Override
             public void onClick(View v) { ProfileViewModel.managePostsFilter(randomChip.getText().toString()); }
         });
-
-
-
+        
         RecyclerView recyclerView = view.findViewById(R.id.recycler_view_post);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));

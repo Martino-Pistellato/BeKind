@@ -45,13 +45,13 @@ public class UserLoginRepository {
             });
     }
 
-    public static void updateCredentials(String email, String oldPassword, String newPassword){
+    public static void updateCredentials(String email, String newPassword){
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (email != null) {
             user.updateEmail(email);
         }
         if (newPassword != null)
-            user.updatePassword(newPassword); //TODO: add check for oldPassword.equals(storedPassword)
+            user.updatePassword(newPassword);
     }
 
     public static boolean isLogged(){

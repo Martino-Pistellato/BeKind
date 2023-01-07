@@ -56,19 +56,19 @@ public class NeighbourhoodFragment extends Fragment {
         continueBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //we extract the text from the neighbourhood form field and we get the city inserted in the second page of the registration
-                //both are converted to a proper form
-                //(Ex. venezia, VENEZIA, vENezIa, ecc.., will all be converted to Venezia)
+                /*we extract the text from the neighbourhood form field and we get the city inserted in the second page of the registration
+                * both are converted to a proper form
+                * (Ex. venezia, VENEZIA, vENezIa, ecc.., will all be converted to Venezia)*/
                 String neighbourhoodName = Utilities.convertToProperForm(name.getText().toString().trim());
                 String city = authenticationViewModel.getCity();
-                //we check if the neighbourhood form field is correct
-                //if it is empty, a message will be shown
+                /* we check if the neighbourhood form field is correct
+                 * if it is empty, a message will be shown */
                 if(!neighbourhoodViewModel.checkNeighbourhoodName(name, neighbourhoodName)){
                     Toast.makeText(getContext(), "Errore: i campi non sono stati riempiti correttamente", Toast.LENGTH_SHORT).show();
                 }
                 else{
-                    //if everything is fine, we attempt to create the new neighbourhood. Once its done, we attempt to create the new user
-                    //if everything is fine, we are redirected to the home page
+                    /*if everything is fine, we attempt to create the new neighbourhood. Once its done, we attempt to create the new user
+                    * if everything is fine, we are redirected to the home page*/
                     city = Utilities.convertToProperForm(city);
                     NeighbourhoodViewModel.createNeighbourhood(neighbourhoodName, city, (x)->{
                         if(x) {

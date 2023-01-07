@@ -64,6 +64,7 @@ public class PostRecyclerViewAdapter extends RecyclerView.Adapter<PostRecyclerVi
                     holder.postPublisher.setText(result.getName()+" "+result.getSurname());
                 else
                     holder.postPublisher.setText("Tu");
+
                 holder.postTitle.setText(post.getTitle());
                 holder.postBody.setText(post.getBody());
 
@@ -125,9 +126,11 @@ public class PostRecyclerViewAdapter extends RecyclerView.Adapter<PostRecyclerVi
                                           animalChip = dialog.findViewById(R.id.animal_chip_popup), transportChip = dialog.findViewById(R.id.transport_chip_popup), 
                                           criminalChip = dialog.findViewById(R.id.criminal_chip_popup), randomChip = dialog.findViewById(R.id.random_chip_popup);
                                   Button closeButton = dialog.findViewById(R.id.close_btn), publishButton = dialog.findViewById(R.id.publish_btn);
+
                                   text.setText("Modifica post");
                                   postTitle.setText(post.getTitle());
                                   postBody.setText(post.getBody());
+
                                   if(filters.contains(eventChip.getText().toString()))
                                       eventChip.setChecked(true);
                                   if(filters.contains(utilitiesChip.getText().toString()))
@@ -171,12 +174,11 @@ public class PostRecyclerViewAdapter extends RecyclerView.Adapter<PostRecyclerVi
                                               public void onCallback(Boolean result) {
                                                   if (result){
                                                       Toast.makeText(context, "Post aggiornato correttamente", Toast.LENGTH_SHORT).show();
-                                                    Utilities.getPosts(Utilities.day, UserManager.getUserId(), ProfileViewModel.postsFilters, PostTypes.MYPOSTS);
+                                                      Utilities.getPosts(Utilities.day, UserManager.getUserId(), ProfileViewModel.postsFilters, PostTypes.MYPOSTS);
                                                   }else
                                                       Toast.makeText(context, "Impossibile modificare post", Toast.LENGTH_SHORT).show();
                                               }
                                           });
-
                                           dialog.dismiss();
                                       }
                                   });
@@ -184,6 +186,7 @@ public class PostRecyclerViewAdapter extends RecyclerView.Adapter<PostRecyclerVi
                           });
                       }
                   }); break;
+
             case OTHERSPOSTS: constraintLayout.setOnClickListener(new View.OnClickListener() {
                   @Override
                   public void onClick(View v) {
@@ -192,6 +195,7 @@ public class PostRecyclerViewAdapter extends RecyclerView.Adapter<PostRecyclerVi
 
                       if(linearLayout.getVisibility() == View.GONE) {
                           linearLayout.setVisibility(View.VISIBLE);
+
                           PostRepository.hasUserFlagged(postId, pubId, new MyCallback<Boolean>() {
                               @Override
                               public void onCallback(Boolean result) {
@@ -201,6 +205,7 @@ public class PostRecyclerViewAdapter extends RecyclerView.Adapter<PostRecyclerVi
                                   }
                               }
                           });
+                          
                           PostRepository.hasUserLiked(postId, pubId, new MyCallback<Boolean>() {
                               @Override
                               public void onCallback(Boolean result) {

@@ -13,7 +13,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.bekind_v2.DataLayer.ProposalRepository;
-import com.example.bekind_v2.DataLayer.UserManager;
 import com.example.bekind_v2.R;
 import com.example.bekind_v2.Utilities.ProposalRecyclerViewAdapter;
 import com.example.bekind_v2.Utilities.ProposalsViewModel;
@@ -82,8 +81,6 @@ public class ProposedFragment extends Fragment {
         };
 
         proposalsViewModel.getProposed().observe(getViewLifecycleOwner(),proposedObserver);
-
-        //Utilities.getProposals(Utilities.day, UserManager.getUserId(), ProfileViewModel.proposedFilters, Types.PROPOSED);
 
         return view;
     }

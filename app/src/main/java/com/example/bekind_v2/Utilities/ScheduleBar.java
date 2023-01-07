@@ -4,7 +4,6 @@ import android.app.DatePickerDialog;
 import android.content.Context;
 import android.widget.TextView;
 
-
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -31,7 +30,6 @@ public class ScheduleBar {
             DatePickerDialog datePickerDialog = new DatePickerDialog(context);
             Date date = ScheduleDate.getScheduleDate();
 
-
             Utilities.BetterCalendar calendar = new Utilities.BetterCalendar(scheduleDate);
 
             datePickerDialog.updateDate( calendar.getYear(),
@@ -50,5 +48,4 @@ public class ScheduleBar {
                     calendar.getYear()); //changing the TextView
         }
     }
-
 }

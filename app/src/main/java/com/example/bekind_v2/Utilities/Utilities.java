@@ -41,6 +41,12 @@ public class Utilities {
         public int getYear() {
             return this.c.get(Calendar.YEAR);
         }
+        public int getHour(){
+            return this.c.get(Calendar.HOUR);
+        }
+        public int getMinute(){
+            return this.c.get(Calendar.MINUTE);
+        }
     }
 
     public static void manageFilter(String filter, ArrayList<String> filters){

@@ -46,8 +46,6 @@ public class BottomBar extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        
-
         BottomBarViewModel.clearProposals();
         BottomBarViewModel.clearPosts();
 

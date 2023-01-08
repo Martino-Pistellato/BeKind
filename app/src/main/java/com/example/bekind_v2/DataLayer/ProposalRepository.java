@@ -7,6 +7,7 @@ import androidx.annotation.NonNull;
 import com.example.bekind_v2.Utilities.MyCallback;
 import com.example.bekind_v2.Utilities.RepublishTypes;
 import com.example.bekind_v2.Utilities.Types;
+import com.example.bekind_v2.Utilities.Utilities;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -23,6 +24,8 @@ import java.util.Date;
 import java.util.UUID;
 
 public class ProposalRepository {
+    public static int MAX_HOUR_LIMIT = 5;
+
     public static class Proposal {
         private String title;
         private String body;
@@ -243,11 +246,14 @@ public class ProposalRepository {
     }
 
     public static void deleteProposal(String documentId, MyCallback<Boolean> myCallback){
-        FirebaseFirestore.getInstance().collection("Proposals").document(documentId).delete().addOnCompleteListener(new OnCompleteListener<Void>() {
-            @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                myCallback.onCallback(task.isSuccessful());
-            }
+        getProposal(documentId, proposal -> {
+            Utilities.BetterCalendar calendar = new Utilities.BetterCalendar(proposal.getExpiringDate());
+            int remainingHour = (calendar.getHour() > LocalDateTime.now().getHour()) ? calendar.getHour() - LocalDateTime.now().getHour() : 0,
+                remainingMinute = (calendar.getMinute() > LocalDateTime.now().getMinute()) ? calendar.getMinute() - LocalDateTime.now().getMinute() : 0;
+            if(remainingHour > MAX_HOUR_LIMIT || ((remainingHour == remainingMinute) && remainingMinute == 0))
+                FirebaseFirestore.getInstance().collection("Proposals").document(documentId).delete().addOnCompleteListener(task -> { myCallback.onCallback(task.isSuccessful());});
+            else
+                myCallback.onCallback(false);
         });
     }
     

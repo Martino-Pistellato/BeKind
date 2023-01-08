@@ -5,24 +5,24 @@ import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_YES;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
+import androidx.core.splashscreen.SplashScreen;
 import androidx.preference.PreferenceManager;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 
 import com.example.bekind_v2.R;
 import com.example.bekind_v2.UILayer.Authentication.LoginActivity;
 
 public class SplashScreenActivity extends AppCompatActivity {
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splashscreen);
-
-        Log.e("SCREEN", "sono qui");
+        getSupportActionBar().hide();
 
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         boolean is_dark = sharedPreferences.getBoolean("dark_theme", false);
@@ -31,11 +31,12 @@ public class SplashScreenActivity extends AppCompatActivity {
         else
             AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_NO);
 
-        if(!BottomBarViewModel.isLogged())
-            startActivity(new Intent(SplashScreenActivity.this, LoginActivity.class));
-        else
-            startActivity(new Intent(SplashScreenActivity.this, LoginActivity.class));
-        finish();
-
+        new Handler().postDelayed(() -> {
+            if(!BottomBarViewModel.isLogged())
+                startActivity(new Intent(SplashScreenActivity.this, LoginActivity.class));
+            else
+                startActivity(new Intent(SplashScreenActivity.this, LoginActivity.class));
+            finish();
+        }, 1000);
     }
 }

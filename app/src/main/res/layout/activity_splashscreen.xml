@@ -4,7 +4,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".UILayer.SplashScreenActivity"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@drawable/splashscreen_background">
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -12,9 +13,9 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
-        android:src="@mipmap/ic_logo_foreground"
-        android:scaleY="4"
-        android:scaleX="4"
+        android:src="@mipmap/ic_logo_v2_foreground_big"
+        android:scaleY="0.66"
+        android:scaleX="0.66"
     />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

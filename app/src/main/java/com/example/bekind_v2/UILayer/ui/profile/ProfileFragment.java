@@ -103,7 +103,7 @@ public class ProfileFragment extends Fragment {
         UserManager.getUser(UserManager.getUserId(), (user) ->{
             String image = user.getImage();
             if(!image.isEmpty()) {
-                Glide.with(this).load(image).addListener(new RequestListener<Drawable>() {
+                Glide.with(this).load(image).placeholder(R.drawable.ic_profile_selected_200).addListener(new RequestListener<Drawable>() {
                     @Override
                     public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
                         return false;

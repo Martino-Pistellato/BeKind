@@ -96,7 +96,6 @@ public class ProfileFragment extends Fragment {
         scheduledateText = root.findViewById(R.id.scheduledate_text);
         profilePic = root.findViewById(R.id.user_photo);
         scheduledateText = root.findViewById(R.id.scheduledate_text);
-        totalActivities = root.findViewById(R.id.total_activities);
         progressBar = root.findViewById(R.id.progressbar);
 
         progressBar.setVisibility(View.VISIBLE);

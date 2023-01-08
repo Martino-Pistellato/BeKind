@@ -27,10 +27,10 @@
             android:clickable="true"/>
 
         <TextView
-            android:id="@+id/total_activities"
+            android:id="@+id/total_posts"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/total_proposals"
+            android:text="Post totali"
             android:textStyle="bold"
             android:layout_marginStart="10dp"
             android:layout_marginTop="1dp"

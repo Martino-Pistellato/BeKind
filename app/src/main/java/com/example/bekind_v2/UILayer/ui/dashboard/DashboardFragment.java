@@ -38,7 +38,7 @@ public class DashboardFragment extends Fragment {
 
     private FragmentDashboardBinding binding;
     private SwitchCompat simpleSwitch;
-    private TextView totalActivities, scheduledateText;
+    private TextView totalPosts, scheduledateText;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         DashboardViewModel dashboardViewModel = new ViewModelProvider(this).get(DashboardViewModel.class);
@@ -99,7 +99,7 @@ public class DashboardFragment extends Fragment {
         ScheduleBar.ScheduleDate.setTextDate(scheduledateText);
 
         simpleSwitch = root.findViewById(R.id.simpleSwitch);
-        totalActivities = root.findViewById(R.id.total_activities);
+        totalPosts = root.findViewById(R.id.total_posts);
         Context context = this.getContext();
 
         scheduledateText.setOnClickListener(new View.OnClickListener() {
@@ -137,13 +137,13 @@ public class DashboardFragment extends Fragment {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if(buttonView.isPressed() && !isChecked){
                     scheduledateText.setVisibility(View.VISIBLE);
-                    totalActivities.setVisibility(View.INVISIBLE);
+                    totalPosts.setVisibility(View.INVISIBLE);
                     Utilities.day = ScheduleBar.ScheduleDate.getScheduleLocalDate();
 
                 }
                 else if (buttonView.isPressed() && isChecked){
                     scheduledateText.setVisibility(View.INVISIBLE);
-                    totalActivities.setVisibility(View.VISIBLE);
+                    totalPosts.setVisibility(View.VISIBLE);
                     Utilities.day = null;
                 }
                 Utilities.getPosts(Utilities.day, UserManager.getUserId(), DashboardViewModel.filters, PostTypes.OTHERSPOSTS);
@@ -168,14 +168,14 @@ public class DashboardFragment extends Fragment {
                 simpleSwitch.setChecked(true);
             }
             scheduledateText.setVisibility(View.INVISIBLE);
-            totalActivities.setVisibility(View.VISIBLE);
+            totalPosts.setVisibility(View.VISIBLE);
         }
         else{
             if(simpleSwitch.isChecked()){
                 simpleSwitch.setChecked(false);
             }
             scheduledateText.setVisibility(View.VISIBLE);
-            totalActivities.setVisibility(View.INVISIBLE);
+            totalPosts.setVisibility(View.INVISIBLE);
         }
 
         Utilities.getPosts(Utilities.day, UserManager.getUserId(), DashboardViewModel.filters, PostTypes.OTHERSPOSTS);

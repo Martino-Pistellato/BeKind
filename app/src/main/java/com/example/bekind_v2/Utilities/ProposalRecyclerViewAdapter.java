@@ -372,29 +372,32 @@ public class ProposalRecyclerViewAdapter extends RecyclerView.Adapter<ProposalRe
                     confirm.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            if(proposal.getRepublishTypes() == RepublishTypes.NEVER) {
-                                ProposalRepository.deleteProposal(documentId, new MyCallback<Boolean>() {
-                                    @Override
-                                    public void onCallback(Boolean result) {
-                                        if (result) {
-                                            Toast.makeText(context, "Attività terminata correttamente", Toast.LENGTH_SHORT).show();
-                                            Utilities.getProposals(Utilities.day, UserManager.getUserId(), ProfileViewModel.proposedFilters, Types.PROPOSED);
-                                        } else
-                                            Toast.makeText(context, "Impossibile terminare attività", Toast.LENGTH_SHORT).show();
-                                    }
-                                });
-                            }
-                            else{
-                                ProposalRepository.updatePeriodicProposal(proposal, new MyCallback<Boolean>() {
-                                    @Override
-                                    public void onCallback(Boolean result) {
-                                        if (result) {
-                                            Toast.makeText(context, "Attività terminata correttamente", Toast.LENGTH_SHORT).show();
-                                            Utilities.getProposals(Utilities.day, UserManager.getUserId(), ProfileViewModel.proposedFilters, Types.PROPOSED);
-                                        } else
-                                            Toast.makeText(context, "Impossibile terminare attività", Toast.LENGTH_SHORT).show();
-                                    }
-                                });
+                            if(!proposal.getAcceptersID().isEmpty()) {
+                                if (proposal.getRepublishTypes() == RepublishTypes.NEVER) {
+                                    ProposalRepository.deleteProposal(documentId, new MyCallback<Boolean>() {
+                                        @Override
+                                        public void onCallback(Boolean result) {
+                                            if (result) {
+                                                Toast.makeText(context, "Attività terminata correttamente", Toast.LENGTH_SHORT).show();
+                                                Utilities.getProposals(Utilities.day, UserManager.getUserId(), ProfileViewModel.proposedFilters, Types.PROPOSED);
+                                            } else
+                                                Toast.makeText(context, "Impossibile terminare attività", Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
+                                } else {
+                                    ProposalRepository.updatePeriodicProposal(proposal, new MyCallback<Boolean>() {
+                                        @Override
+                                        public void onCallback(Boolean result) {
+                                            if (result) {
+                                                Toast.makeText(context, "Attività terminata correttamente", Toast.LENGTH_SHORT).show();
+                                                Utilities.getProposals(Utilities.day, UserManager.getUserId(), ProfileViewModel.proposedFilters, Types.PROPOSED);
+                                            } else
+                                                Toast.makeText(context, "Impossibile terminare attività", Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
+                                }
+                            }else{
+                                Toast.makeText(context, "L'attività non è stata presa in carico da alcun utente. Impossibile evaderla.",Toast.LENGTH_SHORT).show();
                             }
                         }
                     });
@@ -404,7 +407,8 @@ public class ProposalRecyclerViewAdapter extends RecyclerView.Adapter<ProposalRe
             case ACCEPTED: constraintLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    ImageButton reject = holder.itemView.findViewById(R.id.reject_button);
+                    ImageButton reject = holder.itemView.findViewById(R.id.reject_button),
+                                map = holder.itemView.findViewById(R.id.map_accepted_button);
                     LinearLayout linearLayout = holder.itemView.findViewById(R.id.buttons_container_recycler_accepted);
 
                     if(linearLayout.getVisibility() == View.GONE)
@@ -425,6 +429,13 @@ public class ProposalRecyclerViewAdapter extends RecyclerView.Adapter<ProposalRe
                                         Toast.makeText(context, "Errore nel ritiro dall'attività", Toast.LENGTH_SHORT).show();
                                 }
                             });
+                        }
+                    });
+
+                    map.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Toast.makeText(context, "Geolocalizzazione della proposta", Toast.LENGTH_SHORT).show();
                         }
                     });
                 }

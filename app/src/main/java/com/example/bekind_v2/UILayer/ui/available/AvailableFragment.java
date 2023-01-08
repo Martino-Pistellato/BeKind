@@ -98,15 +98,15 @@ public class AvailableFragment extends Fragment {
         LinearLayout mapContainer = root.findViewById(R.id.map_container);
         SupportMapFragment mapFragment = (SupportMapFragment) this.getChildFragmentManager().findFragmentById(R.id.map_prop);
 
-        Dialog mapdialog = new Dialog(context);
-        mapdialog.setCanceledOnTouchOutside(true);
+        Dialog mapdialogAvailable = new Dialog(context);
+        mapdialogAvailable.setCanceledOnTouchOutside(true);
         ((ViewGroup)mapContainer.getParent()).removeView(mapContainer);
-        mapdialog.setContentView(mapContainer);
+        mapdialogAvailable.setContentView(mapContainer);
 
         final Observer<ArrayList<ProposalRepository.Proposal>> availableObserver = new Observer<ArrayList<ProposalRepository.Proposal>>() {
             @Override
             public void onChanged(@Nullable final ArrayList<ProposalRepository.Proposal> available) {
-                ProposalRecyclerViewAdapter adapter = new ProposalRecyclerViewAdapter(mapViewModel, mapdialog, mapFragment, available, getContext(),getActivity(), Types.AVAILABLE);
+                ProposalRecyclerViewAdapter adapter = new ProposalRecyclerViewAdapter(mapViewModel, mapdialogAvailable, mapFragment, available, getContext(),getActivity(), Types.AVAILABLE);
                 recyclerView.setAdapter(adapter);
                 adapter.notifyDataSetChanged();
             }

@@ -2,6 +2,7 @@ package com.example.bekind_v2.Utilities;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.location.Location;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -435,7 +436,29 @@ public class ProposalRecyclerViewAdapter extends RecyclerView.Adapter<ProposalRe
                     map.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            Toast.makeText(context, "Geolocalizzazione della proposta", Toast.LENGTH_SHORT).show();
+                            mapDialog.findViewById(R.id.map_container).setVisibility(View.VISIBLE);
+
+                            LatLng coord = new LatLng(proposal.getLatitude(), proposal.getLongitude());
+
+                            UserManager.getUser(proposal.getPublisherID(), new MyCallback<UserDatabaseRepository.User>() {
+                                @Override
+                                public void onCallback(UserDatabaseRepository.User result) {
+                                    LatLng home_coord = mapViewModel.getCoordinatesFromAddress(context, result.getCity(), result.getStreet(), result.getStreet_number());
+                                    Location home = new Location(""), other = new Location("");
+                                    if(home_coord != null){
+                                        home.setLatitude(home_coord.latitude);
+                                        home.setLongitude(home_coord.longitude);
+                                        other.setLatitude(coord.latitude);
+                                        other.setLongitude(coord.longitude);
+                                        if(home.distanceTo(other) != 0.0)
+                                            mapViewModel.initializeMap(activity, context,null, mapFragment,null,null,null, coord, home_coord);
+                                        else
+                                            mapViewModel.initializeMap(activity, context,null, mapFragment,null,null,null, coord, null);
+
+                                    }
+                                }
+                            });
+                            mapDialog.show();
                         }
                     });
                 }
@@ -518,7 +541,24 @@ public class ProposalRecyclerViewAdapter extends RecyclerView.Adapter<ProposalRe
 
                             LatLng coord = new LatLng(proposal.getLatitude(), proposal.getLongitude());
 
-                            mapViewModel.initializeMap(activity, context,null, mapFragment,null,null,null, coord);
+                            UserManager.getUser(proposal.getPublisherID(), new MyCallback<UserDatabaseRepository.User>() {
+                                @Override
+                                public void onCallback(UserDatabaseRepository.User result) {
+                                    LatLng home_coord = mapViewModel.getCoordinatesFromAddress(context, result.getCity(), result.getStreet(), result.getStreet_number());
+                                    Location home = new Location(""), other = new Location("");
+                                    if(home_coord != null){
+                                        home.setLatitude(home_coord.latitude);
+                                        home.setLongitude(home_coord.longitude);
+                                        other.setLatitude(coord.latitude);
+                                        other.setLongitude(coord.longitude);
+                                        if(home.distanceTo(other) != 0)
+                                            mapViewModel.initializeMap(activity, context,null, mapFragment,null,null,null, coord, home_coord);
+                                        else
+                                            mapViewModel.initializeMap(activity, context,null, mapFragment,null,null,null, coord, null);
+
+                                    }
+                                }
+                            });
 
                             mapDialog.show();
                         }

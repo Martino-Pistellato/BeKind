@@ -22,7 +22,9 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -55,31 +57,68 @@ public class MapViewModel extends ViewModel implements ActivityCompat.OnRequestP
     private Context context;
     private FragmentActivity fragmentActivity;
 
-    public void setMap(SupportMapFragment mapFragment, LatLng coord, Marker[] marker){
+    private void setCamera(LatLng coord1, LatLng coord2){
+        if(coord2 != null){
+            LatLngBounds.Builder builder = new LatLngBounds.Builder();
+            builder.include(coord1);
+            builder.include(coord2);
+            int padding = 120;
+            LatLngBounds bounds = builder.build();
+            map[0].moveCamera(CameraUpdateFactory.newLatLngBounds(bounds, padding));
+        }
+        else{
+            map[0].moveCamera(CameraUpdateFactory.newLatLngZoom(coord1, 17));
+        }
+    }
+
+    public void setMap(SupportMapFragment mapFragment, LatLng coord1, LatLng coord2, Marker[] marker){
 
         mapFragment.getMapAsync(new OnMapReadyCallback() {
             @Override
             public void onMapReady(@NonNull GoogleMap googleMap) {
                 map[0] = googleMap;
-                map[0].moveCamera(CameraUpdateFactory.newLatLng(coord));
-                map[0].animateCamera(CameraUpdateFactory.zoomTo(17));
+
                 Geocoder geocoder = new Geocoder(context, Locale.getDefault());
                 try {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                        geocoder.getFromLocation(coord.latitude, coord.longitude, 1, new Geocoder.GeocodeListener() {
+                        geocoder.getFromLocation(coord1.latitude, coord1.longitude, 1, new Geocoder.GeocodeListener() {
                             @Override
                             public void onGeocode(@NonNull List<Address> list) {
-                                if(list.size() > 0)
-                                    marker[0] = map[0].addMarker(new MarkerOptions().position(coord).title(list.get(0).getAddressLine(0)));//todo add address
+                                if(list.size() > 0) {
+                                    marker[0] = map[0].addMarker(new MarkerOptions().position(coord1)
+                                                                    .title(list.get(0).getAddressLine(0)).snippet("Luogo attività"));
+                                }
                             }
                         });
+                        if(coord2 != null){
+                            geocoder.getFromLocation(coord2.latitude, coord2.longitude, 1, new Geocoder.GeocodeListener() {
+                                @Override
+                                public void onGeocode(@NonNull List<Address> list) {
+                                    if(list.size() > 0) {
+                                       marker[0] = map[0].addMarker(new MarkerOptions().position(coord2)
+                                                                        .title(list.get(0).getAddressLine(0)).snippet("Casa utente")
+                                                                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
+
+                                    }
+                                }
+                            });
+                        }
                     }
                     else{
-                        List<Address> addresses = geocoder.getFromLocation(coord.latitude, coord.longitude, 1);
-                        if(addresses.size() > 0)
-                            marker[0] = map[0].addMarker(new MarkerOptions().position(coord).title(addresses.get(0).getAddressLine(0)));//todo add address
-
+                        List<Address> addresses = geocoder.getFromLocation(coord1.latitude, coord1.longitude, 1);
+                        if(addresses.size() > 0) {
+                            marker[0] = map[0].addMarker(new MarkerOptions().position(coord1)
+                                                            .title(addresses.get(0).getAddressLine(0)).snippet("Luogo attività"));
+                        }
+                        if(coord2 != null){
+                            addresses = geocoder.getFromLocation(coord2.latitude, coord2.longitude, 1);
+                            if(addresses.size() > 0)
+                                marker[0] = map[0].addMarker(new MarkerOptions().position(coord2)
+                                                                .title(addresses.get(0).getAddressLine(0)).snippet("Casa utente")
+                                                                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
+                        }
                     }
+                    setCamera(coord1, coord2);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -88,7 +127,7 @@ public class MapViewModel extends ViewModel implements ActivityCompat.OnRequestP
 
     }
 
-    public void initializeMap(FragmentActivity activity, Context context, AutocompleteSupportFragment autocompleteFragment, SupportMapFragment mapFragment, TextInputEditText city, TextInputEditText street, TextInputEditText streetNumber, LatLng coord) {
+    public void initializeMap(FragmentActivity activity, Context context, AutocompleteSupportFragment autocompleteFragment, SupportMapFragment mapFragment, TextInputEditText city, TextInputEditText street, TextInputEditText streetNumber, LatLng coord1, LatLng coord2) {
 
             this.fragmentActivity = activity;
             this.context = context;
@@ -107,12 +146,11 @@ public class MapViewModel extends ViewModel implements ActivityCompat.OnRequestP
                     @Override
                     public void onPlaceSelected(Place place) {
                         LatLng newLatLng = place.getLatLng();
-                        map[0].moveCamera(CameraUpdateFactory.newLatLng(newLatLng));
-                        map[0].animateCamera(CameraUpdateFactory.zoomTo(17));
                         if (marker[0] != null)
                             marker[0].remove();
 
                         marker[0] = map[0].addMarker(new MarkerOptions().position(newLatLng).draggable(true));
+                        setCamera(newLatLng, null);
 
                         map[0].setOnMarkerDragListener(new GoogleMap.OnMarkerDragListener() {
                             @Override
@@ -146,8 +184,8 @@ public class MapViewModel extends ViewModel implements ActivityCompat.OnRequestP
             // Construct a FusedLocationProviderClient.
             fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(context);
 
-            if (coord != null)
-                setMap(mapFragment, coord, marker);
+            if (coord1 != null)
+                setMap(mapFragment, coord1, coord2, marker);
             else {
                 mapFragment.getMapAsync(new OnMapReadyCallback() {
                     @Override
@@ -164,17 +202,14 @@ public class MapViewModel extends ViewModel implements ActivityCompat.OnRequestP
 
     }
 
-    public LatLng getCoordinatesFromAddress(Context context, TextInputEditText city, TextInputEditText street, TextInputEditText streetNumber){
-
-        Geocoder geo = new Geocoder(context, Locale.getDefault());
+    public LatLng getCoordinatesFromAddress(Context context, String city, String street, String streetNumber){
         LatLng[] latLng = new LatLng[1];
         latLng[0] = null;
-        List<Address> address;
-        String cityText = city.getText().toString().trim(), streetText = street.getText().toString().trim(),
-                streetNumb =streetNumber.getText().toString().trim();
 
-        if( ( !cityText.isEmpty() ) && ( !streetText.isEmpty() ) && ( !streetNumb.isEmpty() ) ) {
-            String addressText = streetText + ", " + streetNumb + ", " + cityText;
+        if( ( !city.isEmpty() ) && ( !street.isEmpty() ) && ( !streetNumber.isEmpty() ) ) {
+            Geocoder geo = new Geocoder(context, Locale.getDefault());
+            List<Address> address;
+            String addressText = street + ", " + streetNumber + ", " + city;
 
             try {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {

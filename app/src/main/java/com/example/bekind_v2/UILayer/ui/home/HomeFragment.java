@@ -1,6 +1,7 @@
 package com.example.bekind_v2.UILayer.ui.home;
 
 import android.app.DatePickerDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -9,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.DatePicker;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -23,11 +25,13 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.bekind_v2.DataLayer.ProposalRepository;
 import com.example.bekind_v2.DataLayer.UserManager;
 import com.example.bekind_v2.R;
+import com.example.bekind_v2.Utilities.MapViewModel;
 import com.example.bekind_v2.Utilities.ProposalRecyclerViewAdapter;
 import com.example.bekind_v2.Utilities.ScheduleBar;
 import com.example.bekind_v2.Utilities.Types;
 import com.example.bekind_v2.Utilities.Utilities;
 import com.example.bekind_v2.databinding.FragmentHomeBinding;
+import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.material.chip.Chip;
 
 import java.time.ZoneId;
@@ -42,6 +46,7 @@ public class HomeFragment extends Fragment {
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
         HomeViewModel homeViewModel = new ViewModelProvider(this).get(HomeViewModel.class);
+        MapViewModel mapViewModel = new ViewModelProvider(this).get(MapViewModel.class);
         binding = FragmentHomeBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
         Chip shoppingChip, houseworksChip, cleaningChip, transportChip, randomChip;
@@ -81,10 +86,18 @@ public class HomeFragment extends Fragment {
 
         Context context = this.getContext();
 
+        LinearLayout mapContainer = root.findViewById(R.id.map_container);
+        SupportMapFragment mapFragment = (SupportMapFragment) this.getChildFragmentManager().findFragmentById(R.id.map_prop);
+
+        Dialog mapdialogAccepted = new Dialog(context);
+        mapdialogAccepted.setCanceledOnTouchOutside(true);
+        ((ViewGroup)mapContainer.getParent()).removeView(mapContainer);
+        mapdialogAccepted.setContentView(mapContainer);
+
         final Observer<ArrayList<ProposalRepository.Proposal>> acceptedObserver = new Observer<ArrayList<ProposalRepository.Proposal>>() {
             @Override
             public void onChanged(@Nullable final ArrayList<ProposalRepository.Proposal> accepted) {
-                ProposalRecyclerViewAdapter adapter = new ProposalRecyclerViewAdapter(null,null, null, accepted, getContext(),getActivity(), Types.ACCEPTED);
+                ProposalRecyclerViewAdapter adapter = new ProposalRecyclerViewAdapter(mapViewModel,mapdialogAccepted, mapFragment, accepted, getContext(),getActivity(), Types.ACCEPTED);
 
                 recyclerView.setAdapter(adapter);
                 adapter.notifyDataSetChanged();

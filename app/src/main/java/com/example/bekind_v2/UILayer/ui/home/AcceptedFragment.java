@@ -1,5 +1,6 @@
 package com.example.bekind_v2.UILayer.ui.home;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
 
@@ -12,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
 import com.example.bekind_v2.DataLayer.ProposalRepository;
 import com.example.bekind_v2.R;
@@ -19,6 +21,7 @@ import com.example.bekind_v2.Utilities.ProposalRecyclerViewAdapter;
 import com.example.bekind_v2.Utilities.ProposalsViewModel;
 import com.example.bekind_v2.Utilities.Types;
 import com.example.bekind_v2.Utilities.Utilities;
+import com.google.android.gms.maps.SupportMapFragment;
 
 import java.util.ArrayList;
 
@@ -36,6 +39,8 @@ public class AcceptedFragment extends Fragment{
         RecyclerView recyclerView = view.findViewById(R.id.recycler_view_proposal);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+
+
 
         Context context = this.getContext();
 

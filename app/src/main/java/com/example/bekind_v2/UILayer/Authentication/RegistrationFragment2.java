@@ -66,12 +66,12 @@ public class RegistrationFragment2 extends Fragment {
 
         /*get the coordinates from the address (city+street+streetnumber)
         * if nothing is returned (form fields are empty or address is invalid), coord will be null*/
-        LatLng coord = mapViewModel.getCoordinatesFromAddress(requireContext(), city, street, streetNumber);
+        LatLng coord = mapViewModel.getCoordinatesFromAddress(requireContext(), city.getText().toString().trim(), street.getText().toString().trim(), streetNumber.getText().toString().trim());
 
         /*initialize the map, setting a marker on the given coordinates (if coord != null) and
         * set the search bar for addresses and the map
         * if necessary, it will ask for geolocalization permission*/
-        mapViewModel.initializeMap(getActivity(), getContext(), autocompleteFragment, mapFragment, city, street, streetNumber, coord);
+        mapViewModel.initializeMap(getActivity(), getContext(), autocompleteFragment, mapFragment, city, street, streetNumber, coord, null);
 
         //if the city form field is empty, the neighbourhood form field is not editable (we cannot write in it)
         if (city.getText().toString().isEmpty())

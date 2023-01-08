@@ -88,9 +88,9 @@ public class UpdateUserLocationDialog extends DialogFragment {
         AutocompleteSupportFragment autocompleteFragment = (AutocompleteSupportFragment) getChildFragmentManager().findFragmentById(R.id.autocomplete_fragment);
         SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
 
-        LatLng coord = mapViewModel.getCoordinatesFromAddress(getContext(), city, street, streetNumber);
+        LatLng coord = mapViewModel.getCoordinatesFromAddress(getContext(), city.getText().toString().trim(), street.getText().toString().trim(), streetNumber.getText().toString().trim());
 
-        mapViewModel.initializeMap(getActivity(), getContext(),autocompleteFragment, mapFragment,city,street,streetNumber, coord);
+        mapViewModel.initializeMap(getActivity(), getContext(),autocompleteFragment, mapFragment,city,street,streetNumber, coord, null);
 
 
         continueBtn.setOnClickListener(new View.OnClickListener() {

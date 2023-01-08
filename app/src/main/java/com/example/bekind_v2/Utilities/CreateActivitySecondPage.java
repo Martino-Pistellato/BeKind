@@ -17,6 +17,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.example.bekind_v2.DataLayer.UserDatabaseRepository;
 import com.example.bekind_v2.DataLayer.UserManager;
 import com.example.bekind_v2.R;
 import com.example.bekind_v2.UILayer.BottomBarViewModel;
@@ -105,8 +106,9 @@ public class CreateActivitySecondPage extends Fragment {
         AutocompleteSupportFragment autocompleteFragment = (AutocompleteSupportFragment) getChildFragmentManager().findFragmentById(R.id.autocomplete_fragment_prop);
         SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map_prop);
 
-        mapViewModel.initializeMap(getActivity(), getContext(), autocompleteFragment, mapFragment, city, street, streetNumber, null);
-        
+        mapViewModel.initializeMap(getActivity(), getContext(), autocompleteFragment, mapFragment, city, street, streetNumber, null, null);
+
+
         backBtn = view.findViewById(R.id.back_btn);
         publishBtn = view.findViewById(R.id.publish_btn);
 
@@ -153,7 +155,7 @@ public class CreateActivitySecondPage extends Fragment {
                     publish = false;
                 }
 
-                LatLng coord = mapViewModel.getCoordinatesFromAddress(getContext(), city, street, streetNumber);
+                LatLng coord = mapViewModel.getCoordinatesFromAddress(getContext(), city.getText().toString().trim(), street.getText().toString().trim(), streetNumber.getText().toString().trim());
                 if (coord == null) {
                     Toast.makeText(getActivity(), "Errore: l'indirizzo inserito non è corretto", Toast.LENGTH_SHORT).show();
                     publish = false;

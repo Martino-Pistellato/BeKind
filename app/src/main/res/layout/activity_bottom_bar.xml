@@ -10,20 +10,21 @@
         android:id="@+id/nav_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="?android:attr/windowBackground"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:menu="@menu/bottom_nav_menu"
-        app:elevation="1dp"
-        app:itemIconTint="?colorPrimary"
-        app:itemTextColor="?colorPrimary" />
+        app:elevation="5dp"
+        android:background="?colorPrimary"
+        app:itemIconTint="?colorTertiary"
+        app:itemTextColor="?colorTertiary"/>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/add_proposal_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:elevation="2dp"
+        app:shapeAppearanceOverlay="@style/fab_square"
+        app:elevation="10dp"
         android:src="@drawable/ic_add_24"
         app:maxImageSize="40dp"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -31,7 +32,8 @@
         app:layout_constraintBottom_toTopOf="@id/nav_view"
         app:layout_constraintTop_toTopOf="@id/nav_view"
         android:contentDescription="@string/add_btn"
-        android:backgroundTint="?colorPrimary"/>
+        android:backgroundTint="?colorTertiary"
+        app:borderWidth="0dp"/>
 
     <fragment
         android:id="@+id/nav_host_fragment"

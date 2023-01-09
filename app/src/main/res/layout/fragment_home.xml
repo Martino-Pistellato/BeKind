@@ -20,12 +20,13 @@
             android:id="@+id/scheduledate_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/x_day_program"
-            android:textStyle="bold"
             android:layout_marginStart="10dp"
             android:layout_marginTop="1dp"
+            android:clickable="true"
+            android:text="@string/x_day_program"
+            android:textStyle="bold"
             android:visibility="visible"
-            android:clickable="true"/>
+            tools:ignore="TouchTargetSizeCheck,TouchTargetSizeCheck" />
 
         <TextView
             android:id="@+id/total_activities"
@@ -42,8 +43,8 @@
             android:id="@+id/simpleSwitch"
             android:layout_width="wrap_content"
             android:layout_height="27dp"
-            android:layout_alignParentEnd="true" />
-
+            android:layout_alignParentEnd="true"
+            tools:ignore="TouchTargetSizeCheck,TouchTargetSizeCheck" />
     </RelativeLayout>
 
     <RelativeLayout
@@ -144,9 +145,7 @@
             android:layout_centerHorizontal="true"
             tools:context=".MapsActivity"
             android:name="com.google.android.gms.maps.SupportMapFragment"
-            tools:layout="@layout/fragment_home"></fragment>
+            tools:layout="@layout/fragment_home"/>
     </LinearLayout>
-
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

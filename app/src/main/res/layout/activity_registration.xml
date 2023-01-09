@@ -6,8 +6,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".UILayer.Authentication.RegistrationActivity"
-    android:background="@color/primaryColor"
     android:id="@+id/activity_registration">
+    <!--android:background="@color/primaryColor" -->
 
     <FrameLayout
         android:id="@+id/fragment_container"

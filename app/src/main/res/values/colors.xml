@@ -5,15 +5,25 @@
     <color name="purple_700">#FF3700B3</color>
     <color name="teal_200">#FF03DAC5</color>
     <color name="teal_700">#FF018786</color>
-    <color name="black">#FF000000</color>
-    <color name="white">#FFFFFFFF</color>
 
-    <color name="primaryColor">#dcedc8</color>
+    <color name="primaryColor1">#dcedc8</color>
     <color name="primaryLightColor">#F9FFE7</color>
-    <color name="primaryDarkColor">#70835B</color>
-    <color name="secondaryColor">#AFAF5F</color>
-    <color name="secondaryLightColor">#ffffc4</color>
-    <color name="secondaryDarkColor">#878655</color>
-    <color name="primaryTextColor">#000000</color>
-    <color name="secondaryTextColor">#000000</color>
+    <color name="primaryDarkColor1">#70835B</color>
+    <color name="secondaryColor1">#AFAF5F</color>
+    <color name="secondaryLightColor1">#ffffc4</color>
+    <color name="secondaryDarkColor1">#878655</color>
+
+    <color name="primaryColor">#ccd5ae</color>
+    <color name="lightBackground">#F6FFF0</color>
+    <color name="darkBackgorund">#53644B</color>
+    <color name="secondaryColor">#6B7C67</color>
+    <color name="tertiaryColor">#374833</color>
+    <color name="textColor">#253F19</color>
+
+    <color name="primaryDarkColor">#9ba47f</color>
+    <color name="secondaryColor_">#9eb299</color>
+    <color name="secondaryLightColor">#cfe4ca</color>
+    <color name="secondaryDarkColor">#6f826b</color>
+    <color name="white">#ffffff</color>
+    <color name="black">#000000</color>
 </resources>

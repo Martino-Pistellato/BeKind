@@ -44,6 +44,7 @@
         </activity>
         <activity
             android:name=".UILayer.Authentication.RegistrationActivity"
+            android:theme="@style/Theme.Authentication"
             android:configChanges="orientation|screenSize|screenLayout|keyboardHidden"
             android:exported="false">
             <meta-data
@@ -52,6 +53,7 @@
         </activity>
         <activity
             android:name=".UILayer.Authentication.LoginActivity"
+            android:theme="@style/Theme.Authentication"
             android:configChanges="orientation|screenSize|screenLayout|keyboardHidden"
             android:exported="false"
             android:noHistory="true">

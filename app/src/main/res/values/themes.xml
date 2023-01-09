@@ -4,7 +4,7 @@
         <!-- Primary brand color. -->
         <item name="colorPrimary">@color/primaryColor</item>
         <item name="colorPrimaryVariant">@color/lightBackground</item>
-        <item name="colorOnPrimary">@color/black</item>
+        <item name="colorOnPrimary">@color/primaryDarkColor</item>
         <!-- Secondary brand color. -->
         <item name="colorSecondary">@color/secondaryColor</item>
         <item name="colorSecondaryVariant">@color/secondaryLightColor</item>
@@ -50,6 +50,6 @@
     </style>
 
     <style name="AppTheme.AppBarOverlay" parent="@style/Widget.AppCompat.ActionBar">
-        <item name="android:textColorPrimary">@color/lightBackground</item>
+        <item name="android:textColorPrimary">@color/textColor</item>
     </style>
 </resources>

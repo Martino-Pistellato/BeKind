@@ -2,6 +2,8 @@ package com.example.bekind_v2.UILayer;
 
 import android.app.Dialog;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -63,12 +65,11 @@ public class BottomBar extends AppCompatActivity {
                 R.id.navigation_home, R.id.navigation_available, R.id.navigation_dashboard, R.id.navigation_profile)
                 .build();
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
-
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(binding.navView, navController);
         bottomBarViewModel = new ViewModelProvider(this).get(BottomBarViewModel.class);
         mapViewModel = new ViewModelProvider(this).get(MapViewModel.class);
-
+        getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#9BA47F")));
         addProposalButton = findViewById(R.id.add_proposal_btn);
 
         addProposalButton.setOnClickListener(new View.OnClickListener() {

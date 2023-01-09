@@ -10,7 +10,7 @@
         <item name="colorSecondary">@color/secondaryColor</item>
         <item name="colorSecondaryVariant">@color/secondaryDarkColor</item>
         <item name="colorOnSecondary">@color/primaryDarkColor</item>
-        <!-- Status bar color. -->
+        <!-- Status bar color. Set to #121212 for black -->
         <item name="android:statusBarColor">?attr/colorPrimary</item>
         <!-- Customize your theme here. -->
         <item name="android:windowBackground">@drawable/dark_background</item>
@@ -45,8 +45,8 @@
         <item name="cornerSize">15dp</item>
     </style>
 
-    <style name="AppTheme.AppBarOverlay" parent="Widget.MaterialComponents.ActionBar.Primary">
+    <style name="AppTheme.AppBarOverlay" parent="@style/Widget.AppCompat.ActionBar">
         <item name="android:textColorPrimary">@color/lightBackground</item>
-        <item name="color">?attr/colorPrimary</item>
+        <item name="colorPrimary">@color/primaryDarkColor</item>
     </style>
 </resources>

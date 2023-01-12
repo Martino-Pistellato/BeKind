@@ -4,21 +4,21 @@
         <!-- Primary brand color. -->
         <item name="colorPrimary">@color/primaryDarkColor</item>
         <item name="colorPrimaryDark">@color/primaryDarkColor</item>
-        <item name="colorPrimaryVariant">@color/primaryDarkColor</item>
-        <item name="colorOnPrimary">@color/textColor</item>
+        <item name="colorPrimaryVariant">@color/darkBackgorund</item>
+        <item name="colorOnPrimary">@color/lightBackground</item>
         <!-- Secondary brand color. -->
         <item name="colorSecondary">@color/secondaryColor</item>
         <item name="colorSecondaryVariant">@color/secondaryDarkColor</item>
         <item name="colorOnSecondary">@color/primaryDarkColor</item>
         <!-- Status bar color. Set to #121212 for black -->
-        <item name="android:statusBarColor">?attr/colorPrimary</item>
+        <item name="android:statusBarColor">#121212</item>
         <!-- Customize your theme here. -->
         <item name="android:windowBackground">@drawable/dark_background</item>
-        <item name="android:textColor">@color/textColor</item>
+        <item name="android:textColor">@color/lightBackground</item>
         <item name="android:textColorPrimary">@color/textColor</item>
         <item name="android:colorForeground">@color/textColor</item>
-        <item name="colorTertiary">@color/tertiaryColor</item>
-
+        <item name="colorTertiary">@color/textColor</item>
+        <item name="colorButtonNormal">@color/primaryColor</item>
         <item name="actionBarTheme">@style/AppTheme.AppBarOverlay</item>
 
     </style>
@@ -37,7 +37,7 @@
         <item name="android:statusBarColor">@color/black</item>
         <!-- Customize your theme here. -->
         <item name="android:windowBackground">@drawable/auth_background</item>
-        <item name="android:textColor">@color/textColor</item>
+        <item name="android:textColor">@color/lightBackground</item>
     </style>
 
     <style name="fab_square" parent="">
@@ -48,5 +48,38 @@
     <style name="AppTheme.AppBarOverlay" parent="@style/Widget.AppCompat.ActionBar">
         <item name="android:textColorPrimary">@color/lightBackground</item>
         <item name="colorPrimary">@color/primaryDarkColor</item>
+        <item name="android:colorControlNormal"> @color/lightBackground </item>
+    </style>
+
+    <style name="Theme.Settings" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">@color/primaryDarkColor</item>
+        <item name="colorPrimaryDark">@color/primaryDarkColor</item>
+        <item name="colorPrimaryVariant">@color/primaryDarkColor</item>
+        <item name="colorOnPrimary">@color/lightBackground</item>
+        <!-- Secondary brand color. -->
+        <item name="colorSecondary">@color/secondaryColor</item>
+        <item name="colorSecondaryVariant">@color/secondaryDarkColor</item>
+        <item name="colorOnSecondary">@color/primaryDarkColor</item>
+        <!-- Status bar color. Set to #121212 for black -->
+        <item name="android:statusBarColor">#121212</item>
+        <!-- Customize your theme here. -->
+        <item name="android:textColor">@color/lightBackground</item>
+        <item name="android:textColorPrimary">@color/lightBackground</item>
+        <item name="android:colorForeground">@color/lightBackground</item>
+        <item name="colorTertiary">@color/lightBackground</item>
+        <item name="android:windowBackground">@color/darkBackgorund</item>
+        <item name="actionBarTheme">@style/AppTheme.AppBarOverlay</item>
+    </style>
+
+    <style name="MyDatePicker">
+        <item name="colorPrimary">@color/lightBackground</item>
+        <item name="android:textColorPrimary">@color/lightBackground</item>
+        <item name="colorControlNormal">@color/lightBackground</item>
+    </style>
+
+    <style name="MyTimePicker">
+        <item name="android:textColorPrimary">@color/lightBackground</item>
+        <item name="colorControlNormal">@color/lightBackground</item>
     </style>
 </resources>

@@ -5,14 +5,17 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".UILayer.NeighbourhoodFragment">
+    tools:context=".UILayer.NeighbourhoodFragment"
+    android:background="@drawable/list_element_roundcorner"
+    android:backgroundTint="@color/primaryColor"
+    android:scaleX="0.95"
+    android:scaleY="0.95">
 
         <RelativeLayout
             android:id="@+id/create_neigh_container"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:background="@color/white">
+            android:layout_centerInParent="true">
 
             <TextView
                 android:id="@+id/new_neigh_text"
@@ -28,9 +31,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/new_neigh_text"
-                app:boxBackgroundColor="@color/white"
-                app:hintTextColor="@color/teal_700"
-                app:boxStrokeColor="@color/teal_700"
+                app:hintTextColor="@color/primaryColor"
+                app:boxBackgroundColor="@color/primaryColor"
+                app:boxStrokeColor="@color/primaryColor"
                 android:layout_centerInParent="true">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -60,7 +63,8 @@
                     android:layout_weight="1"
                     android:text="@string/back_btn"
                     android:layout_marginStart="10dp"
-                    android:backgroundTint="@color/primaryDarkColor"/>
+                    android:background="@drawable/list_element_roundcorner"
+                    app:backgroundTint="@color/primaryDarkColor"/>
 
                 <android.widget.Space
                     android:layout_width="0dp"
@@ -73,7 +77,8 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="@string/confirm_btn"
-                    android:backgroundTint="@color/primaryDarkColor"/>
+                    android:background="@drawable/list_element_roundcorner"
+                    app:backgroundTint="@color/primaryDarkColor"/>
 
             </LinearLayout>
         </RelativeLayout>

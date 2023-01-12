@@ -3,13 +3,17 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/proposal_popup1">
+    android:id="@+id/proposal_popup1"
+    android:background="@drawable/list_element_roundcorner"
+    android:backgroundTint="?attr/colorPrimaryVariant">
 
     <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true">
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/list_element_roundcorner"
+        android:backgroundTint="?attr/colorPrimaryVariant">
 
         <TextView
             android:id="@+id/new_activity_header"
@@ -25,7 +29,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/new_activity_header"
-            app:boxBackgroundColor="@color/white"
+            app:boxBackgroundColor="?attr/colorPrimaryVariant"
             app:hintTextColor="@color/primaryDarkColor"
             app:boxStrokeColor="@color/primaryDarkColor">
 
@@ -45,7 +49,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/title_container"
-            app:boxBackgroundColor="@color/white"
+            app:boxBackgroundColor="?attr/colorPrimaryVariant"
             app:hintTextColor="@color/primaryDarkColor"
             app:boxStrokeColor="@color/primaryDarkColor">
 
@@ -90,13 +94,15 @@
                 android:layout_height="131dp"
                 android:calendarViewShown="false"
                 android:datePickerMode="spinner"
-                android:spinnersShown="true" />
+                android:spinnersShown="true"
+                style="@style/MyDatePicker"/>
 
             <TimePicker
                 android:id="@+id/time_picker"
                 android:layout_width="match_parent"
                 android:layout_height="131dp"
-                android:timePickerMode="spinner" />
+                android:timePickerMode="spinner"
+                android:numbersTextColor="?attr/colorOnPrimary"/>
         </LinearLayout>
 
         <RelativeLayout
@@ -156,6 +162,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/chips_layout_popup"
             android:layout_marginTop="11dp"
+            android:layout_marginBottom="10dp"
             android:gravity="center"
             android:weightSum="2.2">
 
@@ -165,7 +172,9 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="@string/cancel_btn"
-                android:backgroundTint="@color/primaryDarkColor"/>
+                android:textColor="?attr/colorTertiary"
+                android:background="@drawable/list_element_roundcorner"
+                app:backgroundTint="?attr/colorButtonNormal"/>
 
             <android.widget.Space
                 android:layout_width="0dp"
@@ -178,7 +187,9 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="@string/continue_btn"
-                android:backgroundTint="@color/primaryDarkColor"/>
+                android:textColor="?attr/colorTertiary"
+                android:background="@drawable/list_element_roundcorner"
+                app:backgroundTint="?attr/colorButtonNormal"/>
         </LinearLayout>
     </RelativeLayout>
 </RelativeLayout>

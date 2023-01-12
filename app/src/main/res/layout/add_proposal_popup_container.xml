@@ -2,6 +2,8 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/add_proposal_container"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@drawable/list_element_roundcorner"
+    android:backgroundTint="?attr/colorPrimaryVariant">
 
 </FrameLayout>

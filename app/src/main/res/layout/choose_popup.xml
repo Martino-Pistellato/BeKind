@@ -2,7 +2,9 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@drawable/list_element_roundcorner"
+    android:backgroundTint="?attr/colorPrimaryVariant">
 
     <RelativeLayout
         android:layout_width="wrap_content"
@@ -27,7 +29,8 @@
             android:layout_below="@id/choose_text"
             android:layout_marginTop="11dp"
             android:gravity="center"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:layout_marginBottom="10dp">
 
 
             <Button
@@ -36,7 +39,9 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="@string/proposal_btn"
-                android:backgroundTint="@color/primaryDarkColor"/>
+                android:textColor="?attr/colorTertiary"
+                android:background="@drawable/list_element_roundcorner"
+                app:backgroundTint="?attr/colorButtonNormal"/>
 
             <android.widget.Space
                 android:layout_width="0dp"
@@ -50,7 +55,9 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="@string/post_btn"
-                android:backgroundTint="@color/primaryDarkColor"/>
+                android:textColor="?attr/colorTertiary"
+                android:background="@drawable/list_element_roundcorner"
+                app:backgroundTint="?attr/colorButtonNormal"/>
 
 
         </LinearLayout>

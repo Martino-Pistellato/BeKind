@@ -69,7 +69,6 @@ public class BottomBar extends AppCompatActivity {
         NavigationUI.setupWithNavController(binding.navView, navController);
         bottomBarViewModel = new ViewModelProvider(this).get(BottomBarViewModel.class);
         mapViewModel = new ViewModelProvider(this).get(MapViewModel.class);
-        getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#9BA47F")));
         addProposalButton = findViewById(R.id.add_proposal_btn);
 
         addProposalButton.setOnClickListener(new View.OnClickListener() {
@@ -79,6 +78,7 @@ public class BottomBar extends AppCompatActivity {
                 Button activityBtn, postBtn;
 
                 choose_dialog.setContentView(R.layout.choose_popup);
+                choose_dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
                 activityBtn = choose_dialog.findViewById(R.id.activity_btn);
                 postBtn = choose_dialog.findViewById(R.id.post_btn);
@@ -88,6 +88,7 @@ public class BottomBar extends AppCompatActivity {
                     public void onClick(View view) {
                         DialogFragment dialogFragment = new CreateActivityDialog(bottomBarViewModel, choose_dialog, mapViewModel);
 
+                        //dialogFragment.getDialog().getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                         dialogFragment.show(getSupportFragmentManager(), null);
                     }
                 });
@@ -100,6 +101,7 @@ public class BottomBar extends AppCompatActivity {
                         Button closeBtn, publishBtn;
 
                         dialog.setContentView(R.layout.add_post_popup); //set content of dialog (look in layout folder for new_activity_dialog file)
+                        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                         dialog.setCanceledOnTouchOutside(false); //prevents dialog to close when clicking outside of it
 
                         Chip eventChip, animalChip, utilitiesChip, transportChip, randomChip, criminalChip;

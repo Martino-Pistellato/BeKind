@@ -40,8 +40,8 @@
     <string name="public_transport_chip">Trasporto pubblico</string>
     <string name="criminal_chip">Criminalità</string>
     <string name="modify_proposal_text">Modifica attività</string>
-    <string name="x_day_program">Programma del giorno x</string>
-    <string name="total_proposals">Attività totali</string>
+    <string name="x_day_program">Programma del x</string>
+    <string name="total_proposals">Programma totale</string>
     <string name="neighbourhood_creation_title">Crea quartiere</string>
     <string name="neighbourhood_name_hint">Nome quartiere</string>
     <string name="back_btn">Indietro</string>
@@ -86,4 +86,7 @@
     <string name="tutorial">Rivedi tutorial</string>
     <string name="privacy">Informazioni sulla privacy</string>
     <string name="google_maps_key">AIzaSyA3HPOduQGsgbyQ9ZNoXvKr7t_M9yXmxqw</string>
+    <string name="delete_periodic_proposal">Stai per cancellare un\'attività periodica. Vuoi cancellare:</string>
+    <string name="only_this_time">Solo questa occorrenza</string>
+    <string name="all_occurrencies">Tutte le occorrenze</string>
 </resources>

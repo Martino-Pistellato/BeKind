@@ -14,7 +14,7 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:background="@color/primaryColor">
+        android:background="@color/primaryDarkColor">
 
         <TextView
             android:id="@+id/scheduledate_text"
@@ -54,7 +54,7 @@
         app:layout_constraintTop_toBottomOf="@id/schedule_layout"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
-        android:background="@color/primaryDarkColor">
+        android:background="@color/secondaryDarkColor2">
 
         <HorizontalScrollView
             android:layout_width="match_parent"

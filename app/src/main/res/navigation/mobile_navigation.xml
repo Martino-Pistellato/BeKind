@@ -10,12 +10,6 @@
         android:name="com.example.bekind_v2.UILayer.ui.home.HomeFragment"
         android:label="@string/title_home"
         tools:layout="@layout/fragment_home" >
-        <action
-            android:id="@+id/action_navigation_home_to_proposalFragment"
-            app:destination="@id/proposedFragment" />
-        <action
-            android:id="@+id/action_navigation_home_to_acceptedFragment"
-            app:destination="@id/acceptedFragment" />
         <argument
             android:name="proposalsViewModel"
             app:argType="reference" />
@@ -43,23 +37,4 @@
         android:name="com.example.bekind_v2.UILayer.ui.profile.ProfileFragment"
         android:label="@string/title_profile"
         tools:layout="@layout/fragment_profile" />
-
-    <fragment
-        android:id="@+id/proposedFragment"
-        android:name="com.example.bekind_v2.UILayer.ui.profile.ProposedFragment"
-        android:label="fragment_proposed"
-        tools:layout="@layout/fragment_proposed" >
-        <argument
-            android:name="proposalsViewModel"
-            app:argType="reference" />
-    </fragment>
-    <fragment
-        android:id="@+id/acceptedFragment"
-        android:name="com.example.bekind_v2.UILayer.ui.home.AcceptedFragment"
-        android:label="fragment_accepted"
-        tools:layout="@layout/fragment_accepted" >
-        <argument
-            android:name="proposalsViewModel"
-            app:argType="reference" />
-    </fragment>
 </navigation>

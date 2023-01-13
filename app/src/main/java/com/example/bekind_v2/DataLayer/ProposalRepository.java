@@ -24,7 +24,7 @@ import java.util.Date;
 import java.util.UUID;
 
 public class ProposalRepository {
-    public static int MAX_HOUR_LIMIT = 5;
+    public static int MAX_HOUR_LIMIT = 3;
 
     public static class Proposal {
         private String title;
@@ -218,17 +218,14 @@ public class ProposalRepository {
     }
 
     public static void rejectProposal(String documentId, String userId, MyCallback<Boolean> myCallback){
-        ProposalRepository.getProposal(documentId, new MyCallback<Proposal>() {
-            @Override
-            public void onCallback(Proposal result) {
-                result.removeParticipant(userId);
-            }
-        });
-        FirebaseFirestore.getInstance().collection("Proposals"). document(documentId).update("acceptersID", FieldValue.arrayRemove(userId)).addOnCompleteListener(new OnCompleteListener<Void>() {
-            @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                myCallback.onCallback(task.isSuccessful());
-            }
+        getProposal(documentId, proposal -> {
+            Utilities.BetterCalendar calendar = new Utilities.BetterCalendar(proposal.getExpiringDate());
+            int remainingHour = (calendar.getHour() > LocalDateTime.now().getHour()) ? calendar.getHour() - LocalDateTime.now().getHour() : 0,
+                    remainingMinute = (calendar.getMinute() > LocalDateTime.now().getMinute()) ? calendar.getMinute() - LocalDateTime.now().getMinute() : 0;
+            if(remainingHour > MAX_HOUR_LIMIT || ((remainingHour == remainingMinute) && remainingMinute == 0))
+                FirebaseFirestore.getInstance().collection("Proposals").document(documentId).update("acceptersID", FieldValue.arrayRemove(userId)).addOnCompleteListener(task -> { myCallback.onCallback(task.isSuccessful());});
+            else
+                myCallback.onCallback(false);
         });
     }
 
@@ -247,13 +244,7 @@ public class ProposalRepository {
 
     public static void deleteProposal(String documentId, MyCallback<Boolean> myCallback){
         getProposal(documentId, proposal -> {
-            Utilities.BetterCalendar calendar = new Utilities.BetterCalendar(proposal.getExpiringDate());
-            int remainingHour = (calendar.getHour() > LocalDateTime.now().getHour()) ? calendar.getHour() - LocalDateTime.now().getHour() : 0,
-                remainingMinute = (calendar.getMinute() > LocalDateTime.now().getMinute()) ? calendar.getMinute() - LocalDateTime.now().getMinute() : 0;
-            if(remainingHour > MAX_HOUR_LIMIT || ((remainingHour == remainingMinute) && remainingMinute == 0))
-                FirebaseFirestore.getInstance().collection("Proposals").document(documentId).delete().addOnCompleteListener(task -> { myCallback.onCallback(task.isSuccessful());});
-            else
-                myCallback.onCallback(false);
+            FirebaseFirestore.getInstance().collection("Proposals").document(documentId).delete().addOnCompleteListener(task -> { myCallback.onCallback(task.isSuccessful());});
         });
     }
     
@@ -271,7 +262,7 @@ public class ProposalRepository {
                             updatePeriodicProposal(prop, new MyCallback<Boolean>() {
                                 @Override
                                 public void onCallback(Boolean result) {
-                                    //TOTO: finish the callback
+                                    //TODO: finish the callback
                                 }
                             });
                         }
@@ -280,6 +271,7 @@ public class ProposalRepository {
             }
         });
     }
+    
     public static void updatePeriodicProposal(Proposal prop, MyCallback<Boolean> myCallback) {
         Date newPublishing = null, newExpiring = null;
         LocalDateTime ldtPublish, ldtExpiring;
@@ -309,6 +301,7 @@ public class ProposalRepository {
                 newPublishing = Date.from(ldtPublish.atZone(ZoneId.systemDefault()).toInstant());
                 break;
         }
+        prop.getAcceptersID().clear();
         editProposal(prop.getId(), prop.getTitle(), prop.getBody(), newExpiring, newPublishing, prop.getFilters(), prop.getMaxParticipants(), prop.getRepublishTypes(), myCallback);
     }
 

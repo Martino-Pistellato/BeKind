@@ -1,6 +1,8 @@
 package com.example.bekind_v2.Utilities;
 
 import android.app.Dialog;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -45,7 +47,6 @@ public class UpdateUserLocationDialog extends DialogFragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         view = inflater.inflate(R.layout.fragment_registration2,container,false);
-
         TextView textCreateNeighbourhood = view.findViewById(R.id.text_create_neigh), title = view.findViewById(R.id.neighbourhood_text);
         TextInputEditText city = view.findViewById(R.id.user_city), street = view.findViewById(R.id.user_street), streetNumber = view.findViewById(R.id.street_number);
         Button cancelBtn = view.findViewById(R.id.back_button), continueBtn = view.findViewById(R.id.continue_button);
@@ -133,6 +134,7 @@ public class UpdateUserLocationDialog extends DialogFragment {
                 dismiss();
                 Dialog dialog = new Dialog(getContext());
                 dialog.setContentView(R.layout.fragment_neighbourhood);
+                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                 dialog.setCanceledOnTouchOutside(false);
 
                 TextInputEditText neighbourhood = dialog.findViewById(R.id.neigh_name);

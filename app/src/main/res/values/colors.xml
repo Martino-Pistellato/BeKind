@@ -24,6 +24,7 @@
     <color name="secondaryColor_">#9eb299</color>
     <color name="secondaryLightColor">#cfe4ca</color>
     <color name="secondaryDarkColor">#6f826b</color>
+    <color name="secondaryDarkColor2">#7C8366</color>
     <color name="white">#ffffff</color>
     <color name="black">#000000</color>
 </resources>

@@ -14,6 +14,8 @@ import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -87,8 +89,7 @@ public class ProfileFragment extends Fragment {
         binding = FragmentProfileBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
         Context context = this.getContext();
-        Button updateUserData = binding.modifyProfileBtn, updateUserLocation = binding.modifyNeighBtn;
-        TextView profileName = binding.profileName;
+        TextView profileName = binding.profileName, updateUserData = binding.modifyProfileTxt, updateUserLocation = binding.modifyResidenceTxt;
         ViewPager2 viewPager2 = root.findViewById(R.id.pager);
         TabLayout tabLayout = root.findViewById(R.id.tab_layout);
         simpleSwitch = root.findViewById(R.id.simpleSwitch);
@@ -132,6 +133,7 @@ public class ProfileFragment extends Fragment {
             public void onClick(View v) {
                 Dialog dialog = new Dialog(getContext());
                 dialog.setContentView(R.layout.popup_update1);
+                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                 dialog.setCanceledOnTouchOutside(false);
 
                 TextInputEditText userName = dialog.findViewById(R.id.modify_profile_name), userSurname = dialog.findViewById(R.id.modify_profile_surname);
@@ -166,6 +168,7 @@ public class ProfileFragment extends Fragment {
                         dialog.dismiss();
                         Dialog dialog = new Dialog(getContext());
                         dialog.setContentView(R.layout.popup_update2); //set content of dialog (look in layout folder for modify_profile_dialog file)
+                        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                         dialog.setCanceledOnTouchOutside(false); //prevents dialog to close when clicking outside of it
 
                         Button cancelBtn = dialog.findViewById(R.id.cancel_button); //button for closing dialog
@@ -206,7 +209,6 @@ public class ProfileFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 DialogFragment dialog = new UpdateUserLocationDialog(profileViewModel, mapViewModel, profileName);
-
 
                 dialog.show(getChildFragmentManager(), null);
             }

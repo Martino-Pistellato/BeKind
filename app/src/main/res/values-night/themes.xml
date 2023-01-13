@@ -8,7 +8,7 @@
         <item name="colorOnPrimary">@color/lightBackground</item>
         <!-- Secondary brand color. -->
         <item name="colorSecondary">@color/secondaryColor</item>
-        <item name="colorSecondaryVariant">@color/secondaryDarkColor</item>
+        <item name="colorSecondaryVariant">@color/tertiaryColor</item>
         <item name="colorOnSecondary">@color/primaryDarkColor</item>
         <!-- Status bar color. Set to #121212 for black -->
         <item name="android:statusBarColor">#121212</item>
@@ -72,14 +72,15 @@
         <item name="actionBarTheme">@style/AppTheme.AppBarOverlay</item>
     </style>
 
-    <style name="MyDatePicker">
+    <style name="MyDatePicker" parent="android:Widget.Material.DatePicker">
         <item name="colorPrimary">@color/lightBackground</item>
         <item name="android:textColorPrimary">@color/lightBackground</item>
         <item name="colorControlNormal">@color/lightBackground</item>
     </style>
 
     <style name="MyTimePicker">
-        <item name="android:textColorPrimary">@color/lightBackground</item>
-        <item name="colorControlNormal">@color/lightBackground</item>
+        <item name="android:textColorPrimary">@color/lightBackground</item> <!-- color for digits -->
+        <item name="android:textColor">@color/lightBackground</item> <!-- color for colon -->
+        <item name="android:colorControlNormal">@color/lightBackground</item> <!-- color for (horizontal) delimeters -->
     </style>
 </resources>

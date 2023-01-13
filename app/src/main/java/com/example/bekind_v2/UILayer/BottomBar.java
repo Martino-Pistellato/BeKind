@@ -88,7 +88,6 @@ public class BottomBar extends AppCompatActivity {
                     public void onClick(View view) {
                         DialogFragment dialogFragment = new CreateActivityDialog(bottomBarViewModel, choose_dialog, mapViewModel);
 
-                        //dialogFragment.getDialog().getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                         dialogFragment.show(getSupportFragmentManager(), null);
                     }
                 });

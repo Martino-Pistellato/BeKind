@@ -85,4 +85,7 @@
     <string name="logout">Esci</string>
     <string name="tutorial">Rivedi tutorial</string>
     <string name="privacy">Informazioni sulla privacy</string>
+    <string name="delete_periodic_proposal">Stai per cancellare un\'attività periodica. Vuoi cancellare:</string>
+    <string name="only_this_time">Solo questa occorrenza</string>
+    <string name="all_occurrencies">Tutte le occorrenze</string>
 </resources>

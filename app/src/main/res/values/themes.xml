@@ -7,7 +7,7 @@
         <item name="colorOnPrimary">@color/textColor</item>
         <!-- Secondary brand color. -->
         <item name="colorSecondary">@color/secondaryColor</item>
-        <item name="colorSecondaryVariant">@color/secondaryLightColor</item>
+        <item name="colorSecondaryVariant">@color/primaryDarkColor</item>
         <item name="colorOnSecondary">@color/primaryColor</item>
         <!-- Status bar color. -->
         <item name="android:statusBarColor">?attr/colorPrimary</item>
@@ -74,9 +74,15 @@
         <item name="actionBarTheme">@style/AppTheme.AppBarOverlay</item>
     </style>
     
-    <style name="MyDatePicker">
+    <style name="MyDatePicker" parent="android:Widget.Material.DatePicker">
         <item name="colorPrimary">@color/textColor</item>
         <item name="android:textColorPrimary">@color/textColor</item>
         <item name="colorControlNormal">@color/textColor</item>
+    </style>
+
+    <style name="MyTimePicker">
+        <item name="android:textColorPrimary">@color/textColor</item> <!-- color for digits -->
+        <item name="android:textColor">@color/textColor</item> <!-- color for colon -->
+        <item name="android:colorControlNormal">@color/textColor</item> <!-- color for (horizontal) delimeters -->
     </style>
 </resources>

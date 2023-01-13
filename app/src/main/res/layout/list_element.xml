@@ -165,7 +165,6 @@
             android:layout_height="wrap_content"
             android:src="@drawable/ic_map"
             android:background="@drawable/button_roundcorner"
-            android:backgroundTint="@color/primaryColor"
             android:contentDescription="@string/map_button"/>
 
         <android.widget.Space
@@ -178,7 +177,6 @@
             android:layout_height="wrap_content"
             android:src="@drawable/ic_flag"
             android:background="@drawable/button_roundcorner"
-            android:backgroundTint="@color/primaryColor"
             android:contentDescription="@string/flag_button"
             android:tag="to_flag"/>
 
@@ -192,8 +190,7 @@
             android:layout_height="wrap_content"
             android:src="@drawable/ic_accept"
             android:background="@drawable/button_roundcorner"
-            android:contentDescription="@string/accept_prop_btn"
-            android:backgroundTint="@color/primaryColor"/>
+            android:contentDescription="@string/accept_prop_btn"/>
 
     </LinearLayout>
 
@@ -214,7 +211,6 @@
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_delete"
                 android:background="@drawable/button_roundcorner"
-                android:backgroundTint="@color/primaryColor"
                 android:contentDescription="@string/delete_button" />
 
             <android.widget.Space
@@ -227,7 +223,6 @@
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_edit"
                 android:background="@drawable/button_roundcorner"
-                android:backgroundTint="@color/primaryColor"
                 android:contentDescription="@string/edit_button" />
 
             <android.widget.Space
@@ -240,7 +235,6 @@
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_confirm"
                 android:background="@drawable/button_roundcorner"
-                android:backgroundTint="@color/primaryColor"
                 android:contentDescription="@string/confirm_button" />
 
         </LinearLayout>
@@ -265,7 +259,6 @@
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_map"
                 android:background="@drawable/button_roundcorner"
-                android:backgroundTint="@color/primaryColor"
                 android:contentDescription="@string/map_button"/>
 
             <android.widget.Space
@@ -279,7 +272,6 @@
                 android:layout_marginEnd="12dp"
                 android:src="@drawable/ic_reject"
                 android:background="@drawable/button_roundcorner"
-                android:backgroundTint="@color/primaryColor"
                 android:contentDescription="@string/reject_button" />
         </LinearLayout>
 

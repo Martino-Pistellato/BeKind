@@ -16,7 +16,7 @@
         app:layout_constraintTop_toBottomOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
-        android:background="@color/primaryDarkColor">
+        android:background="@color/secondaryDarkColor2">
 
         <HorizontalScrollView
             android:layout_width="match_parent"

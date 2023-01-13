@@ -13,7 +13,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        android:background="@color/primaryColor">
+        android:background="@color/primaryDarkColor">
 
         <TextView
             android:id="@+id/scheduledate_text"
@@ -21,7 +21,7 @@
             android:layout_height="wrap_content"
             android:text="Programma del giorno x"
             android:textStyle="bold"
-            android:layout_marginLeft="10dp"
+            android:layout_marginStart="10dp"
             android:layout_marginTop="1dp"
             android:visibility="visible"
             android:clickable="true"/>
@@ -53,7 +53,7 @@
         app:layout_constraintTop_toBottomOf="@id/schedule_layout"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
-        android:background="@color/primaryDarkColor">
+        android:background="@color/secondaryDarkColor2">
 
         <HorizontalScrollView
             android:layout_width="match_parent"

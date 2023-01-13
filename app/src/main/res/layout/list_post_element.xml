@@ -129,7 +129,6 @@
             android:layout_marginStart="10dp"
             android:src="@drawable/ic_flag"
             android:background="@drawable/button_roundcorner"
-            android:backgroundTint="@color/primaryColor"
             android:contentDescription="@string/flag_button"
             android:tag="to_flag"/>
 
@@ -143,7 +142,6 @@
             android:layout_height="wrap_content"
             android:src="@drawable/ic_thumbsup"
             android:background="@drawable/button_roundcorner"
-            android:backgroundTint="@color/primaryColor"
             android:tag="thumbsup"/>
 
     </LinearLayout>
@@ -170,7 +168,6 @@
             android:layout_marginStart="10dp"
             android:src="@drawable/ic_delete"
             android:background="@drawable/button_roundcorner"
-            android:backgroundTint="@color/primaryColor"
             android:contentDescription="@string/delete_button" />
 
         <android.widget.Space
@@ -183,7 +180,6 @@
             android:layout_height="wrap_content"
             android:src="@drawable/ic_edit"
             android:background="@drawable/button_roundcorner"
-            android:backgroundTint="@color/primaryColor"
             android:contentDescription="@string/edit_button" />
 
     </LinearLayout>

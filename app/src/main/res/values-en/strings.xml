@@ -40,7 +40,7 @@
     <string name="public_transport_chip">Public transport</string>
     <string name="criminal_chip">Criminality</string>
     <string name="modify_proposal_text">Edit activity</string>
-    <string name="x_day_program">Schedule of x</string>
+    <string name="x_day_program">Schedule of\ </string>
     <string name="total_proposals">Total schedule</string>
     <string name="neighbourhood_creation_title">Create neighbourhood</string>
     <string name="neighbourhood_name_hint">Neighbourhood name</string>
@@ -135,10 +135,14 @@
     <string name="error_unflag_activity">Unable to unflag the activity</string>
     <string name="withdrawal_activity">Successfully withdrawn form the activity</string>
     <string name="error_withdrawal_activity">Unable to withdraw from the activity</string>
-    <string name="schedule_of">\"Schedule of \"</string>
     <string name="modify_residence_data">Modify residence data</string>
     <string name="close">CLOSE</string>
     <string name="confirm">CONFIRM</string>
     <string name="already_existing_neighbourhood">The neighbourhood already exists</string>
     <string name="not_existing_neighbourhood">The neighbourhood doesn\'t exist</string>
+    <string name="group_activity">Is it a group activity?</string>
+    <string name="create_new_activity_text">Create a new activity</string>
+    <string name="expiring_date_title">Expiring date and hour</string>
+    <string name="num_partecipants">Number of partecipants</string>
+    <string name="periodic">Is it a periodic activity?</string>
 </resources>

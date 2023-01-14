@@ -13,7 +13,6 @@
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true">
 
-
         <fragment android:id="@+id/autocomplete_fragment_prop"
             android:layout_width="350dp"
             android:layout_height="wrap_content"
@@ -98,7 +97,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
-            android:text="E' un'attività di gruppo?"
+            android:text="@string/group_activity"
             android:textSize="18sp"
             android:layout_below="@id/street_container"
             android:layoutDirection="ltr">
@@ -120,7 +119,7 @@
                 android:layout_centerHorizontal="true"
                 android:layout_marginBottom="20dp"
                 android:textCursorDrawable="@color/primaryDarkColor"
-                android:hint="Numero di partecipanti"
+                android:hint="@string/num_partecipants"
                 android:inputType="number"
                 android:textSize="20sp"
                 android:visibility="gone"/>
@@ -131,7 +130,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
-            android:text="E' un'attività periodica?"
+            android:text="@string/periodic"
             android:textSize="18sp"
             android:layoutDirection="ltr"
             android:layout_below="@id/maxparticipants_container">
@@ -163,7 +162,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Indietro"
+                android:text="@string/cancel_btn"
                 android:textColor="?attr/colorTertiary"
                 android:background="@drawable/list_element_roundcorner"
                 app:backgroundTint="?attr/colorButtonNormal"/>
@@ -178,13 +177,10 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Conferma"
+                android:text="@string/confirm_btn"
                 android:textColor="?attr/colorTertiary"
                 android:background="@drawable/list_element_roundcorner"
                 app:backgroundTint="?attr/colorButtonNormal"/>
         </LinearLayout>
-
     </RelativeLayout>
-
-
 </RelativeLayout>

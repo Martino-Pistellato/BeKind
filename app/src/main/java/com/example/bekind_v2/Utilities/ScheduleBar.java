@@ -44,7 +44,7 @@ public class ScheduleBar {
 
         public static void setTextDate(TextView textScheduleDate, Context context) {
             Utilities.BetterCalendar calendar = new Utilities.BetterCalendar(scheduleDate);
-            textScheduleDate.setText(context.getString(R.string.schedule_of) +
+            textScheduleDate.setText(context.getString(R.string.x_day_program) +
                     calendar.getDay() + "/" +
                     (calendar.getMonth() + 1) + "/" +
                     calendar.getYear()); //changing the TextView

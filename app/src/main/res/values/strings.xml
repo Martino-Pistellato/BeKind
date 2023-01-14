@@ -40,7 +40,7 @@
     <string name="public_transport_chip">Trasporto pubblico</string>
     <string name="criminal_chip">Criminalità</string>
     <string name="modify_proposal_text">Modifica attività</string>
-    <string name="x_day_program">Programma del x</string>
+    <string name="x_day_program">Programma del giorno</string>
     <string name="total_proposals">Programma totale</string>
     <string name="neighbourhood_creation_title">Crea quartiere</string>
     <string name="neighbourhood_name_hint">Nome quartiere</string>
@@ -136,10 +136,15 @@
     <string name="error_unflag_activity">Impossibile non segnalare l\'attività.</string>
     <string name="withdrawal_activity">Ritiro dall\'attività avvenuto correttamente</string>
     <string name="error_withdrawal_activity">Errore nel ritiro dall\'attività</string>
-    <string name="schedule_of">\"Programma del \"</string>
     <string name="modify_residence_data">Modifica dati residenza</string>
     <string name="close">CHIUDI</string>
     <string name="confirm">CONFERMA</string>
     <string name="already_existing_neighbourhood">Il quartiere esiste già</string>
     <string name="not_existing_neighbourhood">Il quartiere non esiste</string>
+    <string name="create_new_activity_text">Crea una nuova attività</string>
+    <string name="expiring_date_title">Data e ora di scadenza</string>
+    <string name="group_activity">È un\'attività di gruppo?</string>
+    <string name="periodic">È un\'attività periodica?</string>
+    <string name="num_partecipants">Numero di partecipanti</string>
+
 </resources>

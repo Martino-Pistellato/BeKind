@@ -3,6 +3,7 @@ package com.example.bekind_v2.Utilities;
 import android.app.Dialog;
 import android.content.Context;
 import android.location.Location;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -211,7 +212,13 @@ public class ProposalRecyclerViewAdapter extends RecyclerView.Adapter<ProposalRe
                             firstDialog.setContentView(R.layout.add_proposal_popup);
                             firstDialog.setCanceledOnTouchOutside(false);
                             Dialog secondDialog = new Dialog(context);
+
+                            Log.e("NULL", "id: "+ R.layout.add_proposal_popup2);
+                            Log.e("NULL", "secon dialog: "+ (secondDialog == null));
                             secondDialog.setContentView(R.layout.add_proposal_popup2);
+                            Log.e("NULL", "id: "+ R.layout.add_proposal_popup2);
+                            Log.e("NULL", "id: "+ R.layout.add_proposal_popup2);
+
                             secondDialog.setCanceledOnTouchOutside(false);
                             Date date = proposal.getExpiringDate();
                             LocalDateTime expiringDateTime = LocalDateTime.ofInstant(date.toInstant(), ZoneId.systemDefault());

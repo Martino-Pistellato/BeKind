@@ -49,7 +49,7 @@
 
     <style name="AppTheme.AppBarOverlay" parent="@style/Widget.AppCompat.ActionBar">
         <item name="android:textColorPrimary">@color/textColor</item>
-        <item name="android:colorControlNormal"> @color/textColor </item>
+        <item name="android:colorControlNormal">@color/textColor</item>
 
     </style>
 
@@ -73,16 +73,9 @@
 
         <item name="actionBarTheme">@style/AppTheme.AppBarOverlay</item>
     </style>
-    
-    <style name="MyDatePicker" parent="android:Widget.Material.DatePicker">
-        <item name="colorPrimary">@color/textColor</item>
-        <item name="android:textColorPrimary">@color/textColor</item>
-        <item name="colorControlNormal">@color/textColor</item>
-    </style>
 
-    <style name="MyTimePicker">
-        <item name="android:textColorPrimary">@color/textColor</item> <!-- color for digits -->
-        <item name="android:textColor">@color/textColor</item> <!-- color for colon -->
-        <item name="android:colorControlNormal">@color/textColor</item> <!-- color for (horizontal) delimeters -->
+    <style name="Theme.BeKind.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
     </style>
 </resources>

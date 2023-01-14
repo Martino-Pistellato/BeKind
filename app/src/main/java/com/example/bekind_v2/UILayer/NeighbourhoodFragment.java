@@ -4,11 +4,13 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.preference.PreferenceManager;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -41,6 +43,7 @@ public class NeighbourhoodFragment extends Fragment {
 
         TextInputEditText name = view.findViewById(R.id.neigh_name);
         Button backBtn = view.findViewById(R.id.back_button), continueBtn = view.findViewById(R.id.continue_button);
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
 
         //if we press the back button, we are redirected to second page of the registration
         backBtn.setOnClickListener(new View.OnClickListener() {
@@ -74,8 +77,10 @@ public class NeighbourhoodFragment extends Fragment {
                         if(x) {
                             authenticationViewModel.setNeighbourhood(neighbourhoodName);
                             authenticationViewModel.createUser(getContext(), (y) -> {
-                                if(y != null)
+                                if(y != null) {
+                                    sharedPreferences.edit().putBoolean("first_time", true).apply();
                                     startActivity(new Intent(getContext(), BottomBar.class));
+                                }
                             });
                         }
                         else

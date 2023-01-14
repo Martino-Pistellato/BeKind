@@ -2,6 +2,7 @@ package com.example.bekind_v2.UILayer;
 
 import android.app.Dialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -9,6 +10,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -19,6 +22,7 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
+import androidx.preference.PreferenceManager;
 
 import com.example.bekind_v2.DataLayer.UserManager;
 import com.example.bekind_v2.R;
@@ -67,9 +71,46 @@ public class BottomBar extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(binding.navView, navController);
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         bottomBarViewModel = new ViewModelProvider(this).get(BottomBarViewModel.class);
         mapViewModel = new ViewModelProvider(this).get(MapViewModel.class);
         addProposalButton = findViewById(R.id.add_proposal_btn);
+
+        if(sharedPreferences.getBoolean("first_time", true)){
+            sharedPreferences.edit().putBoolean("first_time", false).apply();
+
+            Dialog tutorialDialog = new Dialog(this);
+            View view = View.inflate(this, R.layout.tutorial_popup, null);
+            tutorialDialog.setContentView(view);
+            tutorialDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+            Button continueBtn = view.findViewById(R.id.tutorial_continue_btn), backBtn = view.findViewById(R.id.tutorial_back_btn);
+
+            ImageView image = view.findViewById(R.id.tutorial_image);
+            TextView description = view.findViewById(R.id.tutorial_text);
+
+            continueBtn.setOnClickListener(v -> {
+                SettingsViewModel.index++;
+                if (SettingsViewModel.index == 12) {
+                    SettingsViewModel.index = 1;
+                    tutorialDialog.dismiss();
+                }
+                else {
+                    if (SettingsViewModel.index > 1) backBtn.setVisibility(View.VISIBLE);
+                    if (SettingsViewModel.index == 11) continueBtn.setText(R.string.close);
+                    SettingsViewModel.setContent(this, image, description);
+                }
+            });
+
+            backBtn.setOnClickListener(v -> {
+                SettingsViewModel.index--;
+                if (SettingsViewModel.index == 1) backBtn.setVisibility(View.INVISIBLE);
+                SettingsViewModel.setContent(this, image, description);
+            });
+
+            tutorialDialog.show();
+        }
+
+
 
         addProposalButton.setOnClickListener(new View.OnClickListener() {
             @Override

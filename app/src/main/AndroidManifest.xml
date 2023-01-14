@@ -9,7 +9,6 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.CAMERA" />
-
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES" />
@@ -35,29 +34,29 @@
 
         <activity
             android:name=".UILayer.SettingsActivity"
-            android:theme="@style/Theme.Settings"
             android:configChanges="orientation|screenSize|screenLayout|keyboardHidden"
             android:exported="false"
-            android:label="@string/title_activity_settings">
+            android:label="@string/title_activity_settings"
+            android:theme="@style/Theme.Settings">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
         <activity
             android:name=".UILayer.Authentication.RegistrationActivity"
-            android:theme="@style/Theme.Authentication"
             android:configChanges="orientation|screenSize|screenLayout|keyboardHidden"
-            android:exported="false">
+            android:exported="false"
+            android:theme="@style/Theme.Authentication">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
         <activity
             android:name=".UILayer.Authentication.LoginActivity"
-            android:theme="@style/Theme.Authentication"
             android:configChanges="orientation|screenSize|screenLayout|keyboardHidden"
             android:exported="false"
-            android:noHistory="true">
+            android:noHistory="true"
+            android:theme="@style/Theme.Authentication">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
@@ -77,13 +76,14 @@
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
-        </activity>
-        <!--MAPS META DATA-->
+        </activity> <!-- MAPS META DATA -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyA3HPOduQGsgbyQ9ZNoXvKr7t_M9yXmxqw" />

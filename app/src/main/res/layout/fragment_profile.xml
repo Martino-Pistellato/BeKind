@@ -47,7 +47,7 @@
             android:layout_marginTop="36dp"
             android:layout_marginEnd="36dp"
             android:layout_marginBottom="36dp"
-            android:indeterminateTint="@color/primaryDarkColor"
+            android:indeterminateTint="@color/lightBackground"
             android:visibility="gone"
             android:elevation="5dp"/>
 

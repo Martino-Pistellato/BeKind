@@ -2,6 +2,7 @@ package com.example.bekind_v2.UILayer.Authentication;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -18,6 +19,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.preference.PreferenceManager;
 
 import com.example.bekind_v2.DataLayer.NeighbourhoodRepository;
 import com.example.bekind_v2.R;
@@ -60,6 +62,7 @@ public class RegistrationFragment2 extends Fragment {
         //ProgressBar progressBar = view.findViewById(R.id.progressbar);
         AutocompleteSupportFragment autocompleteFragment = (AutocompleteSupportFragment) getChildFragmentManager().findFragmentById(R.id.autocomplete_fragment);
         SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
 
         //if we have previously inserted something in the form fields, we get those data and set the fields correctly
         authenticationViewModel.getLocationData(city, neighbourhood, street, streetNumber);
@@ -156,6 +159,7 @@ public class RegistrationFragment2 extends Fragment {
                                 @Override
                                 public void onCallback(Object result) {
                                     if (result != null) {
+                                        sharedPreferences.edit().putBoolean("first_time", true).apply();
                                         startActivity(new Intent(getContext(), BottomBar.class));
                                     }
                                 }

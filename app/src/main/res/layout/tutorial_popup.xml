@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/tutorial_popup"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/list_element_roundcorner"
+    android:backgroundTint="?attr/colorPrimaryVariant">
+
+    <ImageView
+        android:id="@+id/tutorial_image"
+        android:layout_height="480dp"
+        android:layout_width="300dp"
+        android:layout_marginTop="10dp"
+        android:layout_centerHorizontal="true"
+        android:src="@drawable/tutorial_pic_1"/>
+
+    <TextView
+        android:id="@+id/tutorial_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tutorial_image"
+        android:textAlignment="center"
+        android:layout_marginTop="5dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginLeft="10dp"
+        android:text="@string/description_1"
+        android:textSize="16sp"
+        app:layout_constraintTop_toBottomOf="@id/tutorial_image" />
+
+    <LinearLayout
+        android:id="@+id/tutorial_buttons_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tutorial_text"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="20dp"
+        android:layout_below="@+id/tutorial_text"
+        android:gravity="center">
+
+        <Button
+            android:id="@+id/tutorial_back_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="?attr/colorTertiary"
+            android:text="@string/back_btn"
+            android:visibility="invisible"
+            android:clickable="true"
+            android:background="@drawable/list_element_roundcorner"
+            app:backgroundTint="?attr/colorButtonNormal"/>
+
+        <android.widget.Space
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"/>
+
+        <Button
+            android:id="@+id/tutorial_continue_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/forward_btn"
+            android:textColor="?attr/colorTertiary"
+            android:clickable="true"
+            android:background="@drawable/list_element_roundcorner"
+            app:backgroundTint="?attr/colorButtonNormal"/>
+    </LinearLayout>
+
+</RelativeLayout>

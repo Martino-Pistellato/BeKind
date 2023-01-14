@@ -7,180 +7,187 @@
     android:background="@drawable/list_element_roundcorner"
     android:backgroundTint="?attr/colorPrimaryVariant">
 
-    <RelativeLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true">
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
-        <fragment android:id="@+id/autocomplete_fragment_prop"
-            android:layout_width="350dp"
-            android:layout_height="wrap_content"
-            app:layout_constraintBottom_toTopOf="@id/map_prop"
-            android:name="com.google.android.libraries.places.widget.AutocompleteSupportFragment"
-            tools:layout="@layout/add_proposal_popup2" />
-
-        <fragment
-            android:layout_width="350dp"
-            android:layout_height="220dp"
-            app:layout_constraintBottom_toTopOf="@id/city_container"
-            app:layout_constraintTop_toBottomOf="@id/autocomplete_fragment_prop"
-            android:layout_below="@id/autocomplete_fragment_prop"
-            android:id="@+id/map_prop"
-            android:layout_centerHorizontal="true"
-            tools:context=".MapsActivity"
-            android:name="com.google.android.gms.maps.SupportMapFragment"
-            tools:layout="@layout/add_proposal_popup2"></fragment>
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/city_container"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/map_prop"
-            app:boxBackgroundColor="?attr/colorPrimaryVariant"
-            app:hintTextColor="@color/primaryDarkColor"
-            app:boxStrokeColor="@color/primaryDarkColor">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/user_city"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textCursorDrawable="@color/primaryDarkColor"
-            android:hint="@string/city_hint"
-            android:inputType="textNoSuggestions"
-            android:layout_marginBottom="20dp"/>
-
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/street_container"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:boxBackgroundColor="?attr/colorPrimaryVariant"
-            app:hintTextColor="@color/primaryDarkColor"
-            app:boxStrokeColor="@color/primaryDarkColor"
-            android:layout_below="@id/city_container"
-            android:layout_marginBottom="20dp">
-
-            <LinearLayout
-                android:id="@+id/street_linear"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:weightSum="2.5">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/user_street"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:textCursorDrawable="@color/primaryDarkColor"
-                    android:layout_weight="1.5"
-                    android:hint="@string/street_hint"
-                    android:inputType="textNoSuggestions"/>
-
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/street_number"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="0.7"
-                    android:textCursorDrawable="@color/primaryDarkColor"
-                    android:hint="@string/street_number_hint"
-                    android:inputType="textNoSuggestions"/>
-
-            </LinearLayout>
-
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <CheckBox
-            android:id="@+id/group_checkbox"
+        <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:text="@string/group_activity"
-            android:textSize="18sp"
-            android:layout_below="@id/street_container"
-            android:layoutDirection="ltr">
-        </CheckBox>
+            android:orientation="vertical"
+            android:scrollbars="vertical"
+            android:scrollbarAlwaysDrawVerticalTrack="true">
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/maxparticipants_container"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/group_checkbox"
-            app:boxBackgroundColor="?attr/colorPrimaryVariant"
-            app:hintTextColor="@color/primaryDarkColor"
-            app:boxStrokeColor="@color/primaryDarkColor">
+            <fragment android:id="@+id/autocomplete_fragment_prop"
+                android:layout_width="350dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toTopOf="@id/map_prop"
+                android:name="com.google.android.libraries.places.widget.AutocompleteSupportFragment"
+                tools:layout="@layout/add_proposal_popup2" />
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/activity_maxparticipants"
+            <fragment
+                android:layout_width="350dp"
+                android:layout_height="220dp"
+                app:layout_constraintBottom_toTopOf="@id/city_container"
+                app:layout_constraintTop_toBottomOf="@id/autocomplete_fragment_prop"
+                android:layout_below="@id/autocomplete_fragment_prop"
+                android:id="@+id/map_prop"
+                android:layout_centerHorizontal="true"
+                tools:context=".MapsActivity"
+                android:name="com.google.android.gms.maps.SupportMapFragment"
+                tools:layout="@layout/add_proposal_popup2"></fragment>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/city_container"
                 android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/map_prop"
+                app:boxBackgroundColor="?attr/colorPrimaryVariant"
+                app:hintTextColor="@color/primaryDarkColor"
+                app:boxStrokeColor="@color/primaryDarkColor">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/user_city"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textCursorDrawable="@color/primaryDarkColor"
+                    android:hint="@string/city_hint"
+                    android:inputType="textNoSuggestions"
+                    android:layout_marginBottom="20dp"/>
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/street_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:boxBackgroundColor="?attr/colorPrimaryVariant"
+                app:hintTextColor="@color/primaryDarkColor"
+                app:boxStrokeColor="@color/primaryDarkColor"
+                android:layout_below="@id/city_container"
+                android:layout_marginBottom="20dp">
+
+                <LinearLayout
+                    android:id="@+id/street_linear"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:weightSum="2.5">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/user_street"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:textCursorDrawable="@color/primaryDarkColor"
+                        android:layout_weight="1.5"
+                        android:hint="@string/street_hint"
+                        android:inputType="textNoSuggestions"/>
+
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/street_number"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.7"
+                        android:textCursorDrawable="@color/primaryDarkColor"
+                        android:hint="@string/street_number_hint"
+                        android:inputType="textNoSuggestions"/>
+
+                </LinearLayout>
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <CheckBox
+                android:id="@+id/group_checkbox"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
-                android:layout_marginBottom="20dp"
-                android:textCursorDrawable="@color/primaryDarkColor"
-                android:hint="@string/num_partecipants"
-                android:inputType="number"
-                android:textSize="20sp"
-                android:visibility="gone"/>
-        </com.google.android.material.textfield.TextInputLayout>
+                android:text="@string/group_activity"
+                android:textSize="18sp"
+                android:layout_below="@id/street_container"
+                android:layoutDirection="ltr">
+            </CheckBox>
 
-        <CheckBox
-            android:id="@+id/periodic_checkbox"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:text="@string/periodic"
-            android:textSize="18sp"
-            android:layoutDirection="ltr"
-            android:layout_below="@id/maxparticipants_container">
-        </CheckBox>
-
-        <ListView
-            android:id="@+id/periodic_choices"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/periodic_checkbox"
-            android:layout_centerHorizontal="true"
-            android:visibility="gone"
-            android:choiceMode="singleChoice"
-            android:listSelector="@color/primaryDarkColor">
-        </ListView>
-
-        <LinearLayout
-            android:id="@+id/buttons_container"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/periodic_choices"
-            android:layout_marginTop="11dp"
-            android:gravity="center"
-            android:weightSum="2.2"
-            android:layout_marginBottom="10dp">
-
-            <Button
-                android:id="@+id/back_btn"
-                android:layout_width="0dp"
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/maxparticipants_container"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/cancel_btn"
-                android:textColor="?attr/colorTertiary"
-                android:background="@drawable/list_element_roundcorner"
-                app:backgroundTint="?attr/colorButtonNormal"/>
+                android:layout_below="@id/group_checkbox"
+                app:boxBackgroundColor="?attr/colorPrimaryVariant"
+                app:hintTextColor="@color/primaryDarkColor"
+                app:boxStrokeColor="@color/primaryDarkColor">
 
-            <android.widget.Space
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="0.1" />
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/activity_maxparticipants"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginBottom="20dp"
+                    android:textCursorDrawable="@color/primaryDarkColor"
+                    android:hint="@string/num_partecipants"
+                    android:inputType="number"
+                    android:textSize="20sp"
+                    android:visibility="gone"/>
+            </com.google.android.material.textfield.TextInputLayout>
 
-            <Button
-                android:id="@+id/publish_btn"
-                android:layout_width="0dp"
+            <CheckBox
+                android:id="@+id/periodic_checkbox"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/confirm_btn"
-                android:textColor="?attr/colorTertiary"
-                android:background="@drawable/list_element_roundcorner"
-                app:backgroundTint="?attr/colorButtonNormal"/>
-        </LinearLayout>
-    </RelativeLayout>
+                android:layout_centerHorizontal="true"
+                android:text="@string/periodic"
+                android:textSize="18sp"
+                android:layoutDirection="ltr"
+                android:layout_below="@id/maxparticipants_container">
+            </CheckBox>
+
+            <ListView
+                android:id="@+id/periodic_choices"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/periodic_checkbox"
+                android:layout_centerHorizontal="true"
+                android:visibility="gone"
+                android:choiceMode="singleChoice"
+                android:listSelector="@color/primaryDarkColor">
+            </ListView>
+
+            <LinearLayout
+                android:id="@+id/buttons_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/periodic_choices"
+                android:layout_marginTop="11dp"
+                android:gravity="center"
+                android:weightSum="2.2"
+                android:layout_marginBottom="10dp">
+
+                <Button
+                    android:id="@+id/back_btn"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/cancel_btn"
+                    android:textColor="?attr/colorTertiary"
+                    android:background="@drawable/list_element_roundcorner"
+                    app:backgroundTint="?attr/colorButtonNormal"/>
+
+                <android.widget.Space
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.1" />
+
+                <Button
+                    android:id="@+id/publish_btn"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/confirm_btn"
+                    android:textColor="?attr/colorTertiary"
+                    android:background="@drawable/list_element_roundcorner"
+                    app:backgroundTint="?attr/colorButtonNormal"/>
+            </LinearLayout>
+        </RelativeLayout>
+    </ScrollView>
+
 </RelativeLayout>

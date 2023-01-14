@@ -145,4 +145,17 @@
     <string name="expiring_date_title">Expiring date and hour</string>
     <string name="num_partecipants">Number of partecipants</string>
     <string name="periodic">Is it a periodic activity?</string>
+    <string name="forward_btn">Continue</string>
+    <string name="description_1">Through the lower bar you can access the main sections of the app: Home, Activities, Dashboard, Profile. By clicking the center button a popup, that allows you to create an activity or  a post, will appear.</string>
+    <string name="description_2">After clicking the "+" button and selecting "ACTIVITY" another popup, thorugh which you\'ll be able to set a title, a description, an expiring date and an expiring hour for the activity, will appear. You can also select some tags to make the researches easier.</string>
+    <string name="description_3">In this page you\'ll be able to geolocalize your activity by inserting an address using the Google Maps map. You\'ll be able to specify if it is a group activity, adding the number of partecipants, or if it is a periodic activity, setting the period.</string>
+    <string name="description_4">You can also create posts that will be visible in the "Dashboard" section. These have a title, a description and some tags to make researches easier.</string>
+    <string name="description_5">In the "Profile" page you\'ll see your proposals. Clicking the button pointed by the red arrow you\'ll be able to delete the activity, clicking the one pointed by the green arrow you\'ll be able to modify it and clicking the one pointed by the blue arrow you\'ll be able to complete it. </string>
+    <string name="description_6">In the "Profile" page you\'ll see your posts. Clicking the button pointed by the red arrow you\'ll be able to delete the post, clicking the one pointed by the blue arrow you\'ll be able to modify it.</string>
+    <string name="description_7">In the "Activities" page you\'ll see all the available activities. Clicking the button pointed by the red arrow you\'ll be able to geolocalize the activity, clicking the one pointed by the green arrow you\'ll be able to flag them if you deem them inappropriate and clicking the one pointed by the blue arrow you\'ll be able to accept it.</string>
+    <string name="description_8">In the "Home" page you\'ll see all the activities you accepted. Clicking the button pointed by the red arrow you\'ll be able to geolocalize the activity and clicking the one pointed by the blue arrow you\'ll be able to withdraw form it, if it\'s less than three hours from its expiring hour.</string>
+    <string name="description_9">In the "Dashboard" page you\'ll see all the posts. Clicking the button pointed by the red arrow you\'ll be able to flag them, if you need them inappropriate and clicking the one pointed by the blue arrow you\'ll be able to like them.</string>
+    <string name="description_10">Clicking the switch pointed by the red arrow you\'lll be able to see all the activities and posts, not only the activities that expire the selected day and the posts published the selected day.</string>
+    <string name="description_11">Clicking on "Schedule of dd/mm/yyyy" you\'ll access a calendar. By selecting a specific date you\'ll be able to see the activities axpiring that day and the posts posted that day.</string>
+
 </resources>

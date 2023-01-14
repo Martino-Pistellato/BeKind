@@ -23,7 +23,7 @@
     <string name="new_proposal_text">Crea una nuova attività</string>
     <string name="title_hint">Titolo</string>
     <string name="description_hint">Descrizione</string>
-    <string name="group_activity_text">E\' un\'attività di gruppo?</string>
+    <string name="group_activity_text">È un\'attività di gruppo?</string>
     <string name="partecipants_number">Numero di partecipanti</string>
     <string name="shopping_chip">Spesa</string>
     <string name="housework_chip">Lavori Domestici</string>
@@ -40,11 +40,12 @@
     <string name="public_transport_chip">Trasporto pubblico</string>
     <string name="criminal_chip">Criminalità</string>
     <string name="modify_proposal_text">Modifica attività</string>
-    <string name="x_day_program">Programma del giorno </string>
+    <string name="x_day_program">Programma del giorno\ </string>
     <string name="total_proposals">Programma totale</string>
     <string name="neighbourhood_creation_title">Crea quartiere</string>
     <string name="neighbourhood_name_hint">Nome quartiere</string>
     <string name="back_btn">Indietro</string>
+    <string name="forward_btn">Avanti</string>
     <string name="profile_image_description">profile image</string>
     <string name="username_text">Nome Utente</string>
     <string name="modify_profile_btn">Modifica Profilo</string>
@@ -145,5 +146,15 @@
     <string name="group_activity">È un\'attività di gruppo?</string>
     <string name="num_partecipants">Numero di partecipanti</string>
     <string name="periodic">È un\'attività periodica?</string>
-
+    <string name="description_1">Nella barra in basso, è possibile accedere alle principali sezioni dell\'app: Home, Attività, Bacheca, Profilo. Premendo sul pulsante centrale invece, si aprirà un pop-up che permetterà la creazione di un\'attività o di un post.</string>
+    <string name="description_2">Dopo avere premuto il pulsante "+" e aver selezionato "ATTIVITÀ" apparirà il seguente popup, tramite il quale potrai specificare un titolo,una descizione, una data e un\'ora di scadenza per la tua attività. Cliccando sul pulsante "CONTINUA" avanzerai alla seconda fase della creazione.</string>
+    <string name="description_3">Nella seconda pagina della creazione attività potrai localizzarla inserendo un indirizzo tramite Google Maps. Potrai inoltre specificare se è un\'attività di gruppo, specificando il numero di partecipanti, o se è un\'attività periodica, specificando la cadenza.</string>
+    <string name="description_4">Oltre a creare attività, è possibile creare dei post che saranno visualizzabili nella "Bacheca". Essi sono composti da un titolo, una descrizione e delle proprietà per facilitarne la ricerca.</string>
+    <string name="description_5">Dalla pagina "Profilo", potrai accedere alle tue proposte. Cliccando il pulsante indicato dalla freccia rossa potrai cancellare la tua attività, cliccando il pulsante indicato dalla freccia verde potrai modificarla e cliccando il pulsante indicato dalla freccia blu potrai evaderla a seguito del suo completamento. </string>
+    <string name="description_6">Dalla pagina "Profilo", potrai accedere ai tuoi post. Cliccando il pulsante indicato dalla freccia rossa, è possibile cancellarli, cliccando quello blu, modificarlo.</string>
+    <string name="description_7">Nella pagina "Attività" potrai visualizzare tutte le attività disponibili. Potrai segnalarle, se le ritieni inappropriate, cliccando il pulsante indicato dalla freccia verde, potrai accettarle cliccando il pulsante indicato dalla freccia blu e potrai geolocalizzarrle cliccando il pulsante indicato dalla freccia rossa.</string>
+    <string name="description_8">Nella pagina "Home" verranno visualizzate tutte le attività accettate. Premendo il bottone indicato dalla freccia rossa è possibile mappare tale attività, mentre premendo su quello indicato dalla freccia blu, è possibile ritirarsi masssimo entro tre ore prima dalla scadenza.</string>
+    <string name="description_9">Nella "Bacheca" dei post potrai segnalarli, se li ritieni inappropriati, cliccando il pulsante indicato dalla freccia rossa, potrai invece mettegli un mi piace cliccando il pulsante indicato dalla freccia blu.</string>
+    <string name="description_10">Cliccando il pulsante, presente in ogni pagina, indicato dalla freccia rossa potrai vedere tutte le attività o tutti i post, non solo quelle in scadenza o quelli pubblicati nella data selezionata.</string>
+    <string name="description_11">È possibile cliccare sulla scritta "Programma del giorno" per accedere ad un calendario e selezionare le attività o i post di un giorno arbitrario.</string>
 </resources>

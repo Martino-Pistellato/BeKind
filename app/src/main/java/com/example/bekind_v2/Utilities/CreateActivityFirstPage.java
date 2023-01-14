@@ -113,8 +113,8 @@ public class CreateActivityFirstPage extends Fragment {
                 String proposalTitle = title.getText().toString().trim(); //gets the content of the title
                 String proposalBody = body.getText().toString().trim(); //gets the content of the body
                 
-                if(!bottomBarViewModel.checkConstraints(title, proposalTitle, body, proposalBody, proposalExpiringDate))
-                    Toast.makeText(getActivity(), "Errore: i campi non sono stati riempiti correttamente", Toast.LENGTH_SHORT).show();
+                if(!bottomBarViewModel.checkConstraints(title, proposalTitle, body, proposalBody, proposalExpiringDate, getContext()))
+                    Toast.makeText(getActivity(), R.string.fields_error, Toast.LENGTH_SHORT).show();
                 else{
                     bottomBarViewModel.saveProposalData(proposalTitle, proposalBody, proposalExpiringDate);
                     createActivityDialog.changeFragment(R.layout.add_proposal_popup);

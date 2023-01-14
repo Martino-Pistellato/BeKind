@@ -134,8 +134,8 @@ public class CreateActivitySecondPage extends Fragment {
                 String streetText = street.getText().toString();
 
                 if(groupProposal.isChecked()) {
-                    if (!bottomBarViewModel.checkGroupProposalConstraints(maxParticipants, maxParticipants.getText().toString().trim())) {
-                        Toast.makeText(getActivity(), "Errore: i campi non sono stati riempiti correttamente", Toast.LENGTH_SHORT).show();
+                    if (!bottomBarViewModel.checkGroupProposalConstraints(maxParticipants, maxParticipants.getText().toString().trim(), getContext())) {
+                        Toast.makeText(getActivity(), R.string.fields_error, Toast.LENGTH_SHORT).show();
                         publish = false;
                     }
                     else{
@@ -145,26 +145,26 @@ public class CreateActivitySecondPage extends Fragment {
 
                 if(periodicProposal.isChecked()){
                     if(choice[0] == RepublishTypes.NEVER){
-                        Toast.makeText(getActivity(), "Errore: i campi non sono stati riempiti correttamente", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), R.string.fields_error, Toast.LENGTH_SHORT).show();
                         publish = false;
                     }
                 }
 
-                if(!bottomBarViewModel.checkAddress(city, cityText, street,streetText, streetNumber, streetNumb)){
-                    Toast.makeText(getActivity(), "Errore: i campi non sono stati riempiti correttamente", Toast.LENGTH_SHORT).show();
+                if(!bottomBarViewModel.checkAddress(city, cityText, street,streetText, streetNumber, streetNumb, getContext())){
+                    Toast.makeText(getActivity(), R.string.fields_error, Toast.LENGTH_SHORT).show();
                     publish = false;
                 }
 
                 LatLng coord = mapViewModel.getCoordinatesFromAddress(getContext(), city.getText().toString().trim(), street.getText().toString().trim(), streetNumber.getText().toString().trim());
                 if (coord == null) {
-                    Toast.makeText(getActivity(), "Errore: l'indirizzo inserito non è corretto", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), R.string.fields_error, Toast.LENGTH_SHORT).show();
                     publish = false;
                 }
 
                 if (publish) {
                     bottomBarViewModel.createProposal(bottomBarViewModel.getProposalTitle(), bottomBarViewModel.getProposalBody(), proposalMaxParticipants, bottomBarViewModel.getProposalExpd(), coord.latitude, coord.longitude, choice[0], (result -> {
                         if (result) {
-                            Toast.makeText(getActivity(), "Attività pubblicata correttamente", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getActivity(), R.string.publish_activity, Toast.LENGTH_SHORT).show();
                             Utilities.getProposals(Utilities.day, UserManager.getUserId(), ProfileViewModel.proposedFilters, Types.PROPOSED);
 
                             bottomBarViewModel.setProposalBody("");
@@ -178,7 +178,7 @@ public class CreateActivitySecondPage extends Fragment {
                             choose_dialog.dismiss();
 
                         } else
-                            Toast.makeText(getActivity(), "Errore nella pubblicazione dell'attività", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getActivity(), R.string.activity_publication_error, Toast.LENGTH_SHORT).show();
                     }));
 
                 }

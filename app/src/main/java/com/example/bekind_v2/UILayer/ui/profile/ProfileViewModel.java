@@ -21,6 +21,7 @@ import com.example.bekind_v2.DataLayer.ProfilePictureRepository;
 import com.example.bekind_v2.DataLayer.ProposalRepository;
 import com.example.bekind_v2.DataLayer.UserDatabaseRepository;
 import com.example.bekind_v2.DataLayer.UserManager;
+import com.example.bekind_v2.R;
 import com.example.bekind_v2.UILayer.NeighbourhoodViewModel;
 import com.example.bekind_v2.Utilities.MyCallback;
 import com.example.bekind_v2.Utilities.PostTypes;
@@ -112,7 +113,7 @@ public class ProfileViewModel extends ViewModel {
         if(!StreetNumber.isEmpty()) user.setStreet_number(StreetNumber);
     }
     
-    public void setNeighbourhood(EditText neighbourhood, MyCallback<Boolean> myCallback){
+    public void setNeighbourhood(Context context, EditText neighbourhood, MyCallback<Boolean> myCallback){
         String name = Utilities.convertToProperForm(neighbourhood.getText().toString().trim());
         NeighbourhoodViewModel.doesNeighbourhoodExist(name, user.getCity(), new MyCallback<Boolean>() {
             @Override
@@ -128,7 +129,7 @@ public class ProfileViewModel extends ViewModel {
                 }
                 else{
                     if (!name.isEmpty()) {
-                        neighbourhood.setError("Il quartiere non esiste");
+                        neighbourhood.setError(context.getString(R.string.not_existing_neighbourhood));
                         neighbourhood.requestFocus();
                     }
                     else

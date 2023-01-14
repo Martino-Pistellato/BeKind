@@ -94,7 +94,7 @@ public class ProposalRecyclerViewAdapter extends RecyclerView.Adapter<ProposalRe
                 holder.proposalBody.setText(proposal.getBody());
 
                 if(proposal.getMaxParticipants() > 1)
-                    holder.proposalParticipants.setText("N. partecipanti attuali: "+proposal.getAcceptersID().size()+"/"+proposal.getMaxParticipants());
+                    holder.proposalParticipants.setText(context.getString(R.string.number_partecipants)+proposal.getAcceptersID().size()+"/"+proposal.getMaxParticipants());
                 else
                     holder.proposalParticipants.setText("");
 
@@ -107,7 +107,7 @@ public class ProposalRecyclerViewAdapter extends RecyclerView.Adapter<ProposalRe
 
                 if(proposal.getFlagsUsers().size() >= 1 && type == Types.PROPOSED){
                     holder.proposalPublisher.setVisibility(View.INVISIBLE);
-                    holder.proposalFlagged.setText("Attività segnalata");
+                    holder.proposalFlagged.setText(context.getString(R.string.flagged_activity));
                     holder.proposalFlagged.setVisibility(View.VISIBLE);
                     holder.constraintLayout.setBackgroundResource(R.drawable.list_element_roundcorner_red);
                 }
@@ -138,10 +138,10 @@ public class ProposalRecyclerViewAdapter extends RecyclerView.Adapter<ProposalRe
                                     @Override
                                     public void onCallback(Boolean result) {
                                         if (result) {
-                                            Toast.makeText(context, "Attività cancellata correttamente", Toast.LENGTH_SHORT).show();
+                                            Toast.makeText(context, context.getString(R.string.delete_activity), Toast.LENGTH_SHORT).show();
                                             Utilities.getProposals(Utilities.day, UserManager.getUserId(), ProfileViewModel.proposedFilters, Types.PROPOSED);
                                         } else
-                                            Toast.makeText(context, "Impossibile cancellare attività", Toast.LENGTH_SHORT).show();
+                                            Toast.makeText(context, context.getString(R.string.error_delete_activity), Toast.LENGTH_SHORT).show();
                                     }
                                 });
                             }
@@ -169,17 +169,17 @@ public class ProposalRecyclerViewAdapter extends RecyclerView.Adapter<ProposalRe
                                     @Override
                                     public void onClick(View view) {
                                         if(!singleProposal.isChecked() && !totalProposal.isChecked())
-                                            Toast.makeText(context, "Prima di confermare scegli una delle opzioni", Toast.LENGTH_SHORT).show();
+                                            Toast.makeText(context, context.getString(R.string.options), Toast.LENGTH_SHORT).show();
                                         else{
                                             if(totalProposal.isChecked()){
                                                 ProposalRepository.deleteProposal(documentId, new MyCallback<Boolean>() {
                                                     @Override
                                                     public void onCallback(Boolean result) {
                                                         if (result) {
-                                                            Toast.makeText(context, "Attività cancellata correttamente", Toast.LENGTH_SHORT).show();
+                                                            Toast.makeText(context, R.string.delete_activity, Toast.LENGTH_SHORT).show();
                                                             Utilities.getProposals(Utilities.day, UserManager.getUserId(), ProfileViewModel.proposedFilters, Types.PROPOSED);
                                                         } else
-                                                            Toast.makeText(context, "Impossibile cancellare attività", Toast.LENGTH_SHORT).show();
+                                                            Toast.makeText(context, R.string.error_delete_activity, Toast.LENGTH_SHORT).show();
                                                     }
                                                 });
                                             }
@@ -188,10 +188,10 @@ public class ProposalRecyclerViewAdapter extends RecyclerView.Adapter<ProposalRe
                                                     @Override
                                                     public void onCallback(Boolean result) {
                                                         if (result) {
-                                                            Toast.makeText(context, "Attività cancellata correttamente", Toast.LENGTH_SHORT).show();
+                                                            Toast.makeText(context, R.string.delete_activity, Toast.LENGTH_SHORT).show();
                                                             Utilities.getProposals(Utilities.day, UserManager.getUserId(), ProfileViewModel.proposedFilters, Types.PROPOSED);
                                                         } else
-                                                            Toast.makeText(context, "Impossibile cancellata attività", Toast.LENGTH_SHORT).show();
+                                                            Toast.makeText(context, R.string.error_delete_activity, Toast.LENGTH_SHORT).show();
                                                     }
                                                 });
                                             }
@@ -230,7 +230,7 @@ public class ProposalRecyclerViewAdapter extends RecyclerView.Adapter<ProposalRe
                             CheckBox groupCheckbox = secondDialog.findViewById(R.id.group_checkbox), periodicCheckbox = secondDialog.findViewById(R.id.periodic_checkbox);
                             ListView periodicChoices = secondDialog.findViewById(R.id.periodic_choices);
 
-                            text.setText("Modifica attività");
+                            text.setText(R.string.update_activity);
                             activityTitle.setText(proposal.getTitle());
                             activityBody.setText(proposal.getBody());
                             expiringDate.updateDate(expiringDateTime.getYear(), expiringDateTime.getMonthValue() - 1, expiringDateTime.getDayOfMonth());
@@ -357,11 +357,11 @@ public class ProposalRecyclerViewAdapter extends RecyclerView.Adapter<ProposalRe
                                         public void onCallback(Boolean result) {
 
                                             if(result){
-                                                Toast.makeText(context, "Attività modificata correttamente", Toast.LENGTH_SHORT).show();
+                                                Toast.makeText(context, R.string.updated_activity, Toast.LENGTH_SHORT).show();
                                                 Utilities.getProposals(Utilities.day, UserManager.getUserId(), ProfileViewModel.proposedFilters, Types.PROPOSED);
                                             }
                                             else
-                                                Toast.makeText(context, "Impossibile modificare attività", Toast.LENGTH_SHORT).show();
+                                                Toast.makeText(context, R.string.error_updated_activity, Toast.LENGTH_SHORT).show();
                                             secondDialog.dismiss();
                                         }
                                     });
@@ -379,10 +379,10 @@ public class ProposalRecyclerViewAdapter extends RecyclerView.Adapter<ProposalRe
                                         @Override
                                         public void onCallback(Boolean result) {
                                             if (result) {
-                                                Toast.makeText(context, "Attività terminata correttamente", Toast.LENGTH_SHORT).show();
+                                                Toast.makeText(context, R.string.completed_activity, Toast.LENGTH_SHORT).show();
                                                 Utilities.getProposals(Utilities.day, UserManager.getUserId(), ProfileViewModel.proposedFilters, Types.PROPOSED);
                                             } else
-                                                Toast.makeText(context, "Impossibile terminare attività", Toast.LENGTH_SHORT).show();
+                                                Toast.makeText(context, R.string.error_completed_activity, Toast.LENGTH_SHORT).show();
                                         }
                                     });
                                 } else {
@@ -390,15 +390,15 @@ public class ProposalRecyclerViewAdapter extends RecyclerView.Adapter<ProposalRe
                                         @Override
                                         public void onCallback(Boolean result) {
                                             if (result) {
-                                                Toast.makeText(context, "Attività terminata correttamente", Toast.LENGTH_SHORT).show();
+                                                Toast.makeText(context, R.string.completed_activity, Toast.LENGTH_SHORT).show();
                                                 Utilities.getProposals(Utilities.day, UserManager.getUserId(), ProfileViewModel.proposedFilters, Types.PROPOSED);
                                             } else
-                                                Toast.makeText(context, "Impossibile terminare attività", Toast.LENGTH_SHORT).show();
+                                                Toast.makeText(context, R.string.error_completed_activity, Toast.LENGTH_SHORT).show();
                                         }
                                     });
                                 }
                             }else{
-                                Toast.makeText(context, "L'attività non è stata presa in carico da alcun utente. Impossibile evaderla.",Toast.LENGTH_SHORT).show();
+                                Toast.makeText(context, R.string.error_completion,Toast.LENGTH_SHORT).show();
                             }
                         }
                     });
@@ -424,10 +424,10 @@ public class ProposalRecyclerViewAdapter extends RecyclerView.Adapter<ProposalRe
                                 @Override
                                 public void onCallback(Boolean result) {
                                     if(result) {
-                                        Toast.makeText(context, "Ritiro dall'attività avvenuto correttamente", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(context, R.string.withdrawal_activity, Toast.LENGTH_SHORT).show();
                                         Utilities.getProposals(Utilities.day, UserManager.getUserId(), HomeViewModel.filters, Types.ACCEPTED);
                                     }else
-                                        Toast.makeText(context, "Errore nel ritiro dall'attività", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(context, R.string.error_withdrawal_activity, Toast.LENGTH_SHORT).show();
                                 }
                             });
                         }
@@ -493,10 +493,10 @@ public class ProposalRecyclerViewAdapter extends RecyclerView.Adapter<ProposalRe
                                 @Override
                                 public void onCallback(Boolean result) {
                                     if(result) {
-                                        Toast.makeText(context, "Attività accettata correttamente", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(context, R.string.accept_activity, Toast.LENGTH_SHORT).show();
                                         Utilities.getProposals(Utilities.day, UserManager.getUserId(), AvailableViewModel.filters, Types.AVAILABLE);
                                     }else
-                                        Toast.makeText(context, "Errore nell'accettazione dell'attività", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(context, R.string.error_accept_activity, Toast.LENGTH_SHORT).show();
                                 }
                             });
                         }
@@ -510,11 +510,11 @@ public class ProposalRecyclerViewAdapter extends RecyclerView.Adapter<ProposalRe
                                     @Override
                                     public void onCallback(Boolean result) {
                                         if (result) {
-                                            Toast.makeText(context, "Attività segnalato con successo.", Toast.LENGTH_SHORT).show();
+                                            Toast.makeText(context, R.string.flag_activity, Toast.LENGTH_SHORT).show();
                                             flag.setImageResource(R.drawable.ic_flag_filled);
                                             flag.setTag("flagged");
                                         } else {
-                                            Toast.makeText(context, "Impossibile segnalare l'attività.", Toast.LENGTH_SHORT).show();
+                                            Toast.makeText(context, R.string.error_flag_activity, Toast.LENGTH_SHORT).show();
                                         }
                                     }
                                 });
@@ -523,11 +523,11 @@ public class ProposalRecyclerViewAdapter extends RecyclerView.Adapter<ProposalRe
                                     @Override
                                     public void onCallback(Boolean result) {
                                         if (result) {
-                                            Toast.makeText(context, "Attività non segnalata con successo.", Toast.LENGTH_SHORT).show();
+                                            Toast.makeText(context, R.string.unflag_activity, Toast.LENGTH_SHORT).show();
                                             flag.setImageResource(R.drawable.ic_flag);
                                             flag.setTag("to_flag");
                                         } else {
-                                            Toast.makeText(context, "Impossibile non segnalare l'attività.", Toast.LENGTH_SHORT).show();
+                                            Toast.makeText(context, R.string.error_unflag_activity, Toast.LENGTH_SHORT).show();
                                         }
                                     }
                                 });

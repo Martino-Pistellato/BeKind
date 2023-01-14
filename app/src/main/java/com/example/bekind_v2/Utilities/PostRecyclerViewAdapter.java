@@ -63,7 +63,7 @@ public class PostRecyclerViewAdapter extends RecyclerView.Adapter<PostRecyclerVi
                 if(type != PostTypes.MYPOSTS)
                     holder.postPublisher.setText(result.getName()+" "+result.getSurname());
                 else
-                    holder.postPublisher.setText("Tu");
+                    holder.postPublisher.setText(R.string.user);
 
                 holder.postTitle.setText(post.getTitle());
                 holder.postBody.setText(post.getBody());
@@ -72,7 +72,7 @@ public class PostRecyclerViewAdapter extends RecyclerView.Adapter<PostRecyclerVi
 
                 if(post.getUsersFlag().size() >= 1 && type == PostTypes.MYPOSTS){
                     holder.postPublisher.setVisibility(View.INVISIBLE);
-                    holder.postFlagged.setText("Post segnalato");
+                    holder.postFlagged.setText(R.string.flag_post);
                     holder.postFlagged.setVisibility(View.VISIBLE);
                     holder.constraintLayout.setBackgroundResource(R.drawable.list_element_roundcorner_red);
                 }
@@ -102,11 +102,11 @@ public class PostRecyclerViewAdapter extends RecyclerView.Adapter<PostRecyclerVi
                                       @Override
                                       public void onCallback(Boolean result) {
                                           if(result){
-                                              Toast.makeText(context, "Post cancellato correttamente", Toast.LENGTH_SHORT).show();
+                                              Toast.makeText(context, R.string.cancel_post, Toast.LENGTH_SHORT).show();
                                               Utilities.getPosts(Utilities.day, UserManager.getUserId(), ProfileViewModel.postsFilters, PostTypes.MYPOSTS);
                                           }
                                           else
-                                              Toast.makeText(context, "Impossibile cancellare post", Toast.LENGTH_SHORT).show();
+                                              Toast.makeText(context, R.string.error_cancellation_post, Toast.LENGTH_SHORT).show();
                                       }
                                   });
                               }
@@ -127,7 +127,7 @@ public class PostRecyclerViewAdapter extends RecyclerView.Adapter<PostRecyclerVi
                                           criminalChip = dialog.findViewById(R.id.criminal_chip_popup), randomChip = dialog.findViewById(R.id.random_chip_popup);
                                   Button closeButton = dialog.findViewById(R.id.close_btn), publishButton = dialog.findViewById(R.id.publish_btn);
 
-                                  text.setText("Modifica post");
+                                  text.setText(R.string.modify_post);
                                   postTitle.setText(post.getTitle());
                                   postBody.setText(post.getBody());
 
@@ -173,10 +173,10 @@ public class PostRecyclerViewAdapter extends RecyclerView.Adapter<PostRecyclerVi
                                               @Override
                                               public void onCallback(Boolean result) {
                                                   if (result){
-                                                      Toast.makeText(context, "Post aggiornato correttamente", Toast.LENGTH_SHORT).show();
+                                                      Toast.makeText(context, R.string.update_post, Toast.LENGTH_SHORT).show();
                                                       Utilities.getPosts(Utilities.day, UserManager.getUserId(), ProfileViewModel.postsFilters, PostTypes.MYPOSTS);
                                                   }else
-                                                      Toast.makeText(context, "Impossibile modificare post", Toast.LENGTH_SHORT).show();
+                                                      Toast.makeText(context, R.string.error_update_post, Toast.LENGTH_SHORT).show();
                                               }
                                           });
                                           dialog.dismiss();
@@ -226,11 +226,11 @@ public class PostRecyclerViewAdapter extends RecyclerView.Adapter<PostRecyclerVi
                                       @Override
                                       public void onCallback(Boolean result) {
                                           if (result) {
-                                              Toast.makeText(context, "Post segnalato con successo.", Toast.LENGTH_SHORT).show();
+                                              Toast.makeText(context, R.string.flagged_post, Toast.LENGTH_SHORT).show();
                                               flag.setImageResource(R.drawable.ic_flag_filled);
                                               flag.setTag("flagged");
                                           } else {
-                                              Toast.makeText(context, "Impossibile segnalare il post.", Toast.LENGTH_SHORT).show();
+                                              Toast.makeText(context, R.string.error_flag_post, Toast.LENGTH_SHORT).show();
                                           }
                                       }
                                   });
@@ -239,11 +239,11 @@ public class PostRecyclerViewAdapter extends RecyclerView.Adapter<PostRecyclerVi
                                       @Override
                                       public void onCallback(Boolean result) {
                                           if (result) {
-                                              Toast.makeText(context, "Post non segnalato con successo.", Toast.LENGTH_SHORT).show();
+                                              Toast.makeText(context, R.string.unflagged_post, Toast.LENGTH_SHORT).show();
                                               flag.setImageResource(R.drawable.ic_flag);
                                               flag.setTag("to_flag");
                                           } else {
-                                              Toast.makeText(context, "Impossibile non segnalare il post.", Toast.LENGTH_SHORT).show();
+                                              Toast.makeText(context, R.string.error_unflagging_post, Toast.LENGTH_SHORT).show();
                                           }
                                       }
                                   });
@@ -258,11 +258,11 @@ public class PostRecyclerViewAdapter extends RecyclerView.Adapter<PostRecyclerVi
                                       @Override
                                       public void onCallback(Boolean result) {
                                           if (result) {
-                                              Toast.makeText(context, "Post likkato con successo.", Toast.LENGTH_SHORT).show();
+                                              Toast.makeText(context, R.string.liked_post, Toast.LENGTH_SHORT).show();
                                               like.setImageResource(R.drawable.ic_thumbsup_filled);
                                               like.setTag("thumbsup_filled");
                                           } else {
-                                              Toast.makeText(context, "Impossibile likkare il post.", Toast.LENGTH_SHORT).show();
+                                              Toast.makeText(context, R.string.error_like_post, Toast.LENGTH_SHORT).show();
                                           }
                                       }
                                   });
@@ -272,11 +272,11 @@ public class PostRecyclerViewAdapter extends RecyclerView.Adapter<PostRecyclerVi
                                       @Override
                                       public void onCallback(Boolean result) {
                                           if (result) {
-                                              Toast.makeText(context, "Post unlikkato con successo.", Toast.LENGTH_SHORT).show();
+                                              Toast.makeText(context, R.string.dislike_post, Toast.LENGTH_SHORT).show();
                                               like.setImageResource(R.drawable.ic_thumbsup);
                                               like.setTag("thumbsup");
                                           } else {
-                                              Toast.makeText(context, "Impossibile unlikkare il post.", Toast.LENGTH_SHORT).show();
+                                              Toast.makeText(context, R.string.error_dislike_post, Toast.LENGTH_SHORT).show();
                                           }
                                       }
                                   });

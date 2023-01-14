@@ -67,7 +67,7 @@ public class AvailableFragment extends Fragment {
         scheduledateText = root.findViewById(R.id.scheduledate_text);
         simpleSwitch = root.findViewById(R.id.simpleSwitch);
 
-        ScheduleBar.ScheduleDate.setTextDate(scheduledateText);
+        ScheduleBar.ScheduleDate.setTextDate(scheduledateText, getContext());
 
         shoppingChip.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -134,7 +134,7 @@ public class AvailableFragment extends Fragment {
                 buttonOk.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        ScheduleBar.ScheduleDate.setTextDate(scheduledateText);
+                        ScheduleBar.ScheduleDate.setTextDate(scheduledateText, getContext());
                         datePickerDialog.dismiss();
 
                         Utilities.getProposals(Utilities.day, UserManager.getUserId(), AvailableViewModel.filters, Types.AVAILABLE);

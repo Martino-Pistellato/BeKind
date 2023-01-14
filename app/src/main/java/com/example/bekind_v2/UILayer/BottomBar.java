@@ -155,8 +155,8 @@ public class BottomBar extends AppCompatActivity {
                                 String postTitle = title.getText().toString().trim();
                                 String postBody = body.getText().toString().trim();
 
-                                if(!bottomBarViewModel.checkPostConstraints(title, postTitle, body, postBody))
-                                    Toast.makeText(getApplicationContext(), "Errore: i campi non sono stati riempiti correttamente", Toast.LENGTH_SHORT).show();
+                                if(!bottomBarViewModel.checkPostConstraints(title, postTitle, body, postBody, getApplicationContext()))
+                                    Toast.makeText(getApplicationContext(), R.string.fields_error, Toast.LENGTH_SHORT).show();
                                 else
                                     bottomBarViewModel.createPost(postTitle, postBody, result -> { Utilities.getPosts(Utilities.day, UserManager.getUserId(), new ArrayList<>(), PostTypes.MYPOSTS); });
                                 

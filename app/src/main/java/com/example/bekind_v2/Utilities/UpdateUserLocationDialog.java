@@ -52,7 +52,7 @@ public class UpdateUserLocationDialog extends DialogFragment {
         Button cancelBtn = view.findViewById(R.id.back_button), continueBtn = view.findViewById(R.id.continue_button);
         AutoCompleteTextView neighbourhood = view.findViewById(R.id.user_neigh);
 
-        title.setText("Modifica dati residenza");//TODO: metti la stringa
+        title.setText(R.string.modify_residence_data);//TODO: metti la stringa
         city.setText(profileViewModel.getUser().getCity());
         street.setText(profileViewModel.getUser().getStreet());
         streetNumber.setText(profileViewModel.getUser().getStreet_number());
@@ -75,12 +75,9 @@ public class UpdateUserLocationDialog extends DialogFragment {
             @Override
             public void onFocusChange(View view, boolean b) {
                 if (b) {
-                    NeighbourhoodRepository.getNeighbourhoods(city.getText().toString(), new MyCallback<ArrayList<String>>() {
-                        @Override
-                        public void onCallback(ArrayList<String> result) {
-                            ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1, result);
-                            neighbourhood.setAdapter(adapter);
-                        }
+                    NeighbourhoodRepository.getNeighbourhoods(city.getText().toString(), result -> {
+                        ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1, result);
+                        neighbourhood.setAdapter(adapter);
                     });
                 }
             }
@@ -105,12 +102,7 @@ public class UpdateUserLocationDialog extends DialogFragment {
                 profileViewModel.setStreet(streetText);
                 profileViewModel.setStreet_number(streetNumb);
 
-                profileViewModel.setNeighbourhood(neighbourhood, new MyCallback<Boolean>() {
-                    @Override
-                    public void onCallback(Boolean result) {
-                        profileViewModel.updateUser();
-                    }
-                });
+                profileViewModel.setNeighbourhood(getContext(), neighbourhood, result -> profileViewModel.updateUser());
 
                 profileViewModel.getUserName(profileName::setText);
                 dismiss();
@@ -140,8 +132,8 @@ public class UpdateUserLocationDialog extends DialogFragment {
                 TextInputEditText neighbourhood = dialog.findViewById(R.id.neigh_name);
                 Button backBtn = dialog.findViewById(R.id.back_button), confirmBtn = dialog.findViewById(R.id.continue_button);
 
-                backBtn.setText("CHIUDI"); //TODO: toString
-                confirmBtn.setText("CONFERMA"); //TODO: toString
+                backBtn.setText(R.string.close); //TODO: toString
+                confirmBtn.setText(R.string.confirm); //TODO: toString
 
                 backBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -155,14 +147,14 @@ public class UpdateUserLocationDialog extends DialogFragment {
                     public void onClick(View v) {
                         profileViewModel.createNeighbourhood(neighbourhood.getText().toString().trim(), (x) -> {
                             if (x)
-                                profileViewModel.setNeighbourhood(neighbourhood, (y) -> {
+                                profileViewModel.setNeighbourhood(getContext(), neighbourhood, (y) -> {
                                     profileViewModel.updateUser();
 
                                     profileViewModel.getUserName(profileName::setText);
                                     dialog.dismiss();
                                 });
                             else {
-                                neighbourhood.setError("Il quartiere esiste già");
+                                neighbourhood.setError(getString(R.string.already_existing_neighbourhood));
                             }
                         });
                     }

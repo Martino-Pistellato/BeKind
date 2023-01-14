@@ -63,8 +63,8 @@ public class RegistrationFragment1 extends Fragment {
 
                 //extract text and date from the form fileds and check if they are correct (text not empty)
                 //if something is wrong, a message will appear, else we save the inserted data and we move to the next registration page
-                if(!authenticationViewModel.checkUserFields(name, userName, surname, userSurname, email, userEmail, password, userPassword))
-                    Toast.makeText(getContext(), "Errore: i campi non sono stati riempiti correttamente", Toast.LENGTH_SHORT).show();
+                if(!authenticationViewModel.checkUserFields(name, userName, surname, userSurname, email, userEmail, password, userPassword, getContext()))
+                    Toast.makeText(getContext(), R.string.fields_error, Toast.LENGTH_SHORT).show();
                 else{
                     authenticationViewModel.saveUserData(userName, userSurname, userEmail, userPassword, birthDate);
                     authenticationViewModel.changeFragment(getActivity(), R.id.fragment_registration1, authenticationViewModel, mapViewModel);

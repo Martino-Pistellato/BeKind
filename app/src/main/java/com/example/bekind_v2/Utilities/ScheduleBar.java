@@ -4,6 +4,8 @@ import android.app.DatePickerDialog;
 import android.content.Context;
 import android.widget.TextView;
 
+import com.example.bekind_v2.R;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -40,9 +42,9 @@ public class ScheduleBar {
             return datePickerDialog;
         }
 
-        public static void setTextDate(TextView textScheduleDate) {
+        public static void setTextDate(TextView textScheduleDate, Context context) {
             Utilities.BetterCalendar calendar = new Utilities.BetterCalendar(scheduleDate);
-            textScheduleDate.setText("Programma del giorno " +
+            textScheduleDate.setText(context.getString(R.string.schedule_of) +
                     calendar.getDay() + "/" +
                     (calendar.getMonth() + 1) + "/" +
                     calendar.getYear()); //changing the TextView

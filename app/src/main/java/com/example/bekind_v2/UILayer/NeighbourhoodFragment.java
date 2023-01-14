@@ -63,8 +63,8 @@ public class NeighbourhoodFragment extends Fragment {
                 String city = authenticationViewModel.getCity();
                 /* we check if the neighbourhood form field is correct
                  * if it is empty, a message will be shown */
-                if(!neighbourhoodViewModel.checkNeighbourhoodName(name, neighbourhoodName)){
-                    Toast.makeText(getContext(), "Errore: i campi non sono stati riempiti correttamente", Toast.LENGTH_SHORT).show();
+                if(!neighbourhoodViewModel.checkNeighbourhoodName(getContext(), name, neighbourhoodName)){
+                    Toast.makeText(getContext(), getString(R.string.fields_error), Toast.LENGTH_SHORT).show();
                 }
                 else{
                     /*if everything is fine, we attempt to create the new neighbourhood. Once its done, we attempt to create the new user
@@ -79,7 +79,7 @@ public class NeighbourhoodFragment extends Fragment {
                             });
                         }
                         else
-                            Toast.makeText(getContext(), "Errore: questo quartiere esiste già", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getContext(), getString(R.string.existing_neighbourhood), Toast.LENGTH_SHORT).show();
                     });
                 }
             }

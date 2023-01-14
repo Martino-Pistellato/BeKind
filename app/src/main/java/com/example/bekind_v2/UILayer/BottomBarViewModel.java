@@ -1,11 +1,13 @@
 package com.example.bekind_v2.UILayer;
 
+import android.content.Context;
 import android.widget.DatePicker;
 import android.widget.TimePicker;
 
 import androidx.lifecycle.ViewModel;
 
 import com.example.bekind_v2.DataLayer.PostRepository;
+import com.example.bekind_v2.R;
 import com.example.bekind_v2.Utilities.MyCallback;
 import com.example.bekind_v2.Utilities.RepublishTypes;
 import com.example.bekind_v2.Utilities.Utilities;
@@ -101,47 +103,47 @@ public class BottomBarViewModel extends ViewModel {
         return expiringDate.after(currentDate);
     }
 
-    public boolean checkConstraints(TextInputEditText title, String proposalTitle, TextInputEditText body, String proposalBody, Date proposalExpiringDate){
+    public boolean checkConstraints(TextInputEditText title, String proposalTitle, TextInputEditText body, String proposalBody, Date proposalExpiringDate, Context context){
         if(proposalTitle.isEmpty()){ //checks if the title is empty, in that case it blocks the creation until it is filled
-            title.setError("Questo campo non può essere vuoto");
+            title.setError(context.getString(R.string.empty_field));
             title.requestFocus();
             return false;
         }
         else if(proposalBody.isEmpty()){ //checks if the body is empty, in that case it blocks the creation until it is filled
-            body.setError("Questo campo non può essere vuoto");
+            body.setError(context.getString(R.string.empty_field));
             body.requestFocus();
             return false;
         }
         else return checkDateConstraint(proposalExpiringDate);
     }
 
-    public boolean checkGroupProposalConstraints(TextInputEditText maxparticipants, String proposalPartcipants) {
+    public boolean checkGroupProposalConstraints(TextInputEditText maxparticipants, String proposalPartcipants, Context context) {
         if(proposalPartcipants.isEmpty()){
-            maxparticipants.setError("Questo campo non può essere vuoto");
+            maxparticipants.setError(context.getString(R.string.empty_field));
             maxparticipants.requestFocus();
             return false;
         }
         if(Integer.valueOf(proposalPartcipants) <=1){
-            maxparticipants.setError("Un'attività di gruppo prevede un minimo di 2 partecipanti");
+            maxparticipants.setError(context.getString(R.string.min_partecipants));
             maxparticipants.requestFocus();
             return false;
         }
         if(Integer.valueOf(proposalPartcipants) >20){
-            maxparticipants.setError("Un'attività di gruppo prevede un massimo di 20 partecipanti");
+            maxparticipants.setError(context.getString(R.string.max_partecipants));
             maxparticipants.requestFocus();
             return false;
         }
         return true;
     }
 
-    public boolean checkPostConstraints(TextInputEditText title, String postTitle, TextInputEditText body, String postBody){
+    public boolean checkPostConstraints(TextInputEditText title, String postTitle, TextInputEditText body, String postBody, Context context){
         if(postTitle.isEmpty()){ //checks if the title is empty, in that case it blocks the creation until it is filled
-            title.setError("Questo campo non può essere vuoto");
+            title.setError(context.getString(R.string.empty_field));
             title.requestFocus();
             return false;
         }
         else if(postBody.isEmpty()){ //checks if the body is empty, in that case it blocks the creation until it is filled
-            body.setError("Questo campo non può essere vuoto");
+            body.setError(context.getString(R.string.empty_field));
             body.requestFocus();
             return false;
         }
@@ -155,7 +157,6 @@ public class BottomBarViewModel extends ViewModel {
         PostRepository.clearPosts();
     }
 
-
     public void setSelectedChips(Chip shoppingChip, Chip houseworksChip, Chip cleaningChip, Chip transportChip, Chip randomChip) {
         for(String s : filtersProposal){
             switch(s){
@@ -168,22 +169,22 @@ public class BottomBarViewModel extends ViewModel {
         }
     }
 
-    public boolean checkAddress(TextInputEditText city, String cityText, TextInputEditText street, String streetText, TextInputEditText streetNumber, String streetNumb) {
+    public boolean checkAddress(TextInputEditText city, String cityText, TextInputEditText street, String streetText, TextInputEditText streetNumber, String streetNumb, Context context) {
         boolean res = true;
         
         if(cityText.isEmpty()){
             city.requestFocus();
-            city.setError("Questo campo non può essere vuoto");
+            city.setError(context.getString(R.string.empty_field));
             res = false;
         }
         if(streetNumb.isEmpty()){
             streetNumber.requestFocus();
-            streetNumber.setError("Questo campo non può essere vuoto");
+            streetNumber.setError(context.getString(R.string.empty_field));
             res = false;
         }
         if(streetText.isEmpty()){
             street.requestFocus();
-            street.setError("Questo campo non può essere vuoto");
+            street.setError(context.getString(R.string.empty_field));
             res = false;
         }
         return res;

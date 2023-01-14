@@ -1,5 +1,6 @@
 package com.example.bekind_v2.UILayer.Authentication;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
@@ -48,8 +49,7 @@ public class RegistrationFragment2 extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-
-
+        Context context = this.getContext();
         View view = inflater.inflate(R.layout.fragment_registration2, container, false);
 
         TextView textCreateNeighbourhood = view.findViewById(R.id.text_create_neigh);
@@ -146,11 +146,11 @@ public class RegistrationFragment2 extends Fragment {
                 * if something is wrong, messages depending on the situation will be shown
                 * else, we attempt to create the user, and if everything goes fine we are redirected to the home page */
                 authenticationViewModel.saveLocationData(userCity, userNeighbourhood, userStreet, userStreetNumber);
-                authenticationViewModel.checkLocationFields(city, userCity, neighbourhood, userNeighbourhood, street, userStreet, streetNumber, userStreetNumber, new MyCallback() {
+                authenticationViewModel.checkLocationFields(city, userCity, neighbourhood, userNeighbourhood, street, userStreet, streetNumber, userStreetNumber, context, new MyCallback() {
                     @Override
                     public void onCallback(Object result) {
                         if (!(boolean) result) {
-                            Toast.makeText(getContext(), "Errore: i campi non sono stati riempiti correttamente", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getContext(), R.string.fields_error, Toast.LENGTH_SHORT).show();
                         } else {
                             authenticationViewModel.createUser(getContext(), new MyCallback() {
                                 @Override
@@ -177,7 +177,7 @@ public class RegistrationFragment2 extends Fragment {
             userStreet = Utilities.convertToProperForm(userStreet);
             userStreetNumber = Utilities.convertToProperForm(userStreetNumber);
 
-            if(authenticationViewModel.checkLocationFields(city, userCity, street, userStreet, streetNumber, userStreetNumber)){
+            if(authenticationViewModel.checkLocationFields(city, userCity, street, userStreet, streetNumber, userStreetNumber, this.getContext())){
                 authenticationViewModel.saveLocationData(userCity, userNeighbourhood, userStreet, userStreetNumber);
                 //we save the data inserted in the form fields and we are redirected to the neighbourhood creation page
 

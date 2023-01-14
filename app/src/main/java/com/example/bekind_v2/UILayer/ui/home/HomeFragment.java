@@ -107,7 +107,7 @@ public class HomeFragment extends Fragment {
         Utilities.SharedViewModel.proposalsViewModel.getAccepted().observe(getViewLifecycleOwner(),acceptedObserver);
 
         scheduledateText = root.findViewById(R.id.scheduledate_text);
-        ScheduleBar.ScheduleDate.setTextDate(scheduledateText);
+        ScheduleBar.ScheduleDate.setTextDate(scheduledateText, getContext());
 
         scheduledateText.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -129,7 +129,7 @@ public class HomeFragment extends Fragment {
                 buttonOk.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        ScheduleBar.ScheduleDate.setTextDate(scheduledateText);
+                        ScheduleBar.ScheduleDate.setTextDate(scheduledateText, getContext());
                         datePickerDialog.dismiss();
 
                         Utilities.getProposals(Utilities.day, UserManager.getUserId(), HomeViewModel.filters, Types.ACCEPTED);

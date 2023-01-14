@@ -24,14 +24,14 @@ public class AuthenticationViewModel extends ViewModel {
     private String name, surname, email, password, city, street, streetNumber, neighbourhoodName, neighbourhoodID;
     private Date birthDate;
 
-    public boolean checkCredentials(TextInputEditText email, String userEmail, TextInputEditText password, String userPassword){
+    public boolean checkCredentials(TextInputEditText email, String userEmail, TextInputEditText password, String userPassword, Context context){
         if(userEmail.isEmpty()) { //we check if all fields have been properly filled
-            email.setError("Per accedere devi inserire una email");
+            email.setError(context.getString(R.string.email_error));
             email.requestFocus(); //turns the field red
             return false;
         }
         else if(userPassword.isEmpty()) {
-            password.setError("Per accedere devi inserire una password");
+            password.setError(context.getString(R.string.password_error));
             password.requestFocus();
             return false;
         }
@@ -46,15 +46,15 @@ public class AuthenticationViewModel extends ViewModel {
         UserManager.login(context, email, password, myCallback);
     }
 
-    private boolean checkPassword(TextInputEditText password, String userPassword) {
+    private boolean checkPassword(TextInputEditText password, String userPassword, Context context) {
 
         if(userPassword.isEmpty()){
-            password.setError("Questo campo non può essere vuoto");
+            password.setError(context.getString(R.string.empty_field));
             password.requestFocus();
             return false;
         }
         if(userPassword.length() < 8){
-            password.setError("La password deve essere lunga almeno 8 caratteri");
+            password.setError(context.getString(R.string.password_length));
             password.requestFocus();
             return false;
         }
@@ -72,65 +72,65 @@ public class AuthenticationViewModel extends ViewModel {
         }
 
         if(!(hasDigit && hasUpper && hasLower)) {
-            password.setError("La password deve contenere almeno un carattere maiuscolo, un carattere minuscolo e un numero");
+            password.setError(context.getString(R.string.password_requirements));
             password.requestFocus();
         }
 
         return hasDigit && hasUpper && hasLower;
     }
 
-    public boolean checkUserFields(TextInputEditText name, String userName, TextInputEditText surname, String userSurname, TextInputEditText email, String userEmail, TextInputEditText password, String userPassword){
+    public boolean checkUserFields(TextInputEditText name, String userName, TextInputEditText surname, String userSurname, TextInputEditText email, String userEmail, TextInputEditText password, String userPassword, Context context){
         boolean res = true;
 
         if(userName.isEmpty()){
-            name.setError("Questo campo non può essere vuoto");
+            name.setError(context.getString(R.string.empty_field));
             name.requestFocus();
             res = false;
         }
 
         if(userSurname.isEmpty()){
-            surname.setError("Questo campo non può essere vuoto");
+            surname.setError(context.getString(R.string.empty_field));
             surname.requestFocus();
             res = false;
         }
 
         if(userEmail.isEmpty()) {
-            email.setError("Questo campo non può essere vuoto");
+            email.setError(context.getString(R.string.empty_field));
             email.requestFocus();
             res = false;
         }
 
-        return checkPassword(password, userPassword) && res;
+        return checkPassword(password, userPassword, context) && res;
     }
 
-    public void checkLocationFields(TextInputEditText city, String userCity, AutoCompleteTextView neighbourhood, String userNeighbourhood, TextInputEditText street, String userStreet, TextInputEditText streetNumber, String userStreetNumber, MyCallback<Boolean> myCallback){
+    public void checkLocationFields(TextInputEditText city, String userCity, AutoCompleteTextView neighbourhood, String userNeighbourhood, TextInputEditText street, String userStreet, TextInputEditText streetNumber, String userStreetNumber, Context context, MyCallback<Boolean> myCallback){
         NeighbourhoodViewModel.doesNeighbourhoodExist(userNeighbourhood, userCity, new MyCallback<Boolean>() {
             @Override
             public void onCallback(Boolean result) {
                 boolean res = true;
 
                 if(userCity.isEmpty()){
-                    city.setError("Questo campo non può essere vuoto");
+                    city.setError(context.getString(R.string.empty_field));
                     city.requestFocus();
                     res = false;
                 }
                 if(userNeighbourhood.isEmpty()){
-                    neighbourhood.setError("Questo campo non può essere vuoto");
+                    neighbourhood.setError(context.getString(R.string.empty_field));
                     neighbourhood.requestFocus();
                     res = false;
                 }
                 if(!result){
-                    neighbourhood.setError("Questo quartiere non esiste. Crealo!");
+                    neighbourhood.setError(context.getString(R.string.not_existing_neigh));
                     neighbourhood.requestFocus();
                     res = false;
                 }
                 if(userStreet.isEmpty()){
-                    street.setError("Questo campo non può essere vuoto");
+                    street.setError(context.getString(R.string.empty_field));
                     street.requestFocus();
                     res = false;
                 }
                 if(userStreetNumber.isEmpty()){
-                    streetNumber.setError("Questo campo non può essere vuoto");
+                    streetNumber.setError(context.getString(R.string.empty_field));
                     streetNumber.requestFocus();
                     res = false;
                 }
@@ -140,21 +140,21 @@ public class AuthenticationViewModel extends ViewModel {
         });
     }
 
-    public boolean checkLocationFields(TextInputEditText city, String userCity, TextInputEditText street, String userStreet, TextInputEditText streetNumber, String userStreetNumber){
+    public boolean checkLocationFields(TextInputEditText city, String userCity, TextInputEditText street, String userStreet, TextInputEditText streetNumber, String userStreetNumber, Context context){
         boolean res = true;
 
         if(userCity.isEmpty()){
-            city.setError("Questo campo non può essere vuoto");
+            city.setError(context.getString(R.string.empty_field));
             city.requestFocus();
             res = false;
         }
         if(userStreet.isEmpty()){
-            street.setError("Questo campo non può essere vuoto");
+            street.setError(context.getString(R.string.empty_field));
             street.requestFocus();
             res = false;
         }
         if(userStreetNumber.isEmpty()){
-            streetNumber.setError("Questo campo non può essere vuoto");
+            streetNumber.setError(context.getString(R.string.empty_field));
             streetNumber.requestFocus();
             res = false;
         }

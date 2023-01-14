@@ -235,7 +235,7 @@ public class ProfileFragment extends Fragment {
             }
         });
 
-        ScheduleBar.ScheduleDate.setTextDate(scheduledateText);
+        ScheduleBar.ScheduleDate.setTextDate(scheduledateText, getContext());
         scheduledateText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -256,7 +256,7 @@ public class ProfileFragment extends Fragment {
                 buttonOk.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        ScheduleBar.ScheduleDate.setTextDate(scheduledateText);
+                        ScheduleBar.ScheduleDate.setTextDate(scheduledateText, getContext());
                         datePickerDialog.dismiss();
 
                         Utilities.getProposals(Utilities.day, UserManager.getUserId(), ProfileViewModel.proposedFilters, Types.PROPOSED);

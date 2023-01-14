@@ -96,7 +96,7 @@ public class DashboardFragment extends Fragment {
         Utilities.getPosts(Utilities.day, UserManager.getUserId(), DashboardViewModel.filters, PostTypes.OTHERSPOSTS);
 
         scheduledateText = root.findViewById(R.id.scheduledate_text);
-        ScheduleBar.ScheduleDate.setTextDate(scheduledateText);
+        ScheduleBar.ScheduleDate.setTextDate(scheduledateText,getContext());
 
         simpleSwitch = root.findViewById(R.id.simpleSwitch);
         totalPosts = root.findViewById(R.id.total_posts);
@@ -123,7 +123,7 @@ public class DashboardFragment extends Fragment {
                 buttonOk.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        ScheduleBar.ScheduleDate.setTextDate(scheduledateText);
+                        ScheduleBar.ScheduleDate.setTextDate(scheduledateText, getContext());
                         datePickerDialog.dismiss();
 
                         Utilities.getPosts(Utilities.day, UserManager.getUserId(), DashboardViewModel.filters, PostTypes.OTHERSPOSTS);

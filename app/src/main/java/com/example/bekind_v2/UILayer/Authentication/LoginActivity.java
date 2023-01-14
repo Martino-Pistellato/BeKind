@@ -38,14 +38,14 @@ public class LoginActivity extends AppCompatActivity {
             String userEmail = email.getText().toString().trim(); //to get the text written by the user in the specified EditText view
             String userPassword = password.getText().toString().trim(); //trim is used to delete spaces from the start and the end of the input, if present
 
-            if(!authenticationViewModel.checkCredentials(email, userEmail, password, userPassword))
-                Toast.makeText(getApplicationContext(), "Errore: le credenziali di accesso non sono corrette", Toast.LENGTH_SHORT).show();
+            if(!authenticationViewModel.checkCredentials(email, userEmail, password, userPassword, this))
+                Toast.makeText(getApplicationContext(), R.string.login_cerdentials_error, Toast.LENGTH_SHORT).show();
             else{
                 authenticationViewModel.login(getApplicationContext(), userEmail, userPassword, (x) -> {
                     if (x)
                         startActivity(new Intent(LoginActivity.this, BottomBar.class)); //bring me to the main page, passing .this could be a problem but who knows
                     else
-                        Toast.makeText(getApplicationContext(), "Errore: le credenziali di accesso non sono corrette", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), R.string.login_cerdentials_error, Toast.LENGTH_SHORT).show();
                 });
             }
         });

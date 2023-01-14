@@ -23,6 +23,7 @@ import com.example.bekind_v2.DataLayer.UserDatabaseRepository;
 import com.example.bekind_v2.DataLayer.UserManager;
 import com.example.bekind_v2.R;
 import com.example.bekind_v2.UILayer.NeighbourhoodViewModel;
+import com.example.bekind_v2.Utilities.MapViewModel;
 import com.example.bekind_v2.Utilities.MyCallback;
 import com.example.bekind_v2.Utilities.PostTypes;
 import com.example.bekind_v2.Utilities.Types;
@@ -39,10 +40,13 @@ public class ProfileViewModel extends ViewModel {
     private String password;
     public static Uri imageuri;
 
+
     public static class ProfileActivityViewPagerAdapter extends FragmentStateAdapter {
         //constructor, necessary
-        public ProfileActivityViewPagerAdapter(@NonNull Fragment fragment) {
+        public MapViewModel mapViewModel;
+        public ProfileActivityViewPagerAdapter(@NonNull Fragment fragment, MapViewModel mapViewModel) {
             super(fragment);
+            this.mapViewModel = mapViewModel;
         }
 
         //return new Fragment based on position
@@ -53,7 +57,7 @@ public class ProfileViewModel extends ViewModel {
                 return new MyPostsFragment();
             }
             else {
-                return new ProposedFragment();
+                return new ProposedFragment(this.mapViewModel);
             }
         }
 

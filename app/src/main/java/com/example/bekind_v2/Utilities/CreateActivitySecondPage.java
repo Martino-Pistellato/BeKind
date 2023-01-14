@@ -98,8 +98,12 @@ public class CreateActivitySecondPage extends Fragment {
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 if(b)
                     listView.setVisibility(View.VISIBLE);
-                else
+                else{
                     listView.setVisibility(View.GONE);
+                    choice[0] = RepublishTypes.NEVER;
+                    for(int i = 0; i< types.size(); ++i)
+                        listView.setItemChecked(i ,false);
+                }
             }
         });
 

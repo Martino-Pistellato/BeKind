@@ -64,14 +64,14 @@ public class MapViewModel extends ViewModel implements ActivityCompat.OnRequestP
             builder.include(coord2);
             int padding = 120;
             LatLngBounds bounds = builder.build();
-            map[0].moveCamera(CameraUpdateFactory.newLatLngBounds(bounds, padding));
+            map[0].moveCamera(CameraUpdateFactory.newLatLngBounds(bounds, padding ));
         }
         else{
             map[0].moveCamera(CameraUpdateFactory.newLatLngZoom(coord1, 17));
         }
     }
 
-    public void setMap(SupportMapFragment mapFragment, LatLng coord1, LatLng coord2, Marker[] marker){
+    public void setMap(SupportMapFragment mapFragment, LatLng coord1, LatLng coord2, Marker[] marker, TextInputEditText city, TextInputEditText street, TextInputEditText streetNumber){
 
         mapFragment.getMapAsync(new OnMapReadyCallback() {
             @Override
@@ -118,6 +118,8 @@ public class MapViewModel extends ViewModel implements ActivityCompat.OnRequestP
                                                                 .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
                         }
                     }
+                    if(city != null && street != null && streetNumber != null)
+                        showGeocoderInfo(coord1, city, street, streetNumber);
                     setCamera(coord1, coord2);
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -185,7 +187,7 @@ public class MapViewModel extends ViewModel implements ActivityCompat.OnRequestP
             fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(context);
 
             if (coord1 != null)
-                setMap(mapFragment, coord1, coord2, marker);
+                setMap(mapFragment, coord1, coord2, marker, city, street, streetNumber);
             else {
                 mapFragment.getMapAsync(new OnMapReadyCallback() {
                     @Override

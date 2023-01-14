@@ -229,8 +229,8 @@ public class ProposalRepository {
         });
     }
 
-    public static void editProposal(String documentId, String title, String body, Date expiringDate,Date publishingDate, ArrayList<String> filters, int maxPartecipants, RepublishTypes type, MyCallback<Boolean> myCallback){
-        FirebaseFirestore.getInstance().collection("Proposals").document(documentId).update("title", title, "body", body, "expiringDate", expiringDate, "publishingDate", publishingDate, "filters", filters, "maxParticipants", maxPartecipants, "republishTypes", type).addOnCompleteListener(new OnCompleteListener<Void>() {
+    public static void editProposal(String documentId, String title, String body, Date expiringDate,Date publishingDate, ArrayList<String> filters, int maxPartecipants, RepublishTypes type, double lat, double longitude, MyCallback<Boolean> myCallback){
+        FirebaseFirestore.getInstance().collection("Proposals").document(documentId).update("title", title, "body", body, "expiringDate", expiringDate, "publishingDate", publishingDate, "filters", filters, "maxParticipants", maxPartecipants, "republishTypes", type, "latitude", lat, "longitude", longitude).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 myCallback.onCallback(task.isSuccessful());
@@ -302,7 +302,7 @@ public class ProposalRepository {
                 break;
         }
         prop.getAcceptersID().clear();
-        editProposal(prop.getId(), prop.getTitle(), prop.getBody(), newExpiring, newPublishing, prop.getFilters(), prop.getMaxParticipants(), prop.getRepublishTypes(), myCallback);
+        editProposal(prop.getId(), prop.getTitle(), prop.getBody(), newExpiring, newPublishing, prop.getFilters(), prop.getMaxParticipants(), prop.getRepublishTypes(), prop.getLatitude(), prop.getLongitude(), myCallback);
     }
 
     public static void updateProposalFlag(String documentId, ArrayList<String> flagsUsers, MyCallback<Boolean> myCallback) {

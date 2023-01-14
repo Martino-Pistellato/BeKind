@@ -101,7 +101,7 @@ public class ProposalRecyclerViewAdapter extends RecyclerView.Adapter<ProposalRe
 
                 Date date = proposal.getExpiringDate();
                 LocalDateTime expiring_date_time = LocalDateTime.ofInstant(date.toInstant(), ZoneId.systemDefault());
-                holder.expiringHour.setText((String.format("%02d", expiring_date_time.getHour()+1)) + ":" + (String.format("%02d", expiring_date_time.getMinute())));
+                holder.expiringHour.setText((String.format("%02d", expiring_date_time.getHour())) + ":" + (String.format("%02d", expiring_date_time.getMinute())));
                 holder.expiringDate.setText((String.format("%02d", expiring_date_time.getDayOfMonth())) + "/" + (String.format("%02d", expiring_date_time.getMonthValue())) + "/" + expiring_date_time.getYear());
 
                 if(proposal.getPriority()) holder.constraintLayout.setBackgroundResource(R.drawable.list_element_roundcorner_priority);
@@ -208,6 +208,10 @@ public class ProposalRecyclerViewAdapter extends RecyclerView.Adapter<ProposalRe
                     edit.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
+                            ModifyActivityDialog dialog = new ModifyActivityDialog(proposal, documentId, mapViewModel);
+                            dialog.show(activity.getSupportFragmentManager(), null);
+
+                            /*
                             Dialog firstDialog = new Dialog(context);
                             firstDialog.setContentView(R.layout.add_proposal_popup);
                             firstDialog.setCanceledOnTouchOutside(false);
@@ -373,7 +377,7 @@ public class ProposalRecyclerViewAdapter extends RecyclerView.Adapter<ProposalRe
                                         }
                                     });
                                 }
-                            });
+                            });*/
                         }
                     });
 
@@ -457,6 +461,7 @@ public class ProposalRecyclerViewAdapter extends RecyclerView.Adapter<ProposalRe
                                         home.setLongitude(home_coord.longitude);
                                         other.setLatitude(coord.latitude);
                                         other.setLongitude(coord.longitude);
+                                        mapDialog.show();
                                         if(home.distanceTo(other) != 0.0)
                                             mapViewModel.initializeMap(activity, context,null, mapFragment,null,null,null, coord, home_coord);
                                         else
@@ -465,7 +470,7 @@ public class ProposalRecyclerViewAdapter extends RecyclerView.Adapter<ProposalRe
                                     }
                                 }
                             });
-                            mapDialog.show();
+
                         }
                     });
                 }
@@ -558,6 +563,7 @@ public class ProposalRecyclerViewAdapter extends RecyclerView.Adapter<ProposalRe
                                         home.setLongitude(home_coord.longitude);
                                         other.setLatitude(coord.latitude);
                                         other.setLongitude(coord.longitude);
+                                        mapDialog.show();
                                         if(home.distanceTo(other) != 0)
                                             mapViewModel.initializeMap(activity, context,null, mapFragment,null,null,null, coord, home_coord);
                                         else
@@ -567,7 +573,7 @@ public class ProposalRecyclerViewAdapter extends RecyclerView.Adapter<ProposalRe
                                 }
                             });
 
-                            mapDialog.show();
+
                         }
                     });
                 }

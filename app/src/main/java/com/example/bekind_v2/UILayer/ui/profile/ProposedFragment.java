@@ -5,6 +5,7 @@ import androidx.lifecycle.Observer;
 import android.os.Bundle;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -14,6 +15,7 @@ import android.view.ViewGroup;
 
 import com.example.bekind_v2.DataLayer.ProposalRepository;
 import com.example.bekind_v2.R;
+import com.example.bekind_v2.Utilities.MapViewModel;
 import com.example.bekind_v2.Utilities.ProposalRecyclerViewAdapter;
 import com.example.bekind_v2.Utilities.ProposalsViewModel;
 import com.example.bekind_v2.Utilities.Types;
@@ -23,9 +25,10 @@ import java.util.ArrayList;
 
 public class ProposedFragment extends Fragment {
     private final ProposalsViewModel proposalsViewModel;
-
-    public ProposedFragment() {
+    private MapViewModel mapViewModel;
+    public ProposedFragment(MapViewModel mapViewModel) {
         this.proposalsViewModel = Utilities.SharedViewModel.proposalsViewModel;
+        this.mapViewModel = mapViewModel;
     }
 
     @Override
@@ -74,7 +77,7 @@ public class ProposedFragment extends Fragment {
         final Observer<ArrayList<ProposalRepository.Proposal>> proposedObserver = new Observer<ArrayList<ProposalRepository.Proposal>>() {
             @Override
             public void onChanged(@Nullable final ArrayList<ProposalRepository.Proposal> proposed) {
-                ProposalRecyclerViewAdapter adapter = new ProposalRecyclerViewAdapter(null,null, null, proposed, getContext(),getActivity(), Types.PROPOSED);
+                ProposalRecyclerViewAdapter adapter = new ProposalRecyclerViewAdapter(mapViewModel,null, null, proposed, getContext(),getActivity(), Types.PROPOSED);
                 recyclerView.setAdapter(adapter);
                 adapter.notifyDataSetChanged();
             }

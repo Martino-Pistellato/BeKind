@@ -15,6 +15,7 @@ public class Utilities {
     public static class SharedViewModel{
         public static ProposalsViewModel proposalsViewModel;
         public static PostsViewModel postsViewModel;
+        public static MapViewModel mapViewModel;
     }
 
     public static class BetterCalendar {

@@ -86,7 +86,7 @@ public class ProfileFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         ProfileViewModel profileViewModel = new ViewModelProvider(this).get(ProfileViewModel.class);
         MapViewModel mapViewModeluser = new ViewModelProvider(this).get(MapViewModel.class);
-        MapViewModel mapViewModelactivity = new ViewModelProvider(this).get(MapViewModel.class);
+        Utilities.SharedViewModel.mapViewModel = new ViewModelProvider(this).get(MapViewModel.class);
         binding = FragmentProfileBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
         Context context = this.getContext();
@@ -215,7 +215,7 @@ public class ProfileFragment extends Fragment {
             }
         });
 
-        viewPager2.setAdapter(new ProfileViewModel.ProfileActivityViewPagerAdapter(this, mapViewModelactivity));
+        viewPager2.setAdapter(new ProfileViewModel.ProfileActivityViewPagerAdapter(this));
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) { //when we select a tab

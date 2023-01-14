@@ -43,10 +43,9 @@ public class ProfileViewModel extends ViewModel {
 
     public static class ProfileActivityViewPagerAdapter extends FragmentStateAdapter {
         //constructor, necessary
-        public MapViewModel mapViewModel;
-        public ProfileActivityViewPagerAdapter(@NonNull Fragment fragment, MapViewModel mapViewModel) {
+
+        public ProfileActivityViewPagerAdapter(@NonNull Fragment fragment) {
             super(fragment);
-            this.mapViewModel = mapViewModel;
         }
 
         //return new Fragment based on position
@@ -57,7 +56,7 @@ public class ProfileViewModel extends ViewModel {
                 return new MyPostsFragment();
             }
             else {
-                return new ProposedFragment(this.mapViewModel);
+                return new ProposedFragment();
             }
         }
 

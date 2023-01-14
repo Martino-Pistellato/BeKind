@@ -26,10 +26,12 @@ import java.util.ArrayList;
 public class ProposedFragment extends Fragment {
     private final ProposalsViewModel proposalsViewModel;
     private MapViewModel mapViewModel;
-    public ProposedFragment(MapViewModel mapViewModel) {
+
+    public ProposedFragment(){
         this.proposalsViewModel = Utilities.SharedViewModel.proposalsViewModel;
-        this.mapViewModel = mapViewModel;
+        this.mapViewModel = Utilities.SharedViewModel.mapViewModel;
     }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {

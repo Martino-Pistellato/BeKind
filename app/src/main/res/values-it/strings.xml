@@ -113,10 +113,10 @@
     <string name="error_flag_post">Impossibile segnalare il post.</string>
     <string name="unflagged_post">Post non segnalato con successo.</string>
     <string name="error_unflagging_post">Impossibile non segnalare il post.</string>
-    <string name="liked_post">Post likkato con successo.</string>
+    <string name="liked_post">Hai messo mi piace al post</string>
     <string name="error_like_post">Impossibile likkare il post.</string>
-    <string name="dislike_post">Post unlikkato con successo.</string>
-    <string name="error_dislike_post">Impossibile unlikkare il post.</string>
+    <string name="dislike_post">Hai rimosso il mi piace</string>
+    <string name="error_dislike_post">Impossibile togliere il mi piace</string>
     <string name="number_partecipants">\"N. partecipanti attuali: \"</string>
     <string name="flagged_activity">Attività segnalata</string>
     <string name="delete_activity">Attività cancellata correttamente</string>
@@ -130,7 +130,7 @@
     <string name="error_completion">L\'attività non è stata presa in carico da alcun utente. Impossibile evaderla.</string>
     <string name="accept_activity">Attività accettata correttamente</string>
     <string name="error_accept_activity">Errore nell\'accettazione dell\'attività</string>
-    <string name="flag_activity">Attività segnalato con successo.</string>
+    <string name="flag_activity">Attività segnalata con successo.</string>
     <string name="error_flag_activity">Impossibile segnalare l\'attività.</string>
     <string name="unflag_activity">Attività non segnalata con successo.</string>
     <string name="error_unflag_activity">Impossibile non segnalare l\'attività.</string>
@@ -157,4 +157,10 @@
     <string name="description_9">Nella "Bacheca" dei post potrai segnalarli, se li ritieni inappropriati, cliccando il pulsante indicato dalla freccia rossa, potrai invece mettegli un mi piace cliccando il pulsante indicato dalla freccia blu.</string>
     <string name="description_10">Cliccando il pulsante, presente in ogni pagina, indicato dalla freccia rossa potrai vedere tutte le attività o tutti i post, non solo quelle in scadenza o quelli pubblicati nella data selezionata.</string>
     <string name="description_11">È possibile cliccare sulla scritta "Programma del giorno" per accedere ad un calendario e selezionare le attività o i post di un giorno arbitrario.</string>
+    <string name="camera_permissions">Concedi l\'accesso alla fotocamera</string>
+    <string name="image_picker">Seleziona immagine da </string>
+    <string name="camera">Fotocamera</string>
+    <string name="gallery">Galleria</string>
+
+
 </resources>

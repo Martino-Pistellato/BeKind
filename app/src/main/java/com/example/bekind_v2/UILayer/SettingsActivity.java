@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -62,7 +63,7 @@ public class SettingsActivity extends AppCompatActivity {
             setPreferencesFromResource(R.xml.root_preferences, rootKey);
 
             SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
-            Preference logoutBtn = findPreference("logout"), tutorialBtn = findPreference("tutorial");
+            Preference logoutBtn = findPreference("logout"), tutorialBtn = findPreference("tutorial"), privacy = findPreference("privacy");
             ListPreference theme = findPreference("theme"), language = findPreference("language_selection");
 
             logoutBtn.setOnPreferenceClickListener(preference -> {
@@ -123,8 +124,11 @@ public class SettingsActivity extends AppCompatActivity {
 
                 return true;
             });
+
+            privacy.setOnPreferenceClickListener(preference -> {
+                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.garanteprivacy.it/regolamentoue")));
+                return true;
+            });
         }
-
-
     }
 }

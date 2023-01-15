@@ -157,5 +157,9 @@
     <string name="description_9">In the "Dashboard" page you\'ll see all the posts. Clicking the button pointed by the red arrow you\'ll be able to flag them, if you need them inappropriate and clicking the one pointed by the blue arrow you\'ll be able to like them.</string>
     <string name="description_10">Clicking the switch pointed by the red arrow you\'lll be able to see all the activities and posts, not only the activities that expire the selected day and the posts published the selected day.</string>
     <string name="description_11">Clicking on "Schedule of dd/mm/yyyy" you\'ll access a calendar. By selecting a specific date you\'ll be able to see the activities axpiring that day and the posts posted that day.</string>
+    <string name="camera_permissions">Grant access to camera</string>
+    <string name="image_picker">Pick Image From</string>
+    <string name="camera">Camera</string>
+    <string name="gallery">Gallery</string>
 
 </resources>

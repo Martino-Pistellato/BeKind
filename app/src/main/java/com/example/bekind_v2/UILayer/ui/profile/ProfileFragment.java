@@ -327,16 +327,16 @@ public class ProfileFragment extends Fragment {
     }
 
     private void showImagePicDialog() {
-        String[] options = {"Camera", "Gallery"};
+        String[] options = {getString(R.string.camera), getString(R.string.gallery)};
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-        builder.setTitle("Pick Image From");
+        builder.setTitle(getString(R.string.image_picker));
 
         builder.setItems(options, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                String[] permissions = {"Cancel", "Grant"};
+                String[] permissions = {getString(R.string.close), getString(R.string.confirm)};
                 AlertDialog.Builder builder1 = new AlertDialog.Builder(getContext());
-                builder1.setTitle("Grant access to camera");
+                builder1.setTitle(getString(R.string.camera_permissions));
 
                 if (which == 0) {
                     if (checkCameraPermission(getContext())) pickFromCamera();
